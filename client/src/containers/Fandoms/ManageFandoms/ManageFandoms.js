@@ -8,10 +8,21 @@ class ManageFandoms extends Component{
     this.props.onGetFandoms()
   }
   render(){
+    let page =  <p>Page is loading</p>
+    if(!this.props.loading){
+      if(this.props.fandoms.length === 0||this.props.fandoms ===null){
+          page = <p>There Are No Fandoms On Your List - Please Add at least one</p>
+      }else{
+        page = this.props.fandoms.map(fandom=>(
+          <p>{fandom.Fandom_Name}</p>
+        ))
+      }
+    }
+
     return(
       <div>
         <h2>ManageFandoms</h2>
-        
+        {page}
       </div>
     )
   }
@@ -19,7 +30,7 @@ class ManageFandoms extends Component{
 
 const mapStateToProps = state =>{
   return{
-      fandoms:    state.fandoms.orders,
+      fandoms:    state.fandoms.fandoms,
       loading:    state.fandoms.loading
   };   
 }

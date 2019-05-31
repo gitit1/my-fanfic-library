@@ -1,12 +1,4 @@
-const axios = require('axios');
-
-
-exports.connectToAo3 = async (req,res) => {
-   console.log('[ao3] connectToAo3');
-
-
-   res.send('hello')
-};
+const axios = require('../../axios-firebase');
 
 
 exports.addFandomToDB = (req,res) =>{
@@ -23,7 +15,7 @@ exports.addFandomToDB = (req,res) =>{
         "Search_Keys": "Casey Gardner/Izzie",
         "Auto_Save": "YES"
     }
-    axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
+    axios.post( 'fandoms.json', fandom )
     .then( response => {
         res.send('Fandom '+fandom.Fandom_Name+' ,added to db')
     } )
@@ -38,5 +30,13 @@ exports.addFandomToDB = (req,res) =>{
 }
 
 exports.getAllFandomsFromDB = (req,res) =>{
-    res.send([{name: '1'},{name: '2'}])   
+    console.log('[db] getAllFandomsFromDB');
+    axios.get( 'fandoms.json')
+    .then( response => {
+        res.send(response.data)
+    } )
+    .catch( error => {
+        res.send('error in [db] addFandomToDB')
+        console.log(error)
+    } );
 }
