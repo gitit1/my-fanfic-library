@@ -8,6 +8,7 @@ try {
   router.get('/ao3/connect', ao3.connectToAo3);
   router.get('/db/addFandom',db.addFandomToDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB);
+  router.get('/db/getFanficsFromAo3',db.getFanficsFromAo3);
 
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);
