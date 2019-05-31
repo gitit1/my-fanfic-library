@@ -7,9 +7,8 @@ const Navigator = () => (
           <li className={classes.Dropdown}>
             <a href="/" className={classes.Dropbtn}>Fandoms (TODO-FIX)</a>
             <div className={classes.DropdownContent}>
-                <a href="/">Clexa</a>
-                <a href="/">Vausman</a>
-                <a href="/">Avalance</a>
+                <a href="/allFandoms">All Fandoms</a>
+                <a href="/manageFandoms">Manage Fandoms</a>
             </div>          
           </li>
           <li><a href='/'>Search</a></li>
