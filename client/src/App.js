@@ -3,22 +3,20 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 
 import './App.css';
 import Layout from './hoc/Layout/Layout';
-import Index from './containers/Index/Index'
+import Index from './containers/Index/Index';
+import ManageFandoms from './containers/Fandoms/ManageFandoms/ManageFandoms';
 
 function App() {
   return (
     <Layout>
-      <Index/>
-      {/* <Switch> */}
-        {/* <Route path="/fandoms" component={asyncAuth} /> */}
-        {/* <Route path="/fandom" exact component={BurgerBuilder} /> */}
-        {/* <Route path="/search" exact component={BurgerBuilder} /> */}
-        {/* <Route path="/my_tracking" exact component={BurgerBuilder} /> */}
-        {/* <Redirect to="/" /> */}
-      {/* </Switch> */}
+      <Switch>
+        <Route path="/manageFandoms" component={ManageFandoms} />
+        <Route path="/" exact component={Index} />
+        <Redirect to="/" />
+      </Switch>
     </Layout>
   );
 }
 
-export default App;
-// export default withRouter(App);
+
+export default withRouter(App);
