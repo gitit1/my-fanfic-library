@@ -1,0 +1,3 @@
+export {
+    getFandomsFromDB
+} from './fandoms';

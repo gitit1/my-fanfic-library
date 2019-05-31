@@ -36,3 +36,7 @@ exports.addFandomToDB = (req,res) =>{
     //console.log(new Date(date).toLocaleString())
     
 }
+
+exports.getAllFandomsFromDB = (req,res) =>{
+    res.send([{name: '1'},{name: '2'}])   
+}

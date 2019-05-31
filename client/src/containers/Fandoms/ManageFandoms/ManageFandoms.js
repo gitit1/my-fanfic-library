@@ -1,7 +1,33 @@
-import React from 'react';
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
 
-const ManageFandoms = () => (
-  <div>ManageFandoms</div>
-);
+import * as actions from '../../../store/actions';
 
-export default ManageFandoms;
+class ManageFandoms extends Component{
+  componentDidMount(){
+    this.props.onGetFandoms()
+  }
+  render(){
+    return(
+      <div>
+        <h2>ManageFandoms</h2>
+        
+      </div>
+    )
+  }
+};
+
+const mapStateToProps = state =>{
+  return{
+      fandoms:    state.fandoms.orders,
+      loading:    state.fandoms.loading
+  };   
+}
+
+const mapDispatchedToProps = dispatch =>{
+  return{
+      onGetFandoms: () => dispatch(actions.getFandomsFromDB())
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchedToProps)(ManageFandoms);
