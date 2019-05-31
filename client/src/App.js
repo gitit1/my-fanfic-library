@@ -9,15 +9,16 @@ function App() {
   return (
     <Layout>
       <Index/>
-      <Switch>
+      {/* <Switch> */}
         {/* <Route path="/fandoms" component={asyncAuth} /> */}
-        <Route path="/fandom" exact component={BurgerBuilder} />
+        {/* <Route path="/fandom" exact component={BurgerBuilder} /> */}
         {/* <Route path="/search" exact component={BurgerBuilder} /> */}
         {/* <Route path="/my_tracking" exact component={BurgerBuilder} /> */}
-        <Redirect to="/" />
-      </Switch>
+        {/* <Redirect to="/" /> */}
+      {/* </Switch> */}
     </Layout>
   );
 }
 
 export default App;
+// export default withRouter(App);
