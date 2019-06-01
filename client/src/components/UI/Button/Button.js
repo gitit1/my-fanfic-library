@@ -1,24 +1,6 @@
 import React,{Component} from 'react';
 import classes from './Button.module.css';
 
-// const Button = () => (
-//     <button
-//         disabled={props.disabled}
-//         className={[classes.Button, classes[props.btnType]].join(' ')} 
-//         onClick={props.clicked}
-//         style={{
-//             ['--theme-primary-color']: props.backColorFrimary,
-//             ['--theme-primary-color']: props.backColorSecondary,
-//             'color': props.textColor
-//         }}
-//         //style={{'backgroundColor':props.backColor,}}>
-//         >
-//         {this.props.children}
-//     </button>
-// );
-
-//export default Button;
-
 class Button extends Component{
     render(){
         
