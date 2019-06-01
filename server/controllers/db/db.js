@@ -1,11 +1,34 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const clc = require("cli-color");
+const multer = require('multer');
 
 exports.addFandomToDB = (req,res) =>{   
     console.log(clc.blue('[db] addFandomToDB'));
 
-    //TODO: get fandoms name list from user and fandom data    
+    //TODO: check errors for image: size/not uplode/not image...
+    //TODO: return error if fail
+
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {  
+            return res.status(500).json(err)
+        }
+        console.log(req.body);   
+        
+        
+        return res.status(200).send(req.file)
+
+    })
+
+
+
+
+
+
+
+
     fandomsNames = ["Cazzie","Avalance"];
     
     let date = new Date().getTime()
@@ -21,17 +44,6 @@ exports.addFandomToDB = (req,res) =>{
             "Search_Keys": "Casey Gardner/Izzie",
             "Auto_Save": true
         }
-    // {
-    //     "Save_Method": ["PDF","EPUB"],
-    //     "Fanfics_in_Fandom": 0,
-    //     "Fandom_Name": "Avalance",
-    //     "On_Going_Fanfics": 0,
-    //     "Last_Update": date,
-    //    "Complete_fanfics": 0,
-    //     "Saved_fanfics": 0,
-    //     "Search_Keys": "Sara Lance/Ava Sharpe",
-    //     "Auto_Save": false
-    // }
 
     if(fandomsNames.includes(fandom.Fandom_Name)){
         res.send('Fandom already exist!!');
@@ -239,3 +251,32 @@ const getDataFromAO3FandomPage =  async (page) => {
     });
     return fanficData
 }
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+    cb(null, '../client/src/assets')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' +file.originalname )
+  }
+})
+var upload = multer({ storage: storage }).single('file')
+
+
+exports.upload = (req, res) => {
+   
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {  
+            return res.status(500).json(err)
+        }
+        console.log(req.body);   
+        
+        
+        return res.status(200).send(req.file)
+
+    })
+
+}
+

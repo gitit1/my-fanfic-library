@@ -4,7 +4,7 @@ import Input from '../../../../components/UI/Input/Input';
 import Button from '../../../../components/UI/Button/Button';
 import {updateObject} from '../../../../shared/utility';
 import ImageUpload from '../../../../components/ImageUpload/ImageUpload'
-
+import axios from 'axios'
 
 class AddNewFandom extends Component{
     
@@ -81,21 +81,24 @@ class AddNewFandom extends Component{
             type.checked && saveType.push(type.value)
         })
 
-        const fandom = {
-            "Fandom_Name": this.state.fandomForm['fandom_Name'].value,
-            "Search_Keys":this.state.fandomForm['search_Key'].value,
-            "Auto_Save":this.state.fandomForm['auto_Save'].value,
-            "Save_Method": saveType,
-            "Fanfics_in_Fandom": 0,
-            "On_Going_Fanfics": 0,
-            "Complete_fanfics": 0,
-            "Saved_fanfics": 0,
-            "Fandom_Folder_Assets": `assets/Fandoms/${this.state.fandomForm['fandom_Name'].value}`,
-            "Last_Update": new Date().getTime()
-        }
-        const form = this.formRef.current;
-        console.log(form)
-        console.log(fandom)
+        const fandom = new FormData()
+        fandom.append('file', this.formRef.current.state.file)
+        fandom.append("Fandom_Name", this.state.fandomForm['fandom_Name'].value)
+        fandom.append("Search_Keys", this.state.fandomForm['search_Key'].value)
+        fandom.append("Auto_Save", this.state.fandomForm['auto_Save'].value)
+        fandom.append("Save_Method", saveType)
+        fandom.append("Fanfics_in_Fandom", 0)
+        fandom.append("On_Going_Fanfics", 0)
+        fandom.append("Complete_fanfics", 0)
+        fandom.append("Saved_fanfics", 0)
+        fandom.append("Fandom_Folder_Assets", `assets/Fandoms/${this.state.fandomForm['fandom_Name'].value}`)
+        fandom.append("Last_Update", new Date().getTime())
+        
+        axios.post("http://localhost:5000/upload", fandom ,{headers: {'Content-Type': 'multipart/form-data'} })
+        .then(res => { // then print response status
+            console.log(res.statusText)
+        })
+
         //this.props.onOrderBurger(order,this.props.token);
 
     }
