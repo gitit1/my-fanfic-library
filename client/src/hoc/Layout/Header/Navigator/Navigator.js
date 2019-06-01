@@ -20,6 +20,8 @@ const Navigator = () => (
                 <a href="/">Reading List</a>
               </div>
           </li>
+          {/* TODO: autorization */}
+          <li><a href='/manageDownloader'>Manage Downloader</a></li>
       </ul>
   </nav>
 );

@@ -68,25 +68,50 @@ exports.getAllFandomsFromDB = (req,res) =>{
 //Connection between DB/AO3:
 exports.getFanficsFromAo3 = (req,res) =>{
     console.log(clc.blue('[db] getFanficsFromAo3'));
-    let fandomName = "Cazzie";
+     let fandomNameOriginal = "Avalance";
+     //let fandomNameOriginal = "Avalance";
+     //let fandomNameOriginal = "Cazzie";
 
-    axios.get(`https://my-fanfic-lybrare.firebaseio.com/fandoms.json?orderBy="Fandom_Name"&equalTo="${fandomName}"`)
+    axios.get(`https://my-fanfic-lybrare.firebaseio.com/fandoms.json?orderBy="Fandom_Name"&equalTo="${fandomNameOriginal}"`)
     .then( async fandom => {
         fandomData = fandom.data[Object.keys(fandom.data)[0]];
         
-        fandomName = fandomData.Search_Keys.replace(/ /g,'%20').replace(/\//g,'*s*');
+        let fandomName = fandomData.Search_Keys.replace(/ /g,'%20').replace(/\//g,'*s*');
         
         let fanfics = await getFanficsOfFandom(fandomName,fandomData.Auto_Save,fandomData.Save_Method);
+        await deleteDataOfFanficsFromServer(fandomNameOriginal)
+        await sendFanficsToServer(fandomNameOriginal,fanfics)
 
         res.send(JSON.stringify(fanfics, null, 4));
+        //TODO: send to server each note
+        //TODO: UPDATE-FANFICS
+
         //res.send(fandom.data[Object.keys(fandom.data)[0]])
     } ).catch(error => {
         res.send(error.message)
     })
-    
-    
+}
 
+const deleteDataOfFanficsFromServer = (fandomName) => {
+    axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fanfics/${fandomName}.json`)
+    .then(() =>{
+        return true
+    }).catch(error=>{
+        console.log('couldent delete: ',error)
+        return false
+    })
+}
 
+const sendFanficsToServer =  async (fandomName,fanfics) => {
+    console.log(clc.blue('[db] sendFanficsToServer'));
+    axios.post( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${fandomName}.json`,fanfics)
+    .then( response => {
+        return(response.data)
+    } )
+    .catch( error => {
+        return('error in [db] addFandomToDB')
+        console.log(clc.red(error));
+    } );
 }
 
 const getFanficsOfFandom =  async (fandom,save,filetypes) => {
@@ -105,11 +130,11 @@ const getFanficsOfFandom =  async (fandom,save,filetypes) => {
     );
 
     let promises = [];
-    const getSeriesIds = async numberOfPages => {
+    const getPagesOfFandomData = async numberOfPages => {
         return new Promise(async(resolve, reject) => {
             //get user list from our db:
             let pages = [];
-            [...Array(Number(numberOfPages))].forEach(async (num,index) => {
+            [...Array(Number(numberOfPages-1))].forEach(async (num,index) => {
 
                 // const page = await axios.get(`${ao3URL}/tags/${fandom}/works?page=${index}`).then(fanficsData => 
                 //     fanficsData.data
@@ -125,7 +150,7 @@ const getFanficsOfFandom =  async (fandom,save,filetypes) => {
             axios.all(promises).then(function(results) {
                 results.forEach(function(response) {
                    pages.push(response.data)
-                   console.log(pages.length);
+                   //console.log(pages.length);
                 })
                 promises = [];
                 resolve(pages)
@@ -137,19 +162,22 @@ const getFanficsOfFandom =  async (fandom,save,filetypes) => {
     if(html){
         let seriesArray = []
         let $ = cheerio.load(html);
+        if(Number($('#main').find('ol.pagination li').eq(-2).text())>=10){
+            numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text())+1;
+        }else{
+            numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
+        }
+        
+        pagesArray = await getPagesOfFandomData(numberOfPages);
 
-        numberOfPages = $('#main').children('.pagination').children('li').eq(-2).text();
-
-        seriesArray = await getSeriesIds(numberOfPages);
-
-        await seriesArray.map(page => promises.push(getDataFromAO3FandomPage(page)))
+        await pagesArray.map(page => promises.push(getDataFromAO3FandomPage(page)))
     
-        allSeriesList = await Promise.all(promises);
+        allFanficsList = await Promise.all(promises);
 
-        await allSeriesList.forEach(series => {
+        await allFanficsList.forEach(fanficArray => {
             works  = [
                 ...works,
-                ...series
+                ...fanficArray
             ]
         });
     }
