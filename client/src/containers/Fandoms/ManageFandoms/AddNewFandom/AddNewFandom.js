@@ -1,10 +1,14 @@
 import React,{Component} from 'react';
+import axios from 'axios'
+import {connect} from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+import * as actions from '../../../../store/actions';
 import classes from './AddNewFandom.module.css';
 import Input from '../../../../components/UI/Input/Input';
 import Button from '../../../../components/UI/Button/Button';
 import {updateObject} from '../../../../shared/utility';
 import ImageUpload from '../../../../components/ImageUpload/ImageUpload'
-import axios from 'axios'
 
 class AddNewFandom extends Component{
     
@@ -71,10 +75,20 @@ class AddNewFandom extends Component{
                 visible: false
             }
         },
-        formIsValid:false
+        formIsValid:false,
+        fandomsNames:[],
+        fandomAddedFlag:0
     }
 
-    sendFandomToServerHandler = ( event ) => {
+    componentDidMount(){       
+        this.props.fandoms.map(fandom=>{
+            this.state.fandomsNames.push(fandom.Fandom_Name)
+        });
+        console.log(this.state.fandomsNames)
+        // this.props.initFandom();
+    }
+
+    sendFandomToServerHandler = async (event) => {
         event.preventDefault();
         let saveType = []
         this.state.fandomForm['save_Method'].elementConfig.options.map(type=>{
@@ -82,7 +96,6 @@ class AddNewFandom extends Component{
         })
 
         const fandom = new FormData()
-        fandom.append('file', this.formRef.current.state.file)
         fandom.append("Fandom_Name", this.state.fandomForm['fandom_Name'].value)
         fandom.append("Search_Keys", this.state.fandomForm['search_Key'].value)
         fandom.append("Auto_Save", this.state.fandomForm['auto_Save'].value)
@@ -91,15 +104,33 @@ class AddNewFandom extends Component{
         fandom.append("On_Going_Fanfics", 0)
         fandom.append("Complete_fanfics", 0)
         fandom.append("Saved_fanfics", 0)
-        fandom.append("Fandom_Folder_Assets", `assets/Fandoms/${this.state.fandomForm['fandom_Name'].value}`)
         fandom.append("Last_Update", new Date().getTime())
+        fandom.append("fandomsNames", this.state.fandomsNames)
+        fandom.append('file', this.formRef.current.state.file)
         
-        axios.post("http://localhost:5000/upload", fandom ,{headers: {'Content-Type': 'multipart/form-data'} })
-        .then(res => { // then print response status
-            console.log(res.statusText)
-        })
+        this.props.onAddFandom(this.state.fandomForm['fandom_Name'].value,fandom).then(res=>{
+            switch  (this.props.message) {
+                case 'Success':
+                    this.setState({fandomAddedFlag:1})
+                    console.log(this.state.fandomAddedFlag);                    
+                    setTimeout(() => {
+                        this.props.history.push('/manageFandoms');
+                    }, 2000);
+                    break;
+                case 'Fandom Already Exist':
+                    this.setState({fandomAddedFlag:2})
+                    console.log(this.state.fandomAddedFlag);
+                    break;
+                case 'Error':
+                    this.setState({fandomAddedFlag:3})
+                    console.log(this.state.fandomAddedFlag);
+                    break;
+            }  
+        });
+        
 
-        //this.props.onOrderBurger(order,this.props.token);
+        
+
 
     }
 
@@ -216,18 +247,58 @@ class AddNewFandom extends Component{
                 <Button  btnType="Success" disabled={!this.state.formIsValid}>ADD</Button>
             </form>
         );
-
+        let addFandomStatus = null;
+        switch (this.state.fandomAddedFlag) {
+            case 1:
+                addFandomStatus = <p className={classes.Message} style={{color:'green'}}>Fandom Added Successfully</p>;
+                break;               
+            case 2:
+                addFandomStatus = <p className={classes.Message} style={{color:'red'}}>Fandom Alredy Exsist!!</p>;
+                break;
+            case 3:
+                addFandomStatus = <p className={classes.Message} style={{color:'red'}}>There was an error</p>;
+                break;
+            default:
+                addFandomStatus = null;
+                break;             
+        }
         return(
             <div>
                 <h3>Add New Fandom</h3>
-                {form}
-                <p>Image</p>
-                <ImageUpload ref={this.formRef}/>
+                <div className={classes.FormBox}>
+                    <div className={classes.ImageDiv}>
+                        <ImageUpload ref={this.formRef}/>
+                    </div>
+                    <div className={classes.FormDiv}>
+                        {form}
+                    <div>
+                        {addFandomStatus}
+                    </div>
+                    </div>
+                    <div className={classes.Clear}></div>
+                </div>
             </div>
         );
     }
 }
 
 
-export default AddNewFandom;
+const mapStateToProps = state =>{
+    return{
+        fandoms:        state.fandoms.fandoms,
+        fandom:         state.fandoms.fandom,
+        message:        state.fandoms.message,
+        loading:        state.fandoms.loading
+    };   
+  }
+  
+const mapDispatchedToProps = dispatch =>{
+    return{
+        // initFandom:     () => dispatch(actions.fandomInit()),
+        onGetFandoms:   () => dispatch(actions.getFandomsFromDB()),
+        onAddFandom:    (fandom_Name,fandom) => dispatch(actions.addFandomToDB(fandom_Name,fandom))
+    };
+}
+  
+  export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(AddNewFandom));
 

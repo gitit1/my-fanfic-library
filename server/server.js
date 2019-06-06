@@ -2,12 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
 const cors = require('cors');
-const multiparty = require('multiparty');
 
 const app = express();
-const data = new multiparty.Form();
+
 
 const port = 5000;
+
 
 app.use(cors())
 

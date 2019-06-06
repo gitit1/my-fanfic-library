@@ -6,7 +6,10 @@ import { createStore, applyMiddleware, compose , combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 
 import * as serviceWorker from './serviceWorker';
+
+import './reset.css';
 import './index.css';
+
 import App from './App';
 import fandomsReducer from './store/reducers/fandomsReducer';
 

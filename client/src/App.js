@@ -7,6 +7,7 @@ import Index from './containers/Index/Index';
 import ManageFandoms from './containers/Fandoms/ManageFandoms/ManageFandoms';
 import ManageDownloader from './containers/ManageDownloader/ManageDownloader';
 import AddNewFandom from './containers/Fandoms/ManageFandoms/AddNewFandom/AddNewFandom';
+import TodoList from './containers/TodoList/TodoList';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/manageFandoms" component={ManageFandoms} />
         <Route path="/manageDownloader" component={ManageDownloader} />
         <Route path="/addnewfandom" component={AddNewFandom} />
+        <Route path="/todolist" component={TodoList} />
         <Route path="/" exact component={Index} />
         <Redirect to="/" />
       </Switch>

@@ -2,62 +2,80 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const clc = require("cli-color");
 const multer = require('multer');
+const path = require('path')
+const fs = require('fs');
 
 exports.addFandomToDB = (req,res) =>{   
     console.log(clc.blue('[db] addFandomToDB'));
+    
 
     //TODO: check errors for image: size/not uplode/not image...
-    //TODO: return error if fail
+    //TODO: client - when trying to cancel upload somthing is wrong
+    var pathForImage = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
+
+    if (!fs.existsSync(pathForImage)){
+        fs.mkdirSync(pathForImage);
+    }
+
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+        cb(null, pathForImage)
+        },
+        filename: function (req, file, cb) {
+        cb(null, req.query.Fandom_Name + path.extname(file.originalname))
+        // cb(null, Date.now() + '-' +file.originalname )
+        }
+    })
+    let upload = multer({ storage: storage }).single('file');
 
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
-            return res.status(500).json(err)
+            //return res.status(500).json(err)
+            console.log('Muller Error',res.status(500).json(err));
+            return res.send('Error');
         } else if (err) {  
-            return res.status(500).json(err)
+            console.log('Other Error',res.status(500).json(err));
+            //return res.status(500).json(err)
+            return res.send('Error');
         }
-        console.log(req.body);   
+        const image = req.file === undefined||req.file === null ? '' : req.file.originalname;
+        const fandom = {    
+            "Fandom_Name":              req.body.Fandom_Name,
+            "Search_Keys":              req.body.Search_Keys,
+            "Auto_Save":                req.body.Auto_Save,
+            "Save_Method":              req.body.Save_Method,
+            "Fanfics_in_Fandom":        req.body.Fanfics_in_Fandom,
+            "On_Going_Fanfics":         req.body.On_Going_Fanfics,
+            "Complete_fanfics":         req.body.Complete_fanfics,
+            "Saved_fanfics":            req.body.Saved_fanfics,
+            "Last_Update":              req.body.Last_Update,
+            "Image_Name":               image
+        }
+        console.log(req.body.fandomsNames)
+
+        if(req.body.fandomsNames.length>0 && req.body.fandomsNames.includes(fandom.Fandom_Name)){
+            console.log(clc.red('Fandom Already Exist'));
+            return res.send('Fandom Already Exist');
+        }else{
+            axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
+            .then( response => {
+                res.send('Fandom '+fandom.Fandom_Name+' ,added to db')
+            } )
+            .catch( error => {
+                console.log(clc.red(error.response.data.error));
+                return res.send('error in [db] addFandomToDB: '+error.response.data.error);
+            } );
+        }
         
-        
-        return res.status(200).send(req.file)
+        // return res.status(200).send(req.file)
+        // return res.status(200).send(req.file)
+        return res.send('Success');
 
     })
 
 
 
 
-
-
-
-
-    fandomsNames = ["Cazzie","Avalance"];
-    
-    let date = new Date().getTime()
-    
-    const fandom = {
-            "Save_Method": ["PDF","EPUB"],
-            "Fanfics_in_Fandom": 0,
-            "Fandom_Name": "Cazzie",
-            "On_Going_Fanfics": 0,
-            "Last_Update": date,
-            "Complete_fanfics": 0,
-            "Saved_fanfics": 0,
-            "Search_Keys": "Casey Gardner/Izzie",
-            "Auto_Save": true
-        }
-
-    if(fandomsNames.includes(fandom.Fandom_Name)){
-        res.send('Fandom already exist!!');
-        console.log(clc.red('Fandom already exist!!'));
-    }else{
-        axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
-        .then( response => {
-            res.send('Fandom '+fandom.Fandom_Name+' ,added to db')
-        } )
-        .catch( error => {
-            res.send('error in [db] addFandomToDB: '+error.response.data.error);
-            console.log(clc.red(error.response.data.error));
-        } );
-    }
 
     //TODO: ADD FIXED IMAGE TO  FANFICS / ADDITIONAL IMAGE FOR ONESHOT IF THEY WANT 
     //console.log(date)
@@ -252,15 +270,7 @@ const getDataFromAO3FandomPage =  async (page) => {
     return fanficData
 }
 
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-    cb(null, '../client/src/assets')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' +file.originalname )
-  }
-})
-var upload = multer({ storage: storage }).single('file')
+
 
 
 exports.upload = (req, res) => {

@@ -5,7 +5,7 @@ const Navigator = () => (
   <nav className={classes.Navigator}>
       <ul>
           <li className={classes.Dropdown}>
-            <a href="/" className={classes.Dropbtn}>Fandoms (TODO-FIX)</a>
+            <a href="/" className={classes.Dropbtn}>Fandoms</a>
             <div className={classes.DropdownContent}>
                 <a href="/allFandoms">All Fandoms</a>
                 <a href="/manageFandoms">Manage Fandoms</a>
@@ -20,8 +20,9 @@ const Navigator = () => (
                 <a href="/">Reading List</a>
               </div>
           </li>
-          {/* TODO: autorization */}
           <li><a href='/manageDownloader'>Manage Downloader</a></li>
+          <li><a href="/todolist">TODO LIST</a></li>
+         
       </ul>
   </nav>
 );

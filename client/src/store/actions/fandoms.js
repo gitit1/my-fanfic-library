@@ -1,29 +1,24 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
-export const fandomInit = () =>{
+
+export const getFandomsFromDBStart = () =>{
     return{
-        type: actionTypes.FANDOM_INIT
+        type: actionTypes.GET_FANDOMS_START
     };
-}
+};
 
 export const getFandomsFromDBSuccess = (fandoms) =>{
     return{
-        type: actionTypes.FANDOMS_SUCCESS,
+        type: actionTypes.GET_FANDOMS_SUCCESS,
         fandoms: fandoms
     };
 };
 
 export const getFandomsFromDBFail = (error) =>{
     return{
-        type: actionTypes.FANDOMS_FAIL,
+        type: actionTypes.GET_FANDOMS_FAIL,
         error: error
-    };
-};
-
-export const getFandomsFromDBStart = () =>{
-    return{
-        type: actionTypes.FANDOMS_START
     };
 };
 
@@ -40,6 +35,48 @@ export const getFandomsFromDB = () =>{
         })
         .catch(error =>{
             dispatch(getFandomsFromDBFail(error))
+        })  
+    };
+};
+
+// export const fandomInit = () =>{
+//     return{
+//         type: actionTypes.FANDOM_INIT
+//     };
+// }
+
+export const addFandomToDBStart = () =>{
+    return{
+        type: actionTypes.ADD_FANDOM_START
+    };
+};
+
+export const addFandomToDBSuccess = (message) =>{
+    return{
+        type: actionTypes.ADD_FANDOM_SUCCESS,
+        message: message
+    };
+};
+
+export const addFandomToDBFail = (error) =>{
+    return{
+        type: actionTypes.ADD_FANDOM_FAIL,
+        error: error
+    };
+};
+
+export const addFandomToDB = (fandom_Name,fandom) =>{
+    return dispatch =>{
+        dispatch(addFandomToDBStart())
+        return axios.post(`/db/addFandom?Fandom_Name=${fandom_Name}`, 
+                  fandom ,
+                  {headers: {'Content-Type': 'multipart/form-data',"Access-Control-Allow-Origin": "*"} 
+        }).then(res =>{
+            dispatch(addFandomToDBSuccess(res.data));
+            return true;
+        })
+        .catch(error =>{
+            dispatch(addFandomToDBFail(error))
         })  
     };
 };
