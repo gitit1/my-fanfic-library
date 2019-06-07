@@ -21,7 +21,8 @@ const Navigator = () => (
               </div>
           </li>
           <li><a href='/manageDownloader'>Manage Downloader</a></li>
-          <li><a href="/todolist">TODO LIST</a></li>
+          <li><a href="/todolistClient">TODO LIST CLIENT</a></li>
+          <li><a href="/todolistServer">TODO LIST SERVER</a></li>
          
       </ul>
   </nav>

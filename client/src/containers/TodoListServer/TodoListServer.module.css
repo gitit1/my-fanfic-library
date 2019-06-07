@@ -1,0 +1,32 @@
+.TodolistServer{
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; 
+    margin-top:2%;
+}
+
+.Box {
+    flex: 0 0 30%;
+    -webkit-box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
+    -moz-box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
+    box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
+    margin:1% 1%;
+}
+
+.Box ul li{
+    display: list-item;
+    list-style-type: disc;
+}
+
+.Header{
+    font-weight: 700;
+    line-height: 1.75em;
+}
+.Component{
+    color: blueviolet;
+}
+
+.Other{
+    color: yellowgreen;
+}

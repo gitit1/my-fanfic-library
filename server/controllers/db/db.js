@@ -10,8 +10,8 @@ exports.addFandomToDB = (req,res) =>{
     
 
     //TODO: check errors for image: size/not uplode/not image...
-    //TODO: client - when trying to cancel upload somthing is wrong
     var pathForImage = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
+    var ImageName = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
 
     if (!fs.existsSync(pathForImage)){
         fs.mkdirSync(pathForImage);
@@ -38,7 +38,7 @@ exports.addFandomToDB = (req,res) =>{
             //return res.status(500).json(err)
             return res.send('Error');
         }
-        const image = req.file === undefined||req.file === null ? '' : req.file.originalname;
+        const image = req.file === undefined||req.file === null ? '' : (req.query.Fandom_Name + path.extname(req.file.originalname));
         const fandom = {    
             "Fandom_Name":              req.body.Fandom_Name,
             "Search_Keys":              req.body.Search_Keys,
@@ -58,12 +58,13 @@ exports.addFandomToDB = (req,res) =>{
             return res.send('Fandom Already Exist');
         }else{
             axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
-            .then( response => {
-                res.send('Fandom '+fandom.Fandom_Name+' ,added to db')
+            .then( () => {
+                console.log('Fandom '+fandom.Fandom_Name+' ,added to db')
+                return 'Fandom '+fandom.Fandom_Name+' ,added to db'
             } )
             .catch( error => {
-                console.log(clc.red(error.response.data.error));
-                return res.send('error in [db] addFandomToDB: '+error.response.data.error);
+                console.log(clc.red(error));
+                // return res.send('Error');
             } );
         }
         
@@ -73,16 +74,44 @@ exports.addFandomToDB = (req,res) =>{
 
     })
 
-
-
-
-
     //TODO: ADD FIXED IMAGE TO  FANFICS / ADDITIONAL IMAGE FOR ONESHOT IF THEY WANT 
     //console.log(date)
     //console.log(new Date(date).toLocaleString())
     
 }
 
+exports.deleteFandomFromDB = async (req,res)=>{
+    console.log(clc.blue('[db] deleteFandomFromDB'));
+    deleteDataOfFandomFromServer(req.query.Fandom_Name).then(result =>{
+        result ? res.send('Success') : res.send('Error')        
+    }).catch(error=>(
+        res.send('Error')
+    ));    
+}
+
+const deleteDataOfFandomFromServer = async (fandomName) => {
+    console.log(clc.blueBright('[db] deleteDataOfFandomFromServer'));
+    console.log('fandomName:',fandomName);
+    let status = '';
+    // axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandomName}.json`)
+    return axios.get(`https://my-fanfic-lybrare.firebaseio.com/fandoms.json?orderBy="Fandom_Name"&equalTo="${fandomName}"`)
+    .then(fandomObject =>{
+        var fandomId = Object.keys(fandomObject.data)[0]
+        if(!fandomId || fandomId==0 || fandomId===null){
+            return false;
+        }else{
+            return axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandomId}.json`).then((res) =>{
+                return true
+            }).catch(error=>{
+                return false;
+            });
+        }
+    }).catch(error=>{
+        return false;
+    })
+}
+
+/* --------------------------------------------------------- */
 exports.getAllFandomsFromDB = (req,res) =>{
     console.log(clc.blue('[db] getAllFandomsFromDB'));
     axios.get( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json')
@@ -131,6 +160,7 @@ const deleteDataOfFanficsFromServer = (fandomName) => {
         return false
     })
 }
+
 
 const sendFanficsToServer =  async (fandomName,fanfics) => {
     console.log(clc.blue('[db] sendFanficsToServer'));
@@ -269,24 +299,3 @@ const getDataFromAO3FandomPage =  async (page) => {
     });
     return fanficData
 }
-
-
-
-
-exports.upload = (req, res) => {
-   
-    upload(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            return res.status(500).json(err)
-        } else if (err) {  
-            return res.status(500).json(err)
-        }
-        console.log(req.body);   
-        
-        
-        return res.status(200).send(req.file)
-
-    })
-
-}
-

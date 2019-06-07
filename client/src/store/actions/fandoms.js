@@ -45,38 +45,50 @@ export const getFandomsFromDB = () =>{
 //     };
 // }
 
-export const addFandomToDBStart = () =>{
+export const editFandomDataStart = () =>{
     return{
-        type: actionTypes.ADD_FANDOM_START
+        type: actionTypes.EDIT_FANDOM_START
     };
 };
 
-export const addFandomToDBSuccess = (message) =>{
+export const editFandomDataSuccess = (message) =>{
     return{
-        type: actionTypes.ADD_FANDOM_SUCCESS,
+        type: actionTypes.EDIT_FANDOM_SUCCESS,
         message: message
     };
 };
 
-export const addFandomToDBFail = (error) =>{
+export const editFandomDataFail = (error) =>{
     return{
-        type: actionTypes.ADD_FANDOM_FAIL,
+        type: actionTypes.EDIT_FANDOM_FAIL,
         error: error
     };
 };
 
 export const addFandomToDB = (fandom_Name,fandom) =>{
     return dispatch =>{
-        dispatch(addFandomToDBStart())
-        return axios.post(`/db/addFandom?Fandom_Name=${fandom_Name}`, 
-                  fandom ,
-                  {headers: {'Content-Type': 'multipart/form-data',"Access-Control-Allow-Origin": "*"} 
-        }).then(res =>{
-            dispatch(addFandomToDBSuccess(res.data));
+        dispatch(editFandomDataStart())
+        return axios.post(`/db/addFandom?Fandom_Name=${fandom_Name}`,fandom)
+        .then(res =>{
+            dispatch(editFandomDataSuccess(res.data));
             return true;
         })
         .catch(error =>{
-            dispatch(addFandomToDBFail(error))
+            dispatch(editFandomDataFail(error))
+        })  
+    };
+};
+
+export const deleteFandomFromDB = (fandom_Name) =>{
+    return dispatch =>{
+        dispatch(editFandomDataStart())
+        return axios.post(`/db/deleteFandom?Fandom_Name=${fandom_Name}`)
+        .then(res =>{
+            dispatch(editFandomDataSuccess(res.data));
+            return true;
+        })
+        .catch(error =>{
+            dispatch(editFandomDataFail(error))
         })  
     };
 };

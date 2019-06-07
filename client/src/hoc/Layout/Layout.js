@@ -14,7 +14,6 @@ const Layout = (props) => (
       <footer className={classes.Footer}>
           <Footer/>
       </footer>
-
   </div>
 );
 

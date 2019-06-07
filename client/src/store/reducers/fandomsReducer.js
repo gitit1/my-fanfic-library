@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 import {updateObject} from '../../shared/utility';
 
 const initialState ={
-    fandom: null,
+    // fandom: null,
     fandoms: [],
     error: null,
     message:'',
@@ -25,24 +25,26 @@ const getFandomsFromDBFail  = (state,action) => {
 // const fandomInit = (state,action) => {
 //     return updateObject(state,{fandom: null});
 // }
-const addFandomToDBStart  = (state,action) => {
+
+//Add Fandom To Server
+const editFandomDataStart  = (state,action) => {
     return updateObject(state,{
-                                fandom: null,
                                 error: null,
                                 message:'',
                                 loading:true
                               });
 }
-const addFandomToDBSuccess  = (state,action) => {
+const editFandomDataSuccess  = (state,action) => {
     return updateObject(state,{
                                 message: action.message,
                                 loading: false
                               })
 }
-const addFandomToDBFail  = (state,action) => {
+const editFandomDataFail  = (state,action) => {
     return updateObject(state,{
-                                loading: false,
-                                error:action.error
+                                error:action.error,
+                                message:'Error',
+                                loading: false                                
                               });   
 }
 
@@ -53,9 +55,9 @@ const reducer = (state = initialState,action) =>{
         case actionTypes.GET_FANDOMS_SUCCESS:               return getFandomsFromDBSuccess(state,action)                                    
         case actionTypes.GET_FANDOMS_FAIL:                  return getFandomsFromDBFail(state,action)                                    
         // case actionTypes.FANDOM_INIT:                       return fandomInit(state,action)                                    
-        case actionTypes.ADD_FANDOM_START:                  return addFandomToDBStart(state,action)                                    
-        case actionTypes.ADD_FANDOM_SUCCESS:                return addFandomToDBSuccess(state,action)                                    
-        case actionTypes.ADD_FANDOM_FAIL:                   return addFandomToDBFail(state,action)                                    
+        case actionTypes.EDIT_FANDOM_START:                  return editFandomDataStart(state,action)                                    
+        case actionTypes.EDIT_FANDOM_SUCCESS:                return editFandomDataSuccess(state,action)                                    
+        case actionTypes.EDIT_FANDOM_FAIL:                   return editFandomDataFail(state,action)                                    
         default: return state;
     }
 }

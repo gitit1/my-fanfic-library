@@ -108,14 +108,14 @@ class AddNewFandom extends Component{
         fandom.append("fandomsNames", this.state.fandomsNames)
         fandom.append('file', this.formRef.current.state.file)
         
-        this.props.onAddFandom(this.state.fandomForm['fandom_Name'].value,fandom).then(res=>{
+        this.props.onAddFandom(this.state.fandomForm['fandom_Name'].value,fandom).then(()=>{
             switch  (this.props.message) {
                 case 'Success':
                     this.setState({fandomAddedFlag:1})
                     console.log(this.state.fandomAddedFlag);                    
                     setTimeout(() => {
                         this.props.history.push('/manageFandoms');
-                    }, 2000);
+                    }, 1000);
                     break;
                 case 'Fandom Already Exist':
                     this.setState({fandomAddedFlag:2})

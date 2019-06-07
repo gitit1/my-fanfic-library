@@ -1,33 +1,4 @@
-/* .TodoList{
-    width:60%;
-    margin: 0 auto;
-    margin-top:2%;
-    text-align: center;
-}
-
-.mainUl{
-
-}
-
-.TodoList li{
-    float: left;
-    width:40%;
-}
-.mainLi{
-    -webkit-box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
-    -moz-box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
-    box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
-    margin: 1% 1%;
-}
-
-.mainLi span{
-    font-weight: 700;
-    text-align: center;
-}
-.insideUl li{
-    text-align: center;
-} */
-.TodoList{
+.TodoListClient{
     margin: 0 auto;
     width: 100%;
     display: flex;
@@ -56,3 +27,6 @@
     color: blueviolet;
 }
 
+.Other{
+    color: yellowgreen;
+}

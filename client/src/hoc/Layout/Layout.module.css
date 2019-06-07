@@ -1,4 +1,23 @@
 .Layout{
     text-align: center;    
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+.Header{
+    width: 100%;
+}
+
+.Main{
+    flex: 1 1 0;
+}
+
+.Footer{
+    overflow: hidden;
+    max-height: 5rem;
+    text-overflow: ellipsis;
+    background-color: #6B0204;
+    width:100%;
+    color:white;
+}

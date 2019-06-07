@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link,NavLink} from 'react-router-dom';
 
 import classes from './Header.module.css';
 import Navigator from './Navigator/Navigator';
@@ -10,6 +10,7 @@ const Header = () => (
       <div className={classes.Right}>Last Update <span className={classes.TODO}>30.05.19</span></div>
       <div className={classes.Clear}></div>
       <Navigator/>
+
   </React.Fragment>
 );
 

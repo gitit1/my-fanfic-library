@@ -11,12 +11,25 @@ class ManageFandoms extends Component{
 
   componentDidMount(){
     this.props.onGetFandoms()
-    console.log(this.props.history)
   }
 
   routeChange = () => {
     let path = '/addnewfandom';
     this.props.history.push(path);
+  }
+
+  deleteFandomHandler = (Fandom_Name) =>{
+    this.props.onDeleteFandoms(Fandom_Name).then(()=>{
+      console.log(this.props.message)
+      switch  (this.props.message) {
+          case 'Success':                
+              this.props.onGetFandoms();
+              break;
+          case 'Error':
+              break;
+      }  
+  });
+  
   }
 
   render(){
@@ -41,13 +54,21 @@ class ManageFandoms extends Component{
     return(
       <div className={classes.ManageFandoms}>
         <h2>Manage Fandoms</h2>
-        <div className={classes.AddNew}>
-          <Button clicked={this.routeChange}>Add New Fandom</Button>
-        </div>
-        <div className={classes.Fandoms}>
-          {page}
-        </div>
-        <div className={classes.Clear}></div>
+        { this.props.loading ?
+            <p>Page is loading</p>
+            :
+            <React.Fragment>
+              <div className={classes.AddNew}>
+                <Button clicked={this.routeChange}>Add New Fandom</Button>
+              </div>
+              <div className={classes.Fandoms}>
+                {page}
+              </div>  
+              <div className={classes.Clear}></div>
+            </React.Fragment>
+         
+        }
+
       </div>
     )
   }
@@ -56,13 +77,15 @@ class ManageFandoms extends Component{
 const mapStateToProps = state =>{
   return{
       fandoms:    state.fandoms.fandoms,
+      message:    state.fandoms.message,
       loading:    state.fandoms.loading
   };   
 }
 
 const mapDispatchedToProps = dispatch =>{
   return{
-      onGetFandoms: () => dispatch(actions.getFandomsFromDB())
+      onGetFandoms:    () => dispatch(actions.getFandomsFromDB()),
+      onDeleteFandoms: (Fandom_Name) => dispatch(actions.deleteFandomFromDB(Fandom_Name))
   };
 }
 
