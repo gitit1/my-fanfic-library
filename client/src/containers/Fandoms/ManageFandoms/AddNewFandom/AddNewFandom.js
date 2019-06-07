@@ -115,7 +115,7 @@ class AddNewFandom extends Component{
                     console.log(this.state.fandomAddedFlag);                    
                     setTimeout(() => {
                         this.props.history.push('/manageFandoms');
-                    }, 1000);
+                    }, 2000);
                     break;
                 case 'Fandom Already Exist':
                     this.setState({fandomAddedFlag:2})

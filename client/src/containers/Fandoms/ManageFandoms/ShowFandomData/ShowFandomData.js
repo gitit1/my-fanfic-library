@@ -30,6 +30,8 @@ const ShowFandomData = (props) => {
                           {/* <div className={classes.Clear}></div>   */}
                       </div>
                   ))}
+                  <div className={[classes.Dummy,classes.Fandom].join(' ')}></div>
+                  <div className={[classes.Dummy,classes.Fandom].join(' ')}></div>
                  </div>
         </React.Fragment>  
     )

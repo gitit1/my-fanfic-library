@@ -1,28 +1,29 @@
 import React from 'react';
 import classes from './Navigator.module.css';
+import {Link} from 'react-router-dom';
 
 const Navigator = () => (
   <nav className={classes.Navigator}>
       <ul>
           <li className={classes.Dropdown}>
-            <a href="/" className={classes.Dropbtn}>Fandoms</a>
+            <Link to="/" className={classes.Dropbtn}>Fandoms</Link>
             <div className={classes.DropdownContent}>
-                <a href="/allFandoms">All Fandoms</a>
-                <a href="/manageFandoms">Manage Fandoms</a>
+                <Link to="/allFandoms">All Fandoms</Link>
+                <Link to="/manageFandoms">Manage Fandoms</Link>
             </div>          
           </li>
-          <li><a href='/'>Search</a></li>
+          <li><Link to='/'>Search</Link></li>
           <li className={classes.Dropdown}>
-              <a href='/'>My Tracking</a>
+              <Link to='/'>My Tracking</Link>
               <div className={classes.DropdownContent}>
-                <a href="/">Favorits</a>
-                <a href="/">Status Tracker</a>
-                <a href="/">Reading List</a>
+                <Link to="/">Favorits</Link>
+                <Link to="/">Status Tracker</Link>
+                <Link to="/">Reading List</Link>
               </div>
           </li>
-          <li><a href='/manageDownloader'>Manage Downloader</a></li>
-          <li><a href="/todolistClient">TODO LIST CLIENT</a></li>
-          <li><a href="/todolistServer">TODO LIST SERVER</a></li>
+          <li><Link to='/manageDownloader'>Manage Downloader</Link></li>
+          <li><Link to="/todolistClient">TODO LIST CLIENT</Link></li>
+          <li><Link to="/todolistServer">TODO LIST SERVER</Link></li>
          
       </ul>
   </nav>
