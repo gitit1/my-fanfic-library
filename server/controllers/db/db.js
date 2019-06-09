@@ -3,20 +3,136 @@ const cheerio = require('cheerio');
 const clc = require("cli-color");
 const multer = require('multer');
 const path = require('path')
-const fs = require('fs');
+const fs = require('fs-extra');
+
+
+exports.addEditFandomToDB =  async (req,res) =>{
+    console.log(clc.blue('[db] addEditFandomToDB'));
+
+    let resultMessage = '';
+    let mode = req.query.mode;
+    let pathForImage = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
+    let image = JSON.parse(req.query.Image);
+    let imageName = '';
+    let imageNameTemp = req.query.Fandom_Name +'_'+new Date().getTime();
+
+    if (!fs.existsSync(pathForImage) && image){
+        console.log('!fs.existsSync(pathForImage) 2: ',!fs.existsSync(pathForImage))
+        console.log('req.query.Image 2: ',req.query.Image)
+        fs.mkdirSync(pathForImage);
+    }
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+        cb(null, pathForImage)
+        },
+        filename: function (req, file, cb) {
+        cb(null,  imageNameTemp + path.extname(file.originalname))
+        // cb(null, Date.now() + '-' +file.originalname )
+        }
+    })
+    let upload = multer({ storage: storage }).single('file');
+    
+    await upload(req, res, async function (err) {
+        if (err instanceof multer.MulterError) {
+            //return res.status(500).json(err)
+            console.log('Muller Error',res.status(500).json(err));
+            resultMessage = 'Error';
+            return res.send(resultMessage);
+        } else if (err) {  
+            console.log('Other Error',err);
+            //return res.status(500).json(err)
+            resultMessage = 'Other Error';
+            return res.send(resultMessage);
+        }
+        //check if I have an updated image/prev image/no image
+        if(mode === 'add'){
+            imageName = image ? (imageNameTemp + path.extname(req.file.originalname)) : '';
+        }else{
+            imageName = image ? (imageNameTemp + path.extname(req.file.originalname)) : req.body.Image_Name
+            if(image){
+                let path = pathForImage+'/'+req.body.Image_Name;
+                fs.unlink(path, (err) => {
+                    if (err) {
+                        console.error(err)
+                        return
+                    }
+                });
+            }
+        }
+        const fandom = {    
+            "Fandom_Name":              req.body.Fandom_Name,
+            "Search_Keys":              req.body.Search_Keys,
+            "Auto_Save":                req.body.Auto_Save,
+            "Save_Method":              req.body.Save_Method,
+            "Fanfics_in_Fandom":        req.body.Fanfics_in_Fandom,
+            "On_Going_Fanfics":         req.body.On_Going_Fanfics,
+            "Complete_fanfics":         req.body.Complete_fanfics,
+            "Saved_fanfics":            req.body.Saved_fanfics,
+            "Last_Update":              req.body.Last_Update,
+            "Image_Name":               imageName,
+            "Image_Path":               req.body.Fandom_Name
+        }
+        if(req.query.mode === 'add'){
+            let fandomArray = req.body.fandomsNames.split(",");
+            console.log('fandomArray: ',fandomArray)
+            if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.Fandom_Name)){
+                console.log(clc.red('Fandom Already Exist'));
+                resultMessage = 'Fandom Already Exist';
+                return res.send(resultMessage);
+            }else{
+                await axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
+                    .then( () => {
+                        console.log('Fandom '+fandom.Fandom_Name+' ,added to db');
+                        resultMessage = 'Success';
+                        return res.send(resultMessage)
+                    } )
+                    .catch( error => {
+                        console.log(clc.red(error));
+                        resultMessage = 'Error';
+                        return res.send(resultMessage);
+                    } );               
+                }
+        }else{
+            await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.Fandom_ID}.json`, fandom )
+            .then( () => {
+                console.log('Fandom '+fandom.Fandom_Name+' ,was updated in the db')
+                resultMessage = 'Success';
+                return res.send(resultMessage)
+            } )
+            .catch( error => {
+                console.log(clc.red(error));
+                resultMessage = 'Error';
+                return res.send(resultMessage);
+            } );
+        }        
+        console.log(resultMessage)
+        return resultMessage
+    
+    })
+  
+}
 
 exports.addFandomToDB = (req,res) =>{   
     console.log(clc.blue('[db] addFandomToDB'));
+    //TODO: check errors for image: size/not uplode/not image...
     
 
-    //TODO: check errors for image: size/not uplode/not image...
-    var pathForImage = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
-    var ImageName = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
+    //res.send('Error')
 
-    if (!fs.existsSync(pathForImage)){
+    let pathForImage = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;   
+    let ImageName = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
+
+    console.log('image: ',req.query.Image)
+    console.log('!fs.existsSync(pathForImage): ',!fs.existsSync(pathForImage))
+    console.log('req.query.Image: ',req.query.Image)
+
+    if (!fs.existsSync(pathForImage) && req.query.Image){
+        console.log('!fs.existsSync(pathForImage) 2: ',!fs.existsSync(pathForImage))
+        console.log('req.query.Image 2: ',req.query.Image)
         fs.mkdirSync(pathForImage);
     }
 
+    console.log('req.file:',req.file)
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
         cb(null, pathForImage)
@@ -34,11 +150,21 @@ exports.addFandomToDB = (req,res) =>{
             console.log('Muller Error',res.status(500).json(err));
             return res.send('Error');
         } else if (err) {  
-            console.log('Other Error',res.status(500).json(err));
+            console.log('Other Error',err);
             //return res.status(500).json(err)
             return res.send('Error');
         }
-        const image = req.file === undefined||req.file === null ? '' : (req.query.Fandom_Name + path.extname(req.file.originalname));
+
+ 
+
+        let image = null;
+        if(req.query.mode === 'add'){
+            image = req.file === undefined||req.file === null ? '' : (req.query.Fandom_Name + path.extname(req.file.originalname));
+        }else{
+            image = req.file === undefined||req.file === null ? req.body.Image_Name : (req.query.Fandom_Name + path.extname(req.file.originalname));
+        }
+       console.log('image:',image)
+
         const fandom = {    
             "Fandom_Name":              req.body.Fandom_Name,
             "Search_Keys":              req.body.Search_Keys,
@@ -53,23 +179,43 @@ exports.addFandomToDB = (req,res) =>{
         }
         console.log(req.body.fandomsNames)
 
-        if(req.body.fandomsNames.length>0 && req.body.fandomsNames.includes(fandom.Fandom_Name)){
-            console.log(clc.red('Fandom Already Exist'));
-            return res.send('Fandom Already Exist');
-        }else{
+        if(req.query.mode === 'add'){
+            var fandomArray = req.body.fandomsNames.split(",");
+            console.log('fandomArray: ',fandomArray)
+            if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.Fandom_Name)){
+                console.log(clc.red('Fandom Already Exist'));
+                return res.send('Fandom Already Exist');
+            }
+            console.log('axios add')
             axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
             .then( () => {
                 console.log('Fandom '+fandom.Fandom_Name+' ,added to db')
                 return 'Fandom '+fandom.Fandom_Name+' ,added to db'
             } )
             .catch( error => {
+                console.log('error 1')
+                console.log(clc.red(error));
+                // return res.send('Error');
+            } );
+        }else{
+            console.log('axios edit')
+            axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.Fandom_ID}.json`, fandom )
+            .then( () => {
+                console.log('Fandom '+fandom.Fandom_Name+' ,was updated in the db')
+                return 'Fandom '+fandom.Fandom_Name+' ,was updated in the db'
+            } )
+            .catch( error => {
+                console.log('error 2')
                 console.log(clc.red(error));
                 // return res.send('Error');
             } );
         }
+
+        
         
         // return res.status(200).send(req.file)
         // return res.status(200).send(req.file)
+        console.log('Success')
         return res.send('Success');
 
     })
@@ -82,34 +228,22 @@ exports.addFandomToDB = (req,res) =>{
 
 exports.deleteFandomFromDB = async (req,res)=>{
     console.log(clc.blue('[db] deleteFandomFromDB'));
-    deleteDataOfFandomFromServer(req.query.Fandom_Name).then(result =>{
-        result ? res.send('Success') : res.send('Error')        
-    }).catch(error=>(
+    
+    axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.query.id}.json`).then(() =>{
+        var pathForImage = `../client/src/assets/images/fandoms/${req.query.Fandom_Name}`;
+        fs.remove(pathForImage).then(() => {
+            console.log(pathForImage);
+            res.send('Success') 
+        }).catch(err => {
+        console.error(err)
+        })       
+    }).catch(error=>{
+        console.error(error)
         res.send('Error')
-    ));    
+    });
+
 }
 
-const deleteDataOfFandomFromServer = async (fandomName) => {
-    console.log(clc.blueBright('[db] deleteDataOfFandomFromServer'));
-    console.log('fandomName:',fandomName);
-    let status = '';
-    // axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandomName}.json`)
-    return axios.get(`https://my-fanfic-lybrare.firebaseio.com/fandoms.json?orderBy="Fandom_Name"&equalTo="${fandomName}"`)
-    .then(fandomObject =>{
-        var fandomId = Object.keys(fandomObject.data)[0]
-        if(!fandomId || fandomId==0 || fandomId===null){
-            return false;
-        }else{
-            return axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandomId}.json`).then((res) =>{
-                return true
-            }).catch(error=>{
-                return false;
-            });
-        }
-    }).catch(error=>{
-        return false;
-    })
-}
 
 /* --------------------------------------------------------- */
 exports.getAllFandomsFromDB = (req,res) =>{

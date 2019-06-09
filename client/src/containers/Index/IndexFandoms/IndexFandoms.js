@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './IndexFandoms.module.css';
+// import classes from './IndexFandoms.module.css';
 
 const IndexFandoms = () => (
   <div class="favorite module odd">    

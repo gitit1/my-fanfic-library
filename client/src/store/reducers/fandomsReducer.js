@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 import {updateObject} from '../../shared/utility';
 
 const initialState ={
-    // fandom: null,
+    fandom: null,
     fandoms: [],
     error: null,
     message:'',
@@ -29,6 +29,7 @@ const getFandomsFromDBFail  = (state,action) => {
 //Add Fandom To Server
 const editFandomDataStart  = (state,action) => {
     return updateObject(state,{
+                                fandom: null,
                                 error: null,
                                 message:'',
                                 loading:true
@@ -48,6 +49,12 @@ const editFandomDataFail  = (state,action) => {
                               });   
 }
 
+const getFandom = (state,action) =>{
+      return updateObject(state,{
+                                fandom: action.fandom                         
+                              });    
+}
+
 
 const reducer = (state = initialState,action) =>{
     switch(action.type){
@@ -58,6 +65,9 @@ const reducer = (state = initialState,action) =>{
         case actionTypes.EDIT_FANDOM_START:                  return editFandomDataStart(state,action)                                    
         case actionTypes.EDIT_FANDOM_SUCCESS:                return editFandomDataSuccess(state,action)                                    
         case actionTypes.EDIT_FANDOM_FAIL:                   return editFandomDataFail(state,action)                                    
+        
+        case actionTypes.GET_FANDOM:                         return getFandom(state,action)                                    
+        
         default: return state;
     }
 }

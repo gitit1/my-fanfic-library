@@ -25,13 +25,14 @@ export const getFandomsFromDBFail = (error) =>{
 export const getFandomsFromDB = () =>{
     return dispatch =>{
         dispatch(getFandomsFromDBStart())
-        axios.get('/db/getAllFandoms')
+        return axios.get('/db/getAllFandoms')
         .then(res =>{
             const fetchedFandoms= []
             for(let key in res.data){
                 fetchedFandoms.push({...res.data[key],id: key});
             }
-            dispatch(getFandomsFromDBSuccess(fetchedFandoms))
+            dispatch(getFandomsFromDBSuccess(fetchedFandoms));
+            return true;
         })
         .catch(error =>{
             dispatch(getFandomsFromDBFail(error))
@@ -65,10 +66,10 @@ export const editFandomDataFail = (error) =>{
     };
 };
 
-export const addFandomToDB = (fandom_Name,fandom) =>{
+export const addFandomToDB = (fandom_Name,mode,fandom,image) =>{
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/addFandom?Fandom_Name=${fandom_Name}`,fandom)
+        return axios.post(`/db/addEditFandom?Fandom_Name=${fandom_Name}&mode=${mode}&Image=${image}`,fandom)
         .then(res =>{
             dispatch(editFandomDataSuccess(res.data));
             return true;
@@ -79,10 +80,10 @@ export const addFandomToDB = (fandom_Name,fandom) =>{
     };
 };
 
-export const deleteFandomFromDB = (fandom_Name) =>{
+export const deleteFandomFromDB = (id,Fandom_Name) =>{
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/deleteFandom?Fandom_Name=${fandom_Name}`)
+        return axios.post(`/db/deleteFandom?id=${id}&Fandom_Name=${Fandom_Name}`)
         .then(res =>{
             dispatch(editFandomDataSuccess(res.data));
             return true;
@@ -92,3 +93,16 @@ export const deleteFandomFromDB = (fandom_Name) =>{
         })  
     };
 };
+
+export const getFandom = (fandom) =>{
+    return{
+        type: actionTypes.GET_FANDOM,
+        fandom: fandom
+    };
+}
+
+export const testSocket = () => {
+    return{
+        type: actionTypes.TEST_SOCKET
+    }
+}

@@ -3,11 +3,25 @@ import './ImageUpload.css';
 import Button from '../UI/Button/Button';
 
 class ImageUpload extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {file: '',imagePreviewUrl: ''};
-    }
+  constructor(props) {
+    super(props);
+    this.state = {file: '',imagePreviewUrl: ''};
+  }
   
+  componentDidMount() {
+        console.log('this.props.edit: ',this.props.edit)
+        if(this.props.edit){
+          let file = (this.props.fileName !== '') 
+                     ? require(`../../assets/images/fandoms/${this.props.fandomName}/${this.props.fileName}`)
+                     : require(`../../assets/images/fandoms/nophoto.png`);
+
+          this.setState({
+            imagePreviewUrl:file
+          })
+        }
+  }
+
+
     _handleSubmit(e) {
       e.preventDefault();
       // TODO: do something with -> this.state.file
@@ -21,7 +35,6 @@ class ImageUpload extends Component {
       let reader = new FileReader();
 
       let file = e.target.files[0];
-      let oldFile = file;
   
       reader.onloadend = () => {
         this.setState({
@@ -39,7 +52,7 @@ class ImageUpload extends Component {
       let {imagePreviewUrl} = this.state;
       let $imagePreview = null;
       if (imagePreviewUrl) {
-        $imagePreview = (<img src={imagePreviewUrl} />);
+        $imagePreview = (<img src={imagePreviewUrl} alt={'upload'}/>);
       } else {
         $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
       }
@@ -49,18 +62,10 @@ class ImageUpload extends Component {
           <div className="imgPreview">
             {$imagePreview}
           </div>
-          <form className="fileInputForm" onSubmit={(e)=>this._handleSubmit(e)}>
-              {/* <input className="fileInput" 
-                type="file" 
-                onChange={(e)=>this._handleImageChange(e)} /> */}
-              <input type="file" id="selectedFile"  className="fileInput"  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
-              <span className="fileInputButton">
-                <Button clicked={() => {document.getElementById('selectedFile').click()}} >Browse...</Button> 
-              </span>
-              {/* <button className="submitButton" 
-                type="submit" 
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</button> */}
-            </form>
+          <input type="file" id="selectedFile"  className="fileInput"  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
+          <span className="fileInputButton">
+            <Button clicked={() => {document.getElementById('selectedFile').click()}} >Browse...</Button> 
+          </span>
         </div>
       )
     }

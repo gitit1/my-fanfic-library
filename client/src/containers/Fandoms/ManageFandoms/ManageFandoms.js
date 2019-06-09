@@ -3,9 +3,14 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import classes from './ManageFandoms.module.css';
-import Button from '../../../components/UI/Button/Button';
-import ShowFandomData from './ShowFandomData/ShowFandomData';
+
 import * as actions from '../../../store/actions';
+
+import Button from '../../../components/UI/Button/Button';
+import Container from '../../../components/UI/Container/Container';
+
+import ShowFandomData from './ShowFandomData/ShowFandomData';
+
 
 class ManageFandoms extends Component{
 
@@ -14,26 +19,37 @@ class ManageFandoms extends Component{
   }
 
   routeChange = () => {
-    let path = '/addnewfandom';
-    this.props.history.push(path);
+    this.props.history.push({
+      pathname: '/addnewfandom',
+      state: {editMode: false}
+    });
   }
 
-  deleteFandomHandler = (Fandom_Name) =>{
-    this.props.onDeleteFandoms(Fandom_Name).then(()=>{
+  deleteFandomHandler = (id,Fandom_Name) =>{
+    this.props.onDeleteFandoms(id,Fandom_Name).then(()=>{
       console.log(this.props.message)
       switch  (this.props.message) {
           case 'Success':                
-              this.props.onGetFandoms();
+              this.props.onGetFandoms()
               break;
           case 'Error':
               break;
+          default:
+              break;
       }  
   });
-  
+  }
+
+  editFandomHandler = (fandom) => {
+    this.props.onPostFandom(fandom)
+    this.props.history.push({
+      pathname: '/addnewfandom',
+      state: {editMode: true}
+    });
   }
 
   render(){
-    let page =  <p>Page is loading</p>
+    let page =  this.props.loading && <p>Page is loading</p>
     if(!this.props.loading){
       if(this.props.fandoms.length === 0||this.props.fandoms ===null){
           page = (
@@ -52,24 +68,25 @@ class ManageFandoms extends Component{
     }
 
     return(
-      <div className={classes.ManageFandoms}>
-        <h2>Manage Fandoms</h2>
-        { this.props.loading ?
-            <p>Page is loading</p>
-            :
-            <React.Fragment>
-              <div className={classes.AddNew}>
-                <Button clicked={this.routeChange}>Add New Fandom</Button>
-              </div>
-              <div className={classes.Fandoms}>
-                {page}
-              </div>  
-              <div className={classes.Clear}></div>
-            </React.Fragment>
-         
-        }
+      <Container header={'Manage Fandoms'}>
+          { this.props.loading ?
+              <p>Page is loading</p>
+              :
+              <React.Fragment>
+                <div className={classes.AddNew}>
+                  <Button clicked={this.routeChange}>Add New Fandom</Button>
+                </div>
+                <div className={classes.Fandoms}>
+                  {page}
+                </div>  
+                <div className={classes.Clear}></div>
+              </React.Fragment>
+          
+          }
+        </Container>
 
-      </div>
+
+      
     )
   }
 };
@@ -85,7 +102,8 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
   return{
       onGetFandoms:    () => dispatch(actions.getFandomsFromDB()),
-      onDeleteFandoms: (Fandom_Name) => dispatch(actions.deleteFandomFromDB(Fandom_Name))
+      onPostFandom:    (fandom) => dispatch(actions.getFandom(fandom)),
+      onDeleteFandoms: (id,Fandom_Name) => dispatch(actions.deleteFandomFromDB(id,Fandom_Name))
   };
 }
 

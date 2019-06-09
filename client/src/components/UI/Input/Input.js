@@ -44,7 +44,9 @@ const input = (props) => {
                                         <input type="checkbox"                                           
                                            name={option.value}
                                            value={option.value}
-                                           onChange={props.checked}/>
+                                           onChange={props.checked}
+                                           checked={option.checked}
+                                        />                                           
                                         {option.displayValue}
                                     </React.Fragment>
                                 ))} 

@@ -10,8 +10,8 @@ class Button extends Component{
                 className={[classes.Button, classes[this.props.btnType]].join(' ')} 
                 onClick={this.props.clicked}
                 style={{
-                    ['--theme-primary-color']: this.props.backColorFrimary,
-                    ['--theme-secondery-color']: this.props.backColorSecondary,
+                    '--theme-primary-color': this.props.backColorFrimary,
+                    '--theme-secondery-color': this.props.backColorSecondary,
                     'color': this.props.textColor
                 }}
                 //style={{'backgroundColor':props.backColor,}}>

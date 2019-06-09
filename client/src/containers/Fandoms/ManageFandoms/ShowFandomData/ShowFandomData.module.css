@@ -40,6 +40,7 @@
     margin-top: 1%;
     line-height: 1.75em;
     position: relative;
+    margin-left: 15px;
 }
 
 .DataSection h3{
@@ -47,9 +48,12 @@
     line-height: 2em;
 }
 
-.DataSection p {
-    margin-left: 15px;
+a{
+    text-decoration: none;
+    cursor: pointer;
+    color: #000;
 }
+
 
 .DataSection p span {
     font-weight: 600;
@@ -59,7 +63,6 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    margin-left: 15px;
     margin-bottom: 3%;
     width: 100%;
 }

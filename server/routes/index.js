@@ -7,7 +7,7 @@ const db = require('../controllers/db/db');
 
 try {
   console.log('[Server] - in routes')
-  router.post('/db/addFandom',db.addFandomToDB);
+  router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
 
   /*-----------------------------------------*/

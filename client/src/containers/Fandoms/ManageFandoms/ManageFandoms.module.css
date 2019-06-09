@@ -1,4 +1,4 @@
-
+/* 
 .ManageFandoms{
     font-size: .875em;
     line-height: 1.286;
@@ -8,14 +8,10 @@
     min-height: 450px;
     display: block;
     width:80%
-}
+} */
 
 .Fandoms{
     width: 100%;
-}
-
-.AddNew{
-    margin-top:2%;
 }
 
 .Clear{

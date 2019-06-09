@@ -1,5 +1,7 @@
 export {
     getFandomsFromDB,
+    editFandomDataStart,
     addFandomToDB,
-    deleteFandomFromDB
+    deleteFandomFromDB,
+    getFandom
 } from './fandoms';

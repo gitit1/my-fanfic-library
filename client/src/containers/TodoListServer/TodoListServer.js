@@ -14,6 +14,15 @@ const TodolistServer = () => (
                 <li>clean the functions</li>
             </ul>
         </div>
+        <div className={classes.Box}>
+            <div>
+                <span className={classes.Other}>Other:</span> 
+                <span className={classes.Header}> Add new fandom general</span>
+            </div>
+            <ul className={classes.insideUl}>
+                <li>delete folder of image if deleted from list</li>
+            </ul>
+        </div>
   </div>
 );
 

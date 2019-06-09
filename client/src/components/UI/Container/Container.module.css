@@ -1,0 +1,15 @@
+.Container{
+    margin: 0 auto;
+    margin-top: 1%;
+}
+.Header{
+    height: 40px;     
+}
+.Header h3{
+    font-size: 1.75em;
+    line-height: 1.75em;
+}
+
+.Main{
+    margin-top: 2%;
+}
