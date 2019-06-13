@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "fix-memory-limit": "cross-env LIMIT=8192 increase-memory-limit",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
@@ -12,7 +13,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    
     "concurrently": "^4.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "cross-env": "^5.0.5",
+    "increase-memory-limit": "^1.0.7"
+  }
 }

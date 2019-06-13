@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "fix-memory-limit": "cross-env LIMIT=8192 increase-memory-limit",
     "start": "nodemon server.js"
   },
   "keywords": [],
@@ -12,28 +13,26 @@
   "dependencies": {
     "axios": "^0.19.0",
     "body-parser": "^1.18.3",
-    "busboy-body-parser": "^0.3.2",
     "cheerio": "^1.0.0-rc.3",
     "clc": "^1.0.2",
     "cli-color": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
-    "firebase-admin": "^8.0.0",
     "formidable": "^1.2.1",
     "fs": "0.0.1-security",
     "fs-extra": "^8.0.1",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.2",
     "multer": "^1.4.1",
-    "multiparty": "^4.2.1",
     "node-cron": "^2.0.3",
     "nodemon": "^1.18.9",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "request": "^2.88.0",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "increase-memory-limit": "^1.0.7",
+    "cross-env": "^5.0.5"
   }
 }
