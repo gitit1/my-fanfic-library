@@ -7,16 +7,15 @@ import classes from './ManageFandoms.module.css';
 import * as actions from '../../../store/actions';
 
 import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
+
 
 import ShowFandomData from './ShowFandomData/ShowFandomData';
 
 
 class ManageFandoms extends Component{
 
-  componentDidMount(){
-    this.props.onGetFandoms()
-  }
 
   routeChange = () => {
     this.props.history.push({
@@ -25,16 +24,20 @@ class ManageFandoms extends Component{
     });
   }
 
-  deleteFandomHandler = (id,Fandom_Name) =>{
-    this.props.onDeleteFandoms(id,Fandom_Name).then(()=>{
-      console.log(this.props.message)
-      switch  (this.props.message) {
+  deleteFandomHandler = (id,fandomName) =>{
+
+    this.props.onDeleteFandoms(id,fandomName).then(async res=>{
+      let msg = this.props.message
+      switch  (msg) {
           case 'Success':                
-              this.props.onGetFandoms()
+              //this.props.onGetFandoms()
+              console.log('delete Success')
               break;
           case 'Error':
+              console.log('delete Error')
               break;
           default:
+              console.log('delete Error')
               break;
       }  
   });
@@ -49,7 +52,7 @@ class ManageFandoms extends Component{
   }
 
   render(){
-    let page =  this.props.loading && <p>Page is loading</p>
+    let page =  null
     if(!this.props.loading){
       if(this.props.fandoms.length === 0||this.props.fandoms ===null){
           page = (
@@ -58,7 +61,7 @@ class ManageFandoms extends Component{
             </div>
           )
       }else{
-          const sortedFandomList = this.props.fandoms.sort((a, b) => a.Fandom_Name.localeCompare(b.Fandom_Name))
+          const sortedFandomList = this.props.fandoms.sort((a, b) => a.fandomName.localeCompare(b.fandomName))
           page = (<ShowFandomData 
                                   fandoms={sortedFandomList}
                                   editFandom={this.editFandomHandler}
@@ -70,7 +73,7 @@ class ManageFandoms extends Component{
     return(
       <Container header={'Manage Fandoms'}>
           { this.props.loading ?
-              <p>Page is loading</p>
+              <Spinner/>
               :
               <React.Fragment>
                 <div className={classes.AddNew}>
@@ -103,7 +106,7 @@ const mapDispatchedToProps = dispatch =>{
   return{
       onGetFandoms:    () => dispatch(actions.getFandomsFromDB()),
       onPostFandom:    (fandom) => dispatch(actions.getFandom(fandom)),
-      onDeleteFandoms: (id,Fandom_Name) => dispatch(actions.deleteFandomFromDB(id,Fandom_Name))
+      onDeleteFandoms: (id,fandomName) => dispatch(actions.deleteFandomFromDB(id,fandomName))
   };
 }
 

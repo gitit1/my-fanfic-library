@@ -1,5 +1,5 @@
 export const fandomGeneralForm = [{
-    Fandom_Name: {
+    fandomName: {
             label: 'Fandom Name:',
             elementType: 'input', 
             elementConfig:{
@@ -12,9 +12,10 @@ export const fandomGeneralForm = [{
             },
             valid:false,
             touched:false,
-            visible: true
+            visible: true,
+            disabled:false
     },
-    Search_Keys: {
+    SearchKeys: {
         label: 'Search Key:',
         elementType:'input', 
         elementConfig:{
@@ -27,9 +28,10 @@ export const fandomGeneralForm = [{
         },
         valid:false,
         touched:false,
-        visible: true
+        visible: true,
+        disabled:false
     },
-    Auto_Save: {
+    AutoSave: {
         label: 'Save Fanfics Automatic to Server?',
         elementType:'select', 
         elementConfig:{
@@ -40,9 +42,10 @@ export const fandomGeneralForm = [{
         value:false,
         validation:{},
         valid: true,
-        visible: true
+        visible: true,
+        disabled:false
     },
-    Save_Method: {
+    SaveMethod: {
         label: 'Save Methods:',
         elementType:'checkbox', 
         elementConfig:{
@@ -55,6 +58,7 @@ export const fandomGeneralForm = [{
         value:'',
         validation:{},
         valid: true,
-        visible: false
+        visible: false,
+        disabled:false
     }
 }]

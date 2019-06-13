@@ -23,6 +23,7 @@ export const getFandomsFromDBFail = (error) =>{
 };
 
 export const getFandomsFromDB = () =>{
+    console.log('[action] getFandomsFromDB')
     return dispatch =>{
         dispatch(getFandomsFromDBStart())
         return axios.get('/db/getAllFandoms')
@@ -40,21 +41,17 @@ export const getFandomsFromDB = () =>{
     };
 };
 
-// export const fandomInit = () =>{
-//     return{
-//         type: actionTypes.FANDOM_INIT
-//     };
-// }
-
 export const editFandomDataStart = () =>{
     return{
         type: actionTypes.EDIT_FANDOM_START
     };
 };
 
-export const editFandomDataSuccess = (message) =>{
+export const editFandomDataSuccess = (message,fandoms) =>{
+    console.log('message:',message)
     return{
         type: actionTypes.EDIT_FANDOM_SUCCESS,
+        fandoms: fandoms,
         message: message
     };
 };
@@ -66,11 +63,14 @@ export const editFandomDataFail = (error) =>{
     };
 };
 
-export const addFandomToDB = (fandom_Name,mode,fandom,image) =>{
+export const addFandomToDB = (fandomName,oldFandomName,mode,fandom,image) =>{
+    console.log('[action] addFandomToDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/addEditFandom?Fandom_Name=${fandom_Name}&mode=${mode}&Image=${image}`,fandom)
+        console.log(`${fandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`)
+        return axios.post(`/db/addEditFandom?fandomName=${fandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`,fandom)
         .then(res =>{
+            dispatch(getFandomsFromDB())
             dispatch(editFandomDataSuccess(res.data));
             return true;
         })
@@ -80,12 +80,14 @@ export const addFandomToDB = (fandom_Name,mode,fandom,image) =>{
     };
 };
 
-export const deleteFandomFromDB = (id,Fandom_Name) =>{
+export const deleteFandomFromDB = (id,fandomName) =>{
+    console.log('[action] deleteFandomFromDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/deleteFandom?id=${id}&Fandom_Name=${Fandom_Name}`)
-        .then(res =>{
-            dispatch(editFandomDataSuccess(res.data));
+        return axios.post(`/db/deleteFandom?id=${id}&fandomName=${fandomName}`)
+        .then(async res =>{
+            await dispatch(getFandomsFromDB())
+            await dispatch(editFandomDataSuccess(res.data));
             return true;
         })
         .catch(error =>{

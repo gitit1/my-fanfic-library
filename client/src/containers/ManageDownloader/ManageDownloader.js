@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import openSocket from 'socket.io-client';
 
 import * as actions from '../../store/actions';
 import classes from './ManageDownloader.module.css';
@@ -9,11 +10,12 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container';
 
+const socket = openSocket('http://localhost:5555');
 
 class ManageDownloader extends Component{
 
   state={
-    fandom:null,
+    fandom:{},
     fandomSelect: {
         label: 'Choose Fandom',
         elementType:'select', 
@@ -25,21 +27,25 @@ class ManageDownloader extends Component{
         valid: true,
         visible: true,
         ready: false
-    }
+    },
+    timestamp: 'no timestamp yet',
+    serverData: null,
+    logs: []
   }
 
   componentWillMount(){
     this.props.onGetFandoms().then(()=>
       this.createOptionsForFandomSelect()
     );
+    socket.removeAllListeners()
   }
 
   createOptionsForFandomSelect = () =>{
     let options =[{value: 'All',displayValue: 'All'}];
-    this.props.fandoms.sort((a, b) => a.Fandom_Name.localeCompare(b.Fandom_Name)).map(fandom=>{
+    this.props.fandoms.sort((a, b) => a.fandomName.localeCompare(b.fandomName)).map(fandom=>{
           options.push({
-            value: fandom.Fandom_Name,
-            displayValue: fandom.Fandom_Name
+            value: fandom.fandomName,
+            displayValue: fandom.fandomName
           }
         )
         return null
@@ -59,18 +65,42 @@ class ManageDownloader extends Component{
   }
 
   getFandomFanfics = () =>{
-    console.log('test')
+    socket.removeAllListeners()
+    this.setState({serverData:null,logs:[]})
+      console.log('dd; ',this.state.fandom);
+
+      socket.on('test', serverData =>{
+          this.setState({serverData})
+          this.state.logs.push(this.state.serverData)
+      })
+
+      // while(this.state.serverData!=='End'){  
+      //     this.state.logs.push(this.state.serverData)
+      // }
+      socket.emit('getFandomFanfics', this.state.fandom);
+
+
+    // (err, serverData) => (this.setState({serverData}), this.state.logs.push(serverData)) 
   }
+
+  subscribeToTimer = (cb) => {
+    socket.on('timer', timestamp => cb(null, timestamp));
+    socket.emit('subscribeToTimer', 1000);
+  }
+
+
 
   inputChangedHandler = (event) =>{
     console.log(event.target.value)
     let val = event.target.value;
-
+    let fandom = this.props.fandoms.filter(fandom => fandom.fandomName===val)[0]
+    console.log('fandom: ',fandom)
     this.setState(prevState =>({
       fandomSelect: {
             ...prevState.fandomSelect,
               value: val
-      }
+      },
+      fandom:fandom
     }));  
   }
 
@@ -93,6 +123,20 @@ class ManageDownloader extends Component{
             <br/>    
         </div>
         <Button clicked={this.getFandomFanfics}>Get/Update Fandom Fanfics</Button>
+
+        {/* <Button clicked={() =>this.subscribeToTimer((err, timestamp) => this.setState({ timestamp }))}>subscribeToTimer</Button> */}
+        {/* <p className="App-intro">
+          This is the timer value: {this.state.timestamp}
+        </p> */}
+        <p className="App-intro">
+        serverData: {this.state.serverData}
+        </p>
+        {
+          this.state.logs.map((log,index)=>(
+            <p key={index} dangerouslySetInnerHTML={{ __html:log}}/>
+
+          ))
+        }
       </Container>
       )
     : <Container><Spinner/></Container> 
