@@ -1,9 +1,18 @@
-const io = require('socket.io')();
+const server = require('http').createServer();
+
+const io = require('socket.io')(server,{
+    serveClient: false,
+    // below are engine.IO options
+    pingInterval: 30000,
+    pingTimeout: 80000,
+    cookie: false
+  });
+
 const test = require('../db/db');
 
-io.listen(5555);
+server.listen(5555);
 
-io.sockets.on('connection', (socket) => {
+io.on('connection', (socket) => {
     socket.on('subscribeToTimer', (interval) => {
         console.log('client is subscribing to timer with interval ', interval);
         setInterval(() => {
@@ -15,5 +24,6 @@ io.sockets.on('connection', (socket) => {
         //socket.emit('test', fandom);
         //test.test(fandom)
         test.test(socket,fandomOriginalName)
-    });
+        
+      });
 });

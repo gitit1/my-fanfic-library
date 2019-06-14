@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import openSocket from 'socket.io-client';
+import io from 'socket.io-client';
 
 import * as actions from '../../store/actions';
 import classes from './ManageDownloader.module.css';
@@ -10,7 +10,8 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container';
 
-const socket = openSocket('http://localhost:5555');
+const socket = io('ws://localhost:5555', {transports: ['websocket']});
+
 
 class ManageDownloader extends Component{
 
@@ -91,6 +92,7 @@ class ManageDownloader extends Component{
 
 
   inputChangedHandler = (event) =>{
+    socket.removeAllListeners()
     console.log(event.target.value)
     let val = event.target.value;
     let fandom = this.props.fandoms.filter(fandom => fandom.fandomName===val)[0]
@@ -100,7 +102,9 @@ class ManageDownloader extends Component{
             ...prevState.fandomSelect,
               value: val
       },
-      fandom:fandom
+      fandom:fandom,
+      serverData: null,
+      logs: []
     }));  
   }
 
