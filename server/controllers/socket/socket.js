@@ -1,19 +1,22 @@
-const io = require('socket.io')();
-const test = require('../db/db');
+const server = require('http').createServer();
 
-io.listen(5555);
+const io = require('socket.io')(server,{
+    serveClient: false,
+    // below are engine.IO options
+    pingInterval: 30000,
+    pingTimeout: 80000,
+    cookie: false
+  });
 
-io.sockets.on('connection', (socket) => {
-    socket.on('subscribeToTimer', (interval) => {
-        console.log('client is subscribing to timer with interval ', interval);
-        setInterval(() => {
-            socket.emit('timer', new Date());
-          }, interval);
+const func = require('../db/db');
+
+server.listen(5555);
+
+io.on('connection', (socket) => {
+      socket.on('getFandomFanfics', (fandomData) => {
+        console.log('[socket.js] getFandomFanfics()');
+        
+        func.manageDownloader(socket,fandomData)
+        
       });
-      socket.on('getFandomFanfics', (fandomOriginalName) => {
-        console.log('getFandomFanfics: ', fandomOriginalName);
-        //socket.emit('test', fandom);
-        //test.test(fandom)
-        test.test(socket,fandomOriginalName)
-    });
 });

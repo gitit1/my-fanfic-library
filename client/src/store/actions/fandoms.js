@@ -27,12 +27,8 @@ export const getFandomsFromDB = () =>{
     return dispatch =>{
         dispatch(getFandomsFromDBStart())
         return axios.get('/db/getAllFandoms')
-        .then(res =>{
-            const fetchedFandoms= []
-            for(let key in res.data){
-                fetchedFandoms.push({...res.data[key],id: key});
-            }
-            dispatch(getFandomsFromDBSuccess(fetchedFandoms));
+        .then(fetchedFandoms =>{
+            dispatch(getFandomsFromDBSuccess(fetchedFandoms.data));
             return true;
         })
         .catch(error =>{

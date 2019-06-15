@@ -124,7 +124,7 @@ class AddNewFandom extends Component{
         fandom.append("SavedFanfics", 0)
         fandom.append("LastUpdate", new Date().getTime())
         fandom.append("fandomsNames", fandomsNames)
-        this.state.editMode &&  fandom.append("Fandom_ID", this.props.fandom.id)
+        this.state.editMode &&  fandom.append("FandomID", this.props.fandom.id)
         this.state.editMode &&  fandom.append("Image_Name", this.props.fandom.Image_Name)
         fandom.append('file', this.formRef.current.state.file)
 

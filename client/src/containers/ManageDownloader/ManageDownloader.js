@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import openSocket from 'socket.io-client';
+import io from 'socket.io-client';
 
 import * as actions from '../../store/actions';
 import classes from './ManageDownloader.module.css';
@@ -10,12 +10,13 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container';
 
-const socket = openSocket('http://localhost:5555');
+const socket = io('ws://localhost:5555', {transports: ['websocket']});
+
 
 class ManageDownloader extends Component{
 
   state={
-    fandom:{},
+    fandom:'All',
     fandomSelect: {
         label: 'Choose Fandom',
         elementType:'select', 
@@ -69,38 +70,33 @@ class ManageDownloader extends Component{
     this.setState({serverData:null,logs:[]})
       console.log('dd; ',this.state.fandom);
 
-      socket.on('test', serverData =>{
+      socket.on('getFanficsData', serverData =>{
           this.setState({serverData})
           this.state.logs.push(this.state.serverData)
       })
 
-      // while(this.state.serverData!=='End'){  
-      //     this.state.logs.push(this.state.serverData)
-      // }
       socket.emit('getFandomFanfics', this.state.fandom);
 
 
     // (err, serverData) => (this.setState({serverData}), this.state.logs.push(serverData)) 
   }
 
-  subscribeToTimer = (cb) => {
-    socket.on('timer', timestamp => cb(null, timestamp));
-    socket.emit('subscribeToTimer', 1000);
-  }
-
 
 
   inputChangedHandler = (event) =>{
-    console.log(event.target.value)
-    let val = event.target.value;
-    let fandom = this.props.fandoms.filter(fandom => fandom.fandomName===val)[0]
-    console.log('fandom: ',fandom)
+    socket.removeAllListeners()
+
+    let selectedFandom = event.target.value;
+    let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.fandomName===selectedFandom)[0])
+    
     this.setState(prevState =>({
       fandomSelect: {
             ...prevState.fandomSelect,
-              value: val
+              value: selectedFandom
       },
-      fandom:fandom
+      fandom:fandom,
+      serverData: null,
+      logs: []
     }));  
   }
 
