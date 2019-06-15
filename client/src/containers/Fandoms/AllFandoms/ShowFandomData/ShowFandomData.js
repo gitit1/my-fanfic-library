@@ -22,17 +22,15 @@ const ShowFandomData = (props) => {
                                     </Link>
                               }
                           </section>
-                          <section className={classes.DataSection}>
-                            <h3>
+                            <section className={classes.DataSection}>
                                 <Link to='/'>
-                                    {fandom.fandomName}
+                                    <h3>{fandom.fandomName}</h3>         
+                                    <p><span>Fanfics in Fandoms: </span><b>{fandom.FanficsInFandom}</b></p>           
+                                    <p><span>Complete Fanfics: </span>{fandom.CompleteFanfics}</p> 
+                                    <p><span>In Progress Fanfics: </span>{fandom.OnGoingFanfics}</p>                            
                                 </Link>
-                            </h3>         
-                            <p><span>Search Keys: </span>{fandom.SearchKeys}</p>           
-                            <p><span>Auto Save: </span>{fandom.AutoSave==='true' ? 'Yes' : 'No'}</p> 
-                            {fandom.AutoSave==='true' ? <p><span>Auto Save Types: </span>{fandom.SaveMethod}</p>  : null}  
-     
-                          </section>
+                            </section>
+                          
 
                           {/* <div className={classes.Clear}></div>   */}
                       </div>

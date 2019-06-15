@@ -8,14 +8,26 @@ const fs = require('fs-extra');
 //----------------------------------------------------------Working and implemented with cliend:
 exports.getAllFandomsFromDB = (req,res) =>{
     console.log(clc.blue('[db] getAllFandomsFromDB'));
-    axios.get( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json')
+    getDataFromDB().then(fetchedFandoms=>{
+        !fetchedFandoms ? res.send('error in [db] addFandomToDB') : res.send(fetchedFandoms)
+    })
+}
+
+const getDataFromDB = async () =>{
+    console.log(clc.blue('[db] getDataFromDB'));
+    return axios.get( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json')
     .then( response => {
-        res.send(response.data)
+        const fetchedFandoms= []
+            for(let key in response.data){
+                fetchedFandoms.push({...response.data[key],id: key});
+            }
+        return fetchedFandoms
     } )
     .catch( error => {
-        res.send('error in [db] addFandomToDB')
+        
         console.log(clc.red(error));
-    } );
+        return false
+    } );   
 }
 
 exports.addEditFandomToDB =  async (req,res) =>{
@@ -263,7 +275,50 @@ exports.deleteFandomFromDB = async (req,res)=>{
 exports.manageDownloader = async (socket,fandom) =>{
     console.log(clc.blue('[db] getFanficsFromAo3'));
     try {
-        console.log('fandomData:',fandom)
+        console.log('fandomData:',fandom);
+
+        if(fandom=='All'){
+            console.log('---1---')
+            let fetchedFandoms = await getDataFromDB().then(fetchedFandoms=>{
+                if(!fetchedFandoms){
+                    return false
+                }else{
+                    return fetchedFandoms
+                }
+            })
+            let promises = [];
+            if(fetchedFandoms){
+                let p = Promise.resolve();
+
+                await fetchedFandoms.map(fandom => promises.push(  
+                    p = p.then(() => manageFandomFanficsHandler(socket,fandom) )                               
+                ))
+    
+                return null;
+
+            }else{
+                console.log(clc.cyanBright(`Server got error in manageDownloader`));
+                socket && socket.emit('getFanficsData', `<span style="color:red"><b>Server got error in manageDownloader</b></span>`);   
+                return null;             
+            }
+
+
+        }else{
+            console.log('---2---')
+            await manageFandomFanficsHandler(socket,fandom)
+        }
+
+
+
+        // console.log(clc.cyanBright(`End`));
+        // socket && socket.emit('getFanficsData', 'End');
+        return null
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+const manageFandomFanficsHandler = async (socket,fandom) => {
         const {fandomName,SearchKeys} = fandom
 
         console.log(clc.cyanBright(`Server got fandom: ${fandomName}`));
@@ -302,14 +357,6 @@ exports.manageDownloader = async (socket,fandom) =>{
         console.log(clc.cyanBright(`Executing: sendFanficsToServer()`));
         socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">sendFanficsToServer()</span>`);
         await sendFanficsToServer(socket,fandomName,fanfics);
-
-
-        console.log(clc.cyanBright(`End`));
-        socket && socket.emit('getFanficsData', 'End');
-        return null
-    } catch(e) {
-        console.log(e);
-    }
 }
 
 const deleteOldDataOfFanficsFromServer = (socket,fandomName) => {

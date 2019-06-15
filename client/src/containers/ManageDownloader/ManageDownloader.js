@@ -16,7 +16,7 @@ const socket = io('ws://localhost:5555', {transports: ['websocket']});
 class ManageDownloader extends Component{
 
   state={
-    fandom:{},
+    fandom:'All',
     fandomSelect: {
         label: 'Choose Fandom',
         elementType:'select', 
@@ -75,32 +75,24 @@ class ManageDownloader extends Component{
           this.state.logs.push(this.state.serverData)
       })
 
-      // while(this.state.serverData!=='End'){  
-      //     this.state.logs.push(this.state.serverData)
-      // }
       socket.emit('getFandomFanfics', this.state.fandom);
 
 
     // (err, serverData) => (this.setState({serverData}), this.state.logs.push(serverData)) 
   }
 
-  subscribeToTimer = (cb) => {
-    socket.on('timer', timestamp => cb(null, timestamp));
-    socket.emit('subscribeToTimer', 1000);
-  }
-
 
 
   inputChangedHandler = (event) =>{
     socket.removeAllListeners()
-    console.log(event.target.value)
-    let val = event.target.value;
-    let fandom = this.props.fandoms.filter(fandom => fandom.fandomName===val)[0]
-    console.log('fandom: ',fandom)
+
+    let selectedFandom = event.target.value;
+    let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.fandomName===selectedFandom)[0])
+    
     this.setState(prevState =>({
       fandomSelect: {
             ...prevState.fandomSelect,
-              value: val
+              value: selectedFandom
       },
       fandom:fandom,
       serverData: null,
