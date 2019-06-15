@@ -70,7 +70,7 @@ class ManageDownloader extends Component{
     this.setState({serverData:null,logs:[]})
       console.log('dd; ',this.state.fandom);
 
-      socket.on('test', serverData =>{
+      socket.on('getFanficsData', serverData =>{
           this.setState({serverData})
           this.state.logs.push(this.state.serverData)
       })

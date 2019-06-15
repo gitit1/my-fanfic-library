@@ -107,7 +107,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
                     } );               
                 }
         }else{
-            await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.Fandom_ID}.json`, fandom )
+            await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
             .then( () => {
                 console.log('Fandom '+fandom.fandomName+' ,was updated in the db')
                 resultMessage = 'Success';
@@ -213,7 +213,7 @@ exports.addFandomToDB = (req,res) =>{
             } );
         }else{
             console.log('axios edit')
-            axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.Fandom_ID}.json`, fandom )
+            axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
             .then( () => {
                 console.log('Fandom '+fandom.fandomName+' ,was updated in the db')
                 return 'Fandom '+fandom.fandomName+' ,was updated in the db'
@@ -260,74 +260,56 @@ exports.deleteFandomFromDB = async (req,res)=>{
 //----------------------------------------------------------Testing:
 
 
-exports.test = async (socket,fandom) =>{
+exports.manageDownloader = async (socket,fandom) =>{
     console.log(clc.blue('[db] getFanficsFromAo3'));
     try {
-        const {fandomName,SearchKeys,AutoSave,SaveMethod} = fandom
+        console.log('fandomData:',fandom)
+        const {fandomName,SearchKeys} = fandom
 
         console.log(clc.cyanBright(`Server got fandom: ${fandomName}`));
-        socket && socket.emit('test', `<b>Server got fandom:</b> ${fandomName}`);
+        socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${fandomName}`);
     
         console.log(clc.cyanBright(`Server got keys: ${SearchKeys}`));
-        socket && socket.emit('test', `<b>Server got keys:</b> ${SearchKeys}`);
+        socket && socket.emit('getFanficsData', `<b>Server got keys:</b> ${SearchKeys}`);
         
     
         let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
-        socket && socket.emit('test', `<b>Fixing keys to match url search:</b> ${fandomUrlName}`);
+        socket && socket.emit('getFanficsData', `<b>Fixing keys to match url search:</b> ${fandomUrlName}`);
     
         let oldData=''
         console.log(clc.cyanBright(`Executing: getFanficsFromServer()`));
-        socket && socket.emit('test', `<b>Executing:</b> <span style="color:brown">getFanficsFromServer()</span>`);
+        socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsFromServer()</span>`);
         await getFanficsFromServer(fandomName).then(res=>{
             oldData = res
         });
         const isNewFandom = (oldData===undefined || oldData===null) ? true : false;
         if(!isNewFandom){
             console.log(clc.cyanBright(`Executing: deleteOldDataOfFanficsFromServer()`));
-            socket && socket.emit('test', `<b>Executing:</b> <span style="color:brown">deleteOldDataOfFanficsFromServer()</span>`);
+            socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">deleteOldDataOfFanficsFromServer()</span>`);
             await deleteOldDataOfFanficsFromServer(socket,fandomName);
         }
 
         console.log('isNewFandom :::',isNewFandom)
 
         console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
-        socket && socket.emit('test', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
+        socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
+
         const fanfics = await getFanficsOfFandom(socket,fandom,isNewFandom,oldData);
 
         console.log(clc.cyanBright(`Got ${fanfics.length} from getFanficsOfFandom`)),
-        socket && socket.emit('test', `Got ${fanfics.length} from <span style="color:brown">getFanficsOfFandom()</span>`)
+        socket && socket.emit('getFanficsData', `Got ${fanfics.length} from <span style="color:brown">getFanficsOfFandom()</span>`)
         
         console.log(clc.cyanBright(`Executing: sendFanficsToServer()`));
-        socket && socket.emit('test', `<b>Executing:</b> <span style="color:brown">sendFanficsToServer()</span>`);
+        socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">sendFanficsToServer()</span>`);
         await sendFanficsToServer(socket,fandomName,fanfics);
 
 
-        // console.log(clc.cyanBright(`End`));
-        socket && socket.emit('test', 'End');
+        console.log(clc.cyanBright(`End`));
+        socket && socket.emit('getFanficsData', 'End');
         return null
     } catch(e) {
         console.log(e);
     }
-    setInterval(test, 1000);
-
-
-    // let fanfics = await getFanficsOfFandom(socket,fandom)
-    
-    //console.log(clc.cyanBright(`Got ${fanfics.length} from getFanficsOfFandom`));
-    //socket && socket.emit('test', `Got ${fanfics.length} from <span style="color:brown">getFanficsOfFandom</span>`);
-
-}
-
-const test1 = socket => {
-    return new Promise((resolve, reject) => {
-        ['test1','test2','test3','test4'].map(rs=>{
-            setTimeout(() => {
-              socket && socket.emit('test', rs);
-            }, 1000)
-        })
-        resolve('tessss')
-    })
-
 }
 
 const deleteOldDataOfFanficsFromServer = (socket,fandomName) => {
@@ -395,19 +377,21 @@ const sendFanficsToServer =  async (socket,fandomName,fanfics) => {
     } );
 }
 
+const delay = t => new Promise(resolve => setTimeout(resolve, t));
+
 const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
-    //return new Promise(async (resolve, reject) => {
+
         console.log(clc.blue('[db] getFanficsOfFandom'));
 
-        const {fandomName,SearchKeys,AutoSave,SaveMethod} = fandom;
+        const {id,fandomName,SearchKeys,AutoSave,SaveMethod} = fandom;
 
         console.log('isNewFandom:',isNewFandom)
 
         let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
         console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
-        socket && socket.emit('test', `<b>Server In Function:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
+        socket && socket.emit('getFanficsData', `<b>Server In Function:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
-        //const ao3URL = 'https://archiveofourown.org'
+
         const ao3URL = `https://archiveofourown.org/tags/${fandomUrlName}/works`;
 
         let numberOfPages = 0;
@@ -453,18 +437,18 @@ const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
         if(html){
             let seriesArray = []
             let $ = cheerio.load(html);
+
             if(Number($('#main').find('ol.pagination li').eq(-2).text())>=10){
                 numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text())+1;
             }else{
                 numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
             }
 
-            //const delay = t => new Promise(resolve => setTimeout(resolve, t));
 
             pagesArray = await getPagesOfFandomData(numberOfPages);
 
-            await pagesArray.map(page => promises.push(
-                getDataFromAO3FandomPage(socket,page)                       
+            await pagesArray.map(page => promises.push(   
+                delay(3000).then(() => getDataFromAO3FandomPage(socket,page))             
             ))
 
         
@@ -478,15 +462,33 @@ const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
             });
         }
         console.log('works length:'+works.length);
-        socket && socket.emit('test', `<b>works length: </b> ${works.length}`);
+        let FanficsInFandom = works.length
+        let CompleteFanfics = await works.filter(function(fanfic){return fanfic.Complete==true}).length
+        let OnGoingFanfics = works.length - CompleteFanfics
+
+        let resultMessage=null
+        console.log('FandomID '+id)
+        await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${id}/.json`, {'FanficsInFandom':FanficsInFandom,
+                                                                                           'CompleteFanfics':CompleteFanfics,
+                                                                                           'OnGoingFanfics':OnGoingFanfics} )
+        .then( () => {
+            console.log('Fandom '+fandomName+' ,was updated in the db')
+            resultMessage = 'Success';
+        } )
+        .catch( error => {
+            console.log(clc.red(error));
+            resultMessage = 'Error';
+        } );
+        console.log('resultMessage:',resultMessage)
+
         return works;
-    //})
+
 
 }
 
 const getDataFromAO3FandomPage =  async (socket,page) => {
         console.log(clc.blue('[db] getDataFromAO3FandomPage'));
-        // socket && socket.emit('test', `<b>Server In Function:</b> <span style="color:brown">getDataFromAO3FandomPage()</span>`);
+        // socket && socket.emit('getFanficsData', `<b>Server In Function:</b> <span style="color:brown">getDataFromAO3FandomPage()</span>`);
 
         let $ = cheerio.load(page);
         let fanficData = [];
@@ -494,7 +496,7 @@ const getDataFromAO3FandomPage =  async (socket,page) => {
         await $('ol.work').children('li').each(function () {
             let fanfic = {}
             
-            //socket && socket.emit('test', `<b>Getting data of:</b> <span style="color:purple">${$(this).find('div.header h4 a').first().text()}</span>`);
+            //socket && socket.emit('getFanficsData', `<b>Getting data of:</b> <span style="color:purple">${$(this).find('div.header h4 a').first().text()}</span>`);
             
             fanfic["LastUpdateOfNote"] = new Date().getTime();
             fanfic["Favorite"] = false;            
@@ -534,7 +536,10 @@ const getDataFromAO3FandomPage =  async (socket,page) => {
             fanfic["Words"]             =  $(this).find('dd.words').text(); 
             fanfic["NumberOfChapters"]  =  $(this).find('dd.chapters').text().split('/')[0];  
             
-            fanfic["Complete"]          = ($(this).find('dd.chapters').text().split('/')[1] === '?') ? false : true
+            chapCurrent = $(this).find('dd.chapters').text().split('/')[0]
+            chapEnd = $(this).find('dd.chapters').text().split('/')[1]
+            fanfic["Complete"] = (String(chapEnd) !== '?' && (Number(chapCurrent)===Number(chapEnd)) ) ? true : false
+
             fanfic["Image"]             = "";
 
             fanficData.push(fanfic);

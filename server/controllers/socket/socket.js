@@ -8,22 +8,15 @@ const io = require('socket.io')(server,{
     cookie: false
   });
 
-const test = require('../db/db');
+const func = require('../db/db');
 
 server.listen(5555);
 
 io.on('connection', (socket) => {
-    socket.on('subscribeToTimer', (interval) => {
-        console.log('client is subscribing to timer with interval ', interval);
-        setInterval(() => {
-            socket.emit('timer', new Date());
-          }, interval);
-      });
-      socket.on('getFandomFanfics', (fandomOriginalName) => {
-        console.log('getFandomFanfics: ', fandomOriginalName);
-        //socket.emit('test', fandom);
-        //test.test(fandom)
-        test.test(socket,fandomOriginalName)
+      socket.on('getFandomFanfics', (fandomData) => {
+        console.log('[socket.js] getFandomFanfics()');
+        
+        func.manageDownloader(socket,fandomData)
         
       });
 });
