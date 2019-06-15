@@ -30,9 +30,7 @@ const ShowFandomData = (props) => {
                                     <p><span>In Progress Fanfics: </span>{fandom.OnGoingFanfics}</p>                            
                                 </Link>
                             </section>
-                          
 
-                          {/* <div className={classes.Clear}></div>   */}
                       </div>
                   ))}
                   <div className={[classes.Dummy,classes.Fandom].join(' ')}></div>

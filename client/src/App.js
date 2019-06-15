@@ -20,12 +20,12 @@ function App() {
         <Route path="/addnewfandom" component={AddNewFandom} />
         <Route path="/todolistClient" component={TodoListClient} />
         <Route path="/todolistServer" component={TodoListServer} />
+        {/* <Route name="manageAuthor" path="/manageAuthor/:id" component={ManageAuthorPage} /> */}
         <Route path="/" exact component={Index} />
         <Redirect to="/" />
       </Switch>
     </Layout>
   );
 }
-
 
 export default withRouter(App);
