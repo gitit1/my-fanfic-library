@@ -25,8 +25,7 @@ class AddNewFandom extends Component{
         fandomForm:fandomGeneralForm[0],
         formIsValid:false,
         fandomAddedFlag:0,
-        editMode:false,
-        oldName:null
+        editMode:false
     }
   
     componentWillMount(){
@@ -89,8 +88,7 @@ class AddNewFandom extends Component{
                     }           
                 }
             },
-            formIsValid:true,
-            oldName:this.props.fandom['FandomName']
+            formIsValid:true
         }));
     }
 
@@ -134,12 +132,9 @@ class AddNewFandom extends Component{
 
         //let editImage = this.state.editMode && this.props.fandom.Image_Name
         console.log('this.state.fandomForm[FandomName].value:',this.state.fandomForm['FandomName'].value)
-        console.log('this.state.oldName:',this.state.oldName)
-        let oldFandomName = (this.state.fandomForm['FandomName'].value===this.state.oldName || !this.state.oldName) ? false: this.state.oldName;
-        console.log('oldFandomName:',oldFandomName)
         let mode =  this.state.editMode ? 'edit' : 'add';
 
-        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,oldFandomName,mode,fandom,image).then(()=>{
+        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandom,image).then(()=>{
         
             switch  (this.props.message) {
                 case 'Success':
@@ -319,7 +314,7 @@ const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
         onGetFandoms:       ()                                                  =>      dispatch(actions.getFandomsFromDB()),
-        onAddFandom:        (FandomName,oldFandomName,mode,fandom,image)        =>      dispatch(actions.addFandomToDB(FandomName,oldFandomName,mode,fandom,image)),
+        onAddFandom:        (FandomName,mode,fandom,image)        =>      dispatch(actions.addFandomToDB(FandomName,mode,fandom,image)),
         onPostFandom:       (fandom)                                            =>      dispatch(actions.getFandom(fandom))
         //onLeavingPage:      ()                                  =>      dispatch(actions.editFandomDataStart())
     };

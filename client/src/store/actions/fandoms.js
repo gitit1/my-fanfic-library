@@ -59,12 +59,11 @@ export const editFandomDataFail = (error) =>{
     };
 };
 
-export const addFandomToDB = (FandomName,oldFandomName,mode,fandom,image) =>{
+export const addFandomToDB = (FandomName,mode,fandom,image) =>{
     console.log('[action] addFandomToDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
-        console.log(`${FandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`)
-        return axios.post(`/db/addEditFandom?FandomName=${FandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`,fandom)
+        return axios.post(`/db/addEditFandom?FandomName=${FandomName.replace("&","%26")}&mode=${mode}&Image=${image}`,fandom)
         .then(res =>{
             dispatch(getFandomsFromDB())
             dispatch(editFandomDataSuccess(res.data));
@@ -80,7 +79,7 @@ export const deleteFandomFromDB = (id,FandomName) =>{
     console.log('[action] deleteFandomFromDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/deleteFandom?id=${id}&FandomName=${FandomName}`)
+        return axios.post(`/db/deleteFandom?id=${id}&FandomName=${FandomName.replace("&","%26")}`)
         .then(async res =>{
             await dispatch(getFandomsFromDB())
             await dispatch(editFandomDataSuccess(res.data));

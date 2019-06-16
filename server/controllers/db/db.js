@@ -4,47 +4,55 @@ const clc = require("cli-color");
 const multer = require('multer');
 const path = require('path')
 const fs = require('fs-extra');
+const Fandom = require('../../models/Fandom');
+// const Fanfic = require('../../models/Fanfic');
+const Fanfics = require('../../models/Fanfics');
 
 //----------------------------------------------------------Working and implemented with cliend:
+
+//workds with both firebase and mongo:
 exports.getAllFandomsFromDB = (req,res) =>{
     console.log(clc.blue('[db] getAllFandomsFromDB'));
     getDataFromDB().then(fetchedFandoms=>{
-        !fetchedFandoms ? res.send('error in [db] addFandomToDB') : res.send(fetchedFandoms)
+        !fetchedFandoms ? res.send('error in [db] getAllFandomsFromDB') : res.send(fetchedFandoms)
     })
 }
 
+//workds with both firebase and mongo:
 const getDataFromDB = async () =>{
-    console.log(clc.blue('[db] getDataFromDB'));
-    return axios.get( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json')
-    .then( response => {
-        const fetchedFandoms= []
-            for(let key in response.data){
-                fetchedFandoms.push({...response.data[key],id: key});
-            }
-        return fetchedFandoms
-    } )
-    .catch( error => {
+    // console.log(clc.blue('[db] getDataFromDB'));
+    // return axios.get( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json')
+    // .then( response => {
+    //     const fetchedFandoms= []
+    //         for(let key in response.data){
+    //             fetchedFandoms.push({...response.data[key],id: key});
+    //         }
+    //     return fetchedFandoms
+    // } )
+    // .catch( error => {
         
-        console.log(clc.red(error));
-        return false
-    } );   
+    //     console.log(clc.red(error));
+    //     return false
+    // } );  
+    let fetchedFandoms = await Fandom.find({}, function(err, fandoms) {
+            if (err){throw err;}
+    }); 
+    return fetchedFandoms
 }
 
+//workds with both firebase and mongo:
 exports.addEditFandomToDB =  async (req,res) =>{
     console.log(clc.blue('[db] addEditFandomToDB'));
 
     let resultMessage = '';
-    const {FandomName,oldFandomName,mode} = req.query
-    // let mode = req.query.mode;
-    // let FandomName = req.query.FandomName
-    // let oldFandomName = req.query.oldFandomName;
-    let pathForImage = 'public/images/fandoms/';
-    console.log('this.query: ',req.query)
-    let image = JSON.parse(req.query.Image);
-    //let imageName = (oldFandomName!==false && oldFandomName) ? FandomName : oldFandomName;
-    let imageName = FandomName;
+    const {FandomName,mode,Image} = req.query
 
-    if (!fs.existsSync(pathForImage+FandomName) && image){
+    let pathForImage = 'public/images/fandoms/';
+
+    let image = JSON.parse(Image);
+    let imageName = FandomName.replace("%26","&");
+
+    if (!fs.existsSync(pathForImage+FandomName.replace("%26","&")) && image){
         fs.mkdirSync(pathForImage+FandomName,{recursive: true});
     }
     let storage = multer.diskStorage({
@@ -72,9 +80,9 @@ exports.addEditFandomToDB =  async (req,res) =>{
         }
         //check if I have an updated image/prev image/no image
         if(mode === 'add'){
-            imageName = image ? (FandomName + path.extname(req.file.originalname)) : '';
+            imageName = image ? (FandomName.replace("%26","&") + path.extname(req.file.originalname)) : '';
         }else{
-            imageName = image ? (FandomName + path.extname(req.file.originalname)) : req.body.Image_Name
+            imageName = image ? (FandomName.replace("%26","&") + path.extname(req.file.originalname)) : req.body.Image_Name
             if(image){
                 let path = pathForImage+'/'+req.body.Image_Name;
                 fs.unlink(path, (err) => {
@@ -86,6 +94,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
             }
         }
         const fandom = {    
+            "id":                       req.body.id,
             "FandomName":               req.body.FandomName,
             "SearchKeys":               req.body.SearchKeys,
             "AutoSave":                 req.body.AutoSave,
@@ -94,178 +103,100 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "OnGoingFanfics":           req.body.OnGoingFanfics,
             "CompleteFanfics":          req.body.CompleteFanfics,
             "SavedFanfics":             req.body.SavedFanfics,
-            "LastUpdate":               req.body.LastUpdate,
+            "LastUpdate":               Date.now(),
             "Image_Name":               imageName,
             "Image_Path":               req.body.FandomName
         }
-        if(req.query.mode === 'add'){
-            let fandomArray = req.body.fandomsNames.split(",");
-            console.log('fandomArray: ',fandomArray)
-            if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.FandomName)){
-                console.log(clc.red('Fandom Already Exist'));
-                resultMessage = 'Fandom Already Exist';
-                return res.send(resultMessage);
-            }else{
-                await axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
-                    .then( () => {
-                        console.log('Fandom '+fandom.FandomName+' ,added to db');
-                        resultMessage = 'Success';
-                        return res.send(resultMessage)
-                    } )
-                    .catch( error => {
-                        console.log(clc.red(error));
-                        resultMessage = 'Error';
-                        return res.send(resultMessage);
-                    } );               
-                }
-        }else{
-            await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
-            .then( () => {
+        // if(req.query.mode === 'add'){
+        //     let fandomArray = req.body.fandomsNames.split(",");
+        //     if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.FandomName)){
+        //         console.log(clc.red('Fandom Already Exist'));
+        //         resultMessage = 'Fandom Already Exist';
+        //         return res.send(resultMessage);
+        //     }else{
+        //         await axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
+        //             .then( () => {
+        //                 console.log('Fandom '+fandom.FandomName+' ,added to db');
+        //                 resultMessage = 'Success';
+        //                 return res.send(resultMessage)
+        //             } )
+        //             .catch( error => {
+        //                 console.log(clc.red(error));
+        //                 resultMessage = 'Error';
+        //                 return res.send(resultMessage);
+        //             } );               
+        //         }
+        // }else{
+        //     await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
+        //     .then( () => {
+        //         console.log('Fandom '+fandom.FandomName+' ,was updated in the db')
+        //         resultMessage = 'Success';
+        //         return res.send(resultMessage)
+        //     } )
+        //     .catch( error => {
+        //         console.log(clc.red(error));
+        //         resultMessage = 'Error';
+        //         return res.send(resultMessage);
+        //     } );
+        // }   
+        //TODO:add already exsist:
+        try {
+            const fandomData = new Fandom(fandom);
+            const fanficData = new Fanfics({'FandomName':fandom.FandomName,'Fanfics':[]});
+            if(req.query.mode === 'add'){
+                await fandomData.save();
+                await fanficData.save();
                 console.log('Fandom '+fandom.FandomName+' ,was updated in the db')
                 resultMessage = 'Success';
                 return res.send(resultMessage)
-            } )
-            .catch( error => {
-                console.log(clc.red(error));
-                resultMessage = 'Error';
-                return res.send(resultMessage);
-            } );
-        }        
+            }else{
+                Fandom.updateOne(
+                    { 'FandomName': fandom.FandomName },
+                    { $set: fandom},
+                    (err, result) => {
+                        if (err) throw err;
+                        resultMessage = 'Error';
+                        console.log('Fandom updated!');
+                     }
+                 )
+            }
+    
+        } catch (error) {
+            console.log(`Controller: DEMO - newUser - Error: \n${error.message}`)
+            resultMessage = 'Error';
+            return res.send(resultMessage);
+        }     
         console.log(resultMessage)
         return resultMessage
     
     })
   
 }
-
-exports.addFandomToDB = (req,res) =>{   
-    console.log(clc.blue('[db] addFandomToDB'));
-    //TODO: check errors for image: size/not uplode/not image...
-    
-
-    //res.send('Error')
-
-    let pathForImage = `../client/src/assets/images/fandoms/${req.query.FandomName}`;   
-    let ImageName = `../client/src/assets/images/fandoms/${req.query.FandomName}`;
-
-    console.log('image: ',req.query.Image)
-    console.log('!fs.existsSync(pathForImage): ',!fs.existsSync(pathForImage))
-    console.log('req.query.Image: ',req.query.Image)
-
-    if (!fs.existsSync(pathForImage) && req.query.Image){
-        console.log('!fs.existsSync(pathForImage) 2: ',!fs.existsSync(pathForImage))
-        console.log('req.query.Image 2: ',req.query.Image)
-        fs.mkdirSync(pathForImage);
-    }
-
-    console.log('req.file:',req.file)
-    let storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-        cb(null, pathForImage)
-        },
-        filename: function (req, file, cb) {
-        cb(null, req.query.FandomName + path.extname(file.originalname))
-        // cb(null, Date.now() + '-' +file.originalname )
-        }
-    })
-    let upload = multer({ storage: storage }).single('file');
-
-    upload(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            //return res.status(500).json(err)
-            console.log('Muller Error',res.status(500).json(err));
-            return res.send('Error');
-        } else if (err) {  
-            console.log('Other Error',err);
-            //return res.status(500).json(err)
-            return res.send('Error');
-        }
-
- 
-
-        let image = null;
-        if(req.query.mode === 'add'){
-            image = req.file === undefined||req.file === null ? '' : (req.query.FandomName + path.extname(req.file.originalname));
-        }else{
-            image = req.file === undefined||req.file === null ? req.body.Image_Name : (req.query.FandomName + path.extname(req.file.originalname));
-        }
-       console.log('image:',image)
-
-        const fandom = {    
-            "FandomName":               req.body.FandomName,
-            "SearchKeys":               req.body.SearchKeys,
-            "AutoSave":                 req.body.AutoSave,
-            "SaveMethod":               req.body.SaveMethod,
-            "FanficsInFandom":          req.body.FanficsInFandom,
-            "OnGoingFanfics":           req.body.OnGoingFanfics,
-            "CompleteFanfics":          req.body.CompleteFanfics,
-            "SavedFanfics":             req.body.SavedFanfics,
-            "LastUpdate":               req.body.LastUpdate,
-            "Image_Name":               image
-        }
-        console.log(req.body.fandomsNames)
-
-        if(req.query.mode === 'add'){
-            var fandomArray = req.body.fandomsNames.split(",");
-            console.log('fandomArray: ',fandomArray)
-            if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.FandomName)){
-                console.log(clc.red('Fandom Already Exist'));
-                return res.send('Fandom Already Exist');
-            }
-            console.log('axios add')
-            axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
-            .then( () => {
-                console.log('Fandom '+fandom.FandomName+' ,added to db')
-                return 'Fandom '+fandom.FandomName+' ,added to db'
-            } )
-            .catch( error => {
-                console.log('error 1')
-                console.log(clc.red(error));
-                // return res.send('Error');
-            } );
-        }else{
-            console.log('axios edit')
-            axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
-            .then( () => {
-                console.log('Fandom '+fandom.FandomName+' ,was updated in the db')
-                return 'Fandom '+fandom.FandomName+' ,was updated in the db'
-            } )
-            .catch( error => {
-                console.log('error 2')
-                console.log(clc.red(error));
-                // return res.send('Error');
-            } );
-        }
-
-        
-        
-        // return res.status(200).send(req.file)
-        // return res.status(200).send(req.file)
-        console.log('Success')
-        return res.send('Success');
-
-    })
-
-    //TODO: ADD FIXED IMAGE TO  FANFICS / ADDITIONAL IMAGE FOR ONESHOT IF THEY WANT 
-    //console.log(date)
-    //console.log(new Date(date).toLocaleString())
-    
-}
-
+//workds with both firebase and mongo:
 exports.deleteFandomFromDB = async (req,res)=>{
     console.log(clc.blue('[db] deleteFandomFromDB'));
     
-    axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.query.id}.json`).then(() =>{
-        let pathForImage = 'public/images/fandoms/';
-        fs.remove(pathForImage+req.query.FandomName).then(() => {
-            res.send('Success') 
-        }).catch(err => {
-        console.error(err)
-        })       
-    }).catch(error=>{
-        console.error(error)
+    // axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.query.id}.json`).then(() =>{
+    //     let pathForImage = 'public/images/fandoms/';
+    //     fs.remove(pathForImage+req.query.FandomName).then(() => {
+    //         res.send('Success') 
+    //     }).catch(err => {
+    //     console.error(err)
+    //     })       
+    // }).catch(error=>{
+    //     console.error(error)
+    //     res.send('Error')
+    // });
+    try {
+        await Fandom.findOneAndDelete(
+            { FandomName: req.query.FandomName.replace("%26","&") },() => console.log('deleted!')
+        );
+        res.send('Success')
+     }
+     catch(e){
         res.send('Error')
-    });
+     }
+
 
 }
 
@@ -275,7 +206,7 @@ exports.deleteFandomFromDB = async (req,res)=>{
 exports.manageDownloader = async (socket,fandom) =>{
     console.log(clc.blue('[db] manageDownloader'));
     try {
-        console.log('fandomData:',fandom);
+        // console.log('fandomData:',fandom);
 
         if(fandom=='All'){
             console.log('---1---')
@@ -331,33 +262,48 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
         let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
         socket && socket.emit('getFanficsData', `<b>Fixing keys to match url search:</b> ${fandomUrlName}`);
     
-        let oldData=''
-        console.log(clc.cyanBright(`Executing: getAllFanficsFromServer()`));
-        socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getAllFanficsFromServer()</span>`);
-        await getAllFanficsFromServer(FandomName).then(res=>{
-            oldData = res
-        });
-        const isNewFandom = (oldData===undefined || oldData===null) ? true : false;
-        if(!isNewFandom){
-            console.log(clc.cyanBright(`Executing: deleteOldDataOfFanficsFromServer()`));
-            socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">deleteOldDataOfFanficsFromServer()</span>`);
-            await deleteOldDataOfFanficsFromServer(socket,FandomName);
-        }
+        //let oldData=''
+        // console.log(clc.cyanBright(`Executing: getAllFanficsFromServer()`));
+        // socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getAllFanficsFromServer()</span>`);
+        // await getAllFanficsFromServer(FandomName).then(res=>{
+        //     oldData = res
+        // });
+        // const isNewFandom = (oldData===undefined || oldData===null) ? true : false;
+        // if(!isNewFandom){
+        //     console.log(clc.cyanBright(`Executing: deleteOldDataOfFanficsFromServer()`));
+        //     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">deleteOldDataOfFanficsFromServer()</span>`);
+        //     await deleteOldDataOfFanficsFromServer(socket,FandomName);
+        // }
 
-        console.log('isNewFandom :::',isNewFandom)
+        //console.log('isNewFandom :::',isNewFandom)
 
         console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
         socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
-        const fanfics = await getFanficsOfFandom(socket,fandom,isNewFandom,oldData);
+        const fanfics = await getFanficsOfFandom(socket,fandom);
+        // const fanfics = await getFanficsOfFandom(socket,fandom,isNewFandom,oldData);
 
         console.log(clc.cyanBright(`Got ${fanfics.length} from getFanficsOfFandom`)),
         socket && socket.emit('getFanficsData', `Got ${fanfics.length} from <span style="color:brown">getFanficsOfFandom()</span>`)
         
         console.log(clc.cyanBright(`Executing: sendFanficsToServer()`));
         socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">sendFanficsToServer()</span>`);
-        await sendFanficsToServer(socket,fandom,fanfics);
+        //await sendFanficsToServer(socket,fandom,fanfics);
 }
+const getAllFanficsFromServer = (FandomName) => {
+    console.log(clc.blue('[db] getAllFanficsFromServer'));
+    console.log('FandomName:',FandomName)
+    return axios.get( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${FandomName}.json`)
+    .then( response => {
+        return(response.data)
+    } )
+    .catch( error => {
+        console.log(clc.red(error));
+        return('error in [db] getAllFanficsFromServer')
+    } );    
+}
+
+
 
 const deleteOldDataOfFanficsFromServer = (socket,FandomName) => {
     axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fanfics/${FandomName}.json`)
@@ -369,51 +315,41 @@ const deleteOldDataOfFanficsFromServer = (socket,FandomName) => {
     })
 }
 
-
-const getAllFanficsFromServer = (FandomName) => {
-    console.log(clc.blue('[db] getAllFanficsFromServer'));
-    console.log('FandomName:',FandomName)
-    return axios.get( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${FandomName}.json`)
-    .then( response => {
-        return(response.data)
-    } )
-    .catch( error => {
-        console.log(clc.red(error));
-        return('error in [db] addFandomToDB')
-    } );    
-}
-
 const sendFanficsToServer =  async (socket,fandom,fanfics) => {
     console.log(clc.blue('[db] sendFanficsToServer'));
-    axios.post( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${fandom.FandomName}.json`,fanfics,{maxContentLength: 52428890})
-    .then( async response => {
-        await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandom.id}/.json`, {'FanficsId':response.data.name} )
-        // return(response.data)
-        return(true)
-    } )
-    .catch( error => {
-        console.log(clc.red(error));
-        return('error in [db] addFandomToDB')
-    } );
+    // axios.post( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${fandom.FandomName}.json`,fanfics,{maxContentLength: 52428890})
+    // .then( async response => {
+    //     await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandom.id}/.json`, {'FanficsId':response.data.name} )
+    //     // return(response.data)
+    //     return(true)
+    // } )
+    // .catch( error => {
+    //     console.log(clc.red(error));
+    //     return('error in [db] sendFanficsToServer')
+    // } );
+
+    const fanficData = new Fanfic(fanfics);
+    await fanficData.save();
+    console.log(`Fanfics of ${fandom.FandomName} was saved to server`)
 }
 
 const delay = t => new Promise(resolve => setTimeout(resolve, t));
 
-const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
+const getFanficsOfFandom =  async (socket,fandom) => {
 
         console.log(clc.blue('[db] getFanficsOfFandom'));
 
         const {id,FandomName,SearchKeys,AutoSave,SaveMethod} = fandom;
 
-        console.log('isNewFandom:',isNewFandom)
+        //console.log('isNewFandom:',isNewFandom)
 
         let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
-        console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
-        socket && socket.emit('getFanficsData', `<b>Server In Function:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
+        //console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
+        //socket && socket.emit('getFanficsData', `<b>Server In Function:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
 
         const ao3URL = `https://archiveofourown.org/tags/${fandomUrlName}/works`;
-
+        console.log('ao3URL:',ao3URL)
         let numberOfPages = 0;
         let works = [];
         let downloadList = [];
@@ -425,6 +361,7 @@ const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
         );
 
         let promises = [];
+
         const getPagesOfFandomData = async numberOfPages => {
             return new Promise(async(resolve, reject) => {
                 //get user list from our db:
@@ -457,18 +394,20 @@ const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
         if(html){
             let seriesArray = []
             let $ = cheerio.load(html);
-
-            if(Number($('#main').find('ol.pagination li').eq(-2).text())>=10){
+            
+            if(Number($('#main').find('ol.pagination li').eq(-2).text())===0){
+                numberOfPages = 1
+            }else if(Number($('#main').find('ol.pagination li').eq(-2).text())>=10){
                 numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text())+1;
             }else{
                 numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
             }
 
-
+            console.log('numberOfPages: ',numberOfPages)
             pagesArray = await getPagesOfFandomData(numberOfPages);
 
             await pagesArray.map(page => promises.push(   
-                delay(3000).then(() => getDataFromAO3FandomPage(socket,page))             
+                delay(3000).then(() => getDataFromAO3FandomPage(socket,page,FandomName))             
             ))
 
         
@@ -487,33 +426,43 @@ const getFanficsOfFandom =  async (socket,fandom,isNewFandom,oldData) => {
         let OnGoingFanfics = works.length - CompleteFanfics
 
         let resultMessage=null
-        console.log('FandomID '+id)
-        await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${id}/.json`, {'FanficsInFandom':FanficsInFandom,
-                                                                                           'CompleteFanfics':CompleteFanfics,
-                                                                                           'OnGoingFanfics':OnGoingFanfics} )
-        .then( () => {
-            console.log('Fandom '+FandomName+' ,was updated in the db')
-            resultMessage = 'Success';
-        } )
-        .catch( error => {
-            console.log(clc.red(error));
-            resultMessage = 'Error';
-        } );
-        console.log('resultMessage:',resultMessage)
+        //console.log('FandomID '+id)
+        // await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${id}/.json`, {'FanficsInFandom':FanficsInFandom,
+        //                                                                                    'CompleteFanfics':CompleteFanfics,
+        //                                                                                    'OnGoingFanfics':OnGoingFanfics} )
+        // .then( () => {
+        //     console.log('Fandom '+FandomName+' ,was updated in the db')
+        //     resultMessage = 'Success';
+        // } )
+        // .catch( error => {
+        //     console.log(clc.red(error));
+        //     resultMessage = 'Error';
+        // } );
+        Fandom.updateOne(
+            { 'FandomName': FandomName },
+            { $set:     {'FanficsInFandom':FanficsInFandom,
+                         'CompleteFanfics':CompleteFanfics,
+                         'OnGoingFanfics':OnGoingFanfics}},
+            (err, result) => {
+                if (err) throw err;
+                console.log('Fandom updateded');
+             }
+         )
+        //console.log('resultMessage:',resultMessage)
 
         return works;
 
 
 }
 
-const getDataFromAO3FandomPage =  async (socket,page) => {
+const getDataFromAO3FandomPage =  async (socket,page,FandomName) => {
         console.log(clc.blue('[db] getDataFromAO3FandomPage'));
         // socket && socket.emit('getFanficsData', `<b>Server In Function:</b> <span style="color:brown">getDataFromAO3FandomPage()</span>`);
 
         let $ = cheerio.load(page);
         let fanficData = [];
 
-        await $('ol.work').children('li').each(function () {
+        await $('ol.work').children('li').each(async function () {
             let fanfic = {}
             
             //socket && socket.emit('getFanficsData', `<b>Getting data of:</b> <span style="color:purple">${$(this).find('div.header h4 a').first().text()}</span>`);
@@ -521,14 +470,14 @@ const getDataFromAO3FandomPage =  async (socket,page) => {
             fanfic["LastUpdateOfNote"] = new Date().getTime();
             fanfic["Favorite"] = false;            
             fanfic["Status"] = "Need To Read";
-            fanfic["ChapterStatus"] = "";
+            fanfic["ChapterStatus"] = 0;
             fanfic["SavedFic"] = false;
             
             fanfic["FanficTitle"] = $(this).find('div.header h4 a').first().text();
             fanfic["URL"] = 'https://archiveofourown.org'+ $(this).find('div.header h4 a').first().attr('href');
             fanfic["Author"] = $(this).find('div.header h4 a').last().text();
             fanfic["AuthorURL"] = 'https://archiveofourown.org'+ $(this).find('div.header h4 a').last().attr('href');
-            fanfic["LastUpdate"] = new Date($(this).find('p.datetime').text()).getTime();
+            fanfic["LastUpdateOfFic"] = new Date($(this).find('p.datetime').text()).getTime();
             fanfic["Rating"] = $(this).find('span.rating span').text();
             let tags = [];
             let warnings = [];
@@ -561,9 +510,52 @@ const getDataFromAO3FandomPage =  async (socket,page) => {
             fanfic["Complete"] = (String(chapEnd) !== '?' && (Number(chapCurrent)===Number(chapEnd)) ) ? true : false
 
             fanfic["Image"]             = "";
-            fanfic["ID"]                = Number($(this).attr('id').replace('work_',''));
+            fanfic["FanficID"]         = Number($(this).attr('id').replace('work_',''));
 
             fanficData.push(fanfic);
+            
+            //const fanficRecord = new Fanfics({'FandomName':FandomName,'Fanfics':fanfics});
+            Fanfics.findOne({FandomName: FandomName}, async function(err, fandom) {
+                if (err) { console.log('err: ',err)}
+                let isExist = fandom.Fanfics.find(x => x.FanficID === fanfic["FanficID"] );
+                if(!isExist){
+                    fandom.Fanfics.push({
+                        FanficID:               fanfic["FanficID"],
+                        LastUpdateOfNote:       fanfic["LastUpdateOfNote"],
+                        LastUpdateOfFic:        fanfic["LastUpdateOfFic"],
+                        Favorite:               fanfic["Favorite"],
+                        Status:                 fanfic["Status"],
+                        ChapterStatus:          fanfic["ChapterStatus"],
+                        SavedFic:               fanfic["SavedFic"],
+                        FanficTitle:            fanfic["FanficTitle"],
+                        URL:                    fanfic["URL"],
+                        Author:                 fanfic["Author"],
+                        AuthorURL:              fanfic["AuthorURL"],    
+                        NumberOfChapters:       fanfic["NumberOfChapters"],    
+                        Complete:               fanfic["Complete"],    
+                        Rating:                 fanfic["Rating"],    
+                        Tags:                   fanfic["Tags"], 
+                        Language:               fanfic["Language"],    
+                        Hits:                   fanfic["Kudos"],     
+                        Kudos:                  fanfic["Kudos"],     
+                        Comments:               fanfic["Comments"],     
+                        Words:                  fanfic["Words"],     
+                        Description:            fanfic["Description"],     
+                        Image:                  fanfic["Image"], 
+                        //lastUpdated: lastUpdated
+                    });
+                    await fandom.save();
+                    //return
+                }else{
+                    console.log('errororro')
+                    //return
+                    //TODO: check update...
+                }
+    
+            });
+            //const fanfics = new Fanfics(fanfic);
+            //await fanficRecord.save();
+
         })
 
 
@@ -571,19 +563,24 @@ const getDataFromAO3FandomPage =  async (socket,page) => {
 }
 //*************************************************************** */
 exports.getFanficsFromDB = (req,res) =>{
-    const {FandomName,FanficsId,startPage,endPage} = req.query;
-    console.log('FanficsId: ',FanficsId)
+    const {FandomName,startPage,endPage} = req.query;
+    console.log('FandomName: ',FandomName)
     //orderBy="id" - could be name,date... according to filter
-    return axios.get( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${FandomName}/${FanficsId}.json?orderBy="LastUpdate"&startAt=${startPage}&endAt=${endPage}`)
-    //
-    .then( response => {
-        console.log(response.data['FanficsId'])
-        res.send(response.data[FanficsId])
-    } )
-    .catch( error => {
-        console.log(clc.red(error));
-        res.send('error in [db] getFanficsFromDB')
-    } );     
+//     return axios.get( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${FandomName}/${FanficsId}.json?orderBy="LastUpdate"&startAt=${startPage}&endAt=${endPage}`)
+//     //
+//     .then( response => {
+//         console.log(response.data['FanficsId'])
+//         res.send(response.data[FanficsId])
+//     } )
+//     .catch( error => {
+//         console.log(clc.red(error));
+//         res.send('error in [db] getFanficsFromDB')
+//     } );     
+// }
+    Fanfics.findOne({FandomName: FandomName}, async function(err, fandom) {
+        if (err) { console.log('err: ',err)}
+        res.send(fandom.Fanfics)
+    });
 }
 /* --------------------------------------------------------- OLD*/
 //Connection between DB/AO3:
@@ -611,4 +608,118 @@ exports.getFanficsFromAo3 = (req,res) =>{
     } ).catch(error => {
         res.send(error.message)
     })
+}
+
+exports.addFandomToDB = (req,res) =>{   
+    console.log(clc.blue('[db] addFandomToDB'));
+    //TODO: check errors for image: size/not uplode/not image...
+    
+
+    //res.send('Error')
+
+    let pathForImage = `../client/src/assets/images/fandoms/${req.query.FandomName}`;   
+    let ImageName = `../client/src/assets/images/fandoms/${req.query.FandomName}`;
+
+    console.log('image: ',req.query.Image)
+    console.log('!fs.existsSync(pathForImage): ',!fs.existsSync(pathForImage))
+    console.log('req.query.Image: ',req.query.Image)
+
+    if (!fs.existsSync(pathForImage) && req.query.Image){
+        console.log('!fs.existsSync(pathForImage) 2: ',!fs.existsSync(pathForImage))
+        console.log('req.query.Image 2: ',req.query.Image)
+        fs.mkdirSync(pathForImage);
+    }
+
+    console.log('req.file:',req.file)
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+        cb(null, pathForImage)
+        },
+        filename: function (req, file, cb) {
+        cb(null, req.query.FandomName + path.extname(file.originalname))
+        // cb(null, Date.now() + '-' +file.originalname )
+        }
+    })
+    let upload = multer({ storage: storage }).single('file');
+
+    upload(req, res, async function (err) {
+        if (err instanceof multer.MulterError) {
+            //return res.status(500).json(err)
+            console.log('Muller Error',res.status(500).json(err));
+            return res.send('Error');
+        } else if (err) {  
+            console.log('Other Error',err);
+            //return res.status(500).json(err)
+            return res.send('Error');
+        }
+
+ 
+
+        let image = null;
+        if(req.query.mode === 'add'){
+            image = req.file === undefined||req.file === null ? '' : (req.query.FandomName + path.extname(req.file.originalname));
+        }else{
+            image = req.file === undefined||req.file === null ? req.body.Image_Name : (req.query.FandomName + path.extname(req.file.originalname));
+        }
+       console.log('image:',image)
+
+        const fandom = {    
+            "id":                       Date.now(),
+            "FandomName":               req.body.FandomName,
+            "SearchKeys":               req.body.SearchKeys,
+            "AutoSave":                 req.body.AutoSave,
+            "SaveMethod":               req.body.SaveMethod,
+            "FanficsInFandom":          req.body.FanficsInFandom,
+            "OnGoingFanfics":           req.body.OnGoingFanfics,
+            "CompleteFanfics":          req.body.CompleteFanfics,
+            "SavedFanfics":             req.body.SavedFanfics,
+            "LastUpdate":               req.body.LastUpdate,
+            "Image_Name":               image
+        }
+        console.log(req.body.fandomsNames)
+
+        if(req.query.mode === 'add'){
+            var fandomArray = req.body.fandomsNames.split(",");
+            if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.FandomName)){
+                console.log(clc.red('Fandom Already Exist'));
+                return res.send('Fandom Already Exist');
+            }
+            console.log('axios add')
+            axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
+            .then( () => {
+                console.log('Fandom '+fandom.FandomName+' ,added to db')
+                return 'Fandom '+fandom.FandomName+' ,added to db'
+            } )
+            .catch( error => {
+                console.log('error 1')
+                console.log(clc.red(error));
+                // return res.send('Error');
+            } );
+        }else{
+            console.log('axios edit')
+            axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
+            .then( () => {
+                console.log('Fandom '+fandom.FandomName+' ,was updated in the db')
+                return 'Fandom '+fandom.FandomName+' ,was updated in the db'
+            } )
+            .catch( error => {
+                console.log('error 2')
+                console.log(clc.red(error));
+                // return res.send('Error');
+            } );
+        }
+
+        
+        
+        // return res.status(200).send(req.file)
+        // return res.status(200).send(req.file)
+        console.log('Success')
+        return res.send('Success');
+
+    })
+
+    //TODO: ADD FIXED IMAGE TO  FANFICS / ADDITIONAL IMAGE FOR ONESHOT IF THEY WANT 
+    //console.log(date)
+    //console.log(new Date(date).toLocaleString())
+    
 }

@@ -13,7 +13,7 @@ class Fanfic extends Component{
     state={
         fanfics:[],
         pageNumber:1,
-        pageLimit:20
+        pageLimit:10
     }
 
 
@@ -32,7 +32,10 @@ class Fanfic extends Component{
     render(){
         return(
             <Container header={this.props.match.params.FandomName}>
-                <p>hello</p>
+                {/* <p>hello</p> */}
+                {this.props.fanfics.map((fanfic,index)=>(
+                    <p key={fanfic.FanficID}>{index+1} - {fanfic.FanficTitle}</p>
+                ))}
             </Container>
         )
     }

@@ -68,7 +68,6 @@ class ManageDownloader extends Component{
   getFandomFanfics = () =>{
     socket.removeAllListeners()
     this.setState({serverData:null,logs:[]})
-      console.log('dd; ',this.state.fandom);
 
       socket.on('getFanficsData', serverData =>{
           this.setState({serverData})

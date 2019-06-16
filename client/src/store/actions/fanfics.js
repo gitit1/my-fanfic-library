@@ -27,7 +27,7 @@ export const getFanficsFromDB = (FandomName,FanficsId,pageNumber,pageLimit) =>{
     let endPage = pageLimit*pageNumber;
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        return axios.get(`/db/getFanfics?FandomName=${FandomName}&FanficsId=${FanficsId}&startPage=${startPage}&endPage=${endPage}`)
+        return axios.get(`/db/getFanfics?FandomName=${FandomName.replace("&","%26")}&startPage=${startPage}&endPage=${endPage}`)
         .then(fetchedFanfics =>{
             dispatch(getFanficsFromDBSuccess(fetchedFanfics.data));
             return true;
