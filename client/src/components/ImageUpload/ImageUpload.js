@@ -12,7 +12,7 @@ class ImageUpload extends Component {
         console.log('this.props.edit: ',this.props.edit)
         if(this.props.edit){
           let fileSrc = (this.props.fileName !== '') 
-                     ? (`/images/fandoms/${this.props.fandomName}/${this.props.fileName}`)
+                     ? (`/images/fandoms/${this.props.FandomName}/${this.props.fileName}`)
                      : (`/images/fandoms/nophoto.png`);
           console.log('fileSrc: ',fileSrc)
           this.setState({

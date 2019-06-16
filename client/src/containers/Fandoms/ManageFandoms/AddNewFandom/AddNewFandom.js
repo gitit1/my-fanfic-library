@@ -65,9 +65,9 @@ class AddNewFandom extends Component{
         this.setState(prevState =>({
             fandomForm: {
                 ...prevState.fandomForm,
-                'fandomName': {
-                    ...prevState.fandomForm['fandomName'],
-                    value: this.props.fandom['fandomName'],
+                'FandomName': {
+                    ...prevState.fandomForm['FandomName'],
+                    value: this.props.fandom['FandomName'],
                     valid: true,
                     disabled: true
                 },
@@ -90,7 +90,7 @@ class AddNewFandom extends Component{
                 }
             },
             formIsValid:true,
-            oldName:this.props.fandom['fandomName']
+            oldName:this.props.fandom['FandomName']
         }));
     }
 
@@ -101,7 +101,7 @@ class AddNewFandom extends Component{
         let fandomsNames = [];
         //await this.props.onGetFandoms().then(()=>{
             this.props.fandoms.map(fandom=>(
-                fandomsNames.push(fandom.fandomName)
+                fandomsNames.push(fandom.FandomName)
             ));
             console.log('fandomsNames: ',fandomsNames)
         //});
@@ -114,7 +114,7 @@ class AddNewFandom extends Component{
         })
 
         const fandom = new FormData();
-        fandom.append("fandomName", this.state.fandomForm['fandomName'].value)
+        fandom.append("FandomName", this.state.fandomForm['FandomName'].value)
         fandom.append("SearchKeys", this.state.fandomForm['SearchKeys'].value)
         fandom.append("AutoSave",   this.state.fandomForm['AutoSave'].value)
         fandom.append("SaveMethod", saveType)
@@ -133,13 +133,13 @@ class AddNewFandom extends Component{
                       ||!this.formRef.current.state.file) ? false : true;
 
         //let editImage = this.state.editMode && this.props.fandom.Image_Name
-        console.log('this.state.fandomForm[fandomName].value:',this.state.fandomForm['fandomName'].value)
+        console.log('this.state.fandomForm[FandomName].value:',this.state.fandomForm['FandomName'].value)
         console.log('this.state.oldName:',this.state.oldName)
-        let oldFandomName = (this.state.fandomForm['fandomName'].value===this.state.oldName || !this.state.oldName) ? false: this.state.oldName;
+        let oldFandomName = (this.state.fandomForm['FandomName'].value===this.state.oldName || !this.state.oldName) ? false: this.state.oldName;
         console.log('oldFandomName:',oldFandomName)
         let mode =  this.state.editMode ? 'edit' : 'add';
 
-        this.props.onAddFandom(this.state.fandomForm['fandomName'].value,oldFandomName,mode,fandom,image).then(()=>{
+        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,oldFandomName,mode,fandom,image).then(()=>{
         
             switch  (this.props.message) {
                 case 'Success':
@@ -278,7 +278,7 @@ class AddNewFandom extends Component{
                 addFandomStatus = null;
                 break;             
         }
-        let header = (this.state.editMode && !this.props.loading) ? `Edit ${this.props.fandom['fandomName']} Fandom` : 'Add New Fandom'
+        let header = (this.state.editMode && !this.props.loading) ? `Edit ${this.props.fandom['FandomName']} Fandom` : 'Add New Fandom'
         let page = (this.props.loading && this.state.uploading) ? <Container><Spinner/></Container> : (
             <Container header={header}>
                 <div className={classes.FormBox}>
@@ -286,7 +286,7 @@ class AddNewFandom extends Component{
                         <ImageUpload 
                                         ref={this.formRef} 
                                         edit={this.state.editMode} 
-                                        fandomName={this.state.editMode && this.props.fandom.fandomName} 
+                                        FandomName={this.state.editMode && this.props.fandom.FandomName} 
                                         fileName={this.state.editMode && this.props.fandom.Image_Name}/>
                     </div>
                     <div className={classes.FormDiv}>
@@ -319,7 +319,7 @@ const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
         onGetFandoms:       ()                                                  =>      dispatch(actions.getFandomsFromDB()),
-        onAddFandom:        (fandomName,oldFandomName,mode,fandom,image)        =>      dispatch(actions.addFandomToDB(fandomName,oldFandomName,mode,fandom,image)),
+        onAddFandom:        (FandomName,oldFandomName,mode,fandom,image)        =>      dispatch(actions.addFandomToDB(FandomName,oldFandomName,mode,fandom,image)),
         onPostFandom:       (fandom)                                            =>      dispatch(actions.getFandom(fandom))
         //onLeavingPage:      ()                                  =>      dispatch(actions.editFandomDataStart())
     };

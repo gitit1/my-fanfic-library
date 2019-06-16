@@ -9,22 +9,22 @@ const ShowFandomData = (props) => {
         <React.Fragment>
                 <div className={classes.Fandoms}>
                   { props.fandoms.map(fandom=>(
-                      <div className={classes.Fandom} key={fandom.fandomName}>
+                      <div className={classes.Fandom} key={fandom.FandomName}>
                           <section className={classes.ImageSection}>
                               {
                                   fandom.Image_Name !== '' 
-                                  ? <Link to='/'>
-                                        <img src={`/images/fandoms/${fandom.fandomName}/${fandom.Image_Name}`} alt={fandom.fandomName}/>
+                                  ? <Link to={`/fanfics/${fandom.FandomName}?FanficsId=${fandom.FanficsId}`}>
+                                        <img src={`/images/fandoms/${fandom.FandomName}/${fandom.Image_Name}`} alt={fandom.FandomName}/>
                                     </Link> 
                                   
-                                  : <Link to='/'>
-                                        <img src={`/images/fandoms/nophoto.png`} alt={fandom.fandomName} className={classes.NoImage}/> 
+                                  : <Link to={`/fandom/${fandom.FandomName}`}>
+                                        <img src={`/images/fandoms/nophoto.png`} alt={fandom.FandomName} className={classes.NoImage}/> 
                                     </Link>
                               }
                           </section>
                             <section className={classes.DataSection}>
-                                <Link to='/'>
-                                    <h3>{fandom.fandomName}</h3>         
+                                <Link to={`/fanfics/${fandom.FandomName}?FanficsId=${fandom.FanficsId}`}>
+                                    <h3>{fandom.FandomName}</h3>         
                                     <p><span>Fanfics in Fandoms: </span><b>{fandom.FanficsInFandom}</b></p>           
                                     <p><span>Complete Fanfics: </span>{fandom.CompleteFanfics}</p> 
                                     <p><span>In Progress Fanfics: </span>{fandom.OnGoingFanfics}</p>                            

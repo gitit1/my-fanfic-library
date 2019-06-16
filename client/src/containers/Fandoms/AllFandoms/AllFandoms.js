@@ -21,7 +21,7 @@ class AllFandoms extends Component{
                 </div>
               )
           }else{
-              const sortedFandomList = this.props.fandoms.sort((a, b) => a.fandomName.localeCompare(b.fandomName))
+              const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
               page = (<ShowFandomData 
                                       fandoms={sortedFandomList}/>)
                       
@@ -57,7 +57,7 @@ const mapStateToProps = state =>{
 //     return{
 //         onGetFandoms:    () => dispatch(actions.getFandomsFromDB()),
 //         onPostFandom:    (fandom) => dispatch(actions.getFandom(fandom)),
-//         onDeleteFandoms: (id,fandomName) => dispatch(actions.deleteFandomFromDB(id,fandomName))
+//         onDeleteFandoms: (id,FandomName) => dispatch(actions.deleteFandomFromDB(id,FandomName))
 //     };
 //   }
   

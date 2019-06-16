@@ -7,6 +7,7 @@ import ManageFandoms from './containers/Fandoms/ManageFandoms/ManageFandoms';
 import ManageDownloader from './containers/ManageDownloader/ManageDownloader';
 import AllFandoms from './containers/Fandoms/AllFandoms/AllFandoms';
 import AddNewFandom from './containers/Fandoms/ManageFandoms/AddNewFandom/AddNewFandom';
+import Fanfic from './containers/Fanfic/Fanfic'
 import TodoListClient from './containers/TodoListClient/TodoListClient';
 import TodoListServer from './containers/TodoListServer/TodoListServer';
 
@@ -18,9 +19,9 @@ function App() {
         <Route path="/manageDownloader" component={ManageDownloader} />
         <Route path="/allFandoms" component={AllFandoms} />
         <Route path="/addnewfandom" component={AddNewFandom} />
+        <Route path="/fanfics/:FandomName" component={Fanfic} />
         <Route path="/todolistClient" component={TodoListClient} />
         <Route path="/todolistServer" component={TodoListServer} />
-        {/* <Route name="manageAuthor" path="/manageAuthor/:id" component={ManageAuthorPage} /> */}
         <Route path="/" exact component={Index} />
         <Redirect to="/" />
       </Switch>

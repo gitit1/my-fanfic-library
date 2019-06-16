@@ -1,5 +1,5 @@
 export const fandomGeneralForm = [{
-    fandomName: {
+    FandomName: {
             label: 'Fandom Name:',
             elementType: 'input', 
             elementConfig:{

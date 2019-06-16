@@ -43,10 +43,10 @@ class ManageDownloader extends Component{
 
   createOptionsForFandomSelect = () =>{
     let options =[{value: 'All',displayValue: 'All'}];
-    this.props.fandoms.sort((a, b) => a.fandomName.localeCompare(b.fandomName)).map(fandom=>{
+    this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName)).map(fandom=>{
           options.push({
-            value: fandom.fandomName,
-            displayValue: fandom.fandomName
+            value: fandom.FandomName,
+            displayValue: fandom.FandomName
           }
         )
         return null
@@ -87,7 +87,7 @@ class ManageDownloader extends Component{
     socket.removeAllListeners()
 
     let selectedFandom = event.target.value;
-    let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.fandomName===selectedFandom)[0])
+    let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.FandomName===selectedFandom)[0])
     
     this.setState(prevState =>({
       fandomSelect: {

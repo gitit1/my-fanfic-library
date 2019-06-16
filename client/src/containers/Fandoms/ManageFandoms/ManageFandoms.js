@@ -24,9 +24,9 @@ class ManageFandoms extends Component{
     });
   }
 
-  deleteFandomHandler = (id,fandomName) =>{
+  deleteFandomHandler = (id,FandomName) =>{
 
-    this.props.onDeleteFandoms(id,fandomName).then(async res=>{
+    this.props.onDeleteFandoms(id,FandomName).then(async res=>{
       let msg = this.props.message
       switch  (msg) {
           case 'Success':                
@@ -61,7 +61,7 @@ class ManageFandoms extends Component{
             </div>
           )
       }else{
-          const sortedFandomList = this.props.fandoms.sort((a, b) => a.fandomName.localeCompare(b.fandomName))
+          const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
           page = (<ShowFandomData 
                                   fandoms={sortedFandomList}
                                   editFandom={this.editFandomHandler}
@@ -106,7 +106,7 @@ const mapDispatchedToProps = dispatch =>{
   return{
       onGetFandoms:    () => dispatch(actions.getFandomsFromDB()),
       onPostFandom:    (fandom) => dispatch(actions.getFandom(fandom)),
-      onDeleteFandoms: (id,fandomName) => dispatch(actions.deleteFandomFromDB(id,fandomName))
+      onDeleteFandoms: (id,FandomName) => dispatch(actions.deleteFandomFromDB(id,FandomName))
   };
 }
 

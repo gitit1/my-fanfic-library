@@ -5,3 +5,7 @@ export {
     deleteFandomFromDB,
     getFandom,
 } from './fandoms';
+
+export {
+    getFanficsFromDB
+} from './fanfics';

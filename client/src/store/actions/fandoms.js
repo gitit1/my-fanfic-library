@@ -59,12 +59,12 @@ export const editFandomDataFail = (error) =>{
     };
 };
 
-export const addFandomToDB = (fandomName,oldFandomName,mode,fandom,image) =>{
+export const addFandomToDB = (FandomName,oldFandomName,mode,fandom,image) =>{
     console.log('[action] addFandomToDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
-        console.log(`${fandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`)
-        return axios.post(`/db/addEditFandom?fandomName=${fandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`,fandom)
+        console.log(`${FandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`)
+        return axios.post(`/db/addEditFandom?FandomName=${FandomName}&oldFandomName=${oldFandomName}&mode=${mode}&Image=${image}`,fandom)
         .then(res =>{
             dispatch(getFandomsFromDB())
             dispatch(editFandomDataSuccess(res.data));
@@ -76,11 +76,11 @@ export const addFandomToDB = (fandomName,oldFandomName,mode,fandom,image) =>{
     };
 };
 
-export const deleteFandomFromDB = (id,fandomName) =>{
+export const deleteFandomFromDB = (id,FandomName) =>{
     console.log('[action] deleteFandomFromDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/deleteFandom?id=${id}&fandomName=${fandomName}`)
+        return axios.post(`/db/deleteFandom?id=${id}&FandomName=${FandomName}`)
         .then(async res =>{
             await dispatch(getFandomsFromDB())
             await dispatch(editFandomDataSuccess(res.data));
@@ -99,8 +99,3 @@ export const getFandom = (fandom) =>{
     };
 }
 
-export const testSocket = () => {
-    return{
-        type: actionTypes.TEST_SOCKET
-    }
-}
