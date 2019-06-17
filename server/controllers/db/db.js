@@ -4,13 +4,13 @@ const clc = require("cli-color");
 const multer = require('multer');
 const path = require('path')
 const fs = require('fs-extra');
-const Fandom = require('../../models/Fandom');
+const FandomModal = require('../../models/Fandom');
 // const Fanfic = require('../../models/Fanfic');
-const Fanfics = require('../../models/Fanfics');
-
+const FanficsModal = require('../../models/Fanfics');
+let ChosenFandomFanfics =[]
 //----------------------------------------------------------Working and implemented with cliend:
 
-//workds with both firebase and mongo:
+
 exports.getAllFandomsFromDB = (req,res) =>{
     console.log(clc.blue('[db] getAllFandomsFromDB'));
     getDataFromDB().then(fetchedFandoms=>{
@@ -18,7 +18,6 @@ exports.getAllFandomsFromDB = (req,res) =>{
     })
 }
 
-//workds with both firebase and mongo:
 const getDataFromDB = async () =>{
     // console.log(clc.blue('[db] getDataFromDB'));
     // return axios.get( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json')
@@ -34,13 +33,13 @@ const getDataFromDB = async () =>{
     //     console.log(clc.red(error));
     //     return false
     // } );  
-    let fetchedFandoms = await Fandom.find({}, function(err, fandoms) {
+    let fetchedFandoms = await FandomModal.find({}, function(err, fandoms) {
             if (err){throw err;}
     }); 
     return fetchedFandoms
 }
 
-//workds with both firebase and mongo:
+
 exports.addEditFandomToDB =  async (req,res) =>{
     console.log(clc.blue('[db] addEditFandomToDB'));
 
@@ -107,55 +106,25 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "Image_Name":               imageName,
             "Image_Path":               req.body.FandomName
         }
-        // if(req.query.mode === 'add'){
-        //     let fandomArray = req.body.fandomsNames.split(",");
-        //     if(req.body.fandomsNames.length>0 && fandomArray.includes(fandom.FandomName)){
-        //         console.log(clc.red('Fandom Already Exist'));
-        //         resultMessage = 'Fandom Already Exist';
-        //         return res.send(resultMessage);
-        //     }else{
-        //         await axios.post( 'https://my-fanfic-lybrare.firebaseio.com/fandoms.json', fandom )
-        //             .then( () => {
-        //                 console.log('Fandom '+fandom.FandomName+' ,added to db');
-        //                 resultMessage = 'Success';
-        //                 return res.send(resultMessage)
-        //             } )
-        //             .catch( error => {
-        //                 console.log(clc.red(error));
-        //                 resultMessage = 'Error';
-        //                 return res.send(resultMessage);
-        //             } );               
-        //         }
-        // }else{
-        //     await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.body.FandomID}.json`, fandom )
-        //     .then( () => {
-        //         console.log('Fandom '+fandom.FandomName+' ,was updated in the db')
-        //         resultMessage = 'Success';
-        //         return res.send(resultMessage)
-        //     } )
-        //     .catch( error => {
-        //         console.log(clc.red(error));
-        //         resultMessage = 'Error';
-        //         return res.send(resultMessage);
-        //     } );
-        // }   
         //TODO:add already exsist:
         try {
-            const fandomData = new Fandom(fandom);
-            const fanficData = new Fanfics({'FandomName':fandom.FandomName,'Fanfics':[]});
+            const fandomData = new FandomModal(fandom);
+            const fanficData = new FanficsModal({'FandomName':fandom.FandomName,'Fanfics':[]});
             if(req.query.mode === 'add'){
+                console.log('add1')
                 await fandomData.save();
                 await fanficData.save();
                 console.log('Fandom '+fandom.FandomName+' ,was updated in the db')
                 resultMessage = 'Success';
                 return res.send(resultMessage)
             }else{
-                Fandom.updateOne(
+                console.log('edit1')
+                FandomModal.updateOne(
                     { 'FandomName': fandom.FandomName },
                     { $set: fandom},
                     (err, result) => {
                         if (err) throw err;
-                        resultMessage = 'Error';
+                        resultMessage = 'Success';
                         console.log('Fandom updated!');
                      }
                  )
@@ -166,29 +135,18 @@ exports.addEditFandomToDB =  async (req,res) =>{
             resultMessage = 'Error';
             return res.send(resultMessage);
         }     
-        console.log(resultMessage)
+        console.log('resultMessage:',resultMessage)
         return resultMessage
     
     })
   
 }
-//workds with both firebase and mongo:
+
 exports.deleteFandomFromDB = async (req,res)=>{
     console.log(clc.blue('[db] deleteFandomFromDB'));
     
-    // axios.delete(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${req.query.id}.json`).then(() =>{
-    //     let pathForImage = 'public/images/fandoms/';
-    //     fs.remove(pathForImage+req.query.FandomName).then(() => {
-    //         res.send('Success') 
-    //     }).catch(err => {
-    //     console.error(err)
-    //     })       
-    // }).catch(error=>{
-    //     console.error(error)
-    //     res.send('Error')
-    // });
     try {
-        await Fandom.findOneAndDelete(
+        await FandomModal.findOneAndDelete(
             { FandomName: req.query.FandomName.replace("%26","&") },() => console.log('deleted!')
         );
         res.send('Success')
@@ -262,21 +220,6 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
         let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
         socket && socket.emit('getFanficsData', `<b>Fixing keys to match url search:</b> ${fandomUrlName}`);
     
-        //let oldData=''
-        // console.log(clc.cyanBright(`Executing: getAllFanficsFromServer()`));
-        // socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getAllFanficsFromServer()</span>`);
-        // await getAllFanficsFromServer(FandomName).then(res=>{
-        //     oldData = res
-        // });
-        // const isNewFandom = (oldData===undefined || oldData===null) ? true : false;
-        // if(!isNewFandom){
-        //     console.log(clc.cyanBright(`Executing: deleteOldDataOfFanficsFromServer()`));
-        //     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">deleteOldDataOfFanficsFromServer()</span>`);
-        //     await deleteOldDataOfFanficsFromServer(socket,FandomName);
-        // }
-
-        //console.log('isNewFandom :::',isNewFandom)
-
         console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
         socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
@@ -317,16 +260,6 @@ const deleteOldDataOfFanficsFromServer = (socket,FandomName) => {
 
 const sendFanficsToServer =  async (socket,fandom,fanfics) => {
     console.log(clc.blue('[db] sendFanficsToServer'));
-    // axios.post( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${fandom.FandomName}.json`,fanfics,{maxContentLength: 52428890})
-    // .then( async response => {
-    //     await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${fandom.id}/.json`, {'FanficsId':response.data.name} )
-    //     // return(response.data)
-    //     return(true)
-    // } )
-    // .catch( error => {
-    //     console.log(clc.red(error));
-    //     return('error in [db] sendFanficsToServer')
-    // } );
 
     const fanficData = new Fanfic(fanfics);
     await fanficData.save();
@@ -406,12 +339,17 @@ const getFanficsOfFandom =  async (socket,fandom) => {
             console.log('numberOfPages: ',numberOfPages)
             pagesArray = await getPagesOfFandomData(numberOfPages);
 
+            await FanficsModal.findOne({FandomName: FandomName},async function(err, fandom) {
+                ChosenFandomFanfics = await (fandom.Fanfics===[]) ? [] : fandom.Fanfics
+            });
+
             await pagesArray.map(page => promises.push(   
                 delay(3000).then(() => getDataFromAO3FandomPage(socket,page,FandomName))             
             ))
 
         
             allFanficsList = await Promise.all(promises);
+            //await Promise.all(promises);
 
             await allFanficsList.forEach(fanficArray => {
                 works  = [
@@ -425,20 +363,17 @@ const getFanficsOfFandom =  async (socket,fandom) => {
         let CompleteFanfics = await works.filter(function(fanfic){return fanfic.Complete==true}).length
         let OnGoingFanfics = works.length - CompleteFanfics
 
-        let resultMessage=null
-        //console.log('FandomID '+id)
-        // await axios.patch(`https://my-fanfic-lybrare.firebaseio.com/fandoms/${id}/.json`, {'FanficsInFandom':FanficsInFandom,
-        //                                                                                    'CompleteFanfics':CompleteFanfics,
-        //                                                                                    'OnGoingFanfics':OnGoingFanfics} )
-        // .then( () => {
-        //     console.log('Fandom '+FandomName+' ,was updated in the db')
-        //     resultMessage = 'Success';
-        // } )
-        // .catch( error => {
-        //     console.log(clc.red(error));
-        //     resultMessage = 'Error';
-        // } );
-        Fandom.updateOne(
+
+        await FanficsModal.updateOne(
+            { 'FandomName': FandomName },
+            { $set:     {'LastUpdate':new Date().getTime(),
+                         'Pages':numberOfPages}},
+            (err, result) => {
+                if (err) throw err;
+                console.log('Fanfics updateded');
+             }
+         )
+         await FandomModal.updateOne(
             { 'FandomName': FandomName },
             { $set:     {'FanficsInFandom':FanficsInFandom,
                          'CompleteFanfics':CompleteFanfics,
@@ -448,7 +383,7 @@ const getFanficsOfFandom =  async (socket,fandom) => {
                 console.log('Fandom updateded');
              }
          )
-        //console.log('resultMessage:',resultMessage)
+
 
         return works;
 
@@ -461,23 +396,31 @@ const getDataFromAO3FandomPage =  async (socket,page,FandomName) => {
 
         let $ = cheerio.load(page);
         let fanficData = [];
+        let FanficUpdated = false;
 
         await $('ol.work').children('li').each(async function () {
             let fanfic = {}
             
             //socket && socket.emit('getFanficsData', `<b>Getting data of:</b> <span style="color:purple">${$(this).find('div.header h4 a').first().text()}</span>`);
-            
-            fanfic["LastUpdateOfNote"] = new Date().getTime();
-            fanfic["Favorite"] = false;            
-            fanfic["Status"] = "Need To Read";
-            fanfic["ChapterStatus"] = 0;
-            fanfic["SavedFic"] = false;
+            fanfic["FanficID"]         = Number($(this).attr('id').replace('work_',''));
+            let oldFanficData = (ChosenFandomFanfics.length===0) ? false :  ChosenFandomFanfics.filter(oldFanfic => oldFanfic.FanficID===fanfic["FanficID"])[0]
+
+            fanfic["LastUpdateOfNote"]      =    new Date().getTime();
+            fanfic["Favorite"]              =    oldFanficData ? oldFanficData.Favorite : false;         
+            fanfic["Status"]                =    oldFanficData ? oldFanficData.Status : "Need To Read";
+            fanfic["ChapterStatus"]         =    oldFanficData ? oldFanficData.ChapterStatus : 0;
+            fanfic["SavedFic"]              =    oldFanficData ? oldFanficData.SavedFic : false;
             
             fanfic["FanficTitle"] = $(this).find('div.header h4 a').first().text();
             fanfic["URL"] = 'https://archiveofourown.org'+ $(this).find('div.header h4 a').first().attr('href');
             fanfic["Author"] = $(this).find('div.header h4 a').last().text();
             fanfic["AuthorURL"] = 'https://archiveofourown.org'+ $(this).find('div.header h4 a').last().attr('href');
-            fanfic["LastUpdateOfFic"] = new Date($(this).find('p.datetime').text()).getTime();
+            fanfic["LastUpdateOfFic"] = $(this).find('p.datetime').text() ==="" ? 0 : new Date($(this).find('p.datetime').text()).getTime();
+            // console.log('fanfic.LastUpdateOfFic',fanfic["LastUpdateOfFic"])
+            // console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
+            if(oldFanficData && fanfic["LastUpdateOfFic"]>oldFanficData.LastUpdateOfFic){
+                console.log('fanfic got updated!!!!!!!!!!!!!')
+            }
             fanfic["Rating"] = $(this).find('span.rating span').text();
             let tags = [];
             let warnings = [];
@@ -498,10 +441,10 @@ const getDataFromAO3FandomPage =  async (socket,page,FandomName) => {
             tags.push({'warnings':warnings},{'relationships':relationships},{'characters':characters},{'freeforms':freeforms})                       
             fanfic["Tags"]              =  tags;
             fanfic["Description"]       =  $(this).find('blockquote.summary').text();
-            fanfic["Hits"]              =  Number($(this).find('dd.hits').text());
-            fanfic["Kudos"]             =  Number($(this).find('dd.kudos').text()); 
+            fanfic["Hits"]              =  $(this).find('dd.hits').text()       ===""  ? 0 : Number($(this).find('dd.hits').text());
+            fanfic["Kudos"]             =  $(this).find('dd.kudos').text()      ==="" ? 0 : Number($(this).find('dd.kudos').text()); 
             fanfic["Language"]          =  $(this).find('dd.language').text()  
-            fanfic["Comments"]          =  ($(this).find('dd.comments').text())==="" ? 0 : Number($(this).find('dd.comments').text()); 
+            fanfic["Comments"]          =  ($(this).find('dd.comments').text()) ==="" ? 0 : Number($(this).find('dd.comments').text()); 
             fanfic["Words"]             =  $(this).find('dd.words').text(); 
             fanfic["NumberOfChapters"]  =  Number($(this).find('dd.chapters').text().split('/')[0]);  
             
@@ -510,46 +453,72 @@ const getDataFromAO3FandomPage =  async (socket,page,FandomName) => {
             fanfic["Complete"] = (String(chapEnd) !== '?' && (Number(chapCurrent)===Number(chapEnd)) ) ? true : false
 
             fanfic["Image"]             = "";
-            fanfic["FanficID"]         = Number($(this).attr('id').replace('work_',''));
+            
 
             fanficData.push(fanfic);
             
             //const fanficRecord = new Fanfics({'FandomName':FandomName,'Fanfics':fanfics});
-            Fanfics.findOne({FandomName: FandomName}, async function(err, fandom) {
+            await FanficsModal.findOne({FandomName: FandomName}, async function(err, fandom) {
                 if (err) { console.log('err: ',err)}
-                let isExist = fandom.Fanfics.find(x => x.FanficID === fanfic["FanficID"] );
-                if(!isExist){
-                    fandom.Fanfics.push({
-                        FanficID:               fanfic["FanficID"],
-                        LastUpdateOfNote:       fanfic["LastUpdateOfNote"],
-                        LastUpdateOfFic:        fanfic["LastUpdateOfFic"],
-                        Favorite:               fanfic["Favorite"],
-                        Status:                 fanfic["Status"],
-                        ChapterStatus:          fanfic["ChapterStatus"],
-                        SavedFic:               fanfic["SavedFic"],
-                        FanficTitle:            fanfic["FanficTitle"],
-                        URL:                    fanfic["URL"],
-                        Author:                 fanfic["Author"],
-                        AuthorURL:              fanfic["AuthorURL"],    
-                        NumberOfChapters:       fanfic["NumberOfChapters"],    
-                        Complete:               fanfic["Complete"],    
-                        Rating:                 fanfic["Rating"],    
-                        Tags:                   fanfic["Tags"], 
-                        Language:               fanfic["Language"],    
-                        Hits:                   fanfic["Kudos"],     
-                        Kudos:                  fanfic["Kudos"],     
-                        Comments:               fanfic["Comments"],     
-                        Words:                  fanfic["Words"],     
-                        Description:            fanfic["Description"],     
-                        Image:                  fanfic["Image"], 
-                        //lastUpdated: lastUpdated
-                    });
-                    await fandom.save();
-                    //return
-                }else{
-                    console.log('errororro')
-                    //return
-                    //TODO: check update...
+                    let isExist = (oldFanficData!==undefined) ? true : false;
+                    console.log('isExist: ',isExist)
+                    if(!isExist){
+                        fandom.Fanfics.push({
+                            FanficID:               fanfic["FanficID"],
+                            LastUpdateOfNote:       fanfic["LastUpdateOfNote"],
+                            LastUpdateOfFic:        fanfic["LastUpdateOfFic"],
+                            Favorite:               fanfic["Favorite"],
+                            Status:                 fanfic["Status"],
+                            ChapterStatus:          fanfic["ChapterStatus"],
+                            SavedFic:               fanfic["SavedFic"],
+                            FanficTitle:            fanfic["FanficTitle"],
+                            URL:                    fanfic["URL"],
+                            Author:                 fanfic["Author"],
+                            AuthorURL:              fanfic["AuthorURL"],    
+                            NumberOfChapters:       fanfic["NumberOfChapters"],    
+                            Complete:               fanfic["Complete"],    
+                            Rating:                 fanfic["Rating"],    
+                            Tags:                   fanfic["Tags"], 
+                            Language:               fanfic["Language"],    
+                            Hits:                   fanfic["Kudos"],     
+                            Kudos:                  fanfic["Kudos"],     
+                            Comments:               fanfic["Comments"],     
+                            Words:                  fanfic["Words"],     
+                            Description:            fanfic["Description"],     
+                            Image:                  fanfic["Image"], 
+                        });
+                        await fandom.save();
+                    }else{                   
+                        await FanficsModal.updateOne(
+                            { 'FandomName': FandomName, 'Fanfics.FanficID':fanfic["FanficID"]},
+                            { $set:{'Fanfics.$':{
+                                FanficID:               fanfic["FanficID"],
+                                LastUpdateOfNote:       fanfic["LastUpdateOfNote"],
+                                LastUpdateOfFic:        fanfic["LastUpdateOfFic"],
+                                Favorite:               fanfic["Favorite"],
+                                Status:                 fanfic["Status"],
+                                ChapterStatus:          fanfic["ChapterStatus"],
+                                SavedFic:               fanfic["SavedFic"],
+                                FanficTitle:            fanfic["FanficTitle"],
+                                URL:                    fanfic["URL"],
+                                Author:                 fanfic["Author"],
+                                AuthorURL:              fanfic["AuthorURL"],    
+                                NumberOfChapters:       fanfic["NumberOfChapters"],    
+                                Complete:               fanfic["Complete"],    
+                                Rating:                 fanfic["Rating"],    
+                                Tags:                   fanfic["Tags"], 
+                                Language:               fanfic["Language"],    
+                                Hits:                   fanfic["Kudos"],     
+                                Kudos:                  fanfic["Kudos"],     
+                                Comments:               fanfic["Comments"],     
+                                Words:                  fanfic["Words"],     
+                                Description:            fanfic["Description"],     
+                                Image:                  fanfic["Image"]
+                            }}},
+                            (err, result) => {
+                                if (err) throw err;
+                                console.log('Fanfics updateded');
+                        })
                 }
     
             });
@@ -565,22 +534,57 @@ const getDataFromAO3FandomPage =  async (socket,page,FandomName) => {
 exports.getFanficsFromDB = (req,res) =>{
     const {FandomName,startPage,endPage} = req.query;
     console.log('FandomName: ',FandomName)
-    //orderBy="id" - could be name,date... according to filter
-//     return axios.get( `https://my-fanfic-lybrare.firebaseio.com/fanfics/${FandomName}/${FanficsId}.json?orderBy="LastUpdate"&startAt=${startPage}&endAt=${endPage}`)
-//     //
-//     .then( response => {
-//         console.log(response.data['FanficsId'])
-//         res.send(response.data[FanficsId])
-//     } )
-//     .catch( error => {
-//         console.log(clc.red(error));
-//         res.send('error in [db] getFanficsFromDB')
-//     } );     
-// }
-    Fanfics.findOne({FandomName: FandomName}, async function(err, fandom) {
-        if (err) { console.log('err: ',err)}
-        res.send(fandom.Fanfics)
-    });
+    let skip = Number(startPage-1);
+    let limit = Number(endPage);
+
+    //  Fanfics.findOne({FandomName: FandomName}).sort({'Fanfics.LastUpdateOfFic': -1 }).skip(startPage-1).limit(endPage).lean().exec(async function(err, fandom) {
+        //,sort:{'Fanfics.LastUpdateOfFic': 'descending }
+    //  FanficsModal.findOne({FandomName: FandomName},{Fanfics:{$slice:[skip,limit]}},{sort:{'Fanfics.LastUpdateOfFic': 'asc'}},function(err, fandom) {
+    //  FanficsModal.findOne({FandomName: FandomName},{Fanfics:{$slice:[skip,limit]}},{sort:{'Fanfics.LastUpdateOfFic':'asc'}},function(err, fandom) {
+        // if (err) { console.log('err: ',err)}
+        // sortParam = 'LastUpdateOfFic';
+        // //sortParam = 'FanficTitle';
+        FanficsModal.findOne({FandomName: FandomName},function(err, fandom) {
+            let sortParam = 'LastUpdateOfFic';
+            const sortedFanficsList =fandom.Fanfics.sort(function(a, b) { 
+                return a[sortParam] - b[sortParam];
+            })
+            // res.send(sortedFanficsList.slice(skip, limit))
+            res.send(sortedFanficsList.reverse().slice(skip, limit))
+        });
+        // // fanficsLimitedList = fandom.Fanfics.slice(startPage-1, endPage);
+        // //fanficsLimitedList = fandom.Fanfics
+        // //const sortedFanficsList = fanficsLimitedList.sort((a, b) => a[sortParam].localeCompare(b[sortParam]))
+        // // const sortedFanficsList =fandom.Fanfics.sort(function(a, b) { 
+        //     //     return a[sortParam] - b[sortParam];
+        //     //     }).reverse()
+        //     // res.send(sortedFanficsList.slice(startPage-1, endPage))
+        //     console.log('sss')
+        //     // fandom.Fanfics.map(res=>console.log(res.FanficTitle))
+        //     res.send(fandom.Fanfics)
+        //     });
+            
+            // FanficsModal.aggregate([
+            //    { "$match": {FandomName: FandomName}},
+            //    {$slice:["$Fanfics",skip,limit]}, 
+            //    {$unwind: "$Fanfics"}, 
+            //    {$sort: {"Fanfics.LastUpdateOfFic":1}}, 
+            //  ]).exec(function(err, fandom) {
+            //    console.log(fandom)
+            //  })
+    // Fanfics.findOne({FandomName: FandomName}, async function(err, fandom) {
+    //     if (err) { console.log('err: ',err)}
+    //     sortParam = 'LastUpdateOfFic';
+    //     //sortParam = 'FanficTitle';
+
+    //     // fanficsLimitedList = fandom.Fanfics.slice(startPage-1, endPage);
+    //     //fanficsLimitedList = fandom.Fanfics
+    //     //const sortedFanficsList = fanficsLimitedList.sort((a, b) => a[sortParam].localeCompare(b[sortParam]))
+    //     const sortedFanficsList =fandom.Fanfics.sort(function(a, b) { 
+    //         return a[sortParam] - b[sortParam];
+    //         }).reverse()
+    //     res.send(sortedFanficsList.slice(startPage-1, endPage))
+    // });
 }
 /* --------------------------------------------------------- OLD*/
 //Connection between DB/AO3:

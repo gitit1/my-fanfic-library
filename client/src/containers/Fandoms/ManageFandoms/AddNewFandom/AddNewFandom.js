@@ -158,7 +158,7 @@ class AddNewFandom extends Component{
                     break;           
             }    
         });      
-        this.setState({editMode:false,uploading:false});
+        // this.setState({editMode:false,uploading:false});
         return null
 
     }

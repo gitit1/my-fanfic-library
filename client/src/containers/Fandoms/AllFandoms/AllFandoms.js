@@ -3,8 +3,6 @@ import {connect} from 'react-redux';
 
 import classes from './AllFandoms.module.css';
 
-import * as actions from '../../../store/actions';
-
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
 
@@ -53,12 +51,4 @@ const mapStateToProps = state =>{
     };   
   }
   
-//   const mapDispatchedToProps = dispatch =>{
-//     return{
-//         onGetFandoms:    () => dispatch(actions.getFandomsFromDB()),
-//         onPostFandom:    (fandom) => dispatch(actions.getFandom(fandom)),
-//         onDeleteFandoms: (id,FandomName) => dispatch(actions.deleteFandomFromDB(id,FandomName))
-//     };
-//   }
-  
-  export default connect(mapStateToProps)(AllFandoms);
+export default connect(mapStateToProps)(AllFandoms);

@@ -7,22 +7,23 @@ import classes from './Fanfic.module.css';
 import * as actions from '../../store/actions';
 
 import Container from '../../components/UI/Container/Container';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 
 class Fanfic extends Component{
     state={
         fanfics:[],
         pageNumber:1,
-        pageLimit:10
+        pageLimit:4
     }
 
 
     componentWillMount(){
         const {pageNumber,pageLimit} = this.state
-        const FanficsId = queryString.parse(this.props.location.search).FanficsId;
+        //const FanficsId = queryString.parse(this.props.location.search).FanficsId;
         const FandomName = this.props.match.params.FandomName;
-        console.log()
-        this.props.onGetFanfics(FandomName,FanficsId,pageNumber,pageLimit).then(res=>(
+        
+        this.props.onGetFanfics(FandomName,pageNumber,pageLimit).then(res=>(
             console.log(res)
         ))
     }
@@ -30,13 +31,16 @@ class Fanfic extends Component{
 
 
     render(){
-        return(
+        let page = null
+        page = this.props.loading ? <Container header={this.props.match.params.FandomName}><Spinner/></Container> : (
             <Container header={this.props.match.params.FandomName}>
-                {/* <p>hello</p> */}
                 {this.props.fanfics.map((fanfic,index)=>(
                     <p key={fanfic.FanficID}>{index+1} - {fanfic.FanficTitle}</p>
                 ))}
             </Container>
+        )
+        return(
+            page
         )
     }
 }
@@ -51,7 +55,7 @@ const mapStateToProps = state =>{
   
 const mapDispatchedToProps = dispatch =>{
     return{
-        onGetFanfics:    (FandomName,FanficsId,pageNumber,pageLimit) => dispatch(actions.getFanficsFromDB(FandomName,FanficsId,pageNumber,pageLimit)),
+        onGetFanfics:    (FandomName,pageNumber,pageLimit) => dispatch(actions.getFanficsFromDB(FandomName,pageNumber,pageLimit)),
     };
 }
   

@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from './ShowFandomData.module.css';
-import Button from '../../../../components/UI/Button/Button';
 import {Link} from 'react-router-dom'
 
 
@@ -13,7 +12,7 @@ const ShowFandomData = (props) => {
                           <section className={classes.ImageSection}>
                               {
                                   fandom.Image_Name !== '' 
-                                  ? <Link to={`/fanfics/${fandom.FandomName}?FanficsId=${fandom.FanficsId}`}>
+                                  ? <Link to={`/fanfics/${fandom.FandomName}`}>
                                         <img src={`/images/fandoms/${fandom.FandomName}/${fandom.Image_Name}`} alt={fandom.FandomName}/>
                                     </Link> 
                                   
@@ -23,7 +22,7 @@ const ShowFandomData = (props) => {
                               }
                           </section>
                             <section className={classes.DataSection}>
-                                <Link to={`/fanfics/${fandom.FandomName}?FanficsId=${fandom.FanficsId}`}>
+                                <Link to={`/fanfics/${fandom.FandomName}`}>
                                     <h3>{fandom.FandomName}</h3>         
                                     <p><span>Fanfics in Fandoms: </span><b>{fandom.FanficsInFandom}</b></p>           
                                     <p><span>Complete Fanfics: </span>{fandom.CompleteFanfics}</p> 

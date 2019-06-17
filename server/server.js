@@ -8,10 +8,11 @@ require('dotenv').config({
     path: 'variables.env'
 });
 require('./config/mongoose.js')
+
 require('./controllers/socket/socket');
+require('./cronJobs/cron')
 
 const app = express();
-//require('./cronJobs/cron')
 
 
 const port = 5000;

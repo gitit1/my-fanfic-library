@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Fanfic = require('./Fanfic');
 
 const Schema = mongoose.Schema;
 
@@ -8,13 +7,8 @@ const FanficsSchema = new Schema({
     Fanfics:            [
         {
             FanficID:               {type: Number, unique: true},
-            LastUpdateOfNote:       {type: Number},
-            LastUpdateOfFic:        {type: Number},
-            Favorite:               {type: Boolean},
-            Status:                 {type: String},
-            ChapterStatus:          {type: Number},
-            SavedFic:               {type: Boolean},
             FanficTitle:            {type: String},
+            Favorite:               {type: Boolean},
             URL:                    {type: String},
             Author:                 {type: String},
             AuthorURL:              {type: String},    
@@ -29,13 +23,19 @@ const FanficsSchema = new Schema({
             Words:                  {type: String},     
             Description:            {type: String},     
             Image:                  {type: String},     
+            Status:                 {type: String},
+            ChapterStatus:          {type: Number},
+            SavedFic:               {type: Boolean},
+            LastUpdateOfFic:        {type: Number},
+            LastUpdateOfNote:       {type: Number},
          }
     ],         
     created: {
         type: Date,
         default: Date.now
      },
-     lastUpdate: {type: Number}  
+     LastUpdate:            {type: Number},
+     Pages:                 {type: Number}
  });
  
  

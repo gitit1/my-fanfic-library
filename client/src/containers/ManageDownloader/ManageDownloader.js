@@ -29,7 +29,6 @@ class ManageDownloader extends Component{
         visible: true,
         ready: false
     },
-    timestamp: 'no timestamp yet',
     serverData: null,
     logs: []
   }
@@ -76,8 +75,6 @@ class ManageDownloader extends Component{
 
       socket.emit('getFandomFanfics', this.state.fandom);
 
-
-    // (err, serverData) => (this.setState({serverData}), this.state.logs.push(serverData)) 
   }
 
 
@@ -118,20 +115,14 @@ class ManageDownloader extends Component{
             <br/>    
         </div>
         <Button clicked={this.getFandomFanfics}>Get/Update Fandom Fanfics</Button>
-
-        {/* <Button clicked={() =>this.subscribeToTimer((err, timestamp) => this.setState({ timestamp }))}>subscribeToTimer</Button> */}
-        {/* <p className="App-intro">
-          This is the timer value: {this.state.timestamp}
-        </p> */}
-        <p className="App-intro">
-        serverData: {this.state.serverData}
-        </p>
+        <div className={classes.MsgBoard}>
         {
           this.state.logs.map((log,index)=>(
             <p key={index} dangerouslySetInnerHTML={{ __html:log}}/>
 
           ))
         }
+        </div>
       </Container>
       )
     : <Container><Spinner/></Container> 

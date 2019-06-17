@@ -1,8 +1,9 @@
 import React from 'react';
-import classes from './ShowFandomData.module.css';
-import Button from '../../../../components/UI/Button/Button';
 import {Link} from 'react-router-dom'
+import classes from './ShowFandomData.module.css';
 
+import Button from '../../../../components/UI/Button/Button';
+import {shorten} from '../../../../shared/utility'
 
 const ShowFandomData = (props) => {
     return(
@@ -25,7 +26,7 @@ const ShowFandomData = (props) => {
                           <section className={classes.DataSection}>
                             <h3>
                                 <Link to='/'>
-                                    {fandom.FandomName}
+                                    {shorten(fandom.FandomName,12)}
                                 </Link>
                             </h3>         
                             <p><span>Search Keys: </span>{fandom.SearchKeys}</p>           

@@ -21,7 +21,7 @@ export const getFanficsFromDBFail = (error) =>{
     };
 };
 
-export const getFanficsFromDB = (FandomName,FanficsId,pageNumber,pageLimit) =>{
+export const getFanficsFromDB = (FandomName,pageNumber,pageLimit) =>{
     console.log('[action] getFanficsFromDB')
     let startPage = (pageLimit*pageNumber)-pageLimit+1;
     let endPage = pageLimit*pageNumber;
