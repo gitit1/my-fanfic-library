@@ -6,10 +6,20 @@ import * as actions from '../../store/actions';
 import classes from './Layout.module.css';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Layout extends Component{
     componentDidMount(){
-        if(this.props.fandoms.length===0){this.props.onGetFandoms()}  
+        this.uploadData()
+    }
+
+    uploadData = async () => {
+        try {
+            if(this.props.fandoms.length===0){await this.props.onGetFandoms()} 
+            console.log('....')
+        } catch(e) {
+            console.warn(e);
+        }
     }
 
     render(){
@@ -18,9 +28,11 @@ class Layout extends Component{
                 <header className={classes.Header}>
                     <Header/>
                 </header>
-                <main className={classes.Main}>
-                    {this.props.children}
-                </main>
+                {this.props.loading ? <Spinner/> : (
+                    <main className={classes.Main}>
+                        {this.props.children}
+                    </main>
+                )}
                 <footer className={classes.Footer}>
                     <Footer/>
                 </footer>
@@ -33,7 +45,8 @@ class Layout extends Component{
 
 const mapStateToProps = state =>{
     return{
-        fandoms:        state.fandoms.fandoms
+        fandoms:        state.fandoms.fandoms,
+        loading:        state.fandoms.loading
     };   
 }
   

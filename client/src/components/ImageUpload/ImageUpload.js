@@ -9,12 +9,22 @@ class ImageUpload extends Component {
   }
   
   componentDidMount() {
-        console.log('this.props.edit: ',this.props.edit)
-        if(this.props.edit){
-          let fileSrc = (this.props.fileName !== '') 
-                     ? (`/images/fandoms/${this.props.FandomName}/${this.props.fileName}`)
-                     : (`/images/fandoms/nophoto.png`);
+        if(this.props.fileName !== null){
+          let fileSrc = (this.props.fileName !== '') ? (`/fandoms/${this.props.FandomName}/${this.props.fileName}`): (`/fandoms/nophoto.png`);
+          // let fileSrc=null;
+          // if(this.props.edit==='add'){
+          //   let reader = new FileReader();
+          //    reader.onloadend = () => {
+          //      this.setState({
+          //        file: this.props.fileName,
+          //        imagePreviewUrl: reader.result
+          //      });
+          //   }
+          // }else{
+          //    fileSrc = (this.props.fileName !== '') ? (`/fandoms/${this.props.FandomName}/${this.props.fileName}`): (`/fandoms/nophoto.png`);
+          // }
           console.log('fileSrc: ',fileSrc)
+          console.log('this.props.fileName : ',this.props.fileName )
           this.setState({
             imagePreviewUrl:fileSrc
           })

@@ -8,7 +8,7 @@ const io = require('socket.io')(server,{
     cookie: false
   });
 
-const func = require('../db/db');
+const func = require('../connection');
 
 server.listen(5555);
 

@@ -33,11 +33,13 @@ class ManageDownloader extends Component{
     logs: []
   }
 
-  componentWillMount(){
-    this.props.onGetFandoms().then(()=>
-      this.createOptionsForFandomSelect()
-    );
+  componentDidMount(){
+    this.createOptionsForFandomSelect()
     socket.removeAllListeners()
+  }
+
+  componentWillUnmount(){
+    this.props.onGetFandoms()
   }
 
   createOptionsForFandomSelect = () =>{
@@ -64,17 +66,21 @@ class ManageDownloader extends Component{
 
   }
 
-  getFandomFanfics = () =>{
+  getFandomFanfics = async () =>{
     socket.removeAllListeners()
     this.setState({serverData:null,logs:[]})
 
       socket.on('getFanficsData', serverData =>{
           this.setState({serverData})
           this.state.logs.push(this.state.serverData)
+          if(this.state.serverData==='End'){
+            // this.props.onGetFandoms()
+            this.state.logs.push('Done!')
+          }
       })
 
       socket.emit('getFandomFanfics', this.state.fandom);
-
+      
   }
 
 
@@ -116,6 +122,7 @@ class ManageDownloader extends Component{
         </div>
         <Button clicked={this.getFandomFanfics}>Get/Update Fandom Fanfics</Button>
         <div className={classes.MsgBoard}>
+          {/* <p>serverData: {this.state.serverData}</p> */}
         {
           this.state.logs.map((log,index)=>(
             <p key={index} dangerouslySetInnerHTML={{ __html:log}}/>
@@ -136,10 +143,7 @@ class ManageDownloader extends Component{
 
 const mapStateToProps = state =>{
   return{
-      fandoms:        state.fandoms.fandoms,
-      fandom:         state.fandoms.fandom,
-      message:        state.fandoms.message,
-      loading:        state.fandoms.loading
+      fandoms:        state.fandoms.fandoms
   };   
 }
 

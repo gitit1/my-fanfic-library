@@ -15,11 +15,11 @@ const ShowFandomData = (props) => {
                               {
                                   fandom.Image_Name !== '' 
                                   ? <Link to='/'>
-                                        <img src={`/images/fandoms/${fandom.FandomName}/${fandom.Image_Name}`} alt={fandom.FandomName}/>
+                                        <img src={`/fandoms/${fandom.FandomName}/${fandom.Image_Name}`} alt={fandom.FandomName}/>
                                     </Link> 
                                   
                                   : <Link to='/'>
-                                        <img src={`/images/fandoms/nophoto.png`} alt={fandom.FandomName} className={classes.NoImage}/> 
+                                        <img src={`/fandoms/nophoto.png`} alt={fandom.FandomName} className={classes.NoImage}/> 
                                     </Link>
                               }
                           </section>

@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 
-import classes from './Fanfic.module.css';
+// import classes from './Fanfic.module.css';
 
 import * as actions from '../../store/actions';
 
@@ -14,7 +14,7 @@ class Fanfic extends Component{
     state={
         fanfics:[],
         pageNumber:1,
-        pageLimit:4
+        pageLimit:20
     }
 
 

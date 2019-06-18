@@ -25,7 +25,8 @@ class AddNewFandom extends Component{
         fandomForm:fandomGeneralForm[0],
         formIsValid:false,
         fandomAddedFlag:0,
-        editMode:false
+        editMode:false,
+        imageName:null
     }
   
     componentWillMount(){
@@ -35,9 +36,7 @@ class AddNewFandom extends Component{
                 editMode:true,
             })
             this.editFandomInitialState()
-            console.log('editMode 1: ',this.state.editMode)
         }
-        console.log('editMode 2: ',this.state.editMode)
     }
     // componentWillUnmount(){
     //     this.props.onLeavingPage();
@@ -88,7 +87,8 @@ class AddNewFandom extends Component{
                     }           
                 }
             },
-            formIsValid:true
+            formIsValid:true,
+            imageName: this.props.fandom.Image_Name
         }));
     }
 
@@ -97,12 +97,9 @@ class AddNewFandom extends Component{
         event.preventDefault();
 
         let fandomsNames = [];
-        //await this.props.onGetFandoms().then(()=>{
-            this.props.fandoms.map(fandom=>(
-                fandomsNames.push(fandom.FandomName)
-            ));
-            console.log('fandomsNames: ',fandomsNames)
-        //});
+        this.props.fandoms.map(fandom=>(
+            fandomsNames.push(fandom.FandomName)
+        ));
 
         this.setState({uploading:true})
         let saveType = []
@@ -110,9 +107,10 @@ class AddNewFandom extends Component{
             type.checked && saveType.push(type.value)
             return null
         })
+        const fandomName = this.state.fandomForm['FandomName'].value;
 
         const fandom = new FormData();
-        fandom.append("FandomName", this.state.fandomForm['FandomName'].value)
+        fandom.append("FandomName", fandomName)
         fandom.append("SearchKeys", this.state.fandomForm['SearchKeys'].value)
         fandom.append("AutoSave",   this.state.fandomForm['AutoSave'].value)
         fandom.append("SaveMethod", saveType)
@@ -129,36 +127,37 @@ class AddNewFandom extends Component{
         let image = (this.formRef.current.state.file===undefined
                       ||this.formRef.current.state.file===null
                       ||!this.formRef.current.state.file) ? false : true;
-
-        //let editImage = this.state.editMode && this.props.fandom.Image_Name
-        console.log('this.state.fandomForm[FandomName].value:',this.state.fandomForm['FandomName'].value)
+        let imageDate = new Date().getTime();
         let mode =  this.state.editMode ? 'edit' : 'add';
+        
+        if(this.formRef.current.state.file.name){
+            this.setState({imageName:fandomName+'_'+imageDate+'.'+this.formRef.current.state.file.name.split('.')[1]});
+        }
 
-        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandom,image).then(()=>{
+
+        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandom,image,imageDate).then(()=>{
         
             switch  (this.props.message) {
                 case 'Success':
-                    this.setState({fandomAddedFlag:1})
-                    console.log(this.state.fandomAddedFlag);
-                    //this.props.onGetFandoms();                   
+                    this.setState({fandomAddedFlag:1})             
                     setTimeout(() => {
                         this.props.history.push('/manageFandoms');
                     }, 1000);
                     break;
                 case 'Fandom Already Exist':
                     this.setState({fandomAddedFlag:2})
-                    console.log(this.state.fandomAddedFlag);
                     break;
                 case 'Error':
                     this.setState({fandomAddedFlag:3})
-                    console.log(this.state.fandomAddedFlag);
                     break;
                 default:
                     //alert(this.props.message); 
                     break;           
             }    
         });      
+        //this.setState({fandomName:this.state.fandomForm['FandomName'].value});
         // this.setState({editMode:false,uploading:false});
+        
         return null
 
     }
@@ -273,16 +272,16 @@ class AddNewFandom extends Component{
                 addFandomStatus = null;
                 break;             
         }
-        let header = (this.state.editMode && !this.props.loading) ? `Edit ${this.props.fandom['FandomName']} Fandom` : 'Add New Fandom'
-        let page = (this.props.loading && this.state.uploading) ? <Container><Spinner/></Container> : (
+        let header = (this.state.editMode && !this.props.loading) ? `Edit ${this.state.fandomForm['FandomName'].value} Fandom` : 'Add New Fandom'
+        let page = (this.props.loading) ? <Container><Spinner/></Container> : (
             <Container header={header}>
                 <div className={classes.FormBox}>
                     <div className={classes.ImageDiv}>
                         <ImageUpload 
                                         ref={this.formRef} 
                                         edit={this.state.editMode} 
-                                        FandomName={this.state.editMode && this.props.fandom.FandomName} 
-                                        fileName={this.state.editMode && this.props.fandom.Image_Name}/>
+                                        FandomName={this.state.fandomForm['FandomName'].value} 
+                                        fileName={this.state.imageName}/>
                     </div>
                     <div className={classes.FormDiv}>
                         {form}
@@ -313,10 +312,10 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
-        onGetFandoms:       ()                                                  =>      dispatch(actions.getFandomsFromDB()),
-        onAddFandom:        (FandomName,mode,fandom,image)        =>      dispatch(actions.addFandomToDB(FandomName,mode,fandom,image)),
-        onPostFandom:       (fandom)                                            =>      dispatch(actions.getFandom(fandom))
-        //onLeavingPage:      ()                                  =>      dispatch(actions.editFandomDataStart())
+        onGetFandoms:       ()                                          =>      dispatch(actions.getFandomsFromDB()),
+        onAddFandom:        (FandomName,mode,fandom,image,imageDate)    =>      dispatch(actions.addFandomToDB(FandomName,mode,fandom,image,imageDate)),
+        onPostFandom:       (fandom)                                    =>      dispatch(actions.getFandom(fandom))
+
     };
 }
   

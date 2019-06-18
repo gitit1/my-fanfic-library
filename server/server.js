@@ -7,8 +7,8 @@ const publicDir = require('path').join(__dirname,'/public');
 require('dotenv').config({
     path: 'variables.env'
 });
-require('./config/mongoose.js')
 
+require('./config/mongoose.js')
 require('./controllers/socket/socket');
 require('./cronJobs/cron')
 

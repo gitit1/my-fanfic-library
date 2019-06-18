@@ -21,11 +21,11 @@ const getFandomsFromDBSuccess  = (state,action) => {
 const getFandomsFromDBFail  = (state,action) => {
     return updateObject(state,{loading: false});   
 }
-//Add Fandom To Server
-// const fandomInit = (state,action) => {
-//     return updateObject(state,{fandom: null});
-// }
-
+const getFandom = (state,action) =>{
+        return updateObject(state,{
+                                fandom: action.fandom                         
+                                });    
+}
 //Add Fandom To Server
 const editFandomDataStart  = (state,action) => {
     return updateObject(state,{
@@ -49,24 +49,16 @@ const editFandomDataFail  = (state,action) => {
                               });   
 }
 
-const getFandom = (state,action) =>{
-      return updateObject(state,{
-                                fandom: action.fandom                         
-                              });    
-}
-
-
 const reducer = (state = initialState,action) =>{
     switch(action.type){
         case actionTypes.GET_FANDOMS_START:                 return getFandomsFromDBStart(state,action)                                    
         case actionTypes.GET_FANDOMS_SUCCESS:               return getFandomsFromDBSuccess(state,action)                                    
-        case actionTypes.GET_FANDOMS_FAIL:                  return getFandomsFromDBFail(state,action)                                    
-        // case actionTypes.FANDOM_INIT:                       return fandomInit(state,action)                                    
-        case actionTypes.EDIT_FANDOM_START:                  return editFandomDataStart(state,action)                                    
-        case actionTypes.EDIT_FANDOM_SUCCESS:                return editFandomDataSuccess(state,action)                                    
-        case actionTypes.EDIT_FANDOM_FAIL:                   return editFandomDataFail(state,action)                                    
+        case actionTypes.GET_FANDOMS_FAIL:                  return getFandomsFromDBFail(state,action)                                                                    
+        case actionTypes.EDIT_FANDOM_START:                 return editFandomDataStart(state,action)                                    
+        case actionTypes.EDIT_FANDOM_SUCCESS:               return editFandomDataSuccess(state,action)                                    
+        case actionTypes.EDIT_FANDOM_FAIL:                  return editFandomDataFail(state,action)                                    
         
-        case actionTypes.GET_FANDOM:                         return getFandom(state,action)                                    
+        case actionTypes.GET_FANDOM:                        return getFandom(state,action)                                    
         
         default: return state;
     }

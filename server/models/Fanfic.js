@@ -1,16 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require('../config/mongoose');
 
 const Schema = mongoose.Schema;
 
 const FanficSchema = new Schema({
-    FanficID:               {type: Number},
-    LastUpdateOfNote:       {type: Number},
-    LastUpdateOfFic:        {type: Number},
-    Favorite:               {type: Boolean},
-    Status:                 {type: String},
-    ChapterStatus:          {type: Number},
-    SavedFic:               {type: Boolean},
+    FandomName:             {type: String},
+    FanficID:               {type: Number, unique: true},
     FanficTitle:            {type: String},
+    Favorite:               {type: Boolean},
     URL:                    {type: String},
     Author:                 {type: String},
     AuthorURL:              {type: String},    
@@ -25,11 +21,16 @@ const FanficSchema = new Schema({
     Words:                  {type: String},     
     Description:            {type: String},     
     Image:                  {type: String},     
+    Status:                 {type: String},
+    ChapterStatus:          {type: Number},
+    SavedFic:               {type: Boolean},
+    LastUpdateOfFic:        {type: Number},
+    LastUpdateOfNote:       {type: Number},
  });
  
  
  
- let Fanfic = mongoose.model('Fanfic', FanficSchema);
+ let Fanfic = mongoose.dbFanfics.model('Fanfic', FanficSchema);
  
  
  module.exports = Fanfic;
