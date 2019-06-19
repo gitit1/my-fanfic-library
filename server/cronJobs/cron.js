@@ -7,5 +7,4 @@ const getFanfics = require('../controllers/connection');
 cron.schedule('0 1 * * 0-7', () => {
   console.log('CronJob Awoke: [Get Fanfics of all fandoms]');
     getFanfics.manageDownloader(null,'All')
-
 });

@@ -5,7 +5,9 @@ const path = require('path')
 
 const mongoose = require('../config/mongoose');
 const FandomModal = require('../models/Fandom');
-const FanficsModal = require('../models/Fanfic');
+// const FanficsModal = require('../models/Fanfic');
+const FanficSchema = require('../models/Fanfic');
+
 
 //----------------------------------------------------------Working and implemented with cliend:
 exports.addEditFandomToDB =  async (req,res) =>{
@@ -159,20 +161,43 @@ exports.getAllFandoms = async () =>{
 }
 
 exports.getFanficsFromDB = async (req,res) =>{
-    const {FandomName,startPage,endPage} = req.query;
+    let {FandomName,skip,limit} = req.query;
     console.log('FandomName: ',FandomName)
-    let skip = Number(startPage-1);
-    let limit = Number(endPage);
-
-    // let fanfics = await mongoose.dbFanfics.collection(FandomName).find({}, null, {sort: {'LastUpdateOfFic': 1}}, function(err, docs) { console.log('work already!!')});
-    let fanfics = []
-    await mongoose.dbFanfics.collection(FandomName).find({},{sort: {'LastUpdateOfFic': -1}, skip:skip,limit:limit}, async function (err, cursor){
-        let cursorArrasy =await cursor.toArray()
-        cursorArrasy.forEach(function(fanfic) { 
-            fanfics.push(fanfic)
-        });
+    skip = Number(skip-1); limit = Number(limit);
+    console.log('skip: ',skip)
+    console.log('limit: ',limit)
+    console.log('typeof limit: ',typeof skip)
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,FandomName);
+    FanficDB.find().sort({['LastUpdateOfFic']: -1 }).skip(skip).limit(limit).exec(async function(err, fanfics) {
         res.send(fanfics)
     })
+
+    // let fanfics = await mongoose.dbFanfics.collection(FandomName).find({}, null, {sort: {'LastUpdateOfFic': 1}}, function(err, docs) { console.log('work already!!')});
+    // let fanfics = []
+    // await mongoose.dbFanfics.collection(FandomName).aggregate([
+    //     {'$sort':{'LastUpdateOfFic': 1}},
+    //     {'$skip':skip},
+    //     {'$limit':limit},
+    // ], async function(err, cursor){
+    //     let cursorArrasy =await cursor.toArray()
+    //     console.log(cursorArrasy)
+    //     cursorArrasy.forEach(function(fanfic) { 
+    //         fanfics.push(fanfic)
+    //     });
+    //     res.send(fanfics)
+    
+    // });
+    // await mongoose.dbFanfics.collection(FandomName).find({},{sort: {'LastUpdateOfFic': -1},skip,limit}, async function (err, cursor){
+        //     let cursorArrasy =await cursor.toArray()
+    //     cursorArrasy.forEach(function(fanfic) { 
+    //         fanfics.push(fanfic)
+    //     });
+    //     res.send(fanfics)
+    // })
+
+
+
+
     // console.log(fanfics)
     // res.send(fanfics.data)
     // mongoose.dbFanfics.collection(FandomName).find({}).then(() => {res.send(fanfics)});

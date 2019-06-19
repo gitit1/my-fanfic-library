@@ -9,34 +9,31 @@ import Footer from './Footer/Footer';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Layout extends Component{
-    componentDidMount(){
-        this.uploadData()
+    state = {
+        loading:true
     }
-
-    uploadData = async () => {
-        try {
-            if(this.props.fandoms.length===0){await this.props.onGetFandoms()} 
-            console.log('....')
-        } catch(e) {
-            console.warn(e);
-        }
+    componentDidMount(){
+        this.props.onGetFandoms().then(()=>{
+            this.setState({loading:false})
+        })
     }
 
     render(){
-        return(
+        let page = this.state.loading ? null :(
             <div className={classes.Layout}>
                 <header className={classes.Header}>
                     <Header/>
                 </header>
-                {this.props.loading ? <Spinner/> : (
-                    <main className={classes.Main}>
-                        {this.props.children}
-                    </main>
-                )}
+                <main className={classes.Main}>
+                    {this.props.children}
+                </main>
                 <footer className={classes.Footer}>
                     <Footer/>
                 </footer>
             </div>
+        )
+        return(
+            page
         )
     }
 };

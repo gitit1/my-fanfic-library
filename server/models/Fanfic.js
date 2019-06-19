@@ -1,5 +1,4 @@
 const mongoose = require('../config/mongoose');
-
 const Schema = mongoose.Schema;
 
 const FanficSchema = new Schema({
@@ -30,7 +29,8 @@ const FanficSchema = new Schema({
  
  
  
- let Fanfic = mongoose.dbFanfics.model('Fanfic', FanficSchema);
+//  let Fanfic = mongoose.dbFanfics.model('Fanfic', FanficSchema);
+
  
  
- module.exports = Fanfic;
+ module.exports = FanficSchema;

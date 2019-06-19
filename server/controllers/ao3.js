@@ -61,7 +61,7 @@ exports.getFanficsOfFandom =  async (fandom) => {
 
    
    let FanficsInFandom = await mongoose.dbFanfics.collection(FandomName).countDocuments();
-   let CompleteFanfics = await mongoose.dbFanfics.collection(FandomName).find({'Complete':true}).countDocuments();
+   let CompleteFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Complete':true});
    let OnGoingFanfics =  FanficsInFandom-CompleteFanfics;
 
    await FandomModal.updateOne({ 'FandomName': FandomName },

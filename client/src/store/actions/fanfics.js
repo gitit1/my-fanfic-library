@@ -26,11 +26,11 @@ export const getFanficsFromDBFail = (error) =>{
 
 export const getFanficsFromDB = (FandomName,pageNumber,pageLimit) =>{
     console.log('[actions: fanfics.js] - getFanficsFromDB')
-    let startPage = (pageLimit*pageNumber)-pageLimit+1;
-    let endPage = pageLimit*pageNumber;
+    let skip = (pageLimit*pageNumber)-pageLimit+1;
+    // let limit = pageLimit*pageNumber;
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        return axios.get(`/db/getFanfics?FandomName=${FandomName.replace("&","%26")}&startPage=${startPage}&endPage=${endPage}`)
+        return axios.get(`/db/getFanfics?FandomName=${FandomName.replace("&","%26")}&skip=${skip}&limit=${pageLimit}`)
         .then(fetchedFanfics =>{
             dispatch(getFanficsFromDBSuccess(fetchedFanfics.data));
             return true;
