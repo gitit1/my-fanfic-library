@@ -109,7 +109,7 @@ class AddNewFandom extends Component{
         })
         const fandomName = this.state.fandomForm['FandomName'].value;
 
-        const fandom = new FormData();
+        let fandom = new FormData();
         fandom.append("FandomName", fandomName)
         fandom.append("SearchKeys", this.state.fandomForm['SearchKeys'].value)
         fandom.append("AutoSave",   this.state.fandomForm['AutoSave'].value)

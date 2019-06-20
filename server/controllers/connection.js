@@ -63,11 +63,15 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
     console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
-    await ao3.getFanficsOfFandom(fandom);
-
-    //console.log(clc.cyanBright(`Got ${fanfics} from getFanficsOfFandom`)),
-    //socket && socket.emit('getFanficsData', `Got ${fanfics.length} from <span style="color:brown">getFanficsOfFandom()</span>`)
+    let fanficsLength = await ao3.getFanficsOfFandom(fandom);
     
+    console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));
+    socket && socket.emit('getFanficsData', `<span style="color:green"><b>Fanfics data of ${FandomName} was updated!:</b></span>`)
+
+    console.log(clc.cyanBright(`Got ${fanficsLength} from getFanficsOfFandom()`)),
+    socket && socket.emit('getFanficsData', `Got ${fanficsLength} from <span style="color:brown">getFanficsOfFandom()</span>`)
+  
+
     console.log(clc.cyanBright(`End`));
     socket && socket.emit('getFanficsData', `End`);
 }

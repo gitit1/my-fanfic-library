@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('../controllers/db');
+const ao3 = require('../controllers/ao3');
 
 
 try {
@@ -11,6 +12,7 @@ try {
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB);   
   router.get('/db/getFanfics',db.getFanficsFromDB);
 
+  router.get('/ao3/connectToAO3',ao3.connectToAO3)
 
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);
