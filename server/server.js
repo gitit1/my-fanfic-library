@@ -11,14 +11,17 @@ require('dotenv').config({
 
 require('./config/mongoose.js')
 require('./controllers/socket/socket');
+//TODO: check the cronjob scuduale
 require('./cronJobs/cron')
 
 //ADD CRONJOB TO LOGIN EVERY WEEK
-ao3Connect.connectToAO3()
+//TODO: check if already connected
+//ao3Connect.connectToAO3()
 
 const app = express();
 
 
+// const port = process.env.PORT || 5000;
 const port = 5000;
 
 

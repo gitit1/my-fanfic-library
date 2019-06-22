@@ -16,6 +16,11 @@ mongoose.dbFanfics = mongoose.createConnection(process.env.DATABASEFANFICS, {
 }, () => {
   console.log("myfanficslybrary_fanfics is connected")
 })
+mongoose.dbUsers = mongoose.createConnection(process.env.DATABASEUSERS, {
+  useNewUrlParser: true
+}, () => {
+  console.log("myfanficslybrary_users is connected")
+})
 
 mongoose.Promise = global.Promise;
 

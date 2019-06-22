@@ -3,6 +3,7 @@ const router = express.Router();
 
 const db = require('../controllers/db');
 const ao3 = require('../controllers/ao3');
+const users = require('../controllers/users');
 
 
 try {
@@ -13,6 +14,9 @@ try {
   router.get('/db/getFanfics',db.getFanficsFromDB);
 
   router.get('/ao3/connectToAO3',ao3.connectToAO3)
+
+
+  router.post('/users/register',users.registerUser);
 
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);
