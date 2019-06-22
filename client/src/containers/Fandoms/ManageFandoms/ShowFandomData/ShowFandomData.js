@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import classes from './ShowFandomData.module.css';
 
 import Button from '../../../../components/UI/Button/Button';
-import {shorten} from '../../../../shared/utility'
+import {shorten} from '../../../../utils/utility'
 
 const ShowFandomData = (props) => {
     return(

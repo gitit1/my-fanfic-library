@@ -2,12 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
 const cors = require('cors');
+const passport = require("passport");
+
 const publicDir = require('path').join(__dirname,'/public');
 const ao3Connect = require('./controllers/ao3')
-
-require('dotenv').config({
-    path: 'variables.env'
-});
+const users = require("./controllers/users");
+// require('dotenv').config({
+//     path: 'variables.env'
+// });
 
 require('./config/mongoose.js')
 require('./controllers/socket/socket');
@@ -19,6 +21,11 @@ require('./cronJobs/cron')
 //ao3Connect.connectToAO3()
 
 const app = express();
+
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
 
 
 // const port = process.env.PORT || 5000;

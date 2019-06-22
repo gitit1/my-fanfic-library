@@ -16,7 +16,8 @@ try {
   router.get('/ao3/connectToAO3',ao3.connectToAO3)
 
 
-  router.post('/users/register',users.registerUser);
+  router.post('/users/register',users.register);
+  router.post('/users/login',users.login);
 
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);

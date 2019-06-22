@@ -22,6 +22,8 @@ const Navigator = () => (
               </div>
           </li>
           <li><Link to='/manageDownloader'>Manage Downloader</Link></li>
+          <li><Link to='/registrer'>Registrer</Link></li>
+          <li><Link to='/login'>Login</Link></li>
           <li><Link to="/todolistClient">TODO LIST CLIENT</Link></li>
           <li><Link to="/todolistServer">TODO LIST SERVER</Link></li>
          

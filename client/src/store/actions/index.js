@@ -9,3 +9,11 @@ export {
 export {
     getFanficsFromDB
 } from './fanfics';
+
+
+export {
+    registerUser,
+    loginUser,
+    setCurrentUser,
+    logoutUser
+} from './users';
