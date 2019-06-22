@@ -1,22 +1,19 @@
 const mongoose = require('mongoose');
-
-require('dotenv').config({
-    path: 'variables.env'
-});
+const dbUrl = require("./keys");
 
 mongoose.set('useCreateIndex', true);
-mongoose.dbFandoms = mongoose.createConnection(process.env.DATABASEFANDOMS, {
+mongoose.dbFandoms = mongoose.createConnection(dbUrl.dbFandoms, {
     useNewUrlParser: true
   }, () => {
     console.log("myfanficslybrary_fandoms is connected")
 })
 
-mongoose.dbFanfics = mongoose.createConnection(process.env.DATABASEFANFICS, {
+mongoose.dbFanfics = mongoose.createConnection(dbUrl.dbFanfics, {
   useNewUrlParser: true
 }, () => {
   console.log("myfanficslybrary_fanfics is connected")
 })
-mongoose.dbUsers = mongoose.createConnection(process.env.DATABASEUSERS, {
+mongoose.dbUsers = mongoose.createConnection(dbUrl.dbUsers, {
   useNewUrlParser: true
 }, () => {
   console.log("myfanficslybrary_users is connected")
