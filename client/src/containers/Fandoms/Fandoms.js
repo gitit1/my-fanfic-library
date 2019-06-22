@@ -1,10 +1,10 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 
-import classes from './AllFandoms.module.css';
+import classes from './Fandoms.module.css';
 
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import Container from '../../../components/UI/Container/Container';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Container from '../../components/UI/Container/Container';
 
 import ShowFandomData from './ShowFandomData/ShowFandomData';
 

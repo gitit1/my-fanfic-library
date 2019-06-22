@@ -1,29 +1,40 @@
 import React from 'react';
-import classes from './Navigator.module.css';
 import {Link} from 'react-router-dom';
 
-const Navigator = () => (
+import classes from './Navigator.module.css';
+
+const Navigator = (props) => (
   <nav className={classes.Navigator}>
       <ul>
+          {/* Fandoms */}
           <li className={classes.Dropdown}>
-            <Link to="/" className={classes.Dropbtn}>Fandoms</Link>
+            <Link to="/fandoms">Fandoms</Link>          
+          </li>
+          {/* Search */}
+          <li><Link to='/search'>Search</Link></li>
+          {/* UserData */}  
+          <li className={classes.Dropdown}>
+            <Link to='/'>My Tracking</Link>
             <div className={classes.DropdownContent}>
-                <Link to="/allFandoms">All Fandoms</Link>
+              <Link to="/dashboard">My Dashboard</Link>
+              <Link to="/myFandoms">Status Tracker</Link>
+              <Link to="/readingList">Reading List</Link>
+              <Link to="/">Favorites</Link>
+              <Link to="/">Ignored List</Link>
+            </div>
+          </li>
+          {/* Manage */} 
+          <li className={classes.Dropdown}>
+            <Link to="/" className={classes.Dropbtn}>Manage</Link>
+            <div className={classes.DropdownContent}>
+                <Link to="/manageDownloader">Manage Downloader</Link>
                 <Link to="/manageFandoms">Manage Fandoms</Link>
             </div>          
           </li>
-          <li><Link to='/'>Search</Link></li>
-          <li className={classes.Dropdown}>
-              <Link to='/'>My Tracking</Link>
-              <div className={classes.DropdownContent}>
-                <Link to="/">Favorits</Link>
-                <Link to="/">Status Tracker</Link>
-                <Link to="/">Reading List</Link>
-              </div>
-          </li>
-          <li><Link to='/manageDownloader'>Manage Downloader</Link></li>
+          {/* Auth */}
           <li><Link to='/registrer'>Registrer</Link></li>
           <li><Link to='/login'>Login</Link></li>
+          {/* TODO: DELETE WHEN DONE */}  
           <li><Link to="/todolistClient">TODO LIST CLIENT</Link></li>
           <li><Link to="/todolistServer">TODO LIST SERVER</Link></li>
          
@@ -33,6 +44,7 @@ const Navigator = () => (
 
 export default Navigator;
 
+//TODO:
 /*
 1. header - needs fix
 2. time - need to get from json

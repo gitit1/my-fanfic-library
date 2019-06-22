@@ -102,9 +102,6 @@ const getDataFromPage = async (page,fandomName) =>{
     fandom!==null && (oldFanficData = fandom)
 
     fanfic["LastUpdateOfNote"]      =       new Date().getTime();
-    fanfic["Favorite"]              =       oldFanficData ? oldFanficData.Favorite : false;         
-    fanfic["Status"]                =       oldFanficData ? oldFanficData.Status : "Need To Read";
-    fanfic["ChapterStatus"]         =       oldFanficData ? oldFanficData.ChapterStatus : 0;
     fanfic["SavedFic"]              =       oldFanficData ? oldFanficData.SavedFic : false;
 
     fanfic["FanficTitle"]           =       page.find('div.header h4 a').first().text();

@@ -2,13 +2,13 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import io from 'socket.io-client';
 
-import * as actions from '../../store/actions';
+import * as actions from '../../../store/actions';
 import classes from './ManageDownloader.module.css';
 
-import Input from '../../components/UI/Input/Input';
-import Button from '../../components/UI/Button/Button';
-import Spinner from '../../components/UI/Spinner/Spinner';
-import Container from '../../components/UI/Container/Container';
+import Input from '../../../components/UI/Input/Input';
+import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
+import Container from '../../../components/UI/Container/Container';
 
 const socket = io('ws://localhost:5555', {transports: ['websocket']});
 

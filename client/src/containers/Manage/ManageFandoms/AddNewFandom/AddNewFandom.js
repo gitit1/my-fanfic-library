@@ -11,7 +11,7 @@ import Spinner from '../../../../components/UI/Spinner/Spinner';
 import Container from '../../../../components/UI/Container/Container';
 
 
-import {updateObject} from '../../../../utils/utility';
+import {updateObject} from '../../../../utils/sharedFunctions';
 import ImageUpload from '../../../../components/ImageUpload/ImageUpload'
 
 import {fandomGeneralForm} from '../../../../components/Forms/FandomGeneralDataForm';

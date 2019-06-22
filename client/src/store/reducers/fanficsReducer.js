@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import {updateObject} from '../../utils/utility';
+import {updateObject} from '../../utils/sharedFunctions';
 
 const initialState ={
     fanfic: null,

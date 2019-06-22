@@ -2,28 +2,34 @@ import React from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
 
+import store from "./store/store";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./store/actions";
-import store from "./store/store";
 
 import Layout from './hoc/Layout/Layout';
+import PrivateRoute from "./components/private-route/PrivateRoute";
+
 import Index from './containers/Index/Index';
-
-import AllFandoms from './containers/Fandoms/AllFandoms/AllFandoms';
-import ManageFandoms from './containers/Fandoms/ManageFandoms/ManageFandoms';
-import AddNewFandom from './containers/Fandoms/ManageFandoms/AddNewFandom/AddNewFandom';
-
+//Fandoms
+import Fandoms from './containers/Fandoms/Fandoms';
 import Fanfic from './containers/Fanfic/Fanfic'
-
-import ManageDownloader from './containers/ManageDownloader/ManageDownloader';
-
+//Search
+import Search from './containers/Search/Search'
+//UserData
+import Dashboard from './containers/UserData/Dashboard/Dashboard';
+import MyFandoms from './containers/UserData/MyFandoms/MyFandoms';
+import ReadingList from './containers/UserData/ReadingList/ReadingList';
+//Manage
+import ManageDownloader from './containers/Manage/ManageDownloader/ManageDownloader';
+import ManageFandoms from './containers/Manage/ManageFandoms/ManageFandoms';
+import AddNewFandom from './containers/Manage/ManageFandoms/AddNewFandom/AddNewFandom';
+//Auth
+import Registrer from './containers/Auth/Register'
+import Login from './containers/Auth/Login'
+//TODO: DELETE WHEN DONE
 import TodoListClient from './containers/TodoListClient/TodoListClient';
 import TodoListServer from './containers/TodoListServer/TodoListServer';
 
-import Registrer from './containers/Auth/Register'
-import Login from './containers/Auth/Login'
-import PrivateRoute from "./components/private-route/PrivateRoute";
-import Dashboard from "./containers/Auth/Dashboard";
 
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -47,17 +53,29 @@ function App() {
   return (
     <Layout>
       <Switch>
-        <Route path="/manageFandoms" component={ManageFandoms} />
-        <Route path="/manageDownloader" component={ManageDownloader} />
-        <Route path="/allFandoms" component={AllFandoms} />
-        <Route path="/addnewfandom" component={AddNewFandom} />
-        <Route path="/fanfics/:FandomName" component={Fanfic} />
-        <Route path="/registrer" component={Registrer} />
-        <Route path="/login" component={Login} />
-        <Route path="/todolistClient" component={TodoListClient} />
-        <Route path="/todolistServer" component={TodoListServer} />
-        <Route path="/" exact component={Index} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <Route        exact path="/"                    component={Index}                       />
+        {/* Fandoms */}
+        <Route              path="/fandoms"             component={Fandoms}                     />
+        <Route              path="/fanfics/:FandomName" component={Fanfic}                      />
+        {/* Search */}
+        <Route              path="/search"              component={Search}                      />
+        {/* UserData */}  
+        <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} />
+        <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
+        <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
+        {/* Manage */}  
+        <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
+        <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
+        <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
+        {/* Auth */}  
+        <Route              path="/registrer"           component={Registrer}                   />
+        <Route              path="/login"               component={Login}                       />
+        {/* TODO: DELETE WHEN DONE */}  
+        <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} />
+        <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} />
+
+
+
         <Redirect to="/" />
       </Switch>
     </Layout>

@@ -21,7 +21,8 @@ exports.register = (req, res) => {
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
-          password: req.body.password
+          password: req.body.password,
+          level: 2
         });
   // Hash password before saving in database
         bcrypt.genSalt(10, (err, salt) => {
@@ -60,7 +61,8 @@ exports.login = (req, res) => {
             // Create JWT Payload
             const payload = {
             id: user.id,
-            name: user.name
+            name: user.name,
+            level: user.level
             };
     // Sign token
             jwt.sign(
