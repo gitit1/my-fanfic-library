@@ -10,6 +10,7 @@ import * as actions from '../../store/actions';
 import Container from '../../components/UI/Container/Container';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
+import ShowFanficData from './ShowFanficData/ShowFanficData';
 
 class Fanfic extends Component{
     state={
@@ -24,15 +25,23 @@ class Fanfic extends Component{
         this.getFanfics()
     }
 
+    componentWillReceiveProps(nextProps) {
+        let pre = JSON.stringify(this.props.payload)
+        let next = JSON.stringify(nextProps.payload)
+        if (pre !== next) {
+          this.setState({pageNumber: 0})
+        }
+      }
+
     getFanfics = async () =>{
         const {pageNumber,pageLimit} = this.state
         console.log('pageNumber: ',pageNumber)
         const {fandoms,fanfics,onGetFandoms,onGetFanfics} = this.props
-        const FandomName = this.props.match.params.FandomName;
+        const fandomName = this.props.match.params.FandomName;
         
         (fandoms.length===0) &&  await onGetFandoms();
-        await onGetFanfics(FandomName,pageNumber,pageLimit).then(async ()=>{
-            let fanficsCount = fandoms.filter(fandom=> (FandomName===fandom.FandomName))[0].FanficsInFandom;
+        await onGetFanfics(fandomName,pageNumber,pageLimit).then(async ()=>{
+            let fanficsCount = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0].FanficsInFandom;
             this.setState({pageCount:Math.ceil(fanficsCount/pageLimit)})
         });
 
@@ -41,10 +50,12 @@ class Fanfic extends Component{
 
     handlePageClick = async (data ) =>{
         let selected = data.selected;
+        console.log('selected:',selected)
         selected!==0 && selected++
         await this.setState({pageNumber:selected},await this.getFanfics)       
         return
     }
+
     render(){
         let page = null
         page = this.props.loading ? <Container header={this.props.match.params.FandomName}><Spinner/></Container> : (
@@ -61,10 +72,9 @@ class Fanfic extends Component{
                 containerClassName={classes.Pagination}
                 subContainerClassName={'pages pagination'}
                 activeClassName={'active'}
+                disableInitialCallback={ true }
                 />
-                {this.props.fanfics.map((fanfic,index)=>(
-                    <p key={fanfic.FanficID}>{index+1} - {fanfic.FanficTitle}</p>
-                ))}
+                <ShowFanficData fanfics={this.props.fanfics}/>
             </Container>
         )
         return(

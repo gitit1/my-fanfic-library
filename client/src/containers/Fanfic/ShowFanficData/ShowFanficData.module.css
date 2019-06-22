@@ -1,0 +1,128 @@
+.Fanfics{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; 
+    margin: 0;
+    padding: 0;
+    margin-top:2%;
+    justify-content: center;
+
+}
+
+.Fanfic {
+    flex: 0 0 90%;
+    -webkit-box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
+    -moz-box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
+    box-shadow: 1px 2px 3px 1px rgba(107,2,4,0.51);
+    margin:1% 1%;
+    display:block;
+}
+
+.Header{
+    width: 100%;
+    display: block;
+}
+
+
+.Clear{
+    clear: both;
+}
+
+.Right{
+    text-align: left;
+    width: 80%;
+    margin-top: 1%;
+    float: left;
+} 
+.Right img{    
+    margin-left: 1%;
+    float: left;
+}
+.Right div {
+    margin-bottom:10px;
+    margin-left: 1%;
+    float: left;
+    margin-top: 1px;
+    width:90%
+}
+.Right a{
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 1.1em
+}
+.Right .FandomTags{
+    text-decoration: underline;
+    margin-right: 2%;
+
+}
+.Left{    
+    text-align: right;
+    float: right;
+    width: 20%;
+    margin-top: 1%;
+}
+.Left p{
+    margin-bottom:10px;
+    margin-right: 4%;
+    float: right;
+    margin-top: 1px;  
+}
+.Complete{
+    text-decoration: none;
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 200;
+    text-align: center;
+    border-radius: 4px 4px 4px 4px;
+    line-height: 1.2em;
+    margin-left: 2%;
+    padding: 0 6px 0 6px;
+    
+}
+.Tags{
+    text-align: left;
+    margin-left: 1%;
+}
+.Tags div{
+    margin-top: 3px;
+}
+.Tags b{
+    text-transform: capitalize;
+}
+.Tags span{
+    background: #eee;
+    border-radius: 4px 4px 4px 4px;
+    color: #999;
+    display: inline-block;
+    height: 1.2em;
+    line-height: 1.2em;
+    padding: 0 8px 0 8px;
+    position: relative;
+    margin: 0 5px 5px 0;
+    text-decoration: none;
+    -webkit-transition: color 0.3s;
+}
+.Desc{
+    margin-left: 1%; 
+    text-align: left;  
+    
+}
+.Desc p{
+    margin: 1.286em auto;
+    padding: 0;
+    line-height: 1.5;
+    line-height: 1.5em;
+}
+
+.Stat dt,.Stat dd{
+    float: left;
+    margin-left: 1%; 
+    margin-bottom: 1%
+}
+
+.Stat dt{
+    font-weight: 600;
+}

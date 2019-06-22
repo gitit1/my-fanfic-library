@@ -2,12 +2,11 @@
 const clc = require("cli-color");
 const db  =  require('./db')
 const ao3 =  require('./ao3')
-
+const now  = require('performance-now')
 exports.manageDownloader = async (socket,fandom) =>{
     console.log(clc.blue('[connection] manageDownloader'));
     try {
         if(fandom=='All'){
-            console.log('---1---')
             let fetchedFandoms = await db.getAllFandoms().then(fetchedFandoms=>{
                 if(!fetchedFandoms){
                     return false
@@ -33,7 +32,6 @@ exports.manageDownloader = async (socket,fandom) =>{
 
 
         }else{
-            console.log('---2---')
             await manageFandomFanficsHandler(socket,fandom)
         }
 
@@ -63,10 +61,12 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
     console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
+    let startTime = now(); 
     let fanficsLength = await ao3.getFanficsOfFandom(fandom);
-    
+    let endTime = now();
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));
     socket && socket.emit('getFanficsData', `<span style="color:green"><b>Fanfics data of ${FandomName} was updated!:</b></span>`)
+    socket && socket.emit('getFanficsData', `<b>The function:</b> <span style="color:brown">getFanficsOfFandom()</span> was running for ${((endTime-startTime)/1000).toFixed(2)} seconds`);
 
     console.log(clc.cyanBright(`Got ${fanficsLength} from getFanficsOfFandom()`)),
     socket && socket.emit('getFanficsData', `Got ${fanficsLength} from <span style="color:brown">getFanficsOfFandom()</span>`)

@@ -37,7 +37,6 @@ exports.getFanficsOfFandom =  async (fandom) => {
        numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
    }
    
-   console.log('numberOfPages: ',numberOfPages)
    let pagesArray = await getPagesOfFandomData(ao3URL,numberOfPages);
    
    await pagesArray.map(page => promises.push(   
@@ -45,16 +44,14 @@ exports.getFanficsOfFandom =  async (fandom) => {
         //getDataFromAO3FandomPage(page,FandomName)           
     ))
 
-   const reflect = p => p.then(v => ({v, status: "fulfilled" }),
-   e => ({e, status: "rejected" }));
+//    const reflect = p => p.then(v => ({v, status: "fulfilled" }),
+//    e => ({e, status: "rejected" }));
 
-   console.log('promises.length: ',promises.length)
 
    await Promise.all(promises).then(async () => {
        FanficsInFandom = await mongoose.dbFanfics.collection(FandomName).countDocuments({});
        let CompleteFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Complete':true});
        let OnGoingFanfics =  FanficsInFandom-CompleteFanfics;
-       console.log('FanficsInFandom3: ',FanficsInFandom)
    
        await FandomModal.updateOne({ 'FandomName': FandomName },
                                    { $set: { 'FanficsInFandom':FanficsInFandom, 
@@ -67,7 +64,6 @@ exports.getFanficsOfFandom =  async (fandom) => {
            }
        )
    })    
-   
   return FanficsInFandom 
 
 }
@@ -80,7 +76,7 @@ const getDataFromAO3FandomPage =  async (page,FandomName) => {
             
             for(let count = 0; count < n; count++){
                 let page = $('ol.work').children('li').eq(count)
-                let getData = await DoAPromisse(page,FandomName)
+                let getData = await getDataFromPage(page,FandomName)
                 getData && donePromise++;
                 if (donePromise == n) {
                     return
@@ -95,7 +91,7 @@ const getDataFromAO3FandomPage =  async (page,FandomName) => {
 
 }
 
-const DoAPromisse = async (page,fandomName) =>{
+const getDataFromPage = async (page,fandomName) =>{
     
     let fanfic = {}
     let oldFanficData = false
@@ -116,30 +112,47 @@ const DoAPromisse = async (page,fandomName) =>{
     fanfic["Author"]                =       page.find('div.header h4 a').last().text();
     fanfic["AuthorURL"]             =       'https://archiveofourown.org'+ page.find('div.header h4 a').last().attr('href');
     fanfic["LastUpdateOfFic"]       =       page.find('p.datetime').text() ==="" ? 0 : new Date(page.find('p.datetime').text()).getTime();
-    fanfic["Rating"]                =       page.find('span.rating span').text();
-    let tags                        =       [];
-    let warnings                    =       [];
-    let relationships               =       [];
-    let characters                  =       [];
-    let freeforms                   =       [];
-    page.find('ul.tags').children('li').each(function () {
-        if(page.attr('class')=='warnings'){
-            warnings.push(page.text())
-        }else if(page.attr('class')=='relationships'){
-            relationships.push(page.first().text())
-        }else if(page.attr('class')=='characters'){
-            characters.push(page.first().text())
-        }else if(page.attr('class')=='freeforms'){
-            freeforms.push(page.first().text())
+    
+    rating = page.find('span.rating span').text();
+    switch(rating){
+        case 'General Audiences':       {rating = 'general'; break}                             
+        case 'Teen And Up Audiences':   {rating = 'teen'; break}    
+        case 'Mature':                  {rating = 'mature'; break}    
+        case 'Explicit':                {rating = 'explicit'; break}    
+        case 'Not Rated':               {rating = 'none'; break}  
+        default:                        rating = 'none';
+    }
+    fanfic["Rating"]                =       rating;
+
+    let tags =[],warnings =[],relationships =[],characters =[],freeforms =[],fandomsTags=[];
+    page.find('ul.tags').children('li').each(index => {
+        let tag = page.find('ul.tags').children('li').eq(index);
+        switch(tag.attr('class')){
+            case 'warnings':        {warnings.push(tag.text()); break}                             
+            case 'relationships':   {relationships.push(tag.first().text()); break}    
+            case 'characters':      {characters.push(tag.first().text()); break}    
+            case 'freeforms':       {freeforms.push(tag.first().text()); break}            
         }               
     });
-    tags.push({'warnings':warnings},{'relationships':relationships},{'characters':characters},{'freeforms':freeforms})                       
+    if(warnings[0]=='No Archive Warnings Apply'||warnings[0]=='Creator Chose Not To Use Archive Warnings'){
+        tags.push({'relationships':relationships},{'characters':characters},{'tags':freeforms});
+    }else{
+        tags.push({'warnings':warnings},{'relationships':relationships},{'characters':characters},{'tags':freeforms});
+    }   
     fanfic["Tags"]                  =       tags;
-    fanfic["Description"]           =       page.find('blockquote.summary').text();
+
+    page.find('div.header h5').children('a').each(index => {
+        let tag = page.find('div.header h5').children('a').eq(index);
+        fandomsTags.push(tag.text())
+    });
+    fanfic["FandomsTags"]           =       fandomsTags;
+    
+    fanfic["Description"]           =       page.find('blockquote.summary').html();
     fanfic["Hits"]                  =       page.find('dd.hits').text() ===""  ? 0 : Number(page.find('dd.hits').text());
     fanfic["Kudos"]                 =       page.find('dd.kudos').text() ==="" ? 0 : Number(page.find('dd.kudos').text()); 
     fanfic["Language"]              =       page.find('dd.language').text()  
     fanfic["Comments"]              =       (page.find('dd.comments').text()) ==="" ? 0 : Number(page.find('dd.comments').text()); 
+    fanfic["Bookmarks"]              =      (page.find('dd.bookmarks').text()) ==="" ? 0 : Number(page.find('dd.bookmarks').text()); 
     fanfic["Words"]                 =       page.find('dd.words').text(); 
     fanfic["NumberOfChapters"]      =       Number(page.find('dd.chapters').text().split('/')[0]);  
 
