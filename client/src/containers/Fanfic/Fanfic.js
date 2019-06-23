@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import ReactPaginate from 'react-paginate';
-// import queryString from 'query-string';
+import Pagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
 
 import classes from './Fanfic.module.css';
 
@@ -17,7 +17,8 @@ class Fanfic extends Component{
         fanfics:[],
         pageNumber:1,
         pageLimit:20,
-        pageCount: 0
+        pageTotal: 0,
+        fanficsCount:0
     }
 
 
@@ -25,60 +26,48 @@ class Fanfic extends Component{
         this.getFanfics()
     }
 
-    componentWillReceiveProps(nextProps) {
-        let pre = JSON.stringify(this.props.payload)
-        let next = JSON.stringify(nextProps.payload)
-        if (pre !== next) {
-          this.setState({pageNumber: 0})
-        }
-      }
-
     getFanfics = async () =>{
+        console.log('getFanfics: ')
         const {pageNumber,pageLimit} = this.state
         console.log('pageNumber: ',pageNumber)
-        const {fandoms,fanfics,onGetFandoms,onGetFanfics} = this.props
+        const {fandoms,onGetFandoms,onGetFanfics} = this.props
         const fandomName = this.props.match.params.FandomName;
         
         (fandoms.length===0) &&  await onGetFandoms();
         await onGetFanfics(fandomName,pageNumber,pageLimit).then(async ()=>{
             let fanficsCount = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0].FanficsInFandom;
-            this.setState({pageCount:Math.ceil(fanficsCount/pageLimit)})
+            // this.setState({pageTotal:Math.ceil(fanficsCount/pageLimit)})
+            this.setState({fanficsCount})
         });
 
         return null
     }
 
-    handlePageClick = async (data ) =>{
-        let selected = data.selected;
-        console.log('selected:',selected)
-        selected!==0 && selected++
-        await this.setState({pageNumber:selected},await this.getFanfics)       
-        return
+    pageClickHandler = async (page) =>{
+        console.log('page:',page)
+        console.log('pageNumber:',this.state.pageNumber)
+        
+        await this.setState({pageNumber: page},await this.getFanfics)       
+        return null
     }
 
     render(){
-        let page = null
-        page = this.props.loading ? <Container header={this.props.match.params.FandomName}><Spinner/></Container> : (
-            <Container header={this.props.match.params.FandomName}>
-                <ReactPaginate
-                previousLabel={'previous'}
-                nextLabel={'next'}
-                breakLabel={'...'}
-                breakClassName={'break-me'}
-                pageCount={this.state.pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={8}
-                onPageChange={this.handlePageClick}
-                containerClassName={classes.Pagination}
-                subContainerClassName={'pages pagination'}
-                activeClassName={'active'}
-                disableInitialCallback={ true }
-                />
-                <ShowFanficData fanfics={this.props.fanfics}/>
-            </Container>
-        )
+        let {pageNumber,fanficsCount,pageLimit} = this.state;        
         return(
-            page
+            <Container header={this.props.match.params.FandomName}>
+                <Pagination onChange={this.pageClickHandler} 
+                            current={pageNumber} 
+                            total={fanficsCount}
+                            className={classes.Pagination}
+                            defaultPageSize={pageLimit}
+                />
+                {this.props.loading ?
+                    <Spinner/>      :
+                    <ShowFanficData fanfics={this.props.fanfics}
+                                    markAsFavorite={this.props.FavoriteHandler}            
+                                    />
+                }
+            </Container>
         )
     }
 }
