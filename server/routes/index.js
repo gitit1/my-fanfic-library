@@ -13,7 +13,8 @@ try {
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB);   
   router.get('/db/getFanfics',db.getFanficsFromDB);
 
-  router.get('/ao3/connectToAO3',ao3.connectToAO3)
+
+  router.get('/ao3/checkIfDeletedFromAO3',ao3.checkIfDeletedFromAO3)
 
 
   router.post('/users/register',users.register);

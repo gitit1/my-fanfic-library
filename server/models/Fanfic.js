@@ -23,6 +23,8 @@ const FanficSchema = new Schema({
     SavedFic:               {type: Boolean},
     LastUpdateOfFic:        {type: Number},
     LastUpdateOfNote:       {type: Number},
+    Source:                 {type: String},
+    Oneshot:                {type: String}
  });
  
  

@@ -5,7 +5,6 @@ const cors = require('cors');
 const passport = require("passport");
 
 const publicDir = require('path').join(__dirname,'/public');
-const ao3Connect = require('./controllers/ao3')
 const users = require("./controllers/users");
 // require('dotenv').config({
 //     path: 'variables.env'
@@ -15,10 +14,6 @@ require('./config/mongoose.js')
 require('./controllers/socket/socket');
 //TODO: check the cronjob scuduale
 require('./cronJobs/cron')
-
-//ADD CRONJOB TO LOGIN EVERY WEEK
-//TODO: check if already connected
-//ao3Connect.connectToAO3()
 
 const app = express();
 

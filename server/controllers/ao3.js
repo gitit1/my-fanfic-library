@@ -3,10 +3,12 @@ const cheerio = require('cheerio');
 const mongoose = require('../config/mongoose');
 
 const FandomModal = require('../models/Fandom');
+const FanficSchema = require('../models/Fanfic');
 
 const func = require('../helpers/functions');
+const now  = require('performance-now')
 
-
+const ao3UserKeys = require("../config/keys");
 let request = require('request')
 let jar = request.jar();
 request = request.defaults({
@@ -17,7 +19,9 @@ request = request.defaults({
 
 exports.getFanficsOfFandom =  async (fandom) => {
    console.log(clc.blue('[ao3 controller] getFanficsOfFandom()'));
-
+   
+   await this.loginToAO3()
+   
    const {FandomName,SearchKeys} = fandom;
    
    let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
@@ -96,13 +100,15 @@ const getDataFromPage = async (page,fandomName) =>{
     let fanfic = {}
     let oldFanficData = false
 
-    fanfic["FanficID"]         = Number(page.attr('id').replace('work_',''));
-
-    let fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
-    fandom!==null && (oldFanficData = fandom)
-
+    fanfic["Source"]                =       'AO3';
+    fanfic["FanficID"]              =       Number(page.attr('id').replace('work_',''));
     fanfic["LastUpdateOfNote"]      =       new Date().getTime();
-    fanfic["SavedFic"]              =       oldFanficData ? oldFanficData.SavedFic : false;
+
+    //TODO: check in saveFanficToDB:
+    // let fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
+    // fandom!==null && (oldFanficData = fandom)
+    // fanfic["SavedFic"]              =       oldFanficData ? oldFanficData.SavedFic : false;
+    fanfic["SavedFic"]              =       false;
 
     fanfic["FanficTitle"]           =       page.find('div.header h4 a').first().text();
     fanfic["URL"]                   =       'https://archiveofourown.org'+ page.find('div.header h4 a').first().attr('href');
@@ -149,23 +155,25 @@ const getDataFromPage = async (page,fandomName) =>{
     fanfic["Kudos"]                 =       page.find('dd.kudos').text() ==="" ? 0 : Number(page.find('dd.kudos').text()); 
     fanfic["Language"]              =       page.find('dd.language').text()  
     fanfic["Comments"]              =       (page.find('dd.comments').text()) ==="" ? 0 : Number(page.find('dd.comments').text()); 
-    fanfic["Bookmarks"]              =      (page.find('dd.bookmarks').text()) ==="" ? 0 : Number(page.find('dd.bookmarks').text()); 
+    fanfic["Bookmarks"]             =       (page.find('dd.bookmarks').text()) ==="" ? 0 : Number(page.find('dd.bookmarks').text()); 
     fanfic["Words"]                 =       page.find('dd.words').text(); 
     fanfic["NumberOfChapters"]      =       Number(page.find('dd.chapters').text().split('/')[0]);  
 
     chapCurrent = page.find('dd.chapters').text().split('/')[0]
     chapEnd = page.find('dd.chapters').text().split('/')[1]
     fanfic["Complete"] = (String(chapEnd) !== '?' && (Number(chapCurrent)===Number(chapEnd)) ) ? true : false
-
-    fanfic["Image"]             = "";
+    fanfic["Oneshot"]  = (fanfic["Complete"] && fanfic["NumberOfChapters"]===1) ? true : false 
     
-    await saveFanfficToDB(fandomName,fanfic).then(async () =>{
+
+    
+    await saveFanficToDB(fandomName,fanfic).then(async () =>{
         return await true        
     })
 }
 
-exports.connectToAO3 = async ()=>{
-    let url = "https://archiveofourown.org/users/login/",utf8='',authenticity_token='';
+exports.loginToAO3 = async ()=>{
+    console.log(clc.bgGreenBright('[ao3 controller] loginToAO3()'));
+    let url = "https://archiveofourown.org/users/login/",utf8='',authenticity_token='',isLogin = false;
  
     request.get({
         url: url,
@@ -178,14 +186,15 @@ exports.connectToAO3 = async ()=>{
         let details = {
             'utf8': utf8,
             'authenticity_token': authenticity_token,
-            'user[login]': process.env.AO3_USERNAME_1,
-            'user[password]':process.env.AO3_PASSWORD_1,
+            'user[login]': ao3UserKeys.ao3User,
+            'user[password]':ao3UserKeys.ao3Password,
             'user[remember_me]':0,
             'commit':'Log in'
         };
         const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-
-        request({
+        isLogin = await ($('#greeting').length > 0) ? true : false;
+        !isLogin?(
+            request({
                 url,
                 method: 'POST',
                 body: formBody,
@@ -195,13 +204,91 @@ exports.connectToAO3 = async ()=>{
                 jar: jar,
                 credentials: 'include',
             }, async function (err, httpResponse, body) { 
-                let $ = cheerio.load(body),isLogin = false;
+                let $ = cheerio.load(body);
                 isLogin = await ($('#greeting').length > 0) ? true : false
                 isLogin ? console.log(clc.green('logged in successfully to ao3')) : console.log(clc.red('Error in Loggging in'))
                 return
-            })      
+            })   
+        ):console.log(clc.green('you are already logged in to ao3')) 
     })
 }
+
+//TODO: NEED TO FIX ERRORS,  match to the place I want it (cron)
+exports.checkIfDeletedFromAO3 = async (req,res) =>{  
+    console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
+    //TODO: need to get from client
+    let fandomName = 'Clexa';
+    // let fanficsSum = 500;
+    let fanficsSum = 10788
+    
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    let startTime = now(); 
+    let skip=0,limit=100,promises=[],promises2=[],gotDeletedList = [];
+    let loop = Math.ceil(fanficsSum/limit)
+ 
+    const findNextBunchOfFanfics = () =>{
+        console.log('findNextBunchOfFanfics: skip: '+skip+' , limit: '+limit)
+        return new Promise(function(resolve, reject) {
+            FanficDB.find({Source:'AO3'}).skip(skip).limit(limit).exec(async function(err, fanfics) { 
+                await fanfics.map((fanfic, index) => promises.push(!fanfic.Deleted && checkIfDeleted(fanfic.URL,fanfic)) );
+        
+                Promise.all(promises).then(async () => {
+                    console.log('then 1'); 
+                    await gotDeletedList.forEach(async function(fanfic, index) {
+                        fanfic.LastUpdateOfNote=new Date().getTime();
+                        console.log(`${fanfic.FanficTitle} got deleted`)
+                        await mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic.FanficID},{$set: {Deleted:true}}, async function (error, response) {
+                            //console.log(`${fanfic.FanficTitle} updated as deleted`)
+                        })
+                        await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic, async function (error, response) {
+                            //console.log(`${fanfic.FanficTitle} saved to deleted list`)                   
+                        })     
+                    })
+                }).then(()=>{
+                    resolve()
+                })
+            
+            });
+        });
+    }
+
+    const checkIfDeleted = (url,fanfic) =>{
+        console.log('checkIfDeleted: '+fanfic.FanficID)
+        return new Promise(function(resolve, reject) {
+            request.get({url,jar: jar,credentials: 'include'}, async function (err, httpResponse, body) {
+                try {
+                    func.delay(2000).then(async () => {
+                        let $ = cheerio.load(body);
+                        if(err){
+                            console.log('Error in get ao3URL',err)
+                            reject(false)
+                        }else{
+                            ($('#main h2').text()=='Error 404') && gotDeletedList.push(fanfic);
+                            resolve();         
+                        } 
+                    })         
+                }catch (e) {
+                    console.log(e) // handle error
+                  } 
+               
+       
+            });
+        });
+    }    
+
+    for(i=0; i<loop; i++){
+        skip = (i===0) ? 0 : ((limit*i)-i+1)        
+        func.delay(3000).then(async () => await promises2.push(findNextBunchOfFanfics()))  
+    }
+    await Promise.all(promises2).then(async () => {
+        let endTime = now();
+        res.send(`finished in ${((endTime-startTime)/1000).toFixed(2)} seconds`)
+    });
+
+
+
+}
+
 //UTILITIES FOR getFanficsOfFandom()
 
 const getPagesOfFandomData = async (url,numberOfPages) => {
@@ -238,7 +325,7 @@ const getUrlBodyFromAo3 = url =>{
 }
 //UTILITIES FOR getDataFromAO3FandomPage()
 
-const saveFanfficToDB = (fandomName,fanfic) =>{
+const saveFanficToDB = (fandomName,fanfic) =>{
     console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()'));  
     return new Promise(async function(resolve, reject) {
         mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"] }, async function(err, dbFanfic) {
