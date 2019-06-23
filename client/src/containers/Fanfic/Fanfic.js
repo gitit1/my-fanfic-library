@@ -1,9 +1,9 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import Pagination from 'rc-pagination';
-import 'rc-pagination/assets/index.css';
 
 import classes from './Fanfic.module.css';
+import './Pagination.css';
 
 import * as actions from '../../store/actions';
 
@@ -52,21 +52,22 @@ class Fanfic extends Component{
     }
 
     render(){
+        // TODO: FIX LOADING TO BE LIKE A03 
         let {pageNumber,fanficsCount,pageLimit} = this.state;        
         return(
             <Container header={this.props.match.params.FandomName}>
-                <Pagination onChange={this.pageClickHandler} 
-                            current={pageNumber} 
-                            total={fanficsCount}
-                            className={classes.Pagination}
-                            defaultPageSize={pageLimit}
-                />
-                {this.props.loading ?
-                    <Spinner/>      :
+                    <div className={'Pagination'}>
+                    <p>{(pageNumber*pageLimit)-pageLimit+1}-{pageLimit*pageNumber} of {fanficsCount} Works</p>
+                    <Pagination onChange={this.pageClickHandler} 
+                                current={pageNumber} 
+                                total={fanficsCount}
+                                className={classes.Pagination}
+                                defaultPageSize={pageLimit}
+                    />
+                    </div>
                     <ShowFanficData fanfics={this.props.fanfics}
-                                    markAsFavorite={this.props.FavoriteHandler}            
-                                    />
-                }
+                    markAsFavorite={this.props.FavoriteHandler}            
+                    />
             </Container>
         )
     }

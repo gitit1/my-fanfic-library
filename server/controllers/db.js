@@ -163,7 +163,7 @@ exports.getFanficsFromDB = async (req,res) =>{
 
     skip = Number(skip-1); limit = Number(limit);
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,FandomName);
-    FanficDB.find().sort({['LastUpdateOfFic']: -1 }).skip(skip).limit(limit).exec(async function(err, fanfics) {
+    FanficDB.find().sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).skip(skip).limit(limit).exec(async function(err, fanfics) {
         res.send(fanfics)
     })
 }

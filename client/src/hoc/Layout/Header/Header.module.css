@@ -5,7 +5,7 @@
 }
 
 .Left a{
-    color: #6B0204;
+    color: #5a5d5e;
     font-size: 1.2em;
     font-weight: bold;
     text-decoration: none;
@@ -14,7 +14,7 @@
 .Right{
     float: right;
     margin: 0.5% 1% 0 0;
-    color: #6B0204;
+    color: #5a5d5e;
     font-size: 1.2em;
     font-weight: bold
 }

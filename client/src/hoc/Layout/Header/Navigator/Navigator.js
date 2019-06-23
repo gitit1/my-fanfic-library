@@ -5,7 +5,8 @@ import classes from './Navigator.module.css';
 
 const Navigator = (props) => (
   <nav className={classes.Navigator}>
-      <ul>
+    <div class="nav-wrapper">
+    <ul>
           {/* Fandoms */}
           <li className={classes.Dropdown}>
             <Link to="/fandoms">Fandoms</Link>          
@@ -39,6 +40,7 @@ const Navigator = (props) => (
           <li><Link to="/todolistServer">TODO LIST SERVER</Link></li>
          
       </ul>
+    </div>
   </nav>
 );
 
@@ -51,4 +53,5 @@ export default Navigator;
 3. nav - need fix
 4. link - router
 5. links - expand
+6. add active page
 */

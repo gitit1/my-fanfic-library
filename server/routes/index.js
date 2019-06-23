@@ -14,12 +14,13 @@ try {
   router.get('/db/getFanfics',db.getFanficsFromDB);
 
 
-  router.get('/ao3/checkIfDeletedFromAO3',ao3.checkIfDeletedFromAO3)
-
-
+  
+  
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
 
+  //TODO: funcs in testing:
+  router.get('/ao3/checkIfDeletedFromAO3',ao3.checkIfDeletedFromAO3)
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);
 }

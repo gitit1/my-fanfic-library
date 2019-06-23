@@ -1,7 +1,12 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import classes from './ShowFanficData.module.css';
-
+import ReactSVG from 'react-svg'
+import Favorite from '../../../assets/images/icons/favorite.svg'
+import MarkAsRead from '../../../assets/images/icons/markAsRead.svg'
+import Read from '../../../assets/images/icons/read.svg'
+import Ignore from '../../../assets/images/icons/ignore.svg'
+import ReadingList from '../../../assets/images/icons/readingList.svg'
 
 const ShowFanficData = (props) => {
     return(
@@ -9,32 +14,37 @@ const ShowFanficData = (props) => {
             <div className={classes.Fanfics}>
                 { props.fanfics.map(fanfic=>(
                     <div className={classes.Fanfic} key={fanfic.FanficID}>
+                        {/* TODO: show only if autinticate */}
                         <section className={classes.UserHeader}>
-                            <span>Fav</span>
-                            <span>.....</span>
-                            <span>Mark as read</span>
-                            <span>.....</span>
-                            <span>Mark in progress - if so - chapter</span>
-                            <span>.....</span>
-                            <span>ignore fic</span>
-                            <span>.....</span>
-                            <span>add to reading list (need to read)</span>
-                            <span>.....</span>
-                            <span>options to create reading lists (one shot ... if not created - save to general)</span>
-                            <span>.....</span>
-                            <span>is saved? and how</span>
-                            <span>.....</span>
-                            <span>add image</span>
-                            <span>.....</span>
-                            <span>hiatus</span>
-                            <span>.....</span>
-                            <span>page filters (order by: fav,date(asc,dsc),words.....)</span>
-                            <span>.....</span>
-                            <span>fix pagination</span>
-                            <span>.....</span>
-                            <span>fix to be the same order as ao3</span>
-                            <span>.....</span>
-                            <span>save individual fanfics from ff - later</span>
+                            <div className={`${classes.ReadingList} ${classes.UserData}`}>
+                                <ReactSVG src={ReadingList} className={`${classes.ReadingList} ${classes.Icon}`} wrapper='span' alt='Add to Reading List'  title='Add to Reading List' />
+                                <span className={classes.IconLabel}>Add to Reading List</span>                                
+                            </div>
+                            <div className={`${classes.Favorite} ${classes.UserData}`}>
+                                <ReactSVG src={Favorite} className={`${classes.Favorite} ${classes.Icon}`} wrapper='span' alt='Favorite'  title='Favorite' />
+                                <span className={classes.IconLabel}>Favorite</span>                                
+                            </div>
+                            <div className={`${classes.MarkAsRead} ${classes.UserData}`}>
+                                <ReactSVG src={MarkAsRead} className={`${classes.MarkAsRead} ${classes.Icon}`} wrapper='span' alt='Mark as Read'  title='Mark as Read' />
+                                <span className={classes.IconLabel}>Mark as Read</span>                                
+                            </div>
+                            <div className={`${classes.MarkAsRead} ${classes.UserData}`}>
+                                <ReactSVG src={MarkAsRead} className={`${classes.MarkAsRead} ${classes.Icon}`} wrapper='span' alt='Mark in Progress'  title='Mark in Progress' />
+                                <span className={classes.IconLabel}>Mark in Progress</span>                                
+                            </div>
+                            <div className={`${classes.Ignore} ${classes.UserData}`}>
+                                <ReactSVG src={Ignore} className={`${classes.Ignore} ${classes.Icon}`} wrapper='span' alt='Ignore'  title='Ignore' />
+                                <span className={classes.IconLabel}>Ignore Fanfic</span>                                
+                            </div>
+                            {/* TODO: <span>options to create reading lists (one shot ... if not created - save to general)</span>
+                            {/* TODO: <span>is saved? and how</span> */}
+                            {/* TODO: <span>add image</span> */}
+                            {/* TODO: <span>hiatus</span> */}
+                            {/* TODO: <span>page filters (order by: fav,date(asc,dsc),words.....)</span> */}
+                            {/* TODO: <span>save individual fanfics from ff - later</span> */}
+                            {/* TODO: <span>add from backup (upload epub/mobi/pdf...) - later</span> */}
+                            {/* TODO: Source filter */}
+                            {/* TODO: deleted indication */}
                         </section>
                         <section className={classes.Header}>
                             <div className={classes.Right}>
