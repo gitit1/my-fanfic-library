@@ -5,7 +5,7 @@ import classes from './Navigator.module.css';
 
 const Navigator = (props) => (
   <nav className={classes.Navigator}>
-    <div class="nav-wrapper">
+    <div className="nav-wrapper">
     <ul>
           {/* Fandoms */}
           <li className={classes.Dropdown}>

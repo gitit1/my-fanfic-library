@@ -10,8 +10,11 @@ try {
   console.log('[Server] - in routes')
   router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
-  router.get('/db/getAllFandoms',db.getAllFandomsFromDB);   
+  router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
+
   router.get('/db/getFanfics',db.getFanficsFromDB);
+  router.post('/db/addFanficToUserFavorites',db.addFanficToUserFavoritesInDB);
+  // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
 
 
   

@@ -62,6 +62,7 @@ exports.login = (req, res) => {
             const payload = {
             id: user.id,
             name: user.name,
+            email: user.email,
             level: user.level
             };
     // Sign token

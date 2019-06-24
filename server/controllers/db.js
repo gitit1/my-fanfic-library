@@ -5,6 +5,7 @@ const path = require('path')
 
 const mongoose = require('../config/mongoose');
 const FandomModal = require('../models/Fandom');
+const FandomUserData = require('../models/UserData');
 const FanficSchema = require('../models/Fanfic');
 
 exports.addEditFandomToDB =  async (req,res) =>{
@@ -159,11 +160,98 @@ exports.getAllFandoms = async () =>{
 
 exports.getFanficsFromDB = async (req,res) =>{
     console.log(clc.blue('[db controller] getFanficsFromDB()'));
-    let {FandomName,skip,limit} = req.query;
-
+    let {FandomName,skip,limit,userEmail} = req.query;
     skip = Number(skip-1); limit = Number(limit);
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,FandomName);
+    let userData=[]
+
+    console.log('userEmail: ',userEmail)
     FanficDB.find().sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).skip(skip).limit(limit).exec(async function(err, fanfics) {
-        res.send(fanfics)
+        if(userEmail!='null'){
+            userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,fanfics)
+            res.send([fanfics,userData])
+        }else{
+            res.send([fanfics,[]])
+        }
     })
 }
+
+const checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics)=>{
+    console.log(clc.blue('[db controller] checkForUserDataInDBOnCurrentFanfics()'));
+    // let {userEmail} = req.query;   
+    // let {fanfics} = req.body;   
+
+    let data=[];
+    
+    return new Promise(function(resolve, reject) {
+        FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
+            if (err) {  reject('there is an error'); }
+
+            if (user) {
+                console.log('found user!!, '+user.userEmail)
+                fanfics.forEach(async function (fanfic){ 
+                    let isExist = await user.FanficList.find(x => x.FanficID === fanfic.FanficID);
+                    // console.log('isExist?, '+isExist)
+                    if(isExist){
+                        console.log('pushing fanfic::, '+isExist)
+                        data.push(isExist)
+                    }
+                });
+                 resolve(data)
+                
+            }else{
+                console.log('didnt found user , no personal data yet!!')
+                resolve([])
+            }
+        }) 
+    });
+} 
+
+exports.addFanficToUserFavoritesInDB = async (req,res)=>{
+    console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
+    let {userEmail,fanficId,favorite} = req.query;
+
+    var mongoObjectId = mongoose.Types.ObjectId(userEmail);
+    console.log(mongoObjectId)
+    FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
+        if (err) { return 'there is an error'; }
+
+        if (user) {
+            console.log('found user!!, '+user.userEmail)
+            let isExist = await user.FanficList.find(x => x.FanficID === Number(fanficId));
+            console.log('isExist?, '+isExist)
+            if(!isExist){
+                console.log('not exist!!')
+                user.FanficList.push({
+                    FanficID: fanficId,
+                    Favorite: favorite                    
+                });
+                user.save();
+                res.send(true);
+            }else{
+                console.log('exist!!')
+                FandomUserData.updateOne(
+                    { userEmail: userEmail , "FanficList.FanficID": fanficId },
+                    { $set: {"FanficList.$.Favorite": favorite}},
+                    (err, result) => {
+                        if (err) throw err;
+                        console.log('User updated!');
+                     }
+                 )
+                res.send(true);
+            }
+        }else{
+            console.log('didnt found user , creating new one!!')
+            const newUser = new FandomUserData({
+                userEmail: userEmail,
+                FanficList: {
+                    FanficID:         fanficId,
+                    Favorite:         Boolean(favorite)   
+                }
+            });
+            await newUser.save();
+            res.send(true);
+        }
+    }) 
+}
+

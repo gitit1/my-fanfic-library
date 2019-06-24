@@ -151,6 +151,10 @@
     fill:  rgb(192, 43, 43);
     color:  rgb(192, 43, 43);
 }
+.FavoriteOn{
+    fill:  rgb(192, 43, 43);
+    color:  rgb(192, 43, 43);   
+}
 
 .MarkAsRead:hover,.ReadingList:hover{
     fill:  rgb(23, 167, 119);

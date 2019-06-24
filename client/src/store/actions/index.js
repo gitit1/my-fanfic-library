@@ -7,7 +7,9 @@ export {
 } from './fandoms';
 
 export {
-    getFanficsFromDB
+    getFanficsFromDB,
+    // getUserDataFromDB,
+    addFanficToUserFavorites
 } from './fanfics';
 
 

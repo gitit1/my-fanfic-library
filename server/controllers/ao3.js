@@ -213,7 +213,7 @@ exports.loginToAO3 = async ()=>{
     })
 }
 
-//TODO: NEED TO FIX ERRORS,  match to the place I want it (cron)
+//TODO: NEED TO FIX ERRORS,  place to the place I want it (cron), change it to be inside function and not router
 exports.checkIfDeletedFromAO3 = async (req,res) =>{  
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
     //TODO: need to get from client
