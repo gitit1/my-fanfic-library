@@ -8,8 +8,8 @@ export {
 
 export {
     getFanficsFromDB,
-    // getUserDataFromDB,
-    addFanficToUserFavorites
+    addFanficToUserFavorites,
+    getFilteredFanficsFromDB
 } from './fanfics';
 
 

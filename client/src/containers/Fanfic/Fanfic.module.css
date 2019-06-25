@@ -1,0 +1,26 @@
+.Filter{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; 
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    text-align: left
+}
+
+.Filter form{
+    flex: 0 0 90%;
+    -webkit-box-shadow: 1px 2px 3px 1px rgba(179, 176, 176, 0.699);
+    -moz-box-shadow: 1px 2px 3px 1px rgba(179, 176, 176, 0.699);
+    box-shadow: 1px 2px 3px 1px rgba(179, 176, 176, 0.699);
+    margin:1% 1%;
+    display:block;
+}
+.Filter p{
+    margin-left: 1%
+}
+.Filter p,.Filter button{
+    text-align: left;
+    width: 100%;
+    float: left;
+}

@@ -66,7 +66,7 @@ class ManageDownloader extends Component{
 
   }
 
-  getFandomFanfics = async () =>{
+  sendRequestsToServerHandler = async (choice) =>{
     socket.removeAllListeners()
     this.setState({serverData:null,logs:[]})
 
@@ -79,11 +79,9 @@ class ManageDownloader extends Component{
           }
       })
 
-      socket.emit('getFandomFanfics', this.state.fandom);
+      socket.emit('getFandomFanfics', this.state.fandom,choice);
       
   }
-
-
 
   inputChangedHandler = (event) =>{
     socket.removeAllListeners()
@@ -120,7 +118,11 @@ class ManageDownloader extends Component{
               />
             <br/>    
         </div>
-        <Button clicked={this.getFandomFanfics}>Get/Update Fandom Fanfics</Button>
+        <div className={classes.Buttons}>
+          <Button clicked={()=>this.sendRequestsToServerHandler('getFandomFanfics')}>Get/Update Fandom Fanfics</Button>
+          <Button clicked={()=>this.sendRequestsToServerHandler('getDeletedFanfics')}>Get/Update Deleted Fanfics of this Fandom</Button>  
+        </div>
+        <br/>
         <div className={classes.MsgBoard}>
           {/* <p>serverData: {this.state.serverData}</p> */}
         {
@@ -150,7 +152,7 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
   return{
       // initFandom:     () => dispatch(actions.fandomInit()),
-      onGetFandoms:       ()                                  =>      dispatch(actions.getFandomsFromDB()),
+      onGetFandoms:              ()                                  =>      dispatch(actions.getFandomsFromDB())
   };
 }
 

@@ -193,7 +193,6 @@ const checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics)=>{
                     let isExist = await user.FanficList.find(x => x.FanficID === fanfic.FanficID);
                     // console.log('isExist?, '+isExist)
                     if(isExist){
-                        console.log('pushing fanfic::, '+isExist)
                         data.push(isExist)
                     }
                 });
@@ -209,7 +208,7 @@ const checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics)=>{
 
 exports.addFanficToUserFavoritesInDB = async (req,res)=>{
     console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
-    let {userEmail,fanficId,favorite} = req.query;
+    let {userEmail,fanficId,favorite,fandomName} = req.query;
 
     var mongoObjectId = mongoose.Types.ObjectId(userEmail);
     console.log(mongoObjectId)
@@ -224,6 +223,7 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
                 console.log('not exist!!')
                 user.FanficList.push({
                     FanficID: fanficId,
+                    FandomName: fandomName,
                     Favorite: favorite                    
                 });
                 user.save();
@@ -246,6 +246,7 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
                 userEmail: userEmail,
                 FanficList: {
                     FanficID:         fanficId,
+                    FandomName:       fandomName,
                     Favorite:         Boolean(favorite)   
                 }
             });
@@ -255,3 +256,24 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
     }) 
 }
 
+exports.getFilteredFanficsListFromDB = async (req,res)=>{
+    console.log(clc.blue('[db controller] getFanficsFromDB()'));
+    let {fandomName,userEmail} = req.query,promises=[];
+
+    FandomUserData.findOne({userEmail: userEmail}, async function(err, data) {  
+        let favFanfics = await fandomName ? (data.FanficList.filter( fanfic => {return (fanfic.Favorite === true && fanfic.FandomName === fandomName) })) : (data.FanficList.filter( fanfic => {return fanfic.Favorite === true}))
+        await favFanfics.map((fanfic, index) => promises.push(getOneFanficFromDB(fanfic.FanficID,fanfic.FandomName)));
+        Promise.all(promises).then(async favFanficsList => {res.send(favFanficsList)});
+    });  
+} 
+
+const getOneFanficFromDB = (fanficId,fandomName) =>{
+    console.log(clc.bgGreenBright('[db controller] getOneFanficFromDB()'));  
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    return new Promise(function(resolve, reject) {
+        FanficDB.find({FanficID:fanficId}).exec(async function(err, fanfic) { 
+            err && reject(err);
+            resolve(fanfic[0])
+        });
+    });
+}

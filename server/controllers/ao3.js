@@ -100,6 +100,7 @@ const getDataFromPage = async (page,fandomName) =>{
     let fanfic = {}
     let oldFanficData = false
 
+    fanfic["FandomName"]              =     fandomName;
     fanfic["Source"]                =       'AO3';
     fanfic["FanficID"]              =       Number(page.attr('id').replace('work_',''));
     fanfic["LastUpdateOfNote"]      =       new Date().getTime();
@@ -214,35 +215,28 @@ exports.loginToAO3 = async ()=>{
 }
 
 //TODO: NEED TO FIX ERRORS,  place to the place I want it (cron), change it to be inside function and not router
-exports.checkIfDeletedFromAO3 = async (req,res) =>{  
+exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{  
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
-    //TODO: need to get from client
-    let fandomName = 'Clexa';
-    // let fanficsSum = 500;
-    let fanficsSum = 10788
     
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
-    let startTime = now(); 
-    let skip=0,limit=100,promises=[],promises2=[],gotDeletedList = [];
+    let skip=0,limit=100,promises=[],promises2=[],gotDeletedList = [],DeletedCounter=[],newDeletedCounter=0,allDeletedCounter=0;
     let loop = Math.ceil(fanficsSum/limit)
  
     const findNextBunchOfFanfics = () =>{
         console.log('findNextBunchOfFanfics: skip: '+skip+' , limit: '+limit)
         return new Promise(function(resolve, reject) {
             FanficDB.find({Source:'AO3'}).skip(skip).limit(limit).exec(async function(err, fanfics) { 
+                err && console.log('error: ',err)
                 await fanfics.map((fanfic, index) => promises.push(!fanfic.Deleted && checkIfDeleted(fanfic.URL,fanfic)) );
         
                 Promise.all(promises).then(async () => {
                     console.log('then 1'); 
+                    console.log('gotDeletedList.length',); 
                     await gotDeletedList.forEach(async function(fanfic, index) {
                         fanfic.LastUpdateOfNote=new Date().getTime();
                         console.log(`${fanfic.FanficTitle} got deleted`)
-                        await mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic.FanficID},{$set: {Deleted:true}}, async function (error, response) {
-                            //console.log(`${fanfic.FanficTitle} updated as deleted`)
-                        })
-                        await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic, async function (error, response) {
-                            //console.log(`${fanfic.FanficTitle} saved to deleted list`)                   
-                        })     
+                        await mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic.FanficID},{$set: {Deleted:true}})
+                        await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic)     
                     })
                 }).then(()=>{
                     resolve()
@@ -278,14 +272,16 @@ exports.checkIfDeletedFromAO3 = async (req,res) =>{
 
     for(i=0; i<loop; i++){
         skip = (i===0) ? 0 : ((limit*i)-i+1)        
-        func.delay(3000).then(async () => await promises2.push(findNextBunchOfFanfics()))  
+        await func.delay(3000).then(async () => await promises2.push(findNextBunchOfFanfics()))  
     }
-    await Promise.all(promises2).then(async () => {
-        let endTime = now();
-        res.send(`finished in ${((endTime-startTime)/1000).toFixed(2)} seconds`)
+    console.log('promises2: ',promises2)
+    return await Promise.all(promises2).then(async () => {
+        console.log('promise all')
+        DeletedCounter.push(await mongoose.dbFanfics.collection(fandomName).countDocuments({Deleted:true}))
+        DeletedCounter.push(gotDeletedList.length)
+        return DeletedCounter
     });
-
-
+    
 
 }
 

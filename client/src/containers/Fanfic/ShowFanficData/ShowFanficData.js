@@ -4,9 +4,11 @@ import classes from './ShowFanficData.module.css';
 import ReactSVG from 'react-svg'
 import Favorite from '../../../assets/images/icons/favorite.svg'
 import MarkAsRead from '../../../assets/images/icons/markAsRead.svg'
-import Read from '../../../assets/images/icons/read.svg'
+
 import Ignore from '../../../assets/images/icons/ignore.svg'
 import ReadingList from '../../../assets/images/icons/readingList.svg'
+import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
 
 const ShowFanficData = (props) => {
     return(
@@ -18,24 +20,27 @@ const ShowFanficData = (props) => {
                     const favClassIcon = (userData && userData.Favorite===true) ? `${classes.FavoriteOn} ${classes.Icon}` : `${classes.Favorite} ${classes.Icon}`
                     const favClassLabel = (userData && userData.Favorite===true) ? `${classes.FavoriteOn} ${classes.IconLabel}` : `${classes.Favorite} ${classes.IconLabel}`
                     const favClick = userData ? userData.Favorite : null
-                    console.log('fanfic.FanficID',fanfic.FanficID)
-                    console.log('favClick',favClick)
+                    const finishClick = null
+
                     return(
                             <div className={classes.Fanfic} key={fanfic.FanficID}>
                             {/* TODO: show only if autinticate */}
                             
                             <section className={classes.UserHeader}>
                                 <div className={`${classes.ReadingList} ${classes.UserData}`}>
+                                    {/* <Button className={`${classes.button} ${classes.IconLabel}`}> */}
                                     <ReactSVG src={ReadingList} className={`${classes.ReadingList} ${classes.Icon}`} wrapper='span' alt='Add to Reading List'  title='Add to Reading List' />
-                                    <span className={classes.IconLabel}>Add to Reading List</span>                                
+                                    <span className={classes.IconLabel}>Add to Reading List</span>
+                                    {/* Add to Reading List */}
+                                    {/* </Button>                                 */}
                                 </div>
                                 <div onClick={() =>props.markAsFavorite(fanfic.FanficID,favClick)} className={`${classes.Favorite} ${classes.UserData}`}>
                                     <ReactSVG src={Favorite} className={favClassIcon} wrapper='span' alt='Favorite'  title='Favorite' />
                                     <span className={favClassLabel}>Favorite</span>                                
                                 </div>
-                                <div className={`${classes.MarkAsRead} ${classes.UserData}`}>
+                                <div  onClick={() =>props.markAsFinished(fanfic.FanficID,finishClick)} className={`${classes.MarkAsRead} ${classes.UserData}`}>
                                     <ReactSVG src={MarkAsRead} className={`${classes.MarkAsRead} ${classes.Icon}`} wrapper='span' alt='Mark as Finished'  title='Mark as Finished' />
-                                    <span className={classes.IconLabel}>Mark as Finished</span>                                
+                                    <span className={classes.IconLabel}>Mark as Finished</span>                                                              
                                 </div>
                                 <div className={`${classes.MarkAsRead} ${classes.UserData}`}>
                                     <ReactSVG src={MarkAsRead} className={`${classes.MarkAsRead} ${classes.Icon}`} wrapper='span' alt='Mark in Progress'  title='Mark in Progress' />
@@ -78,7 +83,8 @@ const ShowFanficData = (props) => {
                                         <div key={Object.keys(tags)[0]}>
                                             <b>{ `${Object.keys(tags)[0]}: `}</b>                                                    
                                             {tags[Object.keys(tags)[0]].map(tag=>(                                           
-                                                <span key={tag} >{tag}</span>
+                                                // <span key={tag} >{tag}</span>
+                                                <Chip key={tag} label={tag} className={classes.chip} />
                                             ))}
                                         </div>
 

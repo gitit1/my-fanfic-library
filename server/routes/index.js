@@ -13,17 +13,14 @@ try {
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
 
   router.get('/db/getFanfics',db.getFanficsFromDB);
+  router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
   router.post('/db/addFanficToUserFavorites',db.addFanficToUserFavoritesInDB);
   // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
-
-
-  
+ 
   
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
 
-  //TODO: funcs in testing:
-  router.get('/ao3/checkIfDeletedFromAO3',ao3.checkIfDeletedFromAO3)
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);
 }

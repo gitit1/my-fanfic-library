@@ -13,10 +13,10 @@ const func = require('../connection');
 server.listen(5555);
 
 io.on('connection', (socket) => {
-      socket.on('getFandomFanfics', (fandomData) => {
+      socket.on('getFandomFanfics', (fandomData,choice) => {
         console.log('[socket.js] getFandomFanfics()');
         
-        func.manageDownloader(socket,fandomData)
+        func.manageDownloader(socket,fandomData,choice)
         
       });
 });

@@ -14,12 +14,14 @@ const UserFanficsSchema = new Schema({
   FanficList: [
     {
       FanficID:         {type: Number, unique: true},
+      FandomName:       {type: String},
       Favorite:         {type: Boolean},
       Status:           {type: String}, 
       ChapterStatus:    {type: Number},
       Image:            {type: String},
       SavedFic:         {type: Boolean},       
-      SavedType:        []       
+      SavedType:        [],
+      ReadingList:      [],       
     }
   ]
 });

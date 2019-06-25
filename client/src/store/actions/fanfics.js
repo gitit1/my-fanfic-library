@@ -44,11 +44,11 @@ export const getFanficsFromDB = (FandomName,pageNumber,pageLimit,userEmail) =>{
 };
 
 
-export const addFanficToUserFavorites = (userEmail,fanficId,favorite) =>{
+export const addFanficToUserFavorites = (userEmail,fandomName,fanficId,favorite) =>{
     console.log('[actions: fanfics.js] - addFanficToUserFavorites') 
     console.log('[actions: fanfics.js] - favorite:',favorite) 
     return dispatch =>{
-        return axios.post(`/db/addFanficToUserFavorites?fanficId=${fanficId}&userEmail=${userEmail}&favorite=${favorite}`)
+        return axios.post(`/db/addFanficToUserFavorites?fandomName=${fandomName}&fanficId=${fanficId}&userEmail=${userEmail}&favorite=${favorite}`)
         .then(res =>{
             // dispatch(addFanficToUserFavoritesSuccess(fetchedFanfics.data));
             return true;
@@ -59,47 +59,38 @@ export const addFanficToUserFavorites = (userEmail,fanficId,favorite) =>{
         })  
     };      
 }
-// export const addFanficToUserFavoritesSuccess = (fanfics) =>{
-//     console.log('[actions: fanfics.js] - getFanficsFromDBSuccess')
-//     return{
-//         type: actionTypes.GET_FANFICS_SUCCESS,
-//         fanfics: fanfics
-//     };
-// };
 
-// export const addFanficToUserFavoritesFail = (error) =>{
-//     console.log('[actions: fanfics.js] - getFanficsFromDBFail')
-//     return{
-//         type: actionTypes.GET_FANFICS_FAIL,
-//         error: error
-//     };
-// };
-// export const getUserDataFromDB = (fanfics,userEmail) =>{
-//     console.log('[actions: fanfics.js] - addFanficToUserFavorites') 
-//     return dispatch =>{
-//         return axios.post(`/db/addFanficToUserFavorites?userEmail=${userEmail}`,fanfics)
-//         .then(userFanfics =>{
-//             dispatch(getUserDataFromDB(userFanfics.data));
-//             return true;
-//         })
-//         .catch(error =>{
-//             dispatch(getUserDataFromDBFail(error))
-//             return false
-//         })  
-//     };      
-// }
-// export const getUserDataFromDBSuccess = (userFanfics) =>{
-//     console.log('[actions: fanfics.js] - getFanficsFromDBSuccess')
-//     return{
-//         type: actionTypes.GET_USER_FANFICS_DATA_SUCCESS,
-//         userFanfics: userFanfics
-//     };
-// };
+export const getFilteredFanficsFromDBSuccess = (fetchedData) =>{
+    console.log('[actions: fanfics.js] - getFanficsFromDBSuccess')
+    return{
+        type: actionTypes.GET_FILTERED_FANFICS_SUCCESS,
+        fanfics: fetchedData
+    };
+};
 
-// export const getUserDataFromDBFail = (error) =>{
-//     console.log('[actions: fanfics.js] - getFanficsFromDBFail')
-//     return{
-//         type: actionTypes.GET_USER_FANFICS_DATA_FAIL,
-//         error: error
-//     };
-// };
+export const getFilteredFanficsFromDBFail = (error) =>{
+    console.log('[actions: fanfics.js] - getFanficsFromDBFail')
+    return{
+        type: actionTypes.GET_FILTERED_FANFICS_FAIL,
+        error: error
+    };
+};
+
+export const getFilteredFanficsFromDB = (fandomName,userEmail) =>{
+    console.log('[actions: fanfics.js] - getFilteredFanficsFromDB')
+
+    return dispatch =>{
+        dispatch(getFanficsFromDBStart())
+        //TODO: solution to limit
+        return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}`)
+        .then(fetchedData =>{
+            //dispatch(getFilteredFanficsFromDBSuccess(fetchedData.data));
+            console.log('fetchedData.data:',fetchedData.data)
+            return fetchedData.data;
+        })
+        .catch(error =>{
+            //dispatch(getFilteredFanficsFromDBFail(error))
+        })  
+    };
+
+};

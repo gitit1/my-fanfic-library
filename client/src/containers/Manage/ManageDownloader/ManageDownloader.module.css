@@ -17,3 +17,7 @@
     overflow: auto;
     padding: 20px;
 }
+
+.Buttons button{
+    margin-left: 8px;
+}
