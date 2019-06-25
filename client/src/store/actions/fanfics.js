@@ -76,13 +76,13 @@ export const getFilteredFanficsFromDBFail = (error) =>{
     };
 };
 
-export const getFilteredFanficsFromDB = (fandomName,userEmail) =>{
+export const getFilteredFanficsFromDB = (fandomName,userEmail,filters) =>{
     console.log('[actions: fanfics.js] - getFilteredFanficsFromDB')
 
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
         //TODO: solution to limit
-        return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}`)
+        return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}`,filters)
         .then(fetchedData =>{
             //dispatch(getFilteredFanficsFromDBSuccess(fetchedData.data));
             console.log('fetchedData.data:',fetchedData.data)

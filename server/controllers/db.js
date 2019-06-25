@@ -190,8 +190,7 @@ const checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics)=>{
             if (user) {
                 console.log('found user!!, '+user.userEmail)
                 fanfics.forEach(async function (fanfic){ 
-                    let isExist = await user.FanficList.find(x => x.FanficID === fanfic.FanficID);
-                    // console.log('isExist?, '+isExist)
+                    let isExist = await user.FanficList.find(x => Number(x.FanficID) === Number(fanfic.FanficID));
                     if(isExist){
                         data.push(isExist)
                     }
@@ -258,16 +257,53 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
 
 exports.getFilteredFanficsListFromDB = async (req,res)=>{
     console.log(clc.blue('[db controller] getFanficsFromDB()'));
-    let {fandomName,userEmail} = req.query,promises=[];
-
-    FandomUserData.findOne({userEmail: userEmail}, async function(err, data) {  
-        let favFanfics = await fandomName ? (data.FanficList.filter( fanfic => {return (fanfic.Favorite === true && fanfic.FandomName === fandomName) })) : (data.FanficList.filter( fanfic => {return fanfic.Favorite === true}))
-        await favFanfics.map((fanfic, index) => promises.push(getOneFanficFromDB(fanfic.FanficID,fanfic.FandomName)));
-        Promise.all(promises).then(async favFanficsList => {res.send(favFanficsList)});
-    });  
+    let {fandomName,userEmail} = req.query, filters = req.body, promises=[],filtersUserList=[],filtersFanficList=[],flag;
+    console.log(filters)
+    console.log('fandomName: ',fandomName)
+    await filters.map(filter=>{
+        switch (filter) {
+            case 'favorite':
+                filtersUserList.push({'Favorite':true})
+                break;
+            case 'deleted':
+                filtersFanficList.push({'Deleted':true})
+                break;
+        }
+    })
+    console.log('filtersUserList: ',filtersUserList)
+    console.log('filtersFanficList: ',filtersFanficList)
+    filtersUserList.length!==0 && FandomUserData.findOne({userEmail: userEmail}, async function(err, data) {  
+        let filteredFanfics = await fandomName ? (data.FanficList.filter(fanfic => {
+            // return(fanfic['Favorite']  && fanfic.FandomName === fandomName)
+            filtersUserList.forEach(async function(filter) {
+                var keys = Object.keys(filter);
+                await keys.forEach(function(key) { 
+                    flag=false                   
+                    // console.log('this is a key-> ' + key + ' & this is its value-> ' + filter[key])
+                    // console.log('fanfic[key]' + fanfic[key] + ' & filter[key] ' + filter[key])
+                    if(fanfic[key] === filter[key] && fanfic.FandomName === fandomName){flag=true,console.log('1')}else{flag=false,console.log('2')}               
+                });                          
+            })
+            return flag
+        })) : 
+        //TODO: work on it
+        (data.FanficList.filter( fanfic => {return fanfic.Favorite === true}))
+        //TODO: add filters with both user anf fanfic to: getOneFanficFromDB()
+        await filteredFanfics.map((fanfic, index) => promises.push(getOneFanficFromDB(fanfic.FanficID,fanfic.FandomName,filters)));
+        Promise.all(promises).then(async filteredFanfics => {res.send(filteredFanfics)});
+    }); 
+    //TODO: search for all
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    const filterObj = Object.assign({}, ...filtersFanficList);
+    console.log('filterObj: ',filterObj)
+    filtersFanficList.length!==0 && FanficDB.find(filterObj).exec(async function(err, fanfics) { 
+            err && res.send(err);
+            res.send(fanfics)
+     })
+    
 } 
 
-const getOneFanficFromDB = (fanficId,fandomName) =>{
+const getOneFanficFromDB = (fanficId,fandomName,filters) =>{
     console.log(clc.bgGreenBright('[db controller] getOneFanficFromDB()'));  
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     return new Promise(function(resolve, reject) {

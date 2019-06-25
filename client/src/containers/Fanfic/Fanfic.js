@@ -21,8 +21,8 @@ class Fanfic extends Component{
         pageLimit:20,
         fanficsCount:0,
         filters: {
-            favoriteChecked:false,
-            finishedChecked:false
+            favorite:false,
+            deleted:false
         }
     }
 
@@ -39,7 +39,7 @@ class Fanfic extends Component{
         const fandomName = this.props.match.params.FandomName;
         const userEmail = this.props.userEmail ? this.props.userEmail : null;
         
-        (fandoms.length===0) &&  await onGetFandoms();
+        (fandoms.length===0) &&  await onGetFandoms()
         await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(async ()=>{
             let fanficsCount = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0].FanficsInFandom;
             let userFanfics  = this.props.userFanfics
@@ -58,7 +58,7 @@ class Fanfic extends Component{
         await this.setState({pageNumber: page},await this.getFanfics)       
         return null
     }
-
+    //UPDATE USERDATA:
     FavoriteHandler = async(fanficId,favorite) =>{
         let isFav = await this.props.onMarkFavorite(this.props.userEmail,this.props.match.params.FandomName,fanficId,!favorite)
         const userFanficsCopy = [...this.state.userFanfics];
@@ -103,19 +103,24 @@ class Fanfic extends Component{
 
     }
 
+    //FILTERS:
     ActiveFiltersHandler = async(event)=>{
         event.preventDefault();
         
-        const {onGetFilteredFanfics} = this.props;
-        const {filters} = this.state;
-        filters['favoriteChecked'] && (
-            await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail).then(async favFanfics=>{
-                let fanficsCount = favFanfics.length;
+        const {onGetFilteredFanfics} = this.props, {filters} = this.state;
+        let filterArr = []
+        console.log('filters',filters);
+        for(let key in filters){
+            filters[key] === true && filterArr.push(key)
+        }
+        console.log(filterArr)
+        
+        await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail,filterArr).then(async filteredFanfics=>{
+                let fanficsCount = filteredFanfics.length;
                 this.setState({
-                    fanfics:favFanfics,
+                    fanfics:filteredFanfics,
                     fanficsCount:fanficsCount})
-            })
-        )
+        });
     }
     FilterHandler = async(filter)=>{
         const {filters} = this.state;
@@ -123,9 +128,12 @@ class Fanfic extends Component{
         switch (filter) {
             case 'Favorite':
                 console.log('Favorite')
-                this.setState({filters: {'favoriteChecked': !filters['favoriteChecked']}});
+                this.setState({filters: {...filters,'favorite': !filters['favorite']}});
                 break;
-        
+            case 'Deleted':
+                console.log('Deleted')
+                this.setState({filters: {...filters,'deleted': !filters['deleted']}});
+                break;
             default:
                 console.log('hellooo')
                 break;
@@ -134,7 +142,7 @@ class Fanfic extends Component{
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {pageNumber,fanficsCount,pageLimit} = this.state;     
+        let {pageNumber,fanficsCount,pageLimit} = this.state     
         return(
             <Container header={this.props.match.params.FandomName}>
                     <div className={'Pagination'}>
@@ -146,10 +154,8 @@ class Fanfic extends Component{
                                 defaultPageSize={pageLimit}
                     />
                     </div>
-                    <div className={classes.Filter}>
-                        <Filters        filter={this.FilterHandler}
-                                        filtersAction={this.ActiveFiltersHandler}/>
-                    </div>
+                    <Filters        filter={this.FilterHandler}
+                                    filtersAction={this.ActiveFiltersHandler}/>
                     <ShowFanficData fanfics={this.state.fanfics}
                                     userFanfics={this.state.userFanfics}
                                     markAsFavorite={this.FavoriteHandler}            
@@ -177,7 +183,7 @@ const mapDispatchedToProps = dispatch =>{
         onGetFanfics:           (FandomName,pageNumber,pageLimit,userEmail) =>  dispatch(actions.getFanficsFromDB(FandomName,pageNumber,pageLimit,userEmail)),
         onMarkFavorite:         (userEmail,fandomName,fanficId,favorite)    =>  dispatch(actions.addFanficToUserFavorites(userEmail,fandomName,fanficId,favorite)),
         onMarkFinished:         (userEmail,fandomName,fanficId,favorite)    =>  dispatch(actions.addFanficToUserFavorites(userEmail,fandomName,fanficId,favorite)),
-        onGetFilteredFanfics:   (fandomName,userEmail)                      =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail))
+        onGetFilteredFanfics:   (fandomName,userEmail,filters)              =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters))
     }
 }
   
