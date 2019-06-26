@@ -25,13 +25,14 @@ export const getFanficsFromDBFail = (error) =>{
     };
 };
 
-export const getFanficsFromDB = (FandomName,pageNumber,pageLimit,userEmail) =>{
+export const getFanficsFromDB = (fandomName,pageNumber,pageLimit,userEmail,filters) =>{
     console.log('[actions: fanfics.js] - getFanficsFromDB')
     let skip = (pageLimit*pageNumber)-pageLimit+1;
     // let limit = pageLimit*pageNumber;
+    console.log('filters:',filters)
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        return axios.get(`/db/getFanfics?FandomName=${FandomName.replace("&","%26")}&skip=${skip}&limit=${pageLimit}&userEmail=${userEmail}`)
+        return axios.post(`/db/getFanfics?FandomName=${fandomName.replace("&","%26")}&skip=${skip}&limit=${pageLimit}&userEmail=${userEmail}`,filters)
         .then(fetchedData =>{
             dispatch(getFanficsFromDBSuccess(fetchedData.data));
             return true;
@@ -64,7 +65,8 @@ export const getFilteredFanficsFromDBSuccess = (fetchedData) =>{
     console.log('[actions: fanfics.js] - getFanficsFromDBSuccess')
     return{
         type: actionTypes.GET_FILTERED_FANFICS_SUCCESS,
-        fanfics: fetchedData
+        fanfics: fetchedData[0],
+        counter: fetchedData[1]
     };
 };
 
@@ -76,20 +78,19 @@ export const getFilteredFanficsFromDBFail = (error) =>{
     };
 };
 
-export const getFilteredFanficsFromDB = (fandomName,userEmail,filters) =>{
+export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit) =>{
     console.log('[actions: fanfics.js] - getFilteredFanficsFromDB')
 
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
         //TODO: solution to limit
-        return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}`,filters)
+        return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}&pageLimit=${pageLimit}`,filters)
         .then(fetchedData =>{
-            //dispatch(getFilteredFanficsFromDBSuccess(fetchedData.data));
-            console.log('fetchedData.data:',fetchedData.data)
-            return fetchedData.data;
+            dispatch(getFilteredFanficsFromDBSuccess(fetchedData.data));
+            return true;
         })
         .catch(error =>{
-            //dispatch(getFilteredFanficsFromDBFail(error))
+            dispatch(getFilteredFanficsFromDBFail(error))
         })  
     };
 

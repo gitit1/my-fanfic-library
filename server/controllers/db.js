@@ -160,13 +160,16 @@ exports.getAllFandoms = async () =>{
 
 exports.getFanficsFromDB = async (req,res) =>{
     console.log(clc.blue('[db controller] getFanficsFromDB()'));
-    let {FandomName,skip,limit,userEmail} = req.query;
+    let {FandomName,skip,limit,userEmail} = req.query, userData=[];
+    let filters = req.body
     skip = Number(skip-1); limit = Number(limit);
-    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,FandomName);
-    let userData=[]
-
-    console.log('userEmail: ',userEmail)
-    FanficDB.find().sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).skip(skip).limit(limit).exec(async function(err, fanfics) {
+    if(await Object.entries(filters).length===0 ){
+        filters = null
+    }else{
+        filters = await getFiltersRules(filters);
+        filters = Object.assign({}, ...filters[1]);
+    }
+    getFanfics(skip,limit,FandomName,filters).then(async fanfics=>{
         if(userEmail!='null'){
             userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,fanfics)
             res.send([fanfics,userData])
@@ -174,6 +177,17 @@ exports.getFanficsFromDB = async (req,res) =>{
             res.send([fanfics,[]])
         }
     })
+}
+const getFanfics = async(skip,limit,fandomName,filters)=>{
+    console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
+    console.log('filters:',filters)
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    return new Promise(function(resolve, reject) {
+        FanficDB.find(filters).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).skip(Number(skip)).limit(Number(limit)).exec(async function(err, fanfics) {
+            err && reject(err)
+            resolve(fanfics)
+        })
+    });    
 }
 
 const checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics)=>{
@@ -254,53 +268,78 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
         }
     }) 
 }
-
-exports.getFilteredFanficsListFromDB = async (req,res)=>{
-    console.log(clc.blue('[db controller] getFanficsFromDB()'));
-    let {fandomName,userEmail} = req.query, filters = req.body, promises=[],filtersUserList=[],filtersFanficList=[],flag;
-    console.log(filters)
-    console.log('fandomName: ',fandomName)
+const getFiltersRules = async (filters) =>{
+    let filtersUserList=[],filtersFanficList=[];
     await filters.map(filter=>{
         switch (filter) {
             case 'favorite':
-                filtersUserList.push({'Favorite':true})
+                filtersUserList.push({'FanficList.Favorite':true})
                 break;
             case 'deleted':
                 filtersFanficList.push({'Deleted':true})
+                break;
+            case 'complete':
+                filtersFanficList.push({'Complete':true})
                 break;
         }
     })
     console.log('filtersUserList: ',filtersUserList)
     console.log('filtersFanficList: ',filtersFanficList)
-    filtersUserList.length!==0 && FandomUserData.findOne({userEmail: userEmail}, async function(err, data) {  
-        let filteredFanfics = await fandomName ? (data.FanficList.filter(fanfic => {
-            // return(fanfic['Favorite']  && fanfic.FandomName === fandomName)
-            filtersUserList.forEach(async function(filter) {
-                var keys = Object.keys(filter);
-                await keys.forEach(function(key) { 
-                    flag=false                   
-                    // console.log('this is a key-> ' + key + ' & this is its value-> ' + filter[key])
-                    // console.log('fanfic[key]' + fanfic[key] + ' & filter[key] ' + filter[key])
-                    if(fanfic[key] === filter[key] && fanfic.FandomName === fandomName){flag=true,console.log('1')}else{flag=false,console.log('2')}               
-                });                          
-            })
-            return flag
-        })) : 
-        //TODO: work on it
-        (data.FanficList.filter( fanfic => {return fanfic.Favorite === true}))
-        //TODO: add filters with both user anf fanfic to: getOneFanficFromDB()
-        await filteredFanfics.map((fanfic, index) => promises.push(getOneFanficFromDB(fanfic.FanficID,fanfic.FandomName,filters)));
-        Promise.all(promises).then(async filteredFanfics => {res.send(filteredFanfics)});
-    }); 
-    //TODO: search for all
-    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
-    const filterObj = Object.assign({}, ...filtersFanficList);
-    console.log('filterObj: ',filterObj)
-    filtersFanficList.length!==0 && FanficDB.find(filterObj).exec(async function(err, fanfics) { 
-            err && res.send(err);
-            res.send(fanfics)
-     })
+    console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList])
+    return [filtersUserList,filtersFanficList]
+}
+exports.getFilteredFanficsListFromDB = async (req,res)=>{
+    console.log(clc.blue('[db controller] getFanficsFromDB()'));
+    let {fandomName,userEmail,pageLimit} = req.query, filters = req.body, promises=[],filtersArrays=[],flag;
+
+    filtersArrays = await getFiltersRules(filters)
+
+    if(filtersArrays[0].length!==0){
+
+        const filterObj = Object.assign({'userEmail': userEmail},{'FanficList.FandomName':fandomName}, ...filtersArrays[0]);
+        console.log('filterObj:',filterObj)
+        // FandomUserData.find({'userEmail': userEmail}, async function(err, data) {
+        FandomUserData.aggregate([{$unwind:"$FanficList"},{$match:filterObj},
+                                  {$group :  {_id : {FandomName: "$FanficList.FandomName", FanficID: "$FanficList.FanficID"}} },
+                                  {$project: { _id: 0,FandomName:'$_id.FandomName',FanficID:'$_id.FanficID'}}
+                                 ], async function(err, filtered) {
+            await filtered.map((fanfic, index) => promises.push(getOneFanficFromDB(fanfic.FanficID,fanfic.FandomName,filtersArrays[1])));
+            Promise.all(promises).then(async filteredFanfics => {res.send([filteredFanfics,filteredFanfics.length])});
+        })
     
+    }else if(filtersArrays[1].length!==0){
+        const filterObj = Object.assign({}, ...filtersArrays[1]);
+        getFanfics(0,pageLimit,fandomName,filterObj).then(async fanfics=>{
+            let resultsCounter = await mongoose.dbFanfics.collection(fandomName).countDocuments(filterObj);
+            console.log('resultsCounter:',resultsCounter)
+            res.send([fanfics,resultsCounter])
+        }).catch(err=>res.send(err))
+    }
+    //filtersArrays[0].length!==0 && FandomUserData.findOne({userEmail: userEmail}, async function(err, data) {  
+        // let filteredFanfics = await fandomName ? (data.FanficList.filter(fanfic => {
+        //     // return(fanfic['Favorite']  && fanfic.FandomName === fandomName)
+        //     filtersArrays[0].forEach(async function(filter) {
+        //         var keys = Object.keys(filter);
+        //         await keys.forEach(function(key) { 
+        //             flag=false                   
+        //             // console.log('this is a key-> ' + key + ' & this is its value-> ' + filter[key])
+        //             // console.log('fanfic[key]' + fanfic[key] + ' & filter[key] ' + filter[key])
+        //             if(fanfic[key] === filter[key] && fanfic.FandomName === fandomName){flag=true,console.log('1')}else{flag=false,console.log('2')}               
+        //         });                          
+        //     })
+        //     return flag
+        // })) : 
+        // //TODO: work on it
+        // (data.FanficList.filter( fanfic => {return fanfic.Favorite === true}))
+        // //TODO: add filters with both user anf fanfic to: getOneFanficFromDB()
+        // await filteredFanfics.map((fanfic, index) => promises.push(getOneFanficFromDB(fanfic.FanficID,fanfic.FandomName,filters)));
+        // Promise.all(promises).then(async filteredFanfics => {res.send(filteredFanfics)});
+        
+
+
+    //}); 
+    //TODO: search for all
+
 } 
 
 const getOneFanficFromDB = (fanficId,fandomName,filters) =>{

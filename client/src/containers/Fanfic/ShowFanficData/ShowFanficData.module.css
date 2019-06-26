@@ -67,11 +67,9 @@
     float: right;
     margin-top: 1px;  
 }
-.Complete{
+.Badge{
     text-decoration: none;
     color: #fff;
-    background-color: #5cb85c;
-    border-color: #4cae4c;
     display: inline-block;
     margin-bottom: 0;
     font-weight: 200;
@@ -79,8 +77,15 @@
     border-radius: 4px 4px 4px 4px;
     line-height: 1.2em;
     margin-left: 2%;
-    padding: 0 6px 0 6px;
-    
+    padding: 0 6px 0 6px;  
+}
+.Complete{
+    background-color: #5cb85c;
+    border-color: #4cae4c;  
+}
+.Deleted{
+    background-color: rgb(192, 43, 43);
+    border-color: rgb(192, 43, 43);
 }
 .Tags{
     text-align: left;

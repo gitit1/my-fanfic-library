@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
 import classes from './ShowFanficData.module.css';
 import ReactSVG from 'react-svg'
 import Favorite from '../../../assets/images/icons/favorite.svg'
@@ -8,7 +7,6 @@ import MarkAsRead from '../../../assets/images/icons/markAsRead.svg'
 import Ignore from '../../../assets/images/icons/ignore.svg'
 import ReadingList from '../../../assets/images/icons/readingList.svg'
 import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
 
 const ShowFanficData = (props) => {
     return(
@@ -63,8 +61,9 @@ const ShowFanficData = (props) => {
                                     <div className={classes.Right}>
                                         <img src={`/images/icons/${fanfic.Rating}.png`} alt={fanfic.Rating}/>   
                                         <div>
-                                            <a href={fanfic.URL} target="_blank">{fanfic.FanficTitle}</a> by <a href={fanfic.AuthorURL}>{fanfic.Author}</a>
-                                            {fanfic.Complete && <span className={classes.Complete}>Complete</span>}
+                                            <a href={fanfic.URL} target="_blank" rel="noopener noreferrer">{fanfic.FanficTitle}</a> by <a href={fanfic.AuthorURL}>{fanfic.Author}</a>
+                                            {fanfic.Complete && <span className={`${classes.Badge} ${classes.Complete}`}>Complete</span>}
+                                            {fanfic.Deleted && <span  className={`${classes.Badge} ${classes.Deleted}`}>Deleted from AO3</span>}
                                             <br/>
                                             {fanfic.FandomsTags.map(tag=>(
                                                 <span key={tag} className={classes.FandomTags}>{tag}</span>

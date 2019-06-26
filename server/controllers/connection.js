@@ -3,11 +3,13 @@ const clc = require("cli-color");
 const db  =  require('./db')
 const ao3 =  require('./ao3')
 const now  = require('performance-now')
+
 exports.manageDownloader = async (socket,fandom,choice) =>{
     console.log(clc.blue('[connection] manageDownloader'));
     try {
         if(fandom=='All'){
             let fetchedFandoms = await db.getAllFandoms().then(fetchedFandoms=>{
+                console.log('fetchedFandoms:',fetchedFandoms)
                 if(!fetchedFandoms){
                     return false
                 }else{
@@ -28,6 +30,12 @@ exports.manageDownloader = async (socket,fandom,choice) =>{
                             p = p.then(() => manageDeletedFanficsHandler(socket,fandom) )                                                          
                         ))
                         break;
+                    case 'All':
+                        await fetchedFandoms.map(fandom => promises.push(
+                            p = p.then(() => manageFandomFanficsHandler(socket,fandom) ),                              
+                            p = p.then(() => manageDeletedFanficsHandler(socket,fandom) )                           
+                        ))
+                        break;
                 }
 
     
@@ -46,7 +54,11 @@ exports.manageDownloader = async (socket,fandom,choice) =>{
                     await manageFandomFanficsHandler(socket,fandom)
                     break;                
                 case 'getDeletedFanfics':
-                        await manageDeletedFanficsHandler(socket,fandom)
+                    await manageDeletedFanficsHandler(socket,fandom)
+                    break;
+                case 'All':
+                    await manageFandomFanficsHandler(socket,fandom)
+                    await manageFandomFanficsHandler(socket,fandom)
                     break;
             }
             

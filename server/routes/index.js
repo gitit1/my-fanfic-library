@@ -12,7 +12,7 @@ try {
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
 
-  router.get('/db/getFanfics',db.getFanficsFromDB);
+  router.post('/db/getFanfics',db.getFanficsFromDB);
   router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
   router.post('/db/addFanficToUserFavorites',db.addFanficToUserFavoritesInDB);
   // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);

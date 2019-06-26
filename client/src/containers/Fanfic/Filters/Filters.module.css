@@ -31,3 +31,9 @@
     width: 100%;
 }
 
+.CancelButton{
+    background-color: brown
+}
+.CancelButton:hover{
+    background-color: rgba(165, 42, 42, 0.692)    
+}
