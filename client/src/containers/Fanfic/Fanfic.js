@@ -18,7 +18,7 @@ class Fanfic extends Component{
         fanfics:[],
         userFanfics:[],
         pageNumber:1,
-        pageLimit:2,
+        pageLimit:5,
         fanficsCount:0,
         filters: {
             favorite:false,
@@ -57,7 +57,7 @@ class Fanfic extends Component{
         const {filterArr} = this.state;
         console.log('page: ',page)
         await this.setState({pageNumber: page}, async () => {
-            (filterArr.length===0) ? await this.getFanfics : await this.ActiveFiltersHandler()
+            (filterArr.length===0) ? await this.getFanfics() : await this.ActiveFiltersHandler()
         })       
         return null
     }
@@ -110,20 +110,25 @@ class Fanfic extends Component{
     ActiveFiltersHandler = async(event)=>{
         console.log('[]Fanfic.js] ActiveFiltersHandler()');
         event && event.preventDefault();
-        const {onGetFilteredFanfics} = this.props, {filters,filterArr,pageLimit,pageNumber} = this.state;
-        console.log('pageNumber: ',pageNumber);
+        const {onGetFilteredFanfics} = this.props, {filters,pageLimit} = this.state;
+        let {filterArr,pageNumber} = this.state;
+        event ? pageNumber=1 : pageNumber=pageNumber
+        filterArr = [];
         
-        if(filterArr.length===0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
+        // if(filterArr.length===0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
+        for(let key in filters){filters[key] === true && filterArr.push(key)}
+        // this.setState({filterArr: {...filterArr,[filter]: !filterArr[filter]}})    
         
         await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
-            const fanfics = [...this.props.fanfics],fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics
-            this.setState({fanfics,fanficsCount,userFanfics,filterArr})
+            const fanfics = [...this.props.fanfics],fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
+            this.setState({fanfics,fanficsCount,userFanfics,filterArr,pageNumber})
         });
         return null
     }
+
     FilterHandler = async(filter)=>{
-        const {filters} = this.state;
-        this.setState({filters: {...filters,[filter]: !filters[filter]}})       
+        const {filters,filterArr} = this.state;
+        this.setState({filters: {...filters,[filter]: !filters[filter]}})                
     }
     cancelFiltersHandler = async() =>{
         const {filters} = this.state;
@@ -135,16 +140,18 @@ class Fanfic extends Component{
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {fanfics,userFanfics,pageNumber,fanficsCount,pageLimit,filters} = this.state     
+        let {fanfics,userFanfics,pageNumber,fanficsCount,pageLimit,filters} = this.state;
+        
         return(
             <Container header={this.props.match.params.FandomName}>
                     <div className={'Pagination'}>
-                    <p>{(pageNumber*pageLimit)-pageLimit+1}-{pageLimit*pageNumber} of {fanficsCount} Works</p>
+                    {/* <p>{(pageNumber*pageLimit)-pageLimit+1}-{pageLimit*pageNumber} of {fanficsCount} Works</p> */}
                     <Pagination onChange={this.paginationClickHandler} 
                                 current={pageNumber} 
                                 total={fanficsCount}
                                 className={classes.Pagination}
                                 defaultPageSize={pageLimit}
+                                showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} Works`}
                     />
                     </div>
                     <Filters        filter={this.FilterHandler}
