@@ -18,6 +18,7 @@ const getFanficsFromDBSuccess  = (state,action) => {
     return updateObject(state,{
         fanfics: action.fanfics,
         userFanfics: action.userFanfics,
+        counter: action.counter,
         loading: false
     })
 }
@@ -36,6 +37,7 @@ const getFanficsFromDBFail  = (state,action) => {
 const getFilteredFanficsFromDBSuccess  = (state,action) => {
     return updateObject(state,{
         fanfics: action.fanfics,
+        userFanfics: action.userFanfics,
         counter: action.counter,
         loading: false
     })

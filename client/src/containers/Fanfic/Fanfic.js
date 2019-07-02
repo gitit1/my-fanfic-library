@@ -18,7 +18,7 @@ class Fanfic extends Component{
         fanfics:[],
         userFanfics:[],
         pageNumber:1,
-        pageLimit:20,
+        pageLimit:2,
         fanficsCount:0,
         filters: {
             favorite:false,
@@ -34,15 +34,15 @@ class Fanfic extends Component{
     }
 
     getFanfics = async () =>{
-        console.log('getFanfics: ')
-        const {pageNumber,pageLimit,filterArr} = this.state
-        console.log('pageNumber: ',pageNumber)
-        const {fandoms,onGetFandoms,onGetFanfics} = this.props
+        console.log('[Fanfic.js] getFanfics()')
+        const {pageNumber,pageLimit} = this.state
+        const {fandoms,onGetFandoms,onGetFanfics,counter} = this.props
+        console.log('counter:',counter)
         const fandomName = this.props.match.params.FandomName;
         const userEmail = this.props.userEmail ? this.props.userEmail : null;
         
         (fandoms.length===0) &&  await onGetFandoms()
-        await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail,filterArr).then(()=>{
+        await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(()=>{
             let fanficsCount = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0].FanficsInFandom;
             let userFanfics  = this.props.userFanfics
             let fanfics      = this.props.fanfics
@@ -54,10 +54,11 @@ class Fanfic extends Component{
     }
 
     paginationClickHandler = async (page) =>{
-        console.log('page:',page)
-        console.log('pageNumber:',this.state.pageNumber)
-        
-        await this.setState({pageNumber: page},await this.getFanfics)       
+        const {filterArr} = this.state;
+        console.log('page: ',page)
+        await this.setState({pageNumber: page}, async () => {
+            (filterArr.length===0) ? await this.getFanfics : await this.ActiveFiltersHandler()
+        })       
         return null
     }
     //UPDATE USERDATA:
@@ -108,20 +109,15 @@ class Fanfic extends Component{
     //FILTERS:
     ActiveFiltersHandler = async(event)=>{
         console.log('[]Fanfic.js] ActiveFiltersHandler()');
-        event.preventDefault();
+        event && event.preventDefault();
+        const {onGetFilteredFanfics} = this.props, {filters,filterArr,pageLimit,pageNumber} = this.state;
+        console.log('pageNumber: ',pageNumber);
         
-        let {onGetFilteredFanfics} = this.props, {filters,filterArr} = this.state;
+        if(filterArr.length===0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
         
-        if(filterArr.length==0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
-        
-        await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail,filterArr,this.state.pageLimit).then(()=>{
-            const filteredFanfics = [...this.props.fanfics]
-            const filteredCounter = this.props.counter
-            this.setState({
-                fanfics:filteredFanfics,
-                fanficsCount:filteredCounter,
-                filterArr:filterArr
-            })
+        await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
+            const fanfics = [...this.props.fanfics],fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics
+            this.setState({fanfics,fanficsCount,userFanfics,filterArr})
         });
         return null
     }
@@ -132,7 +128,7 @@ class Fanfic extends Component{
     cancelFiltersHandler = async() =>{
         const {filters} = this.state;
         for(let key in filters){filters[key] === true && this.setState({filters:{[key]: false}})}
-        this.setState({filterArr:[]},await this.getFanfics)
+        this.setState({filterArr:[],pageNumber:1},await this.getFanfics)
         
 
     }
@@ -182,10 +178,10 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
     return{
         onGetFandoms:           ()                                                      =>  dispatch(actions.getFandomsFromDB()),
-        onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail,filterArr)   =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail,filterArr)),
+        onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail)             =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail)),
         onMarkFavorite:         (userEmail,fandomName,fanficId,favorite)                =>  dispatch(actions.addFanficToUserFavorites(userEmail,fandomName,fanficId,favorite)),
         onMarkFinished:         (userEmail,fandomName,fanficId,favorite)                =>  dispatch(actions.addFanficToUserFavorites(userEmail,fandomName,fanficId,favorite)),
-        onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit)                =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit))
+        onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)     =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber))
     }
 }
   
