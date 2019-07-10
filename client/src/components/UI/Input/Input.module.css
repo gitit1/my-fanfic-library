@@ -40,3 +40,8 @@
 .Show{
     visibility: visible;
 }
+
+/* [type="checkbox"]:not(:checked){
+    position: relative;
+    opacity: 1;
+} */

@@ -165,6 +165,11 @@ class Fanfic extends Component{
                                         markAsFinished={this.FinishedHandler}            
                         />
                     {/* )} */}
+                    {
+                        // this.props.fanfics.map(fanfic=>(
+                        //     <p>{fanfic.fileName}</p>
+                        // )
+                    }
             </Container>
         )
     }

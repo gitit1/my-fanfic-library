@@ -69,9 +69,23 @@ const Filters = (props) => (
             <p>
             <label>
                 <input type="checkbox" name="Words" className="filled-in" onChange={()=>props.filter('Words')}/>
-                <span>Words</span>
+                <span>Words (need to add scale)</span>
             </label>
-            </p>                                                    
+            </p>  
+            {/* TODO: */}
+            <p>
+            <label>
+                <input type="checkbox" name="Title" className="filled-in" onChange={()=>props.filter('Title')}/>
+                <span>Title (need to add input)</span>
+            </label>
+            </p> 
+            {/* TODO: */}
+            <p>
+            <label>
+                <input type="checkbox" name="Title" className="filled-in" onChange={()=>props.filter('Title')}/>
+                <span>Author (need to add input)</span>
+            </label>
+            </p>                                                   
             {/* TODO: */}
             <p>
             <label>
@@ -79,6 +93,7 @@ const Filters = (props) => (
                 <span>Language</span>
             </label>
             </p> 
+            <br/>           
             <br/>           
             <br/>           
             <br/>

@@ -4,7 +4,7 @@ const db  =  require('./db')
 const ao3 =  require('./ao3')
 const now  = require('performance-now')
 
-exports.manageDownloader = async (socket,fandom,choice) =>{
+exports.manageDownloader = async (socket,fandom,choice,method) =>{
     console.log(clc.blue('[connection] manageDownloader'));
     try {
         if(fandom=='All'){
@@ -30,7 +30,12 @@ exports.manageDownloader = async (socket,fandom,choice) =>{
                             p = p.then(() => manageDeletedFanficsHandler(socket,fandom) )                                                          
                         ))
                         break;
-                    case 'All':
+                    case 'saveFanfics':
+                        await fetchedFandoms.map(fandom => promises.push(
+                            p = p.then(() => downloadFanficsToServerHandler(socket,fandom,method) )                                                          
+                        ))
+                        break;
+                    case 'All'://TODO:need to add to client side
                         await fetchedFandoms.map(fandom => promises.push(
                             p = p.then(() => manageFandomFanficsHandler(socket,fandom) ),                              
                             p = p.then(() => manageDeletedFanficsHandler(socket,fandom) )                           
@@ -56,6 +61,9 @@ exports.manageDownloader = async (socket,fandom,choice) =>{
                 case 'getDeletedFanfics':
                     await manageDeletedFanficsHandler(socket,fandom)
                     break;
+                case 'saveFanfics':
+                    await downloadFanficsToServerHandler(socket,fandom,method)
+                    break;
                 case 'All':
                     await manageFandomFanficsHandler(socket,fandom)
                     await manageFandomFanficsHandler(socket,fandom)
@@ -75,7 +83,7 @@ exports.manageDownloader = async (socket,fandom,choice) =>{
 }
 
 const manageFandomFanficsHandler = async (socket,fandom) => {
-    const {FandomName,SearchKeys} = fandom
+    const {FandomName,SearchKeys,AutoSave,SaveMethod} = fandom
 
     console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
     socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${FandomName}`);
@@ -91,15 +99,18 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now(); 
-    let fanficsLength = await ao3.getFanficsOfFandom(fandom);
+    let fanficsLengths = await ao3.getFanficsOfFandom(fandom);
+    console.log('fanficsLengths:',fanficsLengths)
     let endTime = now();
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));
     socket && socket.emit('getFanficsData', `<span style="color:green"><b>Fanfics data of ${FandomName} was updated!:</b></span>`)
     socket && socket.emit('getFanficsData', `<b>The function:</b> <span style="color:brown">getFanficsOfFandom()</span> was running for ${((endTime-startTime)/1000).toFixed(2)} seconds`);
 
-    console.log(clc.cyanBright(`Got ${fanficsLength} from getFanficsOfFandom()`)),
-    socket && socket.emit('getFanficsData', `Got ${fanficsLength} from <span style="color:brown">getFanficsOfFandom()</span>`)
+    console.log(clc.cyanBright(`Got ${fanficsLengths[0]} from getFanficsOfFandom()`)),
+    socket && socket.emit('getFanficsData', `Got ${fanficsLengths[0]} from <span style="color:brown">getFanficsOfFandom()</span>`)
   
+    console.log(clc.cyanBright(`Saved ${fanficsLengths[1]} to Server`)),
+    socket && socket.emit('getFanficsData', `Saved ${fanficsLengths[1]} to Server`)
 
     console.log(clc.cyanBright(`End`));
     socket && socket.emit('getFanficsData', `End`);
@@ -127,3 +138,25 @@ const manageDeletedFanficsHandler = async (socket,fandom) => {
     console.log(clc.cyanBright(`End`));
     socket && socket.emit('getFanficsData', `End`);
 }
+
+const downloadFanficsToServerHandler = async (socket,fandom,method) => {
+    const {FandomName} = fandom    
+
+    console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
+    socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${FandomName}`);
+
+    socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span> to get the most updated fanfics`);
+
+    let startTime = now(); 
+    let savedCounters = await ao3.saveFanficsToServer(fandom,method);
+    console.log('savedCounters',savedCounters)
+    let endTime = now();
+
+    console.log(clc.cyanBright(`Saved ${savedCounters[1]} Fanfics to ${FandomName} Fandom!`));
+    socket && socket.emit('getFanficsData', `Saved ${savedCounters[1]} Fanfics to ${FandomName} Fandom!</b></span>`)
+    socket && socket.emit('getFanficsData', `<b>The function:</b> <span style="color:brown">saveFanficsToServer()</span> was running for ${((endTime-startTime)/1000).toFixed(2)} seconds`);
+    //TODO: add to fandom model - last time of saved fanfics - then compare it in saveFanficsToServer() - if null - this is an init , if not this is an update
+
+    console.log(clc.cyanBright(`End`));
+    socket && socket.emit('getFanficsData', `End`);   
+} 

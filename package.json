@@ -7,7 +7,7 @@
     "fix-memory-limit": "cross-env LIMIT=8192 increase-memory-limit",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "start": "concurrently --kill-others-on-fail  \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "axios": "^0.19.0",
     "axios-cookiejar-support": "^0.5.0",
     "cross-env": "^5.0.5",
+    "download": "^7.1.0",
     "increase-memory-limit": "^1.0.7",
     "performance": "^1.1.1",
     "performance-now": "^2.1.0",

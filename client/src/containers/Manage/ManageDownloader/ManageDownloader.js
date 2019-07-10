@@ -29,6 +29,20 @@ class ManageDownloader extends Component{
         visible: true,
         ready: false
     },
+    typeSelect: {
+      label: 'Choose Type for saving fanfics',
+      elementType:'select', 
+      elementConfig:{
+        options: [{value: 'azw3' ,displayValue:  'azw3' ,checked: false},
+        {value: 'epub' ,displayValue: 'epub'  ,checked: false},
+        {value: 'mobi' ,displayValue: 'mobi'  ,checked: false},
+        {value: 'pdf'  ,displayValue:  'pdf'  ,checked: false},
+        {value: 'html' ,displayValue: 'html'  ,checked: false}]
+      },
+      value:'epub',
+      visible: true,
+      ready: true
+  },
     serverData: null,
     logs: []
   }
@@ -59,7 +73,6 @@ class ManageDownloader extends Component{
                   ...prevState.fandomSelect.elementConfig.options,
                   options:options
               },
-              formIsValid:true,
               ready:true
       }
     }));  
@@ -70,16 +83,24 @@ class ManageDownloader extends Component{
     socket.removeAllListeners()
     this.setState({serverData:null,logs:[]})
 
-      socket.on('getFanficsData', serverData =>{
-          this.setState({serverData})
-          this.state.logs.push(this.state.serverData)
-          if(this.state.serverData==='End'){
-            // this.props.onGetFandoms()
-            this.state.logs.push('Done!')
-          }
-      })
-
-      socket.emit('getFandomFanfics', this.state.fandom,choice);
+    socket.on('getFanficsData', serverData =>{
+        this.setState({serverData})
+        this.state.logs.push(this.state.serverData)
+        if(this.state.serverData==='End'){
+          this.state.logs.push('Done!')
+          this.props.onGetFandoms()
+        }
+    })
+    switch (choice) {
+      case 'saveFanfics':
+          let method = this.state.typeSelect.value
+          socket.emit('getFandomFanfics', this.state.fandom,choice,method);
+        break;
+    
+      default:
+        socket.emit('getFandomFanfics', this.state.fandom,choice);
+        break;
+    }
       
   }
 
@@ -100,27 +121,56 @@ class ManageDownloader extends Component{
     }));  
   }
 
+  typeInputChangedHandler = (event) =>{
+    socket.removeAllListeners()
+
+    let selectedMethod = event.target.value;
+    
+    this.setState(prevState =>({
+      typeSelect: {
+            ...prevState.typeSelect,
+              value: selectedMethod
+      }
+    }));  
+  }
+
   render(){
+    const {fandom,fandomSelect,typeSelect} = this.state;
     let page = this.state.fandomSelect.ready 
     ? (
       <Container header={'ManageDownloader'}>
         <div className={classes.Fandom}>
             <Input
-                label={this.state.fandomSelect.label}
-                elementType={this.state.fandomSelect.elementType} 
-                elementConfig={this.state.fandomSelect.elementConfig} 
-                value={this.state.fandomSelect.value} 
-                invalid={!this.state.fandomSelect.valid}
-                shouldValidate={this.state.fandomSelect.validation}
-                touched={this.state.fandomSelect.touched}
-                visible={this.state.fandomSelect.visible}
+                label={fandomSelect.label}
+                elementType={fandomSelect.elementType} 
+                elementConfig={fandomSelect.elementConfig} 
+                value={fandomSelect.value} 
+                invalid={!fandomSelect.valid}
+                shouldValidate={fandomSelect.validation}
+                touched={fandomSelect.touched}
+                visible={fandomSelect.visible}
                 changed={(event) => this.inputChangedHandler(event)}
               />
             <br/>    
         </div>
+        {fandom.AutoSave && <p>This is an auto save fanfics fandom , when click on "Get/Update Fandom Fanfics" the fanfics will be saved automaticlly</p>}
         <div className={classes.Buttons}>
           <Button clicked={()=>this.sendRequestsToServerHandler('getFandomFanfics')}>Get/Update Fandom Fanfics</Button>
           <Button clicked={()=>this.sendRequestsToServerHandler('getDeletedFanfics')}>Get/Update Deleted Fanfics of this Fandom</Button>  
+          {!(fandom.AutoSave||fandom=='All')  && (
+            <div className={classes.Fandom}>
+              <Input
+                label={typeSelect.label}
+                elementType={typeSelect.elementType} 
+                elementConfig={typeSelect.elementConfig} 
+                value={typeSelect.value} 
+                touched={typeSelect.touched}
+                visible={typeSelect.visible}
+                changed={(event) => this.typeInputChangedHandler(event)}
+              />
+              <Button clicked={()=>this.sendRequestsToServerHandler('saveFanfics')} >Save Fanfics of this Fandom</Button>
+              </div>
+          )}  
         </div>
         <br/>
         <div className={classes.MsgBoard}>

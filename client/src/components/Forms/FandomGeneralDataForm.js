@@ -49,11 +49,11 @@ export const fandomGeneralForm = [{
         label: 'Save Methods:',
         elementType:'checkbox', 
         elementConfig:{
-            options: [{value: 'azw3' ,displayValue:  'AZW3' ,checked: false},
-                      {value: 'epub' ,displayValue: 'ePub'  ,checked: false},
-                      {value: 'mobi' ,displayValue: 'Mobi'  ,checked: false},
-                      {value: 'pdf'  ,displayValue:  'PDF'  ,checked: false},
-                      {value: 'html' ,displayValue: 'Html'  ,checked: false}]
+            options: [{value: 'azw3' ,displayValue:  'azw3' ,checked: false},
+                      {value: 'epub' ,displayValue: 'epub'  ,checked: false},
+                      {value: 'mobi' ,displayValue: 'mobi'  ,checked: false},
+                      {value: 'pdf'  ,displayValue:  'pdf'  ,checked: false},
+                      {value: 'html' ,displayValue: 'html'  ,checked: false}]
         },
         value:'',
         validation:{},

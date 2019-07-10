@@ -30,8 +30,8 @@ const ShowFandomData = (props) => {
                                 </Link>
                             </h3>         
                             <p><span>Search Keys: </span>{fandom.SearchKeys}</p>           
-                            <p><span>Auto Save: </span>{fandom.AutoSave==='true' ? 'Yes' : 'No'}</p> 
-                            {fandom.AutoSave==='true' ? <p><span>Auto Save Types: </span>{fandom.SaveMethod}</p>  : null}  
+                            <p><span>Auto Save: </span>{fandom.AutoSave ? 'Yes' : 'No'}</p> 
+                            {fandom.AutoSave ? <p><span>Auto Save Types: </span>{fandom.SaveMethod}</p>  : null}  
 
                             <div className={classes.ButtonsSection}>
                                 <Button clicked={() => props.editFandom(fandom)}>Edit</Button>

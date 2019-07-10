@@ -21,10 +21,14 @@ const FanficSchema = new Schema({
     Words:                  {type: String},     
     Description:            {type: String},          
     SavedFic:               {type: Boolean},
+    fileName:               {type:String},
+    savedAs:                {type:String},    
+    NeedToSaveFlag:         {type: Boolean},
     LastUpdateOfFic:        {type: Number},
     LastUpdateOfNote:       {type: Number},
     Source:                 {type: String},
-    Oneshot:                {type: String}
+    Oneshot:                {type: String},
+    Image:                  {type: String},      
  });
  
  

@@ -50,7 +50,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
         }else{
             imageName = isImage ? (imageName + path.extname(req.file.originalname)) : req.body.Image_Name
             console.log('req.body.Image_Name:',req.body.Image_Name)
-            if(image){
+            if(isImage){
                 let path = pathForImage+fandomName+'/'+req.body.Image_Name;
                 //if image is changed delete the old one
                 fs.unlink(path, (err) => {
@@ -65,15 +65,18 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "id":                       req.body.id,
             "FandomName":               req.body.FandomName,
             "SearchKeys":               req.body.SearchKeys,
-            "AutoSave":                 req.body.AutoSave,
+            "AutoSave":                 (req.body.AutoSave === 'true') ? true : false,
             "SaveMethod":               req.body.SaveMethod,
-            "FanficsInFandom":          req.body.FanficsInFandom,
-            "OnGoingFanfics":           req.body.OnGoingFanfics,
-            "CompleteFanfics":          req.body.CompleteFanfics,
-            "SavedFanfics":             req.body.SavedFanfics,
+            "FanficsInFandom":          Number(req.body.FanficsInFandom),
+            "OnGoingFanfics":           Number(req.body.OnGoingFanfics),
+            "CompleteFanfics":          Number(req.body.CompleteFanfics),
+            "SavedFanfics":             Number(req.body.SavedFanfics),
             "LastUpdate":               Date.now(),
             "Image_Name":               imageName,
             "Image_Path":               req.body.FandomName
+        }
+        if(req.body.AutoSave === 'true'){
+            fs.mkdirSync(pathForImage+fandomName+'/Fanfics',{recursive: true});
         }
         //TODO:add already exsist:
         try {
@@ -130,6 +133,7 @@ exports.deleteFandomFromDB = async (req,res)=>{
         await FandomModal.findOneAndDelete(
             { FandomName: fandomName.replace("%26","&") },() => console.log(clc.green(`${fandomName} fandom node got deleted from db`))
         );
+        await FandomModal.remove({ FandomName: fandomName.replace("%26","&") })
         await mongoose.dbFanfics.collection(fandomName).drop().then(
             console.log(clc.green(`${fandomName} got fanfics collection deleted from db`))
         );
