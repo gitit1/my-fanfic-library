@@ -297,8 +297,8 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
     fanfic["Kudos"]                 =       page.find('dd.kudos').text() ==="" ? 0 : Number(page.find('dd.kudos').text()); 
     fanfic["Language"]              =       page.find('dd.language').text()  
     fanfic["Comments"]              =       (page.find('dd.comments').text()) ==="" ? 0 : Number(page.find('dd.comments').text()); 
-    fanfic["Bookmarks"]             =       (page.find('dd.bookmarks').text()) ==="" ? 0 : Number(page.find('dd.bookmarks').text()); 
-    fanfic["Words"]                 =       page.find('dd.words').text(); 
+    fanfic["Bookmarks"]             =       (page.find('dd.bookmarks').text()) ==="" ? 0 : Number(page.find('dd.bookmarks').text());
+    fanfic["Words"]                 =       Number(page.find('dd.words').text().replace(/,/g,'')); 
 
     // fanfic["SavedFic"]              =       false;  
     fanfic["NeedToSaveFlag"]        =       false;
@@ -315,7 +315,7 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
     //     // ||(chapCurrent===1 && String(chapEnd) === '?' && isThisWeek)
     // ))
     if(isThisWeek){
-        console.log('here...')
+        console.log(fanfic["FanficTitle"]+' was updated/created this week')
         fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
         fandom!==null && (oldFanficData = fandom)
         updated =   (fandom!==null) || 
@@ -422,6 +422,7 @@ exports.loginToAO3 = async (fandomName)=>{
 
 //TODO: NEED TO FIX ERRORS,  place to the place I want it (cron), change it to be inside function and not router
 //somthing is wrong with the promisses if find deleted
+//add - send number of deleted to fandom db
 exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{  
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
     ////checkIfFileExsist(fandomName)
@@ -444,7 +445,8 @@ exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{
                         fanfic.LastUpdateOfNote=new Date().getTime();
                         console.log(`${fanfic.FanficTitle} got deleted`)
                         await mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic.FanficID},{$set: {Deleted:true}})
-                        await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic)     
+                        await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic)
+                              .catch(function(err) {err.code === 11000 ? console.log('Duplicate fanfic, ignored and moving on',err) : console.log('error in insert fanfic:',err)})     
                     })
                 }).then(()=>{
                     resolve()
@@ -487,7 +489,7 @@ exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{
         DeletedCounter.push(await mongoose.dbFanfics.collection(fandomName).countDocuments({Deleted:true}))
         DeletedCounter.push(gotDeletedList.length)
         return DeletedCounter
-    });
+    }).catch(error => console.log(clc.red('Error in checkIfDeletedFromAO3()',error)));
     
 
 }

@@ -16,6 +16,7 @@ const UserFanficsSchema = new Schema({
       FanficID:         {type: Number, unique: true},
       FandomName:       {type: String},
       Favorite:         {type: Boolean},
+      Ignore:           {type: Boolean},
       Status:           {type: String}, 
       ChapterStatus:    {type: Number},
       Image:            {type: String},
@@ -23,7 +24,8 @@ const UserFanficsSchema = new Schema({
       SavedType:        [],
       ReadingList:      [],       
     }
-  ]
+  ],
+  FanficIgnoreList: []
 });
 
 let UserFanfics = mongoose.dbUsers.model('UserData', UserFanficsSchema);

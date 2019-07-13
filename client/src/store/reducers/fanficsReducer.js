@@ -8,7 +8,8 @@ const initialState ={
     error: null,
     message:'',
     loading: false,
-    counter:0
+    counter:0,
+    ignoredCount:0
 }
 //Get Fanfics From Server
 const getFanficsFromDBStart  = (state,action) => {
@@ -18,6 +19,7 @@ const getFanficsFromDBSuccess  = (state,action) => {
     return updateObject(state,{
         fanfics: action.fanfics,
         userFanfics: action.userFanfics,
+        ignoredCount: action.ignoredCount,
         counter: action.counter,
         loading: false
     })
@@ -38,6 +40,7 @@ const getFilteredFanficsFromDBSuccess  = (state,action) => {
     return updateObject(state,{
         fanfics: action.fanfics,
         userFanfics: action.userFanfics,
+        ignoredCount: action.ignoredCount,
         counter: action.counter,
         loading: false
     })

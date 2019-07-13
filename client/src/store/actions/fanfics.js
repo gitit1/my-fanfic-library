@@ -14,6 +14,7 @@ export const getFanficsFromDBSuccess = (fetchedData) =>{
         type: actionTypes.GET_FANFICS_SUCCESS,
         fanfics: fetchedData[0],
         userFanfics: fetchedData[1],
+        ignoredCount: fetchedData[2],
         counter: 0
     };
 };
@@ -45,11 +46,29 @@ export const getFanficsFromDB = (fandomName,pageNumber,pageLimit,userEmail) =>{
 };
 
 
-export const addFanficToUserFavorites = (userEmail,fandomName,fanficId,favorite) =>{
-    console.log('[actions: fanfics.js] - addFanficToUserFavorites') 
-    console.log('[actions: fanfics.js] - favorite:',favorite) 
+export const addFanficToUserMarks = (userEmail,fandomName,fanficId,markType,mark) =>{
+    console.log('[actions: fanfics.js] - addFanficToUserMarks') 
+    console.log('[actions: fanfics.js] - markType:',markType) 
+    console.log('[actions: fanfics.js] - mark:',mark) 
     return dispatch =>{
-        return axios.post(`/db/addFanficToUserFavorites?fandomName=${fandomName}&fanficId=${fanficId}&userEmail=${userEmail}&favorite=${favorite}`)
+        return axios.post(`/db/addFanficToUserMarks?fandomName=${fandomName}&fanficId=${fanficId}&userEmail=${userEmail}&markType=${markType}&mark=${mark}`)
+        .then(res =>{
+            return true;
+        })
+        .catch(error =>{
+            return false
+        })  
+    };      
+}
+
+export const addFanficToUserStatus = (userEmail,fandomName,fanficId,statusType,status,data) =>{
+    console.log('[actions: fanfics.js] - addFanficToUserStatus') 
+    console.log('[actions: fanfics.js] - statusType:',statusType) 
+    console.log('[actions: fanfics.js] - status:',status) 
+    let dateArg = data ? `&data=${data}` : '';
+    console.log('[actions: fanfics.js] - dateArg:',dateArg) 
+    return dispatch =>{
+        return axios.post(`/db/addFanficToUserStatus?fandomName=${fandomName}&fanficId=${fanficId}&userEmail=${userEmail}&statusType=${statusType}&status=${status}${dateArg}`)
         .then(res =>{
             // dispatch(addFanficToUserFavoritesSuccess(fetchedFanfics.data));
             return true;
@@ -58,7 +77,7 @@ export const addFanficToUserFavorites = (userEmail,fandomName,fanficId,favorite)
             return false
             // dispatch(addFanficToUserFavoritesFail(error))
         })  
-    };      
+    };  
 }
 
 export const getFilteredFanficsFromDBSuccess = (fetchedData) =>{

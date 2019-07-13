@@ -14,7 +14,8 @@ try {
 
   router.post('/db/getFanfics',db.getFanficsFromDB);
   router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
-  router.post('/db/addFanficToUserFavorites',db.addFanficToUserFavoritesInDB);
+  router.post('/db/addFanficToUserMarks',db.addFanficToUserMarksInDB);
+  router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);
   // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
  
   

@@ -1,110 +1,84 @@
 import React from 'react';
 import classes from './Filters.module.css';
-
+import {filtersArray} from '../../../components/Forms/FiltersArray'
 const Filters = (props) => (
     <div className={classes.Filters}>
         <form onSubmit={(event)=>props.filtersAction(event)}>
+            {/* TODO: */}
+            {/* <h6>Search:</h6> */}
             <h6>Fanfic:</h6>
-            <p>
-            <label>
-                {/* <input type="checkbox" name="Deleted (Archive)" checked={props.checked['deleted']} className="filled-in" onChange={()=>props.filter('Deleted')}/> */}
-                <input type="checkbox" name="deleted" checked={props.checked['deleted']} className="filled-in" onChange={()=>props.filter('deleted')}/>
-                <span style={{color:'green'}}>Deleted (Archive)</span>
-            </label>
-            </p>
+            {
+                filtersArray.Fanfic.map(filter=>(
+                    <p key={filter.name}>
+                        <label>
+                           <input type={filter.type} name={filter.name} checked={props.checked[`${filter.name}`]} className="filled-in" onChange={()=>props.filter(`${filter.name}`)}/>
+                            <span style={{color:'green'}}>{filter.display}</span>
+                        </label>
+                    </p>
+                ))
+            } 
+            <br/>                    
+            <br/>  
+            <h6>Sort:</h6>           
+            {
+                filtersArray.Sort.map(filter=>(
+                    <p key={filter.name}>
+                        <label>
+                           <input type={filter.type} name={filter.name} checked={props.checked[`${filter.name}`]} className="filled-in" onChange={()=>props.filter(`${filter.name}`)}/>
+                            <span style={{color:'green'}}>{filter.display}</span>
+                        </label>
+                    </p>
+                ))
+            }                                                                  
             {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="complete" checked={props.checked['complete']} className="filled-in" onChange={()=>props.filter('complete')}/>
-                {/* <input type="checkbox" name="Complete" checked={props.checked['complete']} className="filled-in" onChange={()=>props.filter('Complete')}/> */}
-                <span style={{color:'green'}}>Complete</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Wip" className="filled-in" onChange={()=>props.filter('Wip')}/>
-                <span>Work in Progress</span>
-            </label>
-            </p> 
-            
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="One Shot" className="filled-in" onChange={()=>props.filter('One Shot')}/>
-                <span>One Shot</span>
-            </label>
-            </p>              
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Hits" className="filled-in" onChange={()=>props.filter('Hits')}/>
-                <span>Hits</span>
-            </label>
-            </p> 
-                          
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Kudos" className="filled-in" onChange={()=>props.filter('Kudos')}/>
-                <span>Kudos</span>
-            </label>
-            </p>                           
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Bookmarks" className="filled-in" onChange={()=>props.filter('Bookmarks')}/>
-                <span>Bookmarks</span>
-            </label>
-            </p> 
-                                       
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Comments" className="filled-in" onChange={()=>props.filter('Comments')}/>
-                <span>Comments</span>
-            </label>
-            </p>                                       
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Words" className="filled-in" onChange={()=>props.filter('Words')}/>
-                <span>Words (need to add scale)</span>
-            </label>
-            </p>  
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Title" className="filled-in" onChange={()=>props.filter('Title')}/>
-                <span>Title (need to add input)</span>
-            </label>
-            </p> 
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Title" className="filled-in" onChange={()=>props.filter('Title')}/>
-                <span>Author (need to add input)</span>
-            </label>
-            </p>                                                   
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Language" className="filled-in" onChange={()=>props.filter('Language')}/>
-                <span>Language</span>
-            </label>
-            </p> 
-            <br/>           
-            <br/>           
-            <br/>           
-            <br/>
+            <div className="row">
+                <div className="col s12">
+                    <b>Words Count:</b> From:
+                    <div className="input-field inline">
+                        <input id="words_from" type="number" value={props.checked['wordsFrom']} onChange={(event)=>props.filter('wordsFrom',event)}/>
+                    </div>
+                    &nbsp;To&nbsp; 
+                    <div className="input-field inline">
+                        <input id="words_to" type="number" value={props.checked['wordsTo']}  onChange={(event)=>props.filter(`wordsTo`,event)}/>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;<b>Title:</b>
+                    <div className="input-field inline">
+                        <input id="Title" type="text"  value={props.checked['title']}  onChange={(event)=>props.filter('title',event)}/>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;<b>Author:</b>
+                    <div className="input-field inline">
+                        <input id="Author" type="text"  value={props.checked['author']}  onChange={(event)=>props.filter('author',event)}/>
+                    </div>
+                {/* TODO: */}
+                {/* <div className="input-field inline">
+                    <select name="language">
+                        <option value="English">English</option>
+                        <option value="Deutsch">Deutsch</option>
+                        <option value="Italiano">Italiano</option>
+                        <option value="Français">Français</option>
+                        <option value="Español">Español</option>
+                        <option value="Magyar">Magyar</option>
+                        <option value="Polski">Polski</option>
+                        <option value="Português brasileiro">Português brasileiro</option>
+                        <option value="Português europeu">Português europeu</option>
+                        <option value="Русский">Русский</option>
+                        <option value="Spanish">Spanish</option>
+                    </select>
+                </div> */}
+                </div>
+            </div>
             <br/>            
             <h6>User Data:</h6>
-            <p>
-            <label>
-                <input type="checkbox" name="favorite" checked={props.checked['favorite']} className="filled-in" onChange={()=>props.filter('favorite')}/>
-                <span style={{color:'green'}}>Favorites</span>
-            </label>
-            </p>
+            {
+                filtersArray.UserData.map(filter=>(
+                    <p key={filter.name}>
+                        <label>
+                           <input type={filter.type} name={filter.name} checked={props.checked[`${filter.name}`]} className="filled-in" onChange={()=>props.filter(`${filter.name}`)}/>
+                            <span style={{color:'green'}}>{filter.display}</span>
+                        </label>
+                    </p>
+                ))
+            }
             {/* TODO: */}
             <p>
             <label>
@@ -201,6 +175,8 @@ const Filters = (props) => (
                 <input type="checkbox" name="Bookmarks" className="filled-in" onChange={()=>props.filter('Sort-Bookmarks')}/>
                 <span>Bookmarks</span>
             </label>
+            {/* TODO: */}
+            {/* filters by tags */}
             </p>
             <br/>
             <button className="btn waves-effect waves-light" type="submit" name="action">Submit

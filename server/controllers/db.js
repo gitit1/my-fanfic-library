@@ -163,38 +163,147 @@ exports.getAllFandoms = async () =>{
 
 exports.getFanficsFromDB = async (req,res) =>{
     console.log(clc.blue('[db controller] getFanficsFromDB()'));
-    let {FandomName,skip,limit,userEmail} = req.query, userData=[];
+    let {FandomName,skip,limit,userEmail} = req.query, userData=[],ignoreList;
     skip = Number(skip); limit = Number(limit);
-    const filters = null;
+    const sort=null;
 
-    getFanfics(skip,limit,FandomName,filters).then(async fanfics=>{
+    ignoreList = await getIgnoredList(userEmail);
+    const filters = (ignoreList.length>0) ? { FanficID : { $nin: ignoreList }} : null;
+    // const filters = null;
+    getFanfics(skip,limit,FandomName,filters,sort).then(async fanfics=>{
         if(userEmail!='null'){
             userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,fanfics)
-            res.send([fanfics,userData])
+            res.send([fanfics,userData,ignoreList.length])
         }else{
-            res.send([fanfics,[]])
+            res.send([fanfics,[],0])
         }
     })
 }
-exports.addFanficToUserFavoritesInDB = async (req,res)=>{
-    console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
-    let {userEmail,fanficId,favorite,fandomName} = req.query;
+const getIgnoredList = (userEmail) =>{
+    return new Promise(function(resolve, reject) {
+        FandomUserData.findOne({userEmail: userEmail}, async function(err, user) { 
+            if (err) {  
+                console.log('there is an error in getIgnoredList()')
+                reject([]); 
+            }    
+            if (user) {
+                resolve(user.FanficIgnoreList);
+            }else{
+                resolve([])
+            }
+        });
+    });
+}
+const getFanfics = async(skip,limit,fandomName,filters,sortObj)=>{
+    console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
+    console.log('sort 2:',sortObj)
+    sort = (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
+    console.log('sort 3:',sort)
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    console.log('filters:',filters)
+    return new Promise(function(resolve, reject) {
+        FanficDB.find(filters).sort(sort).skip(Number(skip)).limit(Number(limit)).exec(async function(err, fanfics) {
+            err && reject(err)
+            resolve(fanfics)
+        })
+    });    
+}
 
-    var mongoObjectId = mongoose.Types.ObjectId(userEmail);
-    console.log(mongoObjectId)
+exports.addFanficToUserMarksInDB = async (req,res)=>{
+    console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
+    let {userEmail,fanficId,fandomName,markType,mark} = req.query,saveAs;
+
+    FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
+        if (err) { return 'there is an error'; }
+        console.log('markType:',markType)
+        console.log('mark:',mark)
+        if (user) {
+
+
+            console.log('found user!!, '+user.userEmail)
+            let isExist = await user.FanficList.find(x => x.FanficID === Number(fanficId));
+            // console.log('isExist?, '+isExist)
+            if(!isExist){
+                console.log('not exist!!')
+                user.FanficList.push({
+                    FanficID: fanficId,
+                    FandomName: fandomName,
+                    [markType]: Boolean(mark)                     
+                });
+                if(markType=='Ignore' && mark){
+                    user.FanficIgnoreList.push(fanficId);
+                }
+                // }else if(markType=='Ignore' && !mark){
+                //     let newArray = user.FanficIgnoreList.filter(x => {return x === fanficId;})
+                //     user.FanficIgnoreList = newArray;
+                // }
+                user.save();
+                res.send(true);
+            }else{
+                //TODO: function to clean "empty" userdata in userdataDb (if all settings are init not needed)
+                switch (markType) {
+                    case 'Favorite':
+                        saveAs = {"FanficList.$.Favorite":mark}
+                        break;
+                    case 'Ignore':           
+                        if(markType==='Ignore' && mark==='true'){
+                            saveAs = { $set: {"FanficList.$.Ignore":mark}, $push: {"FanficIgnoreList":fanficId} }
+                        }else if(markType==='Ignore' && mark==='false'){
+                            saveAs = {$set: {"FanficList.$.Ignore":mark}, $pull: {"FanficIgnoreList":fanficId} }
+                        }
+                        break;
+                }
+
+                console.log('exist!!')
+                console.log('saveAs:',saveAs)
+                FandomUserData.updateOne(
+                    { userEmail: userEmail , "FanficList.FanficID": fanficId },saveAs,(err, result) => {
+                        if (err) throw err;
+                        console.log('User updated!');
+                     }
+                 )
+                res.send(true);
+            }
+        }else{
+            console.log('didnt found user , creating new one!!')
+            const newUser = new FandomUserData({
+                userEmail: userEmail,
+                FanficList: {
+                    FanficID:         fanficId,
+                    FandomName:       fandomName,
+                    [markType]:       Boolean(mark)   
+                },
+                FanficIgnoreList: (markType=='Ignore' && mark) && fanficId
+            });
+            await newUser.save();
+            res.send(true);
+         }
+    }) 
+}
+exports.addFanficToUserStatus = async (req,res)=>{
+    console.log(clc.blue('[db controller] addFanficToUserStatus()'));
+    let {userEmail,fanficId,fandomName,statusType,status,data} = req.query;
+    console.log('userEmail:',userEmail)
+    console.log('fanficId:',fanficId)
+    console.log('fandomName:',fandomName)
+    console.log('statusType:',statusType)
+    console.log('status:',status)
+    console.log('data:',data)
+
     FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
         if (err) { return 'there is an error'; }
 
         if (user) {
             console.log('found user!!, '+user.userEmail)
             let isExist = await user.FanficList.find(x => x.FanficID === Number(fanficId));
-            console.log('isExist?, '+isExist)
+            // console.log('isExist?, '+isExist)
             if(!isExist){
                 console.log('not exist!!')
                 user.FanficList.push({
                     FanficID: fanficId,
                     FandomName: fandomName,
-                    Favorite: favorite                    
+                    Status: status,
+                    ChapterStatus: (data!==undefined) ? Number(data) : undefined                 
                 });
                 user.save();
                 res.send(true);
@@ -202,7 +311,7 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
                 console.log('exist!!')
                 FandomUserData.updateOne(
                     { userEmail: userEmail , "FanficList.FanficID": fanficId },
-                    { $set: {"FanficList.$.Favorite": favorite}},
+                    { $set: {"FanficList.$.Status": status,"FanficList.$.ChapterStatus": (data!==undefined)?Number(data):undefined }},
                     (err, result) => {
                         if (err) throw err;
                         console.log('User updated!');
@@ -217,64 +326,116 @@ exports.addFanficToUserFavoritesInDB = async (req,res)=>{
                 FanficList: {
                     FanficID:         fanficId,
                     FandomName:       fandomName,
-                    Favorite:         Boolean(favorite)   
+                    Status:           status,
+                    ChapterStatus: (data!==undefined) ? Number(data) : undefined   
                 }
             });
             await newUser.save();
             res.send(true);
         }
     }) 
+
 }
 exports.getFilteredFanficsListFromDB = async (req,res)=>{
     console.log(clc.blue('[db controller] getFanficsFromDB()'));
     let {fandomName,userEmail,pageLimit,pageNumber} = req.query, filters = req.body,filtersArrays=[],flag;
 
-    filtersArrays = await getFiltersRules(filters)//[0] - userData filters , [1] - fanfics filters
-    
-    //userData filters + fanfics filters
-    if(filtersArrays[0].length!==0){
-        let filteredData = await userDataFiltersHandler(userEmail,fandomName,filtersArrays,pageLimit,pageNumber);
+    filtersArrays = await getFiltersRules(filters,userEmail)//[0] - userData filters , [1] - fanfics filters, [2] - sort 
+    sortObj = Object.assign({}, ...filtersArrays[2]);
+    console.log('sortObj:',sortObj)
+
+    if(filtersArrays[2].length!==0 && filtersArrays[0].length===0 && filtersArrays[1].length===0){
+        let filteredFanficsData = await getFilteredFanficsHandler(userEmail,fandomName,{},sortObj,pageLimit,pageNumber)
+        res.send([filteredFanficsData[0],filteredFanficsData[1],filteredFanficsData[2]])
+    }else if(filtersArrays[0].length!==0){
+        let filteredData = await userDataFiltersHandler(userEmail,fandomName,filtersArrays,sortObj,pageLimit,pageNumber);
         res.send([filteredData[0],filteredData[1],filteredData[2]])
     }else if(filtersArrays[1].length!==0){
         const filterObj = Object.assign({}, ...filtersArrays[1]);
-        let filteredFanficsData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,pageLimit,pageNumber)
+        let filteredFanficsData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber)
         res.send([filteredFanficsData[0],filteredFanficsData[1],filteredFanficsData[2]])
     }
 }
+const getFiltersRules = async (filters,userEmail) =>{
+    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false;
+    const ignoreList = await getIgnoredList(userEmail);
+    (ignoreList.length>0) &&  filtersFanficList.push({ FanficID : { $nin: ignoreList }})
 
-const getFanfics = async(skip,limit,fandomName,filters)=>{
-    console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
-    // console.log('filters:',filters)
-    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
-    console.log('filters:',filters)
-    return new Promise(function(resolve, reject) {
-        FanficDB.find(filters).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).skip(Number(skip)).limit(Number(limit)).exec(async function(err, fanfics) {
-            err && reject(err)
-            resolve(fanfics)
-        })
-    });    
-}
-const getFiltersRules = async (filters) =>{
-    let filtersUserList=[],filtersFanficList=[];
+    console.log('filters:::',filters)
     await filters.map(filter=>{
-        switch (filter) {
+        let filterKey = filter.split('_')[0]
+        let filterValue = filter.split('_').pop()
+        console.log('filterKey:',filterKey)
+        switch (filterKey) {
+            //User Data Filters:
             case 'favorite':
                 filtersUserList.push({'FanficList.Favorite':true})
                 break;
+            //Fanfic Filters:
             case 'deleted':
                 filtersFanficList.push({'Deleted':true})
                 break;
             case 'complete':
                 filtersFanficList.push({'Complete':true})
                 break;
+            case 'wip':
+                filtersFanficList.push({'Complete':false})
+                break;
+            case 'oneShot':
+                filtersFanficList.push({'Oneshot':true})
+                break;
+            //Sort Filters:
+            case 'hits':
+                sortList.push({'Hits':-1})
+                break; 
+            case 'kudos':
+                sortList.push({'Kudos':-1})
+                break; 
+            case 'bookmarks':
+                sortList.push({'Bookmarks':-1})
+                break;              
+            case 'comments':
+                sortList.push({'Comments':-1})
+                break;
+            case 'title':
+                filtersFanficList.push({'FanficTitle': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
+                break;
+            case 'author':
+                filtersFanficList.push({'Author': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
+                break;
+            case 'wordsFrom':
+                    if(wordsFlag){
+                        index = filtersFanficList.findIndex(x => x.Words)
+                        filtersFanficList[index].Words = Object.assign(filtersFanficList[index].Words,{$gte: Number(filterValue)})
+                    }else{
+                        filtersFanficList.push({'Words':{$gte: Number(filterValue)}})
+                        sortList.push({'Words':-1})
+                        wordsFlag = true;
+                    }
+                    break;                                            
+            case 'wordsTo':
+                    if(wordsFlag){
+                        index = filtersFanficList.findIndex(x => x.Words)
+                        filtersFanficList[index].Words = Object.assign(filtersFanficList[index].Words,{$lte: Number(filter.split('_').pop())})
+                    }else{
+                        filtersFanficList.push({'Words':{$lte: Number(filter.split('_').pop())}})
+                        sortList.push({'Words':-1})
+                        wordsFlag = true;
+                    }
+                    break;                              
         }
     })
+
+
     console.log('filtersUserList: ',filtersUserList)
     console.log('filtersFanficList: ',filtersFanficList)
-    console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList])
-    return [filtersUserList,filtersFanficList]
+
+    console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList,sortList])
+    return [filtersUserList,filtersFanficList,sortList]
+    
+
 }
-const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,pageLimit,pageNumber) =>{
+const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pageLimit,pageNumber) =>{
     console.log(clc.bgGreenBright('[db controller] userDataFiltersHandler()')); 
     return new Promise(function(resolve, reject) {
         try {
@@ -292,7 +453,7 @@ const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,pageLimit,pag
                                         // let initSkip = (pageLimit*pageNumber)-pageLimit;
                                         console.log('idsList:',idsList)
                                         const filterObj = Object.assign({FanficID: {$in: idsList}}, ...filtersArrays[1]);
-                                        let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,pageLimit,pageNumber)
+                                        let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber)
                                         resolve(filteredData)
             })       
         } catch (error) {
@@ -301,12 +462,12 @@ const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,pageLimit,pag
     });
 
 }
-const getFilteredFanficsHandler = (userEmail,fandomName,filterObj,pageLimit,pageNumber) =>{
+const getFilteredFanficsHandler = (userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber) =>{
     console.log(clc.bgGreenBright('[db controller] fanficsDataFiltersHandler()')); 
     return new Promise(function(resolve, reject) {
         try {           
             let skip = (pageLimit*pageNumber)-pageLimit;
-            getFanfics(skip,pageLimit,fandomName,filterObj).then(async filteredFanfics=>{
+            getFanfics(skip,pageLimit,fandomName,filterObj,sortObj).then(async filteredFanfics=>{
                 let resultsCounter = await mongoose.dbFanfics.collection(fandomName).countDocuments(filterObj);
                 let userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,filteredFanfics)
                 resolve([filteredFanfics,userData,resultsCounter])

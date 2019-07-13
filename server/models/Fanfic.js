@@ -18,7 +18,7 @@ const FanficSchema = new Schema({
     Kudos:                  {type: Number},     
     Comments:               {type: Number},     
     Bookmarks:              {type: Number},     
-    Words:                  {type: String},     
+    Words:                  {type: Number},     
     Description:            {type: String},          
     SavedFic:               {type: Boolean},
     fileName:               {type:String},
@@ -27,7 +27,7 @@ const FanficSchema = new Schema({
     LastUpdateOfFic:        {type: Number},
     LastUpdateOfNote:       {type: Number},
     Source:                 {type: String},
-    Oneshot:                {type: String},
+    Oneshot:                {type: Boolean},
     Image:                  {type: String},      
  });
  
