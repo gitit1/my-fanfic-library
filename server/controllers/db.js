@@ -212,7 +212,7 @@ const getFanfics = async(skip,limit,fandomName,filters,sortObj)=>{
 exports.addFanficToUserMarksInDB = async (req,res)=>{
     console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
     let {userEmail,fanficId,fandomName,markType,mark} = req.query,saveAs;
-
+    fanficId = Number(fanficId)
     FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
         if (err) { return 'there is an error'; }
         console.log('markType:',markType)
@@ -221,7 +221,7 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
 
 
             console.log('found user!!, '+user.userEmail)
-            let isExist = await user.FanficList.find(x => x.FanficID === Number(fanficId));
+            let isExist = await user.FanficList.find(x => x.FanficID === fanficId);
             // console.log('isExist?, '+isExist)
             if(!isExist){
                 console.log('not exist!!')
@@ -230,7 +230,7 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
                     FandomName: fandomName,
                     [markType]: Boolean(mark)                     
                 });
-                if(markType=='Ignore' && mark){
+                if(markType==='Ignore' && mark){
                     user.FanficIgnoreList.push(fanficId);
                 }
                 // }else if(markType=='Ignore' && !mark){
@@ -273,7 +273,7 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
                     FandomName:       fandomName,
                     [markType]:       Boolean(mark)   
                 },
-                FanficIgnoreList: (markType=='Ignore' && mark) && fanficId
+                FanficIgnoreList: (markType==='Ignore' && mark) ? fanficId : undefined
             });
             await newUser.save();
             res.send(true);
@@ -357,9 +357,7 @@ exports.getFilteredFanficsListFromDB = async (req,res)=>{
     }
 }
 const getFiltersRules = async (filters,userEmail) =>{
-    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false;
-    const ignoreList = await getIgnoredList(userEmail);
-    (ignoreList.length>0) &&  filtersFanficList.push({ FanficID : { $nin: ignoreList }})
+    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true;
 
     console.log('filters:::',filters)
     await filters.map(filter=>{
@@ -372,6 +370,10 @@ const getFiltersRules = async (filters,userEmail) =>{
                 filtersUserList.push({'FanficList.Favorite':true})
                 break;
             //Fanfic Filters:
+            case 'ignore':
+                searchWithIgnoreFlag = false;
+                filtersUserList.push({'FanficList.Ignore':true})
+                break;
             case 'deleted':
                 filtersFanficList.push({'Deleted':true})
                 break;
@@ -426,6 +428,8 @@ const getFiltersRules = async (filters,userEmail) =>{
         }
     })
 
+    const ignoreList = await getIgnoredList(userEmail);
+    (ignoreList.length>0 && searchWithIgnoreFlag) &&  filtersFanficList.push({ FanficID : { $nin: ignoreList }})
 
     console.log('filtersUserList: ',filtersUserList)
     console.log('filtersFanficList: ',filtersFanficList)
@@ -463,12 +467,14 @@ const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pageL
 
 }
 const getFilteredFanficsHandler = (userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber) =>{
-    console.log(clc.bgGreenBright('[db controller] fanficsDataFiltersHandler()')); 
+    console.log(clc.bgGreenBright('[db controller] getFilteredFanficsHandler()')); 
     return new Promise(function(resolve, reject) {
         try {           
             let skip = (pageLimit*pageNumber)-pageLimit;
             getFanfics(skip,pageLimit,fandomName,filterObj,sortObj).then(async filteredFanfics=>{
                 let resultsCounter = await mongoose.dbFanfics.collection(fandomName).countDocuments(filterObj);
+                console.log('filterObj:',resultsCounter)
+                console.log('resultsCounter:',resultsCounter)
                 let userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,filteredFanfics)
                 resolve([filteredFanfics,userData,resultsCounter])
             }).catch(err=>reject(err))    

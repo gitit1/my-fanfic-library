@@ -49,7 +49,7 @@ export const ignoreFilter = (userData,redClasses) => {
             ignoreClassIcon     =   (userData && userData.Ignore===true) ? redClasses[3] : redClasses[2],
             ignoreClassLabel    =   (userData && userData.Ignore===true) ? redClasses[5] : redClasses[4],
             // isIgnored        =   (userData && userData.Ignore===true) ? true : false,
-            ignoreClick         =   userData ? userData.Favorite : null;
+            ignoreClick         =   userData ? userData.Ignore : null;
 
     return([ignoreClassDiv,ignoreClassIcon,ignoreClassLabel,ignoreClick])
 }

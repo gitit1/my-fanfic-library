@@ -1,11 +1,12 @@
 import React from 'react';
 import classes from './Filters.module.css';
-import {filtersArray} from '../../../components/Forms/FiltersArray'
+import {filtersArray} from './FiltersArray'
 const Filters = (props) => (
     <div className={classes.Filters}>
         <form onSubmit={(event)=>props.filtersAction(event)}>
             {/* TODO: */}
             {/* <h6>Search:</h6> */}
+            {/* TODO: add delete button for deleted fanfics (only for manage user!) */}
             <h6>Fanfic:</h6>
             {
                 filtersArray.Fanfic.map(filter=>(

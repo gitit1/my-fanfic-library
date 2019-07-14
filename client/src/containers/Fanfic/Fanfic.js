@@ -12,19 +12,28 @@ import Container from '../../components/UI/Container/Container';
 
 import ShowFanficData from './ShowFanficData/ShowFanficData';
 import Filters from './Filters/Filters';
-import {filtersArrayInit} from '../../components/Forms/FiltersArray'
+import {filtersArrayInit} from './Filters/FiltersArray'
 
 class Fanfic extends Component{
     state={
         fanfics:[],
         userFanfics:[],
         pageNumber:1,
-        pageLimit:5,
-        fanficsCount:0,
-        ignoredCount:this.props.ignoredCount,
+        pageLimit:2,
         filters: filtersArrayInit,
         filterArr: [],
         inputChapterFlag:null,
+        fanficsNumbers:{
+            fanficsTotalCount:0,
+            fanficsCurrentCount:0,
+            fanficsDeletedCount:0,
+            fanficsIgnoredCount:0,
+            ao3FanficsCount:0,
+            ffFanficsCount:0,
+            patreonFanficsCount:0,
+            tumblrFanficsCount:0,
+            wattpadFanficsCount:0,   
+        }
     }
 
 
@@ -34,7 +43,7 @@ class Fanfic extends Component{
 
     getFanfics = async () =>{
         console.log('[Fanfic.js] getFanfics()')
-        const {pageNumber,pageLimit,ignoredCount} = this.state
+        const {pageNumber,pageLimit,fanficsNumbers} = this.state
         const {fandoms,onGetFandoms,onGetFanfics,counter} = this.props
         console.log('counter:',counter)
         const fandomName = this.props.match.params.FandomName;
@@ -42,12 +51,27 @@ class Fanfic extends Component{
         
         (fandoms.length===0) &&  await onGetFandoms()
         await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(()=>{
-            console.log('ignoredCount:',ignoredCount)
-            let fanficsCount = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0].FanficsInFandom-ignoredCount;
+            let fandom = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0];
+            let fanficsTotalCount = fandom.FanficsInFandom
+            let fanficsDeletedCount = (fandom.DeletedFanfics) ? fandom.DeletedFanfics : 0//"Bacup" fanfics
+            let fanficsIgnoredCount = (this.props.ignoredCount) ? this.props.ignoredCount : 0
+            // TODO: check for duplicates in DeletedFanfics and ignoredCount
+            let ao3FanficsCount = fanficsTotalCount - fanficsDeletedCount;
+            let fanficsCurrentCount = fanficsTotalCount - fanficsIgnoredCount;
             let userFanfics  = this.props.userFanfics
             let fanfics      = this.props.fanfics
             // this.setState({pageTotal:Math.ceil(fanficsCount/pageLimit)})
-            this.setState({fanficsCount,userFanfics,fanfics})
+            this.setState({userFanfics,fanfics,
+                           fanficsNumbers:{
+                               ...fanficsNumbers,
+                               fanficsTotalCount,
+                               fanficsCurrentCount,
+                               fanficsDeletedCount,
+                               fanficsIgnoredCount,
+                               ao3FanficsCount,
+                               // TODO: need to change the way of saving in server - add counter to each source                            
+                           }
+            })
         })
 
         return null
@@ -57,29 +81,73 @@ class Fanfic extends Component{
         const {filterArr} = this.state;
         console.log('page: ',page)
         await this.setState({pageNumber: page}, async () => {
-            (filterArr.length===0) ? await this.getFanfics() : await this.ActiveFiltersHandler()
+            (filterArr.length===0) ? await this.getFanfics() : await this.activeFiltersHandler()
         })       
         return null
     }
     //UPDATE USERDATA:
     markAsHandler = async(fanficId,markType,mark) =>{
+        console.log('!mark,,,',!mark)
         await this.props.onMarkHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,markType,!mark)
         const userFanficsCopy = [...this.state.userFanfics];
-        let objIndex = userFanficsCopy.findIndex((fanfic => fanfic.FanficID === fanficId));
-        console.log(objIndex)
-        if(objIndex!==-1){
-            userFanficsCopy[objIndex].Favorite = !mark;
-        }else{
-            userFanficsCopy.push({
-                SavedType:[],
-                ReadingList:[],
-                FanficID:fanficId,
-                Favorite:!mark
-            })
-        }
-        this.setState({
-            userFanfics: userFanficsCopy
-        })
+
+        let objIndex = userFanficsCopy.findIndex((fanfic => fanfic.FanficID === fanficId));      
+        switch (markType) {
+            case 'Favorite':
+                if(objIndex!==-1){
+                    userFanficsCopy[objIndex].Favorite = !mark;
+                }else{
+                    userFanficsCopy.push({
+                        SavedType:[],
+                        ReadingList:[],
+                        FanficID:fanficId,
+                        [markType]:!mark
+                    })
+                }
+                this.setState({
+                    userFanfics: userFanficsCopy
+                })
+                break;
+            case 'Ignore':               
+                if(objIndex!==-1){
+                    userFanficsCopy[objIndex].Ignore = !mark;          
+                }else{
+                    userFanficsCopy.push({
+                        SavedType:[],
+                        ReadingList:[],
+                        FanficID:fanficId,
+                        [markType]:!mark
+                    })
+                }
+                const {onGetFilteredFanfics,userEmail} = this.props, {pageLimit,fanficsNumbers,filterArr,pageNumber} = this.state;
+                let fanficsIgnoredCount = (!mark===true) ? fanficsNumbers.fanficsIgnoredCount+1 : fanficsNumbers.fanficsIgnoredCount-1;
+                if(markType==='Ignore'){                   
+                     await onGetFilteredFanfics(this.props.match.params.FandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
+                         const fanfics = [...this.props.fanfics],
+                         fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
+                         let newPagesCounter = Math.ceil(fanficsCount/pageLimit);
+                         console.log('pageNumber:',pageNumber)
+                         console.log('newPagesCounter:',newPagesCounter)
+                         newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber
+                         
+                         this.setState({fanfics,userFanfics,
+                            fanficsNumbers:{
+                                ...fanficsNumbers,
+                                fanficsCurrentCount:fanficsCount,
+                                fanficsIgnoredCount
+                            },   
+                            pageNumber:newPagesCounter,
+                            userFanfics: userFanficsCopy         
+                        })
+                        this.paginationClickHandler(newPagesCounter)
+                     });
+                }else{
+                    this.setState({
+                        userFanfics: userFanficsCopy
+                    })
+                }
+                break;               
+        }  
     }
     //Need to Read, Finished, In Progress
     statusHandler = async(fanficId,statusType,status,event) =>{
@@ -141,11 +209,11 @@ class Fanfic extends Component{
     }
 
     //FILTERS:
-    ActiveFiltersHandler = async(event)=>{
-        console.log('[]Fanfic.js] ActiveFiltersHandler()');
+    activeFiltersHandler = async(event)=>{
+        console.log('[]Fanfic.js] activeFiltersHandler()');
         event && event.preventDefault();
         const {onGetFilteredFanfics} = this.props, {filters,pageLimit} = this.state;
-        let {filterArr,pageNumber} = this.state;
+        let {filterArr,pageNumber,fanficsNumbers} = this.state;
         event ? pageNumber=1 : pageNumber=pageNumber
         filterArr = [];
         
@@ -159,7 +227,13 @@ class Fanfic extends Component{
         
         await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
             const fanfics = [...this.props.fanfics],fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
-            this.setState({fanfics,fanficsCount,userFanfics,filterArr,pageNumber})
+            this.setState({fanfics,userFanfics,filterArr,pageNumber,
+                           fanficsNumbers:{
+                               ...fanficsNumbers,
+                               fanficsCurrentCount:fanficsCount
+                           }
+            
+            })
         });
         return null
     }
@@ -169,7 +243,8 @@ class Fanfic extends Component{
         if(event && event.target.value){
             this.setState({filters: {...filters,[filter]: event.target.value}})                
         }else{
-            this.setState({filters: {...filters,[filter]: !filters[filter]}})    
+            let filterInit = (typeof filters[filter]==='string') ? '' : !filters[filter];
+            this.setState({filters: {...filters,[filter]: filterInit}})    
         }
     }
     cancelFiltersHandler = async() =>{
@@ -179,7 +254,7 @@ class Fanfic extends Component{
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {fanfics,userFanfics,pageNumber,fanficsCount,pageLimit,filters,inputChapterFlag} = this.state;
+        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag} = this.state;
         
         return(
             <Container header={this.props.match.params.FandomName}>
@@ -189,18 +264,24 @@ class Fanfic extends Component{
                     {/* TODO: drewer for filters*/}
                     {/* TODO: error checker for filters*/}
                     {/* TODO: add routing to page (pagination)- if not exist - redirect to first page*/}
-                    {/* TODO: if delete akk string from filters: author/title - return true/false- need to fix*/}
+                    {/* TODO: pagination movining from middle if the pages are smaller then 8 */}
                     <Pagination onChange={this.paginationClickHandler} 
                                 current={pageNumber} 
-                                total={fanficsCount}
+                                total={fanficsNumbers.fanficsCurrentCount}
                                 className={classes.Pagination}
                                 defaultPageSize={pageLimit}
                                 showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} Works`}
                     />
+                    <div>
+                    {/* <div className={FanficsNumbers}> */}
+                        <p>There is a total of <b>{fanficsNumbers.fanficsTotalCount}</b> fanfics in <b>{this.props.match.params.FandomName}</b> Fandom</p>
+                        <p>Sources: <b style={{color:'#8A0407'}}>AO3:</b> <b>{fanficsNumbers.ao3FanficsCount}</b> , <b style={{color:'#0a48ab'}}>Backup (Deleted from sites):</b> <b>{fanficsNumbers.fanficsDeletedCount}</b> </p>
+                        <p><b>{fanficsNumbers.fanficsIgnoredCount}</b> of the fanfics are ignored (filter by ignore to see them and reactive them)</p>
+                    </div>
                     </div>
                     <Filters        filter={this.FilterHandler}
                                     cancelFilters={this.cancelFiltersHandler}
-                                    filtersAction={this.ActiveFiltersHandler}
+                                    filtersAction={this.activeFiltersHandler}
                                     checked={filters}/>
                     {/* {this.props.loading ? <Spinner/> : ( */}
                         <ShowFanficData fanfics={fanfics}

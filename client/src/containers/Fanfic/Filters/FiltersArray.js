@@ -34,6 +34,11 @@ export const filtersArray = {
             type : 'checkbox',
             name:   'favorite',
             display: 'Favorite'
+        },
+        {
+            type : 'checkbox',
+            name:   'ignore',
+            display: 'Ignore'
         }
     ],
     Sort:[
@@ -67,6 +72,7 @@ export const filtersArrayInit = {
     complete:false,
     deleted:false,
     favorite:false,
+    ignore:false,
     wordsFrom:"",
     wordsTo:"",
     title:"",

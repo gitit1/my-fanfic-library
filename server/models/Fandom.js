@@ -12,6 +12,7 @@ const FandomSchema = new Schema({
     FanficsInFandom:        {type: Number},
     OnGoingFanfics:         {type: Number},
     CompleteFanfics:        {type: Number},
+    DeletedFanfics:         {type: Number},
     SavedFanfics:           {type: Number},    
     LastUpdate:             {type: Number},
     FanficsLastUpdate:      {type: Number},
