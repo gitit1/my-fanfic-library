@@ -3,6 +3,8 @@ import classes from '../ShowFanficData.module.css';
 
 const Stat = (props) => (
   <React.Fragment>
+    <dt>Publish Date:</dt>
+    <dd>{new Date(props.fanfic.PublishDate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</dd>
     <dt>Language:</dt>
     <dd>{props.fanfic.Language}</dd>
     <dt>Words:</dt>

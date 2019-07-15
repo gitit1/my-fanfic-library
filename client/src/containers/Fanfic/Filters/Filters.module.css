@@ -37,3 +37,11 @@
 .CancelButton:hover{
     background-color: rgba(165, 42, 42, 0.692)    
 }
+/* ---------------------------------------- */
+.Root{
+    display: flex;
+    flex-wrap: wrap;
+}
+.FormControl{
+    min-width: 120
+}

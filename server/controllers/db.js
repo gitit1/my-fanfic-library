@@ -195,6 +195,8 @@ const getIgnoredList = (userEmail) =>{
     });
 }
 const getFanfics = async(skip,limit,fandomName,filters,sortObj)=>{
+    skip = (Number(skip)<0) ? 0 : Number(skip)
+    limit = (Number(limit)<0) ? 0 : Number(limit) 
     console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
     console.log('sort 2:',sortObj)
     sort = (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
@@ -202,7 +204,7 @@ const getFanfics = async(skip,limit,fandomName,filters,sortObj)=>{
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     console.log('filters:',filters)
     return new Promise(function(resolve, reject) {
-        FanficDB.find(filters).sort(sort).skip(Number(skip)).limit(Number(limit)).exec(async function(err, fanfics) {
+        FanficDB.find(filters).sort(sort).skip(skip).limit(limit).exec(async function(err, fanfics) {
             err && reject(err)
             resolve(fanfics)
         })
@@ -369,14 +371,17 @@ const getFiltersRules = async (filters,userEmail) =>{
             case 'favorite':
                 filtersUserList.push({'FanficList.Favorite':true})
                 break;
-            //Fanfic Filters:
+            case 'finished':
+                filtersUserList.push({'FanficList.Status':'Finished'})
+                break;
+            case 'inProgress':
+                filtersUserList.push({'FanficList.Status':'In Progress'})
+                break;
             case 'ignore':
                 searchWithIgnoreFlag = false;
                 filtersUserList.push({'FanficList.Ignore':true})
-                break;
-            case 'deleted':
-                filtersFanficList.push({'Deleted':true})
-                break;
+                break; 
+            //Fanfic Filters:  
             case 'complete':
                 filtersFanficList.push({'Complete':true})
                 break;
@@ -386,24 +391,40 @@ const getFiltersRules = async (filters,userEmail) =>{
             case 'oneShot':
                 filtersFanficList.push({'Oneshot':true})
                 break;
+            case 'deleted':
+                filtersFanficList.push({'Deleted':true})
+                break;            
             //Sort Filters:
+            case 'dateLastUpdate':
+                sortList.push({'LastUpdateOfFic':-1})
+                break;
+            case 'publishDate':
+                sortList.push({'PublishDate':-1})
+                break;
+            case 'authorSort':
+                sortList.push({'Author':1})
+                break;
+            case 'titleSort':
+                    sortList.push({'FanficTitle':1})
+                    break;
             case 'hits':
-                sortList.push({'Hits':-1})
-                break; 
+                    sortList.push({'Hits':-1})
+                    break; 
             case 'kudos':
                 sortList.push({'Kudos':-1})
-                break; 
+                break;
             case 'bookmarks':
-                sortList.push({'Bookmarks':-1})
-                break;              
+                    sortList.push({'Bookmarks':-1})
+                    break; 
             case 'comments':
                 sortList.push({'Comments':-1})
                 break;
+            //Search:
+            case 'author'://author with text
+                filtersFanficList.push({'Author': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
+                break;
             case 'title':
                 filtersFanficList.push({'FanficTitle': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
-                break;
-            case 'author':
-                filtersFanficList.push({'Author': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
                 break;
             case 'wordsFrom':
                     if(wordsFlag){
@@ -428,14 +449,17 @@ const getFiltersRules = async (filters,userEmail) =>{
         }
     })
 
-    const ignoreList = await getIgnoredList(userEmail);
-    (ignoreList.length>0 && searchWithIgnoreFlag) &&  filtersFanficList.push({ FanficID : { $nin: ignoreList }})
-
-    console.log('filtersUserList: ',filtersUserList)
-    console.log('filtersFanficList: ',filtersFanficList)
+    let ignoreList = await getIgnoredList(userEmail);
+  
+    if (ignoreList.length>0 && searchWithIgnoreFlag && filtersUserList.length===0){
+        filtersFanficList.push({ FanficID : { $nin: ignoreList }})
+        ignoreList = [] 
+    }else if(!searchWithIgnoreFlag){
+        ignoreList = [] 
+    }
 
     console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList,sortList])
-    return [filtersUserList,filtersFanficList,sortList]
+    return [filtersUserList,filtersFanficList,sortList,ignoreList]
     
 
 }
@@ -445,8 +469,8 @@ const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pageL
         try {
             //USER DATA FILTERS:
             let idsList=[]
-            const filterObj = Object.assign({'userEmail': userEmail},{'FanficList.FandomName':fandomName}, ...filtersArrays[0]);
-
+            const filterObj = Object.assign({'userEmail': userEmail},{'FanficList.FandomName':fandomName},{'FanficList.FanficID': { $nin: filtersArrays[3] }}, ...filtersArrays[0]);
+            console.log('----filterObj:',filterObj)
             // FandomUserData.find({'userEmail': userEmail}, async function(err, data) {
             FandomUserData.aggregate([{$unwind:"$FanficList"},{$match:filterObj},
                                     {$group :  {_id : {FandomName: "$FanficList.FandomName", FanficID: "$FanficList.FanficID"}} },
@@ -455,8 +479,9 @@ const userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pageL
                                         pageLimit = Number(pageLimit), pageNumber = Number(pageNumber)
                                         filtered.map(fanfic => idsList.push(fanfic.FanficID));
                                         // let initSkip = (pageLimit*pageNumber)-pageLimit;
-                                        console.log('idsList:',idsList)
+                                        
                                         const filterObj = Object.assign({FanficID: {$in: idsList}}, ...filtersArrays[1]);
+
                                         let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber)
                                         resolve(filteredData)
             })       

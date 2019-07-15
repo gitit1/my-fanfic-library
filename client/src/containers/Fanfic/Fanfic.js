@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import Pagination from 'rc-pagination';
 
+
 import classes from './Fanfic.module.css';
 import './Pagination.css';
 
@@ -14,15 +15,22 @@ import ShowFanficData from './ShowFanficData/ShowFanficData';
 import Filters from './Filters/Filters';
 import {filtersArrayInit} from './Filters/FiltersArray'
 
-class Fanfic extends Component{
+import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+class Fanfic extends Component{    
     state={
         fanfics:[],
         userFanfics:[],
         pageNumber:1,
-        pageLimit:2,
+        pageLimit:10,
         filters: filtersArrayInit,
+        currentSort:'',
         filterArr: [],
         inputChapterFlag:null,
+        drawerFilters: true,
         fanficsNumbers:{
             fanficsTotalCount:0,
             fanficsCurrentCount:0,
@@ -35,7 +43,6 @@ class Fanfic extends Component{
             wattpadFanficsCount:0,   
         }
     }
-
 
     componentWillMount(){     
         this.getFanfics()
@@ -126,10 +133,7 @@ class Fanfic extends Component{
                          const fanfics = [...this.props.fanfics],
                          fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
                          let newPagesCounter = Math.ceil(fanficsCount/pageLimit);
-                         console.log('pageNumber:',pageNumber)
-                         console.log('newPagesCounter:',newPagesCounter)
                          newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber
-                         
                          this.setState({fanfics,userFanfics,
                             fanficsNumbers:{
                                 ...fanficsNumbers,
@@ -137,7 +141,8 @@ class Fanfic extends Component{
                                 fanficsIgnoredCount
                             },   
                             pageNumber:newPagesCounter,
-                            userFanfics: userFanficsCopy         
+                            userFanfics: userFanficsCopy,
+                            filterArr      
                         })
                         this.paginationClickHandler(newPagesCounter)
                      });
@@ -227,7 +232,9 @@ class Fanfic extends Component{
         
         await onGetFilteredFanfics(this.props.match.params.FandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
             const fanfics = [...this.props.fanfics],fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
+
             this.setState({fanfics,userFanfics,filterArr,pageNumber,
+                           drawerFilters:false,
                            fanficsNumbers:{
                                ...fanficsNumbers,
                                fanficsCurrentCount:fanficsCount
@@ -238,24 +245,44 @@ class Fanfic extends Component{
         return null
     }
 
-    FilterHandler = async(filter,event)=>{
+    FilterHandler = async(filter,event,type)=>{
         const {filters} = this.state;
-        if(event && event.target.value){
-            this.setState({filters: {...filters,[filter]: event.target.value}})                
-        }else{
-            let filterInit = (typeof filters[filter]==='string') ? '' : !filters[filter];
-            this.setState({filters: {...filters,[filter]: filterInit}})    
+        console.log('FilterHandler()')
+        switch (type) {
+            case 'sort':
+                 console.log('sort')
+                this.setState({
+                    currentSort:event.target.value,
+                    filters: {...filters,
+                              [event.target.value]: !filters[filter]}
+                }) 
+                console.log('sort-state',this.state.currentSort)
+                break;
         }
+        // if(event.target.value){
+        //     this.setState({filters: {...filters,[filter]: event.target.value}})                
+        // }else{
+        //     let filterInit = (typeof filters[filter]==='string') ? '' : !filters[filter];
+        //     this.setState({filters: {...filters,[filter]: filterInit}})    
+        // }
     }
     cancelFiltersHandler = async() =>{
         const {filters} = this.state;
-        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1},await this.getFanfics)
+        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,drawerFilters:false},await this.getFanfics)
+    }
+
+    toggleDrawer = (open) => event => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+          return;
+        }
+    
+        this.setState({drawerFilters: open});
     }
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag} = this.state;
-        
+        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort} = this.state;
+
         return(
             <Container header={this.props.match.params.FandomName}>
                     <div className={'Pagination'}>
@@ -265,6 +292,10 @@ class Fanfic extends Component{
                     {/* TODO: error checker for filters*/}
                     {/* TODO: add routing to page (pagination)- if not exist - redirect to first page*/}
                     {/* TODO: pagination movining from middle if the pages are smaller then 8 */}
+                    {/* TODO: animation for ignore delete */}
+                    {/* TODO: if fanfic not complete - cant mark as finished*/}
+                    {/* TODO: if fanfic in progress limit it to the chapters the fanfic does have*/}
+                    {/* TODO: Add filter: hiatus fanfic*/}
                     <Pagination onChange={this.paginationClickHandler} 
                                 current={pageNumber} 
                                 total={fanficsNumbers.fanficsCurrentCount}
@@ -279,18 +310,31 @@ class Fanfic extends Component{
                         <p><b>{fanficsNumbers.fanficsIgnoredCount}</b> of the fanfics are ignored (filter by ignore to see them and reactive them)</p>
                     </div>
                     </div>
-                    <Filters        filter={this.FilterHandler}
-                                    cancelFilters={this.cancelFiltersHandler}
-                                    filtersAction={this.activeFiltersHandler}
-                                    checked={filters}/>
+
+                    <Button onClick={this.toggleDrawer(true)}>Filters</Button>
+                    <Drawer anchor="right" open={this.state.drawerFilters} onClose={this.toggleDrawer(false)}>
+                        <div className={classes.FilterDrewer} role="presentation">
+                            <Button onClick={this.toggleDrawer(false)}>Close</Button>
+                            <Filters    filter={this.FilterHandler}
+                                        sort={currentSort}
+                                        cancelFilters={this.cancelFiltersHandler}
+                                        filtersAction={this.activeFiltersHandler}
+                                        checked={filters}/>
+                        </div>
+                    </Drawer>
+
                     {/* {this.props.loading ? <Spinner/> : ( */}
-                        <ShowFanficData fanfics={fanfics}
-                                        userFanfics={userFanfics}
-                                        markAs={this.markAsHandler}            
-                                        markStatus={this.statusHandler}
-                                        inputChapterToggle={this.inputChapterHandler}
-                                        inputChapter={inputChapterFlag} 
-                        />
+                        {fanficsNumbers.fanficsCurrentCount===0 ? 
+                            <p><b>Didn't found any fanfics with this search filters</b></p>
+                        :
+                            <ShowFanficData fanfics={fanfics}
+                                            userFanfics={userFanfics}
+                                            markAs={this.markAsHandler}            
+                                            markStatus={this.statusHandler}
+                                            inputChapterToggle={this.inputChapterHandler}
+                                            inputChapter={inputChapterFlag} 
+                            />
+                        }
                     {/* )} */}
                     {
                         // this.props.fanfics.map(fanfic=>(

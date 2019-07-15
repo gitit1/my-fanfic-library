@@ -1,21 +1,6 @@
 export const filtersArray = {
-    Search:[
-        {
-            type : 'input',
-            name:   'author_search',
-            display: 'Author',
-        },{
-            type : 'input',
-            name:  'title_search',
-            display: 'Title'
-        }
-    ],
     Fanfic:[
         {
-            type : 'checkbox',
-            name:   'deleted',
-            display: 'Deleted (Archive)'
-        },{
             type : 'checkbox',
             name:  'complete',
             display: 'Complete'
@@ -27,6 +12,10 @@ export const filtersArray = {
             type : 'checkbox',
             name:  'oneShot',
             display: 'One Shot'
+        },{
+            type : 'checkbox',
+            name:   'deleted',
+            display: 'Deleted (Archive)'
         }
     ],
     UserData:[
@@ -37,12 +26,38 @@ export const filtersArray = {
         },
         {
             type : 'checkbox',
+            name:   'finished',
+            display: 'Finished'
+        },
+        {
+            type : 'checkbox',
+            name:   'inProgress',
+            display: 'In Progress'
+        },
+        {
+            type : 'checkbox',
             name:   'ignore',
             display: 'Ignore'
         }
     ],
     Sort:[
         {
+            type : 'checkbox',
+            name:  'dateLastUpdate',
+            display: 'Update Date'
+        },{
+            type : 'checkbox',
+            name: 'publishDate',
+            display: 'Publish Date'
+        },{
+            type : 'checkbox',
+            name:  'authorSort',
+            display: 'Author'
+        },{
+            type : 'checkbox',
+            name:  'titleSort',
+            display: 'Title'
+        },{
             type : 'checkbox',
             name:  'hits',
             display: 'Hits'
@@ -63,20 +78,24 @@ export const filtersArray = {
 }
 
 export const filtersArrayInit = {
-    hits:false,
-    kudos:false,
-    bookmarks:false,
-    comments:false,
-    oneShot:false,
-    wip:false,
-    complete:false,
-    deleted:false,
     favorite:false,
     ignore:false,
+    complete:false,
+    wip:false,
+    oneShot:false,
+    deleted:false,
+
+    author:"",
+    bookmarks:false,
+    comments:false,
+    dateLastUpdate:false,
+    publishDate:false,
+
+    hits:false,
+    kudos:false,
     wordsFrom:"",
     wordsTo:"",
     title:"",
-    author:""
 }
 
 

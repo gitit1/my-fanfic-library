@@ -1,0 +1,1 @@
+// mongoose.dbFanfics.collection(fandomName).updateMany({}, {$unset: {publishDate:1}}); //DELETE ONE FIELD FROM COLLECTION

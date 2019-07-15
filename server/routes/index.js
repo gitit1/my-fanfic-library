@@ -23,7 +23,7 @@ try {
   router.post('/users/login',users.login);
 
   // checking:
-  router.get('/ao3/saveFanficsToServer',ao3.saveFanficsToServer)
+  router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
   
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);

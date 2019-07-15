@@ -1,8 +1,43 @@
 import React from 'react';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import FilledInput from '@material-ui/core/FilledInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 import classes from './Filters.module.css';
-import {filtersArray} from './FiltersArray'
+import {filtersArray} from './FiltersArray';
+
 const Filters = (props) => (
-    <div className={classes.Filters}>
+    <div>
+        <form className={classes.Root} onSubmit={(event)=>props.filtersAction(event)} autoComplete="off">
+            <FormControl className={classes.FormControl}>
+                <InputLabel htmlFor="sort-filters">Sort</InputLabel>
+                <Select value={props.sort}
+                        onChange={(event)=>props.filter(null,event,'sort')}
+                        inputProps={{
+                            name: 'sort',
+                            id: 'sort-filters',
+                        }}
+                        >
+                        {
+                            filtersArray.Sort.map(filter=>(
+                                <MenuItem   key={filter.name}
+                                            value={filter.name} 
+                                            >
+                                    {filter.display}
+                                </MenuItem>
+                            ))  
+                        }
+                </Select>
+            </FormControl>
+        </form>
+        <div className={classes.Filters}>
         <form onSubmit={(event)=>props.filtersAction(event)}>
             {/* TODO: */}
             {/* <h6>Search:</h6> */}
@@ -87,99 +122,9 @@ const Filters = (props) => (
                 <span>Reading List</span>
             </label>
             </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Finished" className="filled-in" onChange={()=>props.filter('Finished')}/>
-                <span>Finished</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p></p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="In Progress" className="filled-in" onChange={()=>props.filter('In Progress')}/>
-                <span>In Progress</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Ignored" className="filled-in" onChange={()=>props.filter('Ignored')}/>
-                <span>Ignored</span>
-            </label>
-            </p>
             <br/>           
             <br/>           
             <br/>           
-            <h6>Sort:</h6>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Author" className="filled-in" onChange={()=>props.filter('Sort-Author')}/>
-                <span>Author</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Title" className="filled-in" onChange={()=>props.filter('Sort-Title')}/>
-                <span>Title</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Date Posted" className="filled-in" onChange={()=>props.filter('Sort-Date Posted')}/>
-                <span>Date Posted</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Date Updated" className="filled-in" onChange={()=>props.filter('Sort-Date Updated')}/>
-                <span>Date Updated</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Words Count" className="filled-in" onChange={()=>props.filter('Sort-Words Count')}/>
-                <span>Words Count</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Hits" className="filled-in" onChange={()=>props.filter('Sort-Hits')}/>
-                <span>Hits</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Kudos" className="filled-in" onChange={()=>props.filter('Sort-Kudos')}/>
-                <span>Kudos</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Comments" className="filled-in" onChange={()=>props.filter('Sort-Comments')}/>
-                <span>Comments</span>
-            </label>
-            </p>
-            {/* TODO: */}
-            <p>
-            <label>
-                <input type="checkbox" name="Bookmarks" className="filled-in" onChange={()=>props.filter('Sort-Bookmarks')}/>
-                <span>Bookmarks</span>
-            </label>
-            {/* TODO: */}
-            {/* filters by tags */}
-            </p>
-            <br/>
             <button className="btn waves-effect waves-light" type="submit" name="action">Submit
                 <i className="material-icons right">send</i>
             </button>           
@@ -187,6 +132,8 @@ const Filters = (props) => (
                 <i className="material-icons right">cancel</i>
             </button>
         </form>
+        </div>
+        
     </div>
 );
 

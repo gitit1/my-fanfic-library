@@ -24,6 +24,7 @@ const FanficSchema = new Schema({
     fileName:               {type:String},
     savedAs:                {type:String},    
     NeedToSaveFlag:         {type: Boolean},
+    PublishDate:            {type: Number},
     LastUpdateOfFic:        {type: Number},
     LastUpdateOfNote:       {type: Number},
     Source:                 {type: String},

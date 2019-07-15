@@ -34,7 +34,8 @@ const ShowFanficData = (props) => {
                                 <section className={classes.UserHeader}>
                                     <UserHeader props={props} 
                                                 fanfic={fanfic}
-                                                redClasses={redClasses} 
+                                                redClasses={redClasses}
+                                                userData={userData}
                                                 greenClasses={greenClasses} 
                                                 isFavorite={isFavorite}
                                                 isFinished={isFinished}
