@@ -17,7 +17,6 @@ import {filtersArrayInit} from './Filters/FiltersArray'
 
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 
 
 class Fanfic extends Component{    
@@ -27,10 +26,10 @@ class Fanfic extends Component{
         pageNumber:1,
         pageLimit:10,
         filters: filtersArrayInit,
-        currentSort:'',
+        currentSort:'dateLastUpdate',
         filterArr: [],
         inputChapterFlag:null,
-        drawerFilters: true,
+        drawerFilters: false,
         fanficsNumbers:{
             fanficsTotalCount:0,
             fanficsCurrentCount:0,
@@ -215,7 +214,7 @@ class Fanfic extends Component{
 
     //FILTERS:
     activeFiltersHandler = async(event)=>{
-        console.log('[]Fanfic.js] activeFiltersHandler()');
+        console.log('[Fanfic.js] activeFiltersHandler()');
         event && event.preventDefault();
         const {onGetFilteredFanfics} = this.props, {filters,pageLimit} = this.state;
         let {filterArr,pageNumber,fanficsNumbers} = this.state;
@@ -258,6 +257,14 @@ class Fanfic extends Component{
                 }) 
                 console.log('sort-state',this.state.currentSort)
                 break;
+            case 'filter':
+                console.log('filter')
+                if(event){
+                    this.setState({filters: {...filters,[filter]: event.target.value}})  
+                }else{
+                    let filterInit = (typeof filters[filter]==='string') ? '' : !filters[filter];
+                    this.setState({filters: {...filters,[filter]: filterInit}})  
+                }
         }
         // if(event.target.value){
         //     this.setState({filters: {...filters,[filter]: event.target.value}})                
@@ -268,7 +275,8 @@ class Fanfic extends Component{
     }
     cancelFiltersHandler = async() =>{
         const {filters} = this.state;
-        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,drawerFilters:false},await this.getFanfics)
+        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'},await this.getFanfics)
+        // this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,drawerFilters:false},await this.getFanfics)
     }
 
     toggleDrawer = (open) => event => {

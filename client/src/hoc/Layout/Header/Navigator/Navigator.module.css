@@ -1,27 +1,25 @@
-.Navigator ul {
+.Navigator {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #b0bec5;
+    margin-top: 10px;
   }
   
-  .Navigator ul li {
+  .Navigator button {
     float: left;
   }
   
-  .Navigator ul li a, 
-  .Dropbtn {
+  .Navigator button a, 
+  .Navigator button  {
     display: inline-block;
     color: white;
     text-align: center;
     /* padding: 14px 16px; */
     text-decoration: none;
   }
-  
-  .Navigator{
-    margin-top: 10px;
-  }
+
   /* TODO: need fix - hover on link on nav */
   .Navigator ul li a:hover, .Dropdown:hover .Dropbtn {
     /* background-color: #6B0204; */

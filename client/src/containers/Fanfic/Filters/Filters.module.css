@@ -41,7 +41,28 @@
 .Root{
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    text-align: left
 }
 .FormControl{
-    min-width: 120
+    min-width: 120px;
+}
+.SortSelect{
+    width: 220px;
+    margin-top: 25px;
+}
+
+.FiltersFanficLabel{
+    width: 220px;
+    margin-top: 25px;
+    color:#56647a!important;
+    font-weight: 600!important;
+    font-size: 1.3em!important;
+}
+
+.FiltersFanficCheckBox{
+    margin-top: 10px;
 }

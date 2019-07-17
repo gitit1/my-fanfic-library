@@ -78,19 +78,21 @@ export const filtersArray = {
 }
 
 export const filtersArrayInit = {
-    favorite:false,
-    ignore:false,
     complete:false,
     wip:false,
     oneShot:false,
     deleted:false,
 
+    favorite:false,
+    finished:false,
+    inProgress:false,
+    ignore:false,
+    
     author:"",
     bookmarks:false,
     comments:false,
     dateLastUpdate:false,
     publishDate:false,
-
     hits:false,
     kudos:false,
     wordsFrom:"",
