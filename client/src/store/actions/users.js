@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from 'axios';
+import axios from '../axios-server';
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../../utils/setAuthToken";
 // Register User
