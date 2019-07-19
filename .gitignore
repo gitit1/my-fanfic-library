@@ -67,3 +67,6 @@ typings/
 config/
 Fanfics/
 backup/
+
+package.json
+package-lock.json
