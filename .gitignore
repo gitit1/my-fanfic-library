@@ -68,5 +68,4 @@ config/
 Fanfics/
 backup/
 
-package.json
-package-lock.json
+client/package.jsom
