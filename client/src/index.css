@@ -1,11 +1,17 @@
+/* @import url('https://fonts.googleapis.com/css?family=Raleway|Roboto&display=swap'); */
+
 * { 
-  margin: 0;
+    margin: 0;
+  }
+
+
+html {
+    font-family: 'Roboto', "Adobe Blank";
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.header{
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #5a5d5e;
 }

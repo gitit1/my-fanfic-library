@@ -6,7 +6,6 @@ import * as actions from '../../store/actions';
 import classes from './Layout.module.css';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Layout extends Component{
     state = {

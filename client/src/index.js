@@ -7,13 +7,12 @@ import * as serviceWorker from './serviceWorker';
 import store from "./store/store";
 import App from './App';
 
-import './index.css';
+import './index.css'
 
-   
 const app =(
     <Provider store={store}>
         <BrowserRouter>
-                <App />
+            <App />
         </BrowserRouter>
     </Provider>
 )

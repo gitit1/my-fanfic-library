@@ -91,8 +91,13 @@ class Navigator extends Component{
                 >
                   <MenuItem onClick={()=>this.handleClose(null,'anchorManage')}><Link to="/manageDownloader">Manage Downloader</Link></MenuItem>
                   <MenuItem onClick={()=>this.handleClose(null,'anchorManage')}><Link to="/manageFandoms">Manage Fandoms</Link></MenuItem>
-
                 </Menu>
+                <Button >
+                <Link to='/registrer'>Registrer</Link>
+                </Button>
+                <Button className={classes.NavItem} aria-haspopup="true" >
+                  <Link to='/login'>Login</Link>
+                </Button>
 
             {/* </Tabs> */}
           {/* </AppBar> */}

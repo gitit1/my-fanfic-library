@@ -1,27 +1,42 @@
 import React,{Component} from 'react';
-import classes from './Index.module.css';
-import IndexFandoms from './IndexFandoms/IndexFandoms'
+import {connect} from 'react-redux';
+
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Container from '../../components/UI/Container/Container'
+import IndexContainer from './IndexContainer/IndexContainer';
+import IndexFandoms from './Sections/Fandoms/Fandoms'
+import LatestUpdates from './Sections/LatestUpdates/LatestUpdates'
+import MyFanfics from './Sections/MyFanfics/MyFanfics'
+import MyLatestActivity from './Sections/MyLatestActivity/MyLatestActivity'
+
+
+
 class Index extends Component{
+
     render(){
 
         return(
-            <div className={classes.Index}>
-                <section className={[classes.IndexFandoms, classes.Box].join(' ')}>
-                    <h3 className={classes.Heading}>Fandoms</h3>
-                    <IndexFandoms />
-                </section>
-                <section className={[classes.LatestUpdates, classes.Box].join(' ')}>
-                    <h3 className={classes.Heading}>Latest Updates</h3>
-                </section>
-                <section className={[classes.InProgress, classes.Box].join(' ')}>
-                    <h3 className={classes.Heading}>Fanfics In Progress</h3>
-                </section>
-                <section className={[classes.MyLatestActivity, classes.Box].join(' ')}>
-                    <h3 className={classes.Heading}>My Latest Activities</h3>
-                </section>
-            </div>
+            <Container>
+                {/* TODO: NEED TO BE FROM SERVER */}
+                { this.props.loading ? <Spinner/> :
+                    <React.Fragment>
+                        <IndexContainer header='Fandoms'><IndexFandoms fandoms={this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/></IndexContainer>
+                        <IndexContainer header='Latest Updates'><LatestUpdates /></IndexContainer>
+                        <IndexContainer header='My Fanfics Updates'><MyFanfics /></IndexContainer>
+                        <IndexContainer header='My Latest Activities'><MyLatestActivity /></IndexContainer>
+                    </React.Fragment>
+                }
+            </Container>
         )
     }
 }
 
-export default Index;
+const mapStateToProps = state =>{
+    return{
+        fandoms:    state.fandoms.fandoms,
+        loading:    state.fandoms.loading
+    };   
+  }   
+
+
+export default connect(mapStateToProps)(Index);

@@ -20,8 +20,7 @@ class AllFandoms extends Component{
               )
           }else{
               const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
-              page = (<ShowFandomData 
-                                      fandoms={sortedFandomList}/>)
+              page = (<ShowFandomData fandoms={sortedFandomList}/>)
                       
           }
         }
