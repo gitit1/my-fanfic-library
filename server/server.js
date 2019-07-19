@@ -5,6 +5,7 @@ const cors = require('cors');
 const passport = require("passport");
 
 const publicDir = require('path').join(__dirname,'/public');
+const buildDir  = require('path').join(__dirname,'/build');
 const users = require("./controllers/users");
 // require('dotenv').config({
 //     path: 'variables.env'
@@ -32,8 +33,8 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(publicDir));
+app.use(express.static(buildDir));
 
-app.use('/', express.static(__dirname+'/server/build'))
 app.use('/',routes);
 
 
