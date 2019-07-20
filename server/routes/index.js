@@ -8,6 +8,8 @@ const users = require('../controllers/users');
 
 try {
   console.log('[Server] - in routes')
+
+  router.get('/*', (req, res) => res.send('Index Page'));
   router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
