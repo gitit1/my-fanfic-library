@@ -1,15 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
+const buildDir  = require('path').join(__dirname,'../build');
+
 const db = require('../controllers/db');
 const ao3 = require('../controllers/ao3');
 const users = require('../controllers/users');
-
+const keys = require("../config/keys");
 
 try {
   console.log('[Server] - in routes')
 
-  router.get('/*', (req, res) => res.send('Index Page'));
+ if (!keys.nodeEnv==='development'){  
+  router.get('/',function(req,res){
+    res.sendFile(path.join(buildDir+'/index.html'));
+    //__dirname : It will resolve to your project folder.
+  });
+
+}
+
+
+  
   router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 

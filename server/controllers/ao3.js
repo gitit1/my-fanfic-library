@@ -17,7 +17,7 @@ request = request.defaults({
   jar: jar,
   followAllRedirects: true
 });
-const fanficsPath = "public/Fandoms"
+const fanficsPath = "public/fandoms"
 
 
 exports.getFanficsOfFandom =  async (fandom,method) => {
@@ -391,7 +391,7 @@ const checkIfFileExsist = async (fandomName) => {
                 }
                 if(dbFanfic[index].Deleted===undefined || (dbFanfic[index].Deleted && !dbFanfic[index].Deleted)){
                     await methods.map(async (method) => {
-                        path = `${fanficsPath}/${fandomName}/Fanfics/${dbFanfic[index].fileName}.${method}`;
+                        path = `${fanficsPath}/${fandomName}/fanfics/${dbFanfic[index].fileName}.${method}`;
                         counter = await checkIfExist(dbFanfic[index],path,method)
                         sum = sum+counter;
                     })
@@ -618,7 +618,7 @@ const saveFanficToServerHandler = async (url,fandomName,saveMethod,savedNotAuto)
                     await links.push([`https://archiveofourown.org${link}`,fanficNewName])                 
                 })
             ).then(()=>{
-                Promise.all(links.map(x => downloader(x[0], `${fanficsPath}/${fandomName}/Fanfics/${x[1]}`))).then(res => {
+                Promise.all(links.map(x => downloader(x[0], `${fanficsPath}/${fandomName}/fanfics/${x[1]}`))).then(res => {
                     let counter = res.reduce((a, b) => a + b, 0);
                     // console.log('counter:',counter)
                     if(counter===0){

@@ -13,20 +13,21 @@ exports.addEditFandomToDB =  async (req,res) =>{
 
     let {fandomName,mode,image,imageDate} = req.query
     let resultMessage = '';
-    let pathForImage = 'public/Fandoms/';
+    let pathForImage = 'public/fandoms/';
     fandomName = fandomName.replace("%26","&");
+    let fandomNameLowerCase = fandomName.toLowerCase();
     
     let isImage = JSON.parse(image);
-    let imageName = fandomName+'_'+imageDate;
+    let imageName = fandomNameLowerCase+'_'+imageDate;
 
     //check if path for image exsist (if fandom exsist) and if image was requested 
-    if (!fs.existsSync(pathForImage+fandomName) && isImage){
-        fs.mkdirSync(pathForImage+fandomName,{recursive: true});
+    if (!fs.existsSync(pathForImage+fandomNameLowerCase) && isImage){
+        fs.mkdirSync(pathForImage+fandomNameLowerCase,{recursive: true});
     }
     //setting of multer
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
-        cb(null, pathForImage+fandomName)
+        cb(null, pathForImage+fandomNameLowerCase)
         },
         filename: function (req, file, cb) {
         cb(null,  imageName + path.extname(file.originalname))
@@ -51,7 +52,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
             imageName = isImage ? (imageName + path.extname(req.file.originalname)) : req.body.Image_Name
             console.log('req.body.Image_Name:',req.body.Image_Name)
             if(isImage){
-                let path = pathForImage+fandomName+'/'+req.body.Image_Name;
+                let path = pathForImage+fandomNameLowerCase+'/'+req.body.Image_Name;
                 //if image is changed delete the old one
                 fs.unlink(path, (err) => {
                     if (err) {
@@ -76,7 +77,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "Image_Path":               req.body.FandomName
         }
         if(req.body.AutoSave === 'true'){
-            fs.mkdirSync(pathForImage+fandomName+'/Fanfics',{recursive: true});
+            fs.mkdirSync(pathForImage+fandomNameLowerCase+'/fanfics',{recursive: true});
         }
         //TODO:add already exsist:
         try {
@@ -128,7 +129,8 @@ exports.addEditFandomToDB =  async (req,res) =>{
 exports.deleteFandomFromDB = async (req,res)=>{
     console.log(clc.blue('[db controller] deleteFandomFromDB()'));
     let fandomName = req.query.fandomName.replace("%26","&")
-    let path = `public/Fandoms/${fandomName}`;
+    let fandomNameLowerCase = fandomName.toLowerCase();
+    let path = `public/fandoms/${fandomNameLowerCase.toLowerCase()}`;
     try {
         await FandomModal.findOneAndDelete(
             { FandomName: fandomName.replace("%26","&") },() => console.log(clc.green(`${fandomName} fandom node got deleted from db`))
