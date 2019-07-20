@@ -10,7 +10,7 @@ const users = require("./controllers/users");
 // require('dotenv').config({
 //     path: 'variables.env'
 // });
-
+require('http').createServer()
 require('./config/mongoose.js')
 require('./controllers/socket/socket');
 //TODO: check the cronjob scuduale
@@ -25,7 +25,7 @@ require("./config/passport")(passport);
 
 
 // const port = process.env.PORT || 5000;
-const port = 80;
+const port = 5000;
 
 
 
