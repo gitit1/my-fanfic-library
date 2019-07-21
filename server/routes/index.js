@@ -11,16 +11,6 @@ const keys = require("../config/keys");
 try {
   console.log('[Server] - in routes')
 
- if (!keys.nodeEnv==='development'){  
-  router.get('/',function(req,res){
-    res.sendFile(path.join(buildDir+'/index.html'));
-    //__dirname : It will resolve to your project folder.
-  });
-
-}
-
-
-  
   router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
@@ -38,6 +28,13 @@ try {
   // checking:
   router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
   
+  //if (!keys.nodeEnv==='development'){  
+  //  router.get('/',function(req,res){
+  //    res.sendFile(path.join(buildDir+'/index.html'));
+      //__dirname : It will resolve to your project folder.
+  //  });
+  //}
+
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);
 }

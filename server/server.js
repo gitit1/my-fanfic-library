@@ -13,6 +13,7 @@ require('./controllers/socket/socket');
 require('./cronJobs/cron')
 
 const app = express();
+const keys = require("./config/keys");
 
 app.use(express.static(publicDir));
 app.use(express.static(buildDir));
@@ -27,7 +28,7 @@ require("./config/passport")(passport);
 // const port = process.env.PORT || 5000;
 const port = 5000;
 
-
+const http = require('http');
 
 app.use(cors())
 app.use(bodyParser.json());
@@ -35,4 +36,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/',routes);
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
+//app.listen(port, () => console.log(`Listening on port ${port}`));
+
+if (keys.nodeEnv==='development'){  
+     app.listen(port, () => console.log(`Listening on port ${port} - development mode`));
+ }else{
+	 app.get('*', function(req, res) {
+		 res.sendFile(require('path').join(buildDir,'/index.html'));
+	 });
+	 app.listen(port, () => console.log(`Listening on port ${port} - production mode`));
+ }
+//server.listen(port, () => console.log(`Listening on port ${port} - development mode`));

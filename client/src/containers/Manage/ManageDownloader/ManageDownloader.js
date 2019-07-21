@@ -11,8 +11,8 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
 
 const socket = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') 
-               ? io('ws://localhost:5555', {transports: ['websocket']}) 
-               : io('ws://192.236.176.82:5555', {transports: ['websocket']}) ;
+               ? io('ws://localhost:5001', {transports: ['websocket']}) 
+               : io('ws://192.236.176.82:5001', {transports: ['websocket']}) ;
 
 
 class ManageDownloader extends Component{

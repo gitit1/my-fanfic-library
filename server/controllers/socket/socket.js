@@ -10,7 +10,7 @@ const io = require('socket.io')(server,{
 
 const func = require('../connection');
 
-server.listen(5555);
+server.listen(5001);
 
 io.on('connection', (socket) => {
       socket.on('getFandomFanfics', (fandomData,choice,method) => {
