@@ -1,12 +1,16 @@
-const server = require('http').createServer();
+const app = require('express')()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 
-const io = require('socket.io')(server,{
-    serveClient: true,
-    // below are engine.IO options
-    pingInterval: 30000,
-    pingTimeout: 80000,
-    cookie: false
-  });
+//const server = require('http').createServer();
+
+// const io = require('socket.io')(server,{
+//     serveClient: true,
+//     // below are engine.IO options
+//     pingInterval: 30000,
+//     pingTimeout: 80000,
+//     cookie: false
+//   });
 
 const func = require('../connection');
 

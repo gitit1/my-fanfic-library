@@ -20,11 +20,12 @@ request = request.defaults({
 const fanficsPath = "public/fandoms"
 
 
-exports.getFanficsOfFandom =  async (fandom,method) => {
+exports.getFanficsOfFandom =  async (fandom,method,socket) => {
    console.log(clc.blue('[ao3 controller] getFanficsOfFandom()'));
+   socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">[ao3 controller] getFanficsOfFandom()</span>`);
 
     await this.loginToAO3()
-   const savedNotAuto = method ? method : null;   
+   const savedNotAuto = (method||!method===null) ? method : null;   
    const {FandomName,SearchKeys,SaveMethod,AutoSave} = fandom;
    
    let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
@@ -65,7 +66,7 @@ exports.getFanficsOfFandom =  async (fandom,method) => {
             for (let i = 0; i < loop; i++) {
                 // console.log('i: '+i)
                 // console.log('pagesArray[i+(loom_ir*100)]: '+(i+(loom_ir*100)))
-                promises2.push(getDataFromAO3FandomPage(pagesArray[i+(loom_ir*100)],fandom,savedNotAuto));
+                promises2.push(getDataFromAO3FandomPage(pagesArray[i+(loom_ir*100)],fandom,savedNotAuto,socket));
             }
             // console.log('promises2: ',promises2.length)
             await Promise.all(promises2).then(async results=> {
@@ -129,7 +130,7 @@ exports.getFanficsOfFandom =  async (fandom,method) => {
 //  return [fanficsInFandom,savedFanficsCurrent] 
 
 }
-const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {  
+const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto,socket) => {  
     // console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));    
         try {
             let $ = cheerio.load(page),donePromise = 0;
@@ -140,7 +141,7 @@ const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {
                     let page = $('ol.work').children('li').eq(count)
                     // timer = (fandom.SavedFanficsLastUpdate===undefined) ? 6000 : 1000;
                     // func.delay(timer).then(async () => {
-                        await getDataFromPage(page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto).then(res=>{
+                        await getDataFromPage(page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto,socket).then(res=>{
                             donePromise++;
                             // console.log('res:',res)
                             res===0 && counter++;
@@ -170,7 +171,7 @@ const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {
 
 
 }
-const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
+const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto,socket) =>{
     
     let fanfic = {}
     let counter = -1
@@ -273,10 +274,15 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
         
         newFic = (fandom===null) ? true : false
 
-        newFic ? console.log(`Saving ${fanfic["FanficTitle"]} into the DB`) : console.log(`${fanfic["FanficTitle"]} was updated this week`)
+        newFic ? console.log(`NEW FANFIC: ${fanfic["FanficTitle"]} - Saving into the DB`) : console.log(`${fanfic["FanficTitle"]} was updated this week`)
         // console.log('updated:',updated)
         if (updated||newFic){
             fanfic["NeedToSaveFlag"] = true
+            if(newFic){
+                socket && socket.emit('getFanficsData', `<span style="color:#11469c"><b>New Fic:</b> <span>${fanfic["FanficTitle"]}</span></span>`);
+            }else{
+                socket && socket.emit('getFanficsData', `<span style="color:#11469c"><b>Updated Fic:</b> <span>${fanfic["FanficTitle"]}</span></span>`);
+            }
         }
     }
 

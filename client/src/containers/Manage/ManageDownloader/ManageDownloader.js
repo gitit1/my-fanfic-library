@@ -14,6 +14,7 @@ import Container from '../../../components/UI/Container/Container';
 //               ? io('ws://localhost:5005', {transports: ['websocket']}) 
 //               : io('ws://192.236.176.82:5005', {transports: ['websocket']}) ;
 
+//const socket = io('ws://localhost:5005', {transports: ['websocket']})
 const socket = io('ws://localhost:5005', {transports: ['websocket']})
 
 class ManageDownloader extends Component{
