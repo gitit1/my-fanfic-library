@@ -37,6 +37,7 @@ build/
 backups/
 node_modules/
 jspm_packages/
+public/
 
 # TypeScript v1 declaration files
 typings/
