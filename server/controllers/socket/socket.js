@@ -1,7 +1,7 @@
 const server = require('http').createServer();
 
 const io = require('socket.io')(server,{
-    serveClient: false,
+    serveClient: true,
     // below are engine.IO options
     pingInterval: 30000,
     pingTimeout: 80000,
@@ -10,7 +10,7 @@ const io = require('socket.io')(server,{
 
 const func = require('../connection');
 
-server.listen(5001);
+server.listen(5005);
 
 io.on('connection', (socket) => {
       socket.on('getFandomFanfics', (fandomData,choice,method) => {
