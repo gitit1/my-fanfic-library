@@ -68,5 +68,6 @@ typings/
 config/
 Fanfics/
 backup/
+public/
 
 client/package.json
