@@ -37,8 +37,9 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                         break;
                     case 'All'://TODO:need to add to client side
                         await fetchedFandoms.map(fandom => promises.push(
-                            p = p.then(() => manageFandomFanficsHandler(socket,fandom) ),                              
-                            p = p.then(() => manageDeletedFanficsHandler(socket,fandom) )                           
+                            p = p.then(() => manageFandomFanficsHandler(socket,fandom) )                           
+                            // p = p.then(() => manageFandomFanficsHandler(socket,fandom) ),                              
+                            // p = p.then(() => manageDeletedFanficsHandler(socket,fandom) )                           
                         ))
                         break;
                 }
@@ -99,7 +100,7 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now(); 
-    let fanficsLengths = await ao3.getFanficsOfFandom(fandom);
+    let fanficsLengths = await ao3.getFanficsOfFandom(fandom,null,socket);
     console.log('fanficsLengths:',fanficsLengths)
     let endTime = now();
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));
