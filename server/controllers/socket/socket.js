@@ -1,6 +1,7 @@
-const app = require('express')()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
+//const app = require('express')()
+//const server = require('http').Server(app)
+//const io = require('socket.io')(server)
+//const io = require('socket.io').listen(80);
 
 //const server = require('http').createServer();
 
@@ -12,9 +13,16 @@ const io = require('socket.io')(server)
 //     cookie: false
 //   });
 
+const express = require('express');
+const http = require('http')
+
+const app = express();
+const server = http.createServer(app);
+var io = require('socket.io')(server);
+
 const func = require('../connection');
 
-server.listen(5005);
+server.listen(8080);
 
 io.on('connection', (socket) => {
       socket.on('getFandomFanfics', (fandomData,choice,method) => {

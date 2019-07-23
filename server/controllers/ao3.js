@@ -274,14 +274,14 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
         
         newFic = (fandom===null) ? true : false
 
-        newFic ? console.log(`NEW FANFIC: ${fanfic["FanficTitle"]} - Saving into the DB`) : console.log(`${fanfic["FanficTitle"]} was updated this week`)
+        newFic ? console.log(`Saving ${fanfic["FanficTitle"]} into the DB`) : console.log(`${fanfic["FanficTitle"]} was updated this week`)
         // console.log('updated:',updated)
         if (updated||newFic){
             fanfic["NeedToSaveFlag"] = true
             if(newFic){
-                socket && socket.emit('getFanficsData', `<span style="color:#11469c"><b>New Fic:</b> <span>${fanfic["FanficTitle"]}</span></span>`);
+                socket && socket.emit('getFanficsData', `<b>New Fic:</b> <span style="color:#8c221b">${fanfic["FanficTitle"]}</span>`);
             }else{
-                socket && socket.emit('getFanficsData', `<span style="color:#11469c"><b>Updated Fic:</b> <span>${fanfic["FanficTitle"]}</span></span>`);
+                socket && socket.emit('getFanficsData', `<b>New Fic:</b> <span style="color:#8c221b">${fanfic["FanficTitle"]}</span>`);
             }
         }
     }
@@ -549,19 +549,29 @@ exports.loginToAO3 = async (fandomName)=>{
 const downloader = (url, filename) => {
     return new Promise((resolve, reject) => {
         // console.log('url:',url)
-        // console.log('filename:',filename)
-        request.head({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
-            if (err){
-                reject(console.log('There was an error in: downloader(): ',err))
-            }
+        console.log('filename:',filename)
+        const file = fs.createWriteStream(filename);
+        request({url,jar, credentials: 'include'}).pipe(file);
+
+        file.on('finish',function(){
+            resolve(0)
+        }).on('close', function(){ 
+           fs.readFileSync(filename, 'utf8');    
+        }).on('error',() => reject(console.log('There was an error in: downloader(): '+url+' , filename: ',+filename)))  
+
+        // request.head({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
+        //     if (err){
+        //         reject(console.log('There was an error in: downloader(): ',err))
+        //     }
             
-            request({url,jar, credentials: 'include'}).pipe(fs.createWriteStream(filename))
-            .on( "finish", () => resolve(0) )
-            .on('close', () =>  {})
-            .on('error',() => reject(console.log('There was an error in: downloader(): '+url+' , filename: ',+filename)))        
-        }); 
+        //     request({url,jar, credentials: 'include'}).pipe(fs.createWriteStream(filename))
+        //     .on( "finish", () => resolve(0) )
+        //     .on('close', () =>  {})
+        //     .on('error',() => reject(console.log('There was an error in: downloader(): '+url+' , filename: ',+filename)))        
+        // }); 
     })
-}; 
+};
+
 exports.saveFanficsToServer = async (fandom,method) =>{
 
     let promises =[],slowMode;
@@ -624,7 +634,7 @@ const saveFanficToServerHandler = async (url,fandomName,saveMethod,savedNotAuto)
                     await links.push([`https://archiveofourown.org${link}`,fanficNewName])                 
                 })
             ).then(()=>{
-                Promise.all(links.map(x => downloader(x[0], `${fanficsPath}/${fandomName}/fanfics/${x[1]}`))).then(res => {
+                Promise.all(links.map(x => downloader(x[0], `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${x[1]}`))).then(res => {
                     let counter = res.reduce((a, b) => a + b, 0);
                     // console.log('counter:',counter)
                     if(counter===0){
