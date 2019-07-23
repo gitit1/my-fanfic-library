@@ -1,0 +1,36 @@
+@import '../../../style/_colors';
+
+%headers_font_style {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: $color-header
+}
+
+.header_section_left{
+    float: left;
+    margin:0.5% 0 0 1%;
+    
+    a{
+        font-size: 1.2em;
+        text-decoration: none;
+        @extend %headers_font_style;     
+    }
+}
+
+.header_section_right{
+    float: right;
+    margin: 0.5% 1% 0 0;
+
+    p{
+        @extend %headers_font_style;  
+    }
+
+    span{
+        color: $color-header-bold       
+    }
+}
+
+
+.clear{
+    clear: both;
+}

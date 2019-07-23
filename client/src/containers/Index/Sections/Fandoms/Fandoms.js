@@ -8,7 +8,7 @@ const IndexFandoms = (props) => (
       <ul>
       {
         props.fandoms.map(fandom=>
-          <li><Link to={`/fanfics/${fandom.FandomName}`}>{fandom.FandomName}</Link></li>
+          <li key={fandom.FandomName}><Link to={`/fanfics/${fandom.FandomName}`}>{fandom.FandomName}</Link></li>
         )
       }        
       </ul>

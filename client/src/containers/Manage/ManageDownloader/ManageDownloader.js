@@ -10,12 +10,15 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
 
-//const socket = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') 
-//               ? io('ws://localhost:5005', {transports: ['websocket']}) 
-//               : io('ws://192.236.176.82:5005', {transports: ['websocket']}) ;
+ const socket = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') 
+                ? io('ws://localhost:8080', {transports: ['websocket']}) 
+                : io(window.location.origin.replace(/^http/, 'ws') + ':8080', {transports: ['websocket']}) ;
 
-//const socket = io('ws://localhost:5005', {transports: ['websocket']})
-const socket = io('ws://localhost:5005', {transports: ['websocket']})
+
+//const socket = io(window.location.origin.replace(/^http/, 'ws'), {transports: ['websocket']})
+console.log('test:::',window.location.origin.replace(/^http/, 'ws'))
+
+//const socket = io('ws://localhost', {transports: ['websocket']})
 
 class ManageDownloader extends Component{
 
@@ -161,7 +164,7 @@ class ManageDownloader extends Component{
         <div className={classes.Buttons}>
           <Button clicked={()=>this.sendRequestsToServerHandler('getFandomFanfics')}>Get/Update Fandom Fanfics</Button>
           <Button clicked={()=>this.sendRequestsToServerHandler('getDeletedFanfics')}>Get/Update Deleted Fanfics of this Fandom</Button>  
-          {!(fandom.AutoSave||fandom=='All')  && (
+          {!(fandom.AutoSave||fandom==='All')  && (
             <div className={classes.Fandom}>
               <Input
                 label={typeSelect.label}

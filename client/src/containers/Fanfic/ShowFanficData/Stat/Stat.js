@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from '../ShowFanficData.module.css';
+//import classes from '../ShowFanficData.module.css';
 
 const Stat = (props) => (
   <React.Fragment>

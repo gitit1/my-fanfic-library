@@ -4,6 +4,7 @@ export {
     addFandomToDB,
     deleteFandomFromDB,
     getFandom,
+    getLastUpdateDate
 } from './fandoms';
 
 export {

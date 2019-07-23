@@ -91,6 +91,7 @@ exports.getFanficsOfFandom =  async (fandom,method,socket) => {
                                            'CompleteFanfics':completeFanfics, 
                                            'OnGoingFanfics':onGoingFanfics,
                                            'SavedFanfics':savedFanficsAll,
+                                           'LastUpdate':new Date().getTime(),
                                            'FanficsLastUpdate':new Date().getTime(),
                                            'SavedFanficsLastUpdate':new Date().getTime()
                                    }},

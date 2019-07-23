@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactSVG from 'react-svg';
-import classes from '../../ShowFanficData.module.css';
+//import classes from '../../ShowFanficData.module.css';
 import IgnoreSvg from '../../../../../assets/images/icons/ignore.svg'
 
 const Ignore = (props) => (

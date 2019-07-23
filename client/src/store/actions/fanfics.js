@@ -113,5 +113,4 @@ export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit,
             dispatch(getFilteredFanficsFromDBFail(error))
         })  
     };
-
 };

@@ -6,7 +6,7 @@ const buildDir  = require('path').join(__dirname,'../build');
 const db = require('../controllers/db');
 const ao3 = require('../controllers/ao3');
 const users = require('../controllers/users');
-const keys = require("../config/keys");
+
 
 try {
   console.log('[Server] - in routes')
@@ -27,6 +27,7 @@ try {
 
   // checking:
   router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
+  router.get('/db/getLastUpdateDate',db.getLastUpdateDate)
   
   //if (!keys.nodeEnv==='development'){  
   //  router.get('/',function(req,res){
