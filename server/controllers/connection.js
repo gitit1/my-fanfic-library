@@ -4,6 +4,8 @@ const db  =  require('./db')
 const ao3 =  require('./ao3')
 const now  = require('performance-now')
 
+const FandomModal = require('../models/Fandom');
+
 exports.manageDownloader = async (socket,fandom,choice,method) =>{
     console.log(clc.blue('[connection] manageDownloader'));
     try {

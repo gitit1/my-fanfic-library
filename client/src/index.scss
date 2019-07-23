@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Roboto&display=swap');
+@import './style/_colors';
+
+$font-stack-header:    'Lato', sans-serif;
+$font-stack-text:       'Roboto', sans-serif;
+
+* { margin: 0;}
+
+.header{
+    font: 100% $font-stack-header;
+    color: $color-header
+}
+
+@media only screen and (max-width: 600px) {
+    .responsive_hide{
+        display: none
+    }
+}

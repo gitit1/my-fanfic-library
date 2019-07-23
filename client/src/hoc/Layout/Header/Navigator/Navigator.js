@@ -9,9 +9,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import classes from './Navigator.module.css';
 
-let anchorEl = null
-
-
 
 class Navigator extends Component{
   state = {

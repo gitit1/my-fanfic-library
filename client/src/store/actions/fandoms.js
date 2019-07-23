@@ -104,3 +104,27 @@ export const getFandom = (fandom) =>{
     };
 }
 
+// const getLastUpdateDate = (lastUpdateDate) =>{
+//     console.log('[actions: fandom.js] - getLastUpdateDate')
+//     return{
+//         type: actionTypes.GET_LAST_UPDATE_DATE,
+//         lastUpdateDate: lastUpdateDate
+//     };
+// }
+
+export const getLastUpdateDate = () =>{
+    console.log('[actions: fandom.js] - getLastUpdateDate')
+    return dispatch =>{
+        //dispatch(editFandomDataStart())
+        return axios.get(`/db/getLastUpdateDate`)
+        .then(res =>{
+            return res.data
+            //dispatch(getLastUpdateDate(res.data));
+            //return true;
+        })
+        .catch(error =>{
+            return false
+            //dispatch(editFandomDataFail(error))
+        })  
+    };    
+}

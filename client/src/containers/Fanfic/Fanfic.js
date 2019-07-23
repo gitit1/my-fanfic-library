@@ -130,10 +130,11 @@ class Fanfic extends Component{
                 if(markType==='Ignore'){                   
                      await onGetFilteredFanfics(this.props.match.params.FandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
                          const fanfics = [...this.props.fanfics],
-                         fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
+                         fanficsCount = this.props.counter
                          let newPagesCounter = Math.ceil(fanficsCount/pageLimit);
                          newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber
-                         this.setState({fanfics,userFanfics,
+                         this.setState({
+                            fanfics,
                             fanficsNumbers:{
                                 ...fanficsNumbers,
                                 fanficsCurrentCount:fanficsCount,
@@ -150,6 +151,8 @@ class Fanfic extends Component{
                         userFanfics: userFanficsCopy
                     })
                 }
+                break;
+            default:
                 break;               
         }  
     }
@@ -176,6 +179,8 @@ class Fanfic extends Component{
             case 'Need to Read':
                 // newStatusFalse = (statusType==='Finished') && 'Finished'
                 break;
+            default:
+                break;
         }
         if(flag){
             newStatusFalse = (newStatus==='In progress') ? 'Need to Read' : 'In progress'
@@ -185,7 +190,7 @@ class Fanfic extends Component{
             console.log('objIndex:',objIndex)
             if(objIndex!==-1){
                 userFanficsCopy[objIndex].Status = newStatus;
-                if (statusType=='In Progress'){
+                if (statusType==='In Progress'){
                     userFanficsCopy[objIndex].ChapterStatus = Number(chapterNum)
                 }
             }else{
@@ -218,7 +223,7 @@ class Fanfic extends Component{
         event && event.preventDefault();
         const {onGetFilteredFanfics} = this.props, {filters,pageLimit} = this.state;
         let {filterArr,pageNumber,fanficsNumbers} = this.state;
-        event ? pageNumber=1 : pageNumber=pageNumber
+        pageNumber= event ? 1 : pageNumber
         filterArr = [];
         
         // if(filterArr.length===0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
@@ -265,18 +270,13 @@ class Fanfic extends Component{
                     let filterInit = (typeof filters[filter]==='string') ? '' : !filters[filter];
                     this.setState({filters: {...filters,[filter]: filterInit}})  
                 }
+                break;
+            default:
+                break;
         }
-        // if(event.target.value){
-        //     this.setState({filters: {...filters,[filter]: event.target.value}})                
-        // }else{
-        //     let filterInit = (typeof filters[filter]==='string') ? '' : !filters[filter];
-        //     this.setState({filters: {...filters,[filter]: filterInit}})    
-        // }
     }
     cancelFiltersHandler = async() =>{
-        const {filters} = this.state;
         this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'},await this.getFanfics)
-        // this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,drawerFilters:false},await this.getFanfics)
     }
 
     toggleDrawer = (open) => event => {

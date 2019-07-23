@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import classes from './ShowFandomData.module.css';
 
-import Button from '../../../../components/UI/Button/Button';
 import {shorten} from '../../../../utils/sharedFunctions'
 
 const ShowFandomData = (props) => {
@@ -16,7 +15,7 @@ const ShowFandomData = (props) => {
                                 {
                                 fandom.Image_Name !== '' 
                                 ? <Link to={`/fanfics/${fandom.FandomName}`}>
-                                    <img src={`/fandoms/${fandom.FandomName}/${fandom.Image_Name}`} alt={fandom.FandomName}/>
+                                    <img src={`/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Image_Name}`} alt={fandom.FandomName}/>
                                     </Link> 
 
                                 : <Link to={`/fanfics/${fandom.FandomName}`}>

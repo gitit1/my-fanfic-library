@@ -9,11 +9,15 @@ import Footer from './Footer/Footer';
 
 class Layout extends Component{
     state = {
-        loading:true
+        loading:true,
+        lastUpdateDate:null
     }
     componentDidMount(){
         this.props.onGetFandoms().then(()=>{
-            this.setState({loading:false})
+            this.props.onGetLastUpdateDate().then(lastUpdateDate=>{
+                console.log('lastUpdateDate:::',lastUpdateDate)
+                this.setState({loading:false,lastUpdateDate:Number(lastUpdateDate)})
+            })
         })
     }
 
@@ -21,7 +25,7 @@ class Layout extends Component{
         let page = this.state.loading ? null :(
             <div className={classes.Layout}>
                 <header className={classes.Header}>
-                    <Header/>
+                    <Header lastUpdateDate={this.state.lastUpdateDate}/>
                 </header>
                 <main className={classes.Main}>
                     {this.props.children}
@@ -42,14 +46,15 @@ class Layout extends Component{
 const mapStateToProps = state =>{
     return{
         fandoms:        state.fandoms.fandoms,
-        loading:        state.fandoms.loading
+        loading:        state.fandoms.loading,
     };   
 }
   
 const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
-        onGetFandoms:       ()                                  =>      dispatch(actions.getFandomsFromDB()),
+        onGetFandoms:           ()      =>      dispatch(actions.getFandomsFromDB()),
+        onGetLastUpdateDate:    ()      =>      dispatch(actions.getLastUpdateDate())
     };
 }
 

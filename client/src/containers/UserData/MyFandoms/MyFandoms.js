@@ -6,7 +6,6 @@ import classes from './ManageFandoms.module.css';
 
 import * as actions from '../../../store/actions';
 
-import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
 

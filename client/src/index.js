@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import store from "./store/store";
 import App from './App';
 
-import './index.css'
+import './index.scss'
 
 const app =(
     <Provider store={store}>
