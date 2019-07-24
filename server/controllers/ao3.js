@@ -20,9 +20,8 @@ request = request.defaults({
 const fanficsPath = "public/fandoms"
 
 
-exports.getFanficsOfFandom =  async (fandom,method,socket) => {
+exports.getFanficsOfFandom =  async (fandom,method) => {
    console.log(clc.blue('[ao3 controller] getFanficsOfFandom()'));
-   socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">[ao3 controller] getFanficsOfFandom()</span>`);
 
     await this.loginToAO3()
    const savedNotAuto = (method||!method===null) ? method : null;   
@@ -66,7 +65,7 @@ exports.getFanficsOfFandom =  async (fandom,method,socket) => {
             for (let i = 0; i < loop; i++) {
                 // console.log('i: '+i)
                 // console.log('pagesArray[i+(loom_ir*100)]: '+(i+(loom_ir*100)))
-                promises2.push(getDataFromAO3FandomPage(pagesArray[i+(loom_ir*100)],fandom,savedNotAuto,socket));
+                promises2.push(getDataFromAO3FandomPage(pagesArray[i+(loom_ir*100)],fandom,savedNotAuto));
             }
             // console.log('promises2: ',promises2.length)
             await Promise.all(promises2).then(async results=> {
@@ -131,7 +130,7 @@ exports.getFanficsOfFandom =  async (fandom,method,socket) => {
 //  return [fanficsInFandom,savedFanficsCurrent] 
 
 }
-const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto,socket) => {  
+const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {  
     // console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));    
         try {
             let $ = cheerio.load(page),donePromise = 0;
@@ -142,7 +141,7 @@ const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto,socket) => {
                     let page = $('ol.work').children('li').eq(count)
                     // timer = (fandom.SavedFanficsLastUpdate===undefined) ? 6000 : 1000;
                     // func.delay(timer).then(async () => {
-                        await getDataFromPage(page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto,socket).then(res=>{
+                        await getDataFromPage(page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto).then(res=>{
                             donePromise++;
                             // console.log('res:',res)
                             res===0 && counter++;
@@ -172,7 +171,7 @@ const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto,socket) => {
 
 
 }
-const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto,socket) =>{
+const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
     
     let fanfic = {}
     let counter = -1
@@ -190,6 +189,7 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
     fanfic["FandomName"]            =       fandomName;
     fanfic["Source"]                =       'AO3';
     fanfic["FanficID"]              =       Number(page.attr('id').replace('work_',''));
+
     fanficUpdateDate                =       page.find('p.datetime').text();
     fanfic["LastUpdateOfFic"]       =       fanficUpdateDate ==="" ? 0 : new Date(fanficUpdateDate).getTime();
 
@@ -269,21 +269,22 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
         
         fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
         fandom!==null && (oldFanficData = fandom)
+        
+        let isThisWeekOldData =  moment(new Date(oldFanficData.LastUpdateOfFic)).isSame(new Date(), 'week')
+        
         updated =   (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
                     (fanfic["LastUpdateOfNote"] > oldFanficData.LastUpdateOfNote) ||
                     (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ? true : false;
         
         newFic = (fandom===null) ? true : false
+        updated = isThisWeekOldData ? false : updated
 
-        newFic ? console.log(`Saving ${fanfic["FanficTitle"]} into the DB`) : console.log(`${fanfic["FanficTitle"]} was updated this week`)
+        newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
+        updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
+
         // console.log('updated:',updated)
         if (updated||newFic){
             fanfic["NeedToSaveFlag"] = true
-            if(newFic){
-                socket && socket.emit('getFanficsData', `<b>New Fic:</b> <span style="color:#8c221b">${fanfic["FanficTitle"]}</span>`);
-            }else{
-                socket && socket.emit('getFanficsData', `<b>New Fic:</b> <span style="color:#8c221b">${fanfic["FanficTitle"]}</span>`);
-            }
         }
     }
 
@@ -324,7 +325,7 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
            // }
             // );
         })
-    }else{
+    }else if(newFic || updated ||savedFanficsLastUpdate===undefined){
         return saveFanficToDB(fandomName,fanfic).then(async () =>{
             // console.log('2')
             return counter  
@@ -416,7 +417,6 @@ const checkIfFileExsist = async (fandomName) => {
 exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{  
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
     await this.loginToAO3()
-    ////checkIfFileExsist(fandomName)   
     
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     let skip=0,limit=100,promises=[],promises2=[],gotDeletedList = [],DeletedCounter=[],newDeletedCounter=0,allDeletedCounter=0;
@@ -444,15 +444,15 @@ exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{
                 try {
                     func.delay(2000).then(async () => {
                         if(httpResponse===undefined || httpResponse.body===undefined){
-                            console.log('httpResponse:',httpResponse)
                             reject(console.log(clc.red('Error in checkIfDeleted: body undefined: ',fanfic.FanficID,' url: ',fanfic.URL)))
                         }else{
+                            console.log('FanficID:',fanfic.FanficID)
                             let $ = cheerio.load(httpResponse.body);
                             if(err){
                                 reject(console.log(clc.red('Error in checkIfDeleted: ',err)))
                             }else{
-                                if($('#main h2').text().includes("Error 404")){
-                                    console.log(clc.redBright(`Found new deleted fanfic:: ${fanfic.FanficTitle}`))    
+                                if($('#main h2').text().includes("Error 404") || $('#main div.error').text().includes("you don't have permission")){
+                                    console.log(clc.redBright(`Deleted fanfic:: ${fanfic.FanficTitle}`))    
                                     gotDeletedList.push(fanfic);
                                 }
                                 resolve();         
@@ -484,6 +484,7 @@ exports.checkIfDeletedFromAO3 = async (fandomName,fanficsSum) =>{
                     newDeletedCounter++                          
                     await mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic.FanficID},{$set: {Deleted:true}})
                     await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic)
+                    console.log(clc.redBright(`Found new deleted fanfic:: ${fanfic.FanficTitle}`))    
                 }else{
                     console.log('Duplicate fanfic, ignored and moving on')
                 }

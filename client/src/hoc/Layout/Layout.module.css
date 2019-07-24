@@ -17,10 +17,5 @@
 .Footer{
     overflow: hidden;
     max-height: 5rem;
-    text-overflow: ellipsis;
-    background-color: #cfd8dc;
     width:100%;
-    color:white;
-    font-weight: 500;
-    font-size: 1rem;
 }

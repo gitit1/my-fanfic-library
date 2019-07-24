@@ -102,7 +102,7 @@ const manageFandomFanficsHandler = async (socket,fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now(); 
-    let fanficsLengths = await ao3.getFanficsOfFandom(fandom,null,socket);
+    let fanficsLengths = await ao3.getFanficsOfFandom(fandom,null);
     console.log('fanficsLengths:',fanficsLengths)
     let endTime = now();
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));
