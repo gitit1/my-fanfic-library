@@ -319,7 +319,7 @@
     background-color: #fff;
     border-color: #cfd8dc;
   }
-  @media only screen and (max-width: 1024px) {
+  @media (max-width: 1024px) {
     .rc-pagination-item-after-jump-prev,
     .rc-pagination-item-before-jump-next {
       display: none;

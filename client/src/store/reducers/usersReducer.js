@@ -4,13 +4,16 @@ const isEmpty = require("is-empty");
 
 const initialState = {
     isAuthenticated: false,
+    isManager: false,
     user: {},
     loading: false
 };
 
 const setCurrentUser = (state,action) =>{
+    const manager = (!isEmpty(action.payload) && action.payload.level===1) ? true : false
     return updateObject(state,{
         isAuthenticated: !isEmpty(action.payload),
+        isManager: manager,
         user: action.payload
     });
 

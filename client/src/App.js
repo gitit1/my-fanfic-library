@@ -6,7 +6,7 @@ import store from "./store/store";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./store/actions";
 
-import Layout from './hoc/Layout/Layout';
+import Layout from './hoc/Layout';
 import PrivateRoute from "./components/private-route/PrivateRoute";
 
 import Index from './containers/Index/Index';
