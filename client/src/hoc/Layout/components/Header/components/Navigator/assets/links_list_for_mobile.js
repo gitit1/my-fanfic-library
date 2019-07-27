@@ -1,0 +1,55 @@
+export const navLinks = [
+    {
+        type: 'mobile',
+        auth: false,
+        label: 'Fandoms',
+        list:[
+            {      
+                label: 'Fandoms',
+                link: '/fandoms',
+            }             
+        ]
+    },{
+        type: 'mobile',
+        auth: false,
+        label: 'Search',
+        list:[
+            {      
+                label: 'Search',
+                link: '/search',
+            }             
+        ]
+    },{
+        type: 'mobile',
+        label: 'My Tracking',
+        auth: true,
+        list:[
+            {
+                label: 'My Dashboard',       
+                link: '/dashboard',                
+            },
+            {
+                label: 'Status Tracker',       
+                link: '/myFandoms',                
+            },
+            {
+                label: 'Reading List',       
+                link: '/readingList',                
+            }           
+        ]
+    },{
+        type: 'mobile',
+        label: 'Manage',
+        auth_manager: true,
+        list:[
+            {
+                label: 'Manage Downloader',       
+                link: '/manageDownloader',                
+            },
+            {
+                label: 'Manage Fandoms',       
+                link: '/manageFandoms',                
+            }          
+        ]
+    }
+]

@@ -9,8 +9,8 @@ const publicDir = require('path').join(__dirname,'/public');
 const buildDir  = require('path').join(__dirname,'/build');
 require('./config/mongoose.js')
 require('./controllers/socket/socket');
-//TODO: check the cronjob scuduale
-require('./cronJobs/cron')
+
+//require('./cronJobs/cron')
 
 const app = express();
 const keys = require("./config/keys");
@@ -41,6 +41,7 @@ if (keys.nodeEnv==='development'){
      app.listen(port, () => console.log(`Listening on port ${port} - development mode`));
  }else{
 	 app.get('*', function(req, res) {
+		 console.log('heree')
 		 res.sendFile(require('path').join(buildDir,'/index.html'));
 	 });
 	 app.listen(port, () => console.log(`Listening on port ${port} - production mode`));

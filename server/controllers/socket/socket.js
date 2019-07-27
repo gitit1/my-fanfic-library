@@ -18,7 +18,13 @@ const http = require('http')
 
 const app = express();
 const server = http.createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server,{
+      serveClient: false,
+
+      pingInterval: 200000,
+      pingTimeout: 200000,
+      cookie: false
+});
 
 const func = require('../connection');
 
@@ -31,4 +37,14 @@ io.on('connection', (socket) => {
         func.manageDownloader(socket,fandomData,choice,method)
         
       });
+});
+io.on('error', function(err) {
+  console.error("Server error:", err);
+});
+io.on('clientError', function(err) {
+  console.error("Client connection error:", err);
+});
+
+server.on('error', function(err) {
+  console.error("WebSocket error:", err);
 });

@@ -2,6 +2,7 @@ const clc = require("cli-color");
 const cheerio = require('cheerio');
 const mongoose = require('../config/mongoose');
 
+
 const FandomModal = require('../models/Fandom');
 const FanficSchema = require('../models/Fanfic');
 
@@ -19,13 +20,14 @@ request = request.defaults({
 });
 const fanficsPath = "public/fandoms"
 
+const pLimit = require('p-limit');
 
 exports.getFanficsOfFandom =  async (fandom,method) => {
    console.log(clc.blue('[ao3 controller] getFanficsOfFandom()'));
 
-    await this.loginToAO3()
+   await this.loginToAO3()
    const savedNotAuto = (method||!method===null) ? method : null;   
-   const {FandomName,SearchKeys,SaveMethod,AutoSave} = fandom;
+   const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
    
    let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
    const ao3URL = `https://archiveofourown.org/tags/${fandomUrlName}/works`;
@@ -48,35 +50,48 @@ exports.getFanficsOfFandom =  async (fandom,method) => {
 
 
     // await pagesArray.map(page => promises.push(getDataFromAO3FandomPage(page,fandom,savedNotAuto)))
+    console.log('savedFanficsLastUpdate:',SavedFanficsLastUpdate)
+    const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 50;
+    console.log('limitConn:',limitConn)
+    const limit = pLimit(limitConn)
+    // console.log('pagesArray.length:',pagesArray.length)
+    let promises2 = []
+    for (let i = 0; i < pagesArray.length; i++) {
+        promises2.push(limit(() => getDataFromAO3FandomPage(pagesArray[i],fandom,savedNotAuto)));
+    }
+    //console.log('promises2: ',promises2)    
+    await Promise.all(promises2).then(async results=> {
+        // console.log('results:',results) 
+        let counterArray = results.filter(function(num) {return (!isNaN(num)); });
+        savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
+    });
+        // let promises2 = [],sum = pagesArray.length,loop=0,loom_ir=0,index=Math.ceil(pagesArray.length/100);
+        // console.log('index:',index)
+        // while(index>0){
+        //     promises2 = []
+        //     index--;
+        //     console.log('index:',index)
+        //     loop = (sum>100) ? 100 : sum
+        //     sum =  (sum>100) ? sum-100 : sum;
 
-
-        let promises2 = [],sum = pagesArray.length,loop=0,loom_ir=0,index=Math.ceil(pagesArray.length/100);
-        console.log('index:',index)
-        while(index>0){
-            promises2 = []
-            index--;
-            console.log('index:',index)
-            loop = (sum>100) ? 100 : sum
-            sum =  (sum>100) ? sum-100 : sum;
-
-            console.log(clc.redBright('I am in a loop:',loop))
-            console.log(clc.redBright('sum:',sum))
-            console.log(clc.redBright('loom_ir:',loom_ir))
-            for (let i = 0; i < loop; i++) {
-                // console.log('i: '+i)
-                // console.log('pagesArray[i+(loom_ir*100)]: '+(i+(loom_ir*100)))
-                promises2.push(getDataFromAO3FandomPage(pagesArray[i+(loom_ir*100)],fandom,savedNotAuto));
-            }
-            // console.log('promises2: ',promises2.length)
-            await Promise.all(promises2).then(async results=> {
-                // console.log('results:',results) 
-                let counterArray = results.filter(function(num) {return (!isNaN(num)); });
-                savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
-            });
-            loom_ir++;
-            // let result = await getDataFromAO3FandomPage(pagesArray[index],fandom,savedNotAuto);
-            // results.push(result)    
-        }              
+        //     console.log(clc.redBright('I am in a loop:',loop))
+        //     console.log(clc.redBright('sum:',sum))
+        //     console.log(clc.redBright('loom_ir:',loom_ir))
+        //     for (let i = 0; i < loop; i++) {
+        //         // console.log('i: '+i)
+        //         // console.log('pagesArray[i+(loom_ir*100)]: '+(i+(loom_ir*100)))
+        //         promises2.push(limit(() => getDataFromAO3FandomPage(pagesArray[i+(loom_ir*100)],fandom,savedNotAuto)));
+        //     }
+        //     // console.log('promises2: ',promises2.length)
+        //     await Promise.all(promises2).then(async results=> {
+        //         // console.log('results:',results) 
+        //         let counterArray = results.filter(function(num) {return (!isNaN(num)); });
+        //         savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
+        //     });
+        //     loom_ir++;
+        //     // let result = await getDataFromAO3FandomPage(pagesArray[index],fandom,savedNotAuto);
+        //     // results.push(result)    
+        // }              
         console.log('savedFanficsCurrent:',savedFanficsCurrent)
         fanficsInFandom = await mongoose.dbFanfics.collection(FandomName).countDocuments({});
         console.log('fanficsInFandom:',fanficsInFandom)
@@ -131,7 +146,7 @@ exports.getFanficsOfFandom =  async (fandom,method) => {
 
 }
 const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {  
-    // console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));    
+    console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));    
         try {
             let $ = cheerio.load(page),donePromise = 0;
             let n = $('ol.work').children('li').length;
@@ -172,17 +187,14 @@ const getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {
 
 }
 const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
-    
+    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));  
     let fanfic = {}
     let counter = -1
     let oldFanficData = false
     let updated = false;
     let newFic = false;
     let fandom = null;
-    let slowDownload = false;
     let todayDate = new Date();
-    let thisYear = String(todayDate.getFullYear());
-    // let timer = 0;
 
     fanfic["LastUpdateOfNote"]      =       todayDate.getTime();
 
@@ -325,7 +337,8 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
            // }
             // );
         })
-    }else if(newFic || updated ||savedFanficsLastUpdate===undefined){
+    // }else if(newFic || updated ||savedFanficsLastUpdate===undefined){
+    }else{
         return saveFanficToDB(fandomName,fanfic).then(async () =>{
             // console.log('2')
             return counter  
@@ -555,11 +568,16 @@ const downloader = (url, filename) => {
         const file = fs.createWriteStream(filename);
         request({url,jar, credentials: 'include'}).pipe(file);
 
-        file.on('finish',function(){
+        file.on('finish',() => {
             resolve(0)
-        }).on('close', function(){ 
-           fs.readFileSync(filename, 'utf8');    
-        }).on('error',() => reject(console.log('There was an error in: downloader(): '+url+' , filename: ',+filename)))  
+        }).on('close',() => {
+            fs.readFileSync(filename, 'utf8');    
+        }).on('error',() => 
+            reject(console.log(`There was an error in: downloader(): ${url} , filename: ${filename}`)
+        )).on('timeout', function(e) {
+            console.log(`TimeOut - redownloading: ${url}`)
+            downloader(url, fileName);
+        });  
 
         // request.head({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
         //     if (err){
