@@ -1,27 +1,38 @@
 import classes from './ShowFanficData.module.css';
 
 export const greenClassesHandler = () =>{
-    const greenDiv      =   `${classes.Green}  ${classes.UserData}`,
-          greenDivOn    =   `${classes.GreenOn}  ${classes.UserData}`, 
-          greenIcon     =   `${classes.Green} ${classes.Icon}`,
-          greenIconOn   =   `${classes.GreenOn} ${classes.Icon}`
-  //   greenLabel = `${classes.Green}  ${classes.UserData}`,greenLabelOn = `${classes.GreenOn} ${classes.IconLabel}`
+    const   greenDiv            =   `${classes.Green}  ${classes.UserData}`,
+            greenDivOn          =   `${classes.GreenOn}  ${classes.UserData}`, 
+            greenIcon           =   `${classes.Green} ${classes.Icon}`,
+            greenIconOn         =   `${classes.GreenOn} ${classes.Icon}`
+
   return([greenDiv,greenDivOn,greenIcon,greenIconOn])
 }
 export const redClassesHandler = () =>{
-    const redDiv = `${classes.Red}  ${classes.UserData}`,
-          redDivOn = `${classes.RedOn}  ${classes.UserData}`, 
-          redIcon = `${classes.Red} ${classes.Icon}`,
-          redIconOn = `${classes.RedOn} ${classes.Icon}`,
-          redLabel = `${classes.Red}  ${classes.IconLabel}`,
-          redLabelOn = `${classes.RedOn} ${classes.IconLabel}`
+    const   redDiv              =   `${classes.Red}  ${classes.UserData}`,
+            redDivOn            =   `${classes.RedOn}  ${classes.UserData}`, 
+            redIcon             =   `${classes.Red} ${classes.Icon}`,
+            redIconOn           =   `${classes.RedOn} ${classes.Icon}`,
+            redLabel            =   `${classes.Red}  ${classes.IconLabel}`,
+            redLabelOn          =   `${classes.RedOn} ${classes.IconLabel}`
 
     return([redDiv,redDivOn,redIcon,redIconOn,redLabel,redLabelOn])
 }
+export const followFilter = (userData,greenClasses,MarkedAsRead,MarkAsRead) =>{
+    const   isFollowed          =   (userData && userData.Follow===true) ? true : false,
+            followClassDiv      =   isFollowed ? greenClasses[1] : greenClasses[0],
+            followClassIcon     =   isFollowed ? greenClasses[3] : greenClasses[2],
+            followClassLabel    =   isFollowed ? greenClasses[5] : greenClasses[4],
+            followSvgSrc        =   isFollowed ?  MarkedAsRead : MarkAsRead,
+            followClick         =   userData ? userData.Follow : null;
+    
+    return([followClassDiv,followClassIcon,followClassLabel,followClick,followSvgSrc,isFollowed])
+}  
 export const favoriteFilter = (userData,redClasses) =>{
-    const   favClassDiv         =   (userData && userData.Favorite===true) ? redClasses[1] : redClasses[0],
-            favClassIcon        =   (userData && userData.Favorite===true) ? redClasses[3] : redClasses[2],
-            favClassLabel       =   (userData && userData.Favorite===true) ? redClasses[5] : redClasses[4],
+    const   isFavorite          =   (userData && userData.Favorite===true) ? true : false, 
+            favClassDiv         =   isFavorite ? redClasses[1] : redClasses[0],
+            favClassIcon        =   isFavorite ? redClasses[3] : redClasses[2],
+            favClassLabel       =   isFavorite ? redClasses[5] : redClasses[4],
             favClick            =   userData ? userData.Favorite : null;
     
     return([favClassDiv,favClassIcon,favClassLabel,favClick])
@@ -52,4 +63,9 @@ export const ignoreFilter = (userData,redClasses) => {
             ignoreClick         =   userData ? userData.Ignore : null;
 
     return([ignoreClassDiv,ignoreClassIcon,ignoreClassLabel,ignoreClick])
+}
+export const readingListFilter = (userData)=>{
+    const   inReadingList     =   (userData && (userData.ReadingList!==''||userData.ReadingList.length>0)) ? true : false;
+    
+    return([inReadingList])
 }

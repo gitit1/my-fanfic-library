@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './ShowFanficData.module.css';
 
-
 import MarkAsRead from '../../../assets/images/icons/markAsRead.svg'
 import MarkedAsRead from '../../../assets/images/icons/markedAsRead.svg'
 
@@ -24,9 +23,11 @@ const ShowFanficData = (props) => {
                     const redClasses    =   functions.redClassesHandler()
                     const greenClasses  =   functions.greenClassesHandler()
                     const isFavorite    =   functions.favoriteFilter(userData,redClasses)    
+                    const isFollowed    =   functions.followFilter(userData,greenClasses,MarkedAsRead,MarkAsRead)    
                     const isFinished    =   functions.finishedFilter(userData,greenClasses,MarkedAsRead,MarkAsRead)
                     const isInProgress  =   functions.inProgressFilter(userData,greenClasses,isFinished[0],MarkedAsRead,MarkAsRead)
                     const isIgnored     =   functions.ignoreFilter(userData,redClasses)
+                    const inReadingList =   functions.readingListFilter(userData)
 
                     return(
                             <div className={classes.Fanfic} key={fanfic.FanficID}>
@@ -37,10 +38,12 @@ const ShowFanficData = (props) => {
                                                 redClasses={redClasses}
                                                 userData={userData}
                                                 greenClasses={greenClasses} 
+                                                isFollowed={isFollowed}
                                                 isFavorite={isFavorite}
                                                 isFinished={isFinished}
                                                 isInProgress={isInProgress}
                                                 isIgnored={isIgnored}
+                                                inReadingList={inReadingList}
                                     />
                                     {/* TODO: Reading List: 
                                         first step - just general to make it work
@@ -77,9 +80,6 @@ const ShowFanficData = (props) => {
                         </div>
                     )
                 })}
-
-                  {/* <div className={[classes.Dummy,classes.Fandom].join(' ')}></div> */}
-                  {/* <div className={[classes.Dummy,classes.Fandom].join(' ')}></div> */}
                  </div>
         </React.Fragment>  
     )

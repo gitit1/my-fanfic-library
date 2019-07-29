@@ -249,6 +249,9 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
                     case 'Favorite':
                         saveAs = {"FanficList.$.Favorite":mark}
                         break;
+                    case 'Follow':
+                        saveAs = {"FanficList.$.Follow":mark}
+                        break;
                     case 'Ignore':           
                         if(markType==='Ignore' && mark==='true'){
                             saveAs = { $set: {"FanficList.$.Ignore":mark}, $push: {"FanficIgnoreList":fanficId} }
