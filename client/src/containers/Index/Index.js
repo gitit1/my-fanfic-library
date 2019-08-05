@@ -3,11 +3,11 @@ import {connect} from 'react-redux';
 
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container'
-import IndexContainer from './IndexContainer/IndexContainer';
-import IndexFandoms from './Sections/Fandoms/Fandoms'
-import LatestUpdates from './Sections/LatestUpdates/LatestUpdates'
-import MyFanfics from './Sections/MyFanfics/MyFanfics'
-import MyLatestActivity from './Sections/MyLatestActivity/MyLatestActivity'
+import IndexContainer from './components/IndexContainer/IndexContainer';
+import IndexFandoms from './components/Sections/Fandoms/Fandoms'
+import LatestUpdates from './components/Sections/LatestUpdates/LatestUpdates'
+import MyFanfics from './components/Sections/MyFanfics/MyFanfics'
+import MyLatestActivity from './components/Sections/MyLatestActivity/MyLatestActivity'
 
 
 

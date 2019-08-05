@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Container.module.css';
 
 const Container = (props) => (
-  <div className={classes.Container}>
+  <div className={`${props.className} ${classes.Container}`}>
       <div className={classes.Header}>
         <h3>{props.header}</h3>
       </div>

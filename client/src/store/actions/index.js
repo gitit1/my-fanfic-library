@@ -21,3 +21,7 @@ export {
     setCurrentUser,
     logoutUser
 } from './users';
+
+export{
+    getDataOfFanfic
+}from './downloader'

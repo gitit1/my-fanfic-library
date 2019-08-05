@@ -23,6 +23,7 @@
     "increase-memory-limit": "^1.0.7",
     "performance": "^1.1.1",
     "performance-now": "^2.1.0",
+    "puppeteer": "^1.19.0",
     "tough-cookie": "^3.0.1"
   }
 }

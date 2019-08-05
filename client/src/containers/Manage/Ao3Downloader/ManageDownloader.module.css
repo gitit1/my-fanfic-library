@@ -1,0 +1,32 @@
+.Fandom select{
+    width:40%;
+    margin: 0 auto;
+}
+
+.MsgBoard{
+    width:60%;
+    background: #eee;
+    color: #666;
+    border-radius: 5px;
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0 auto;
+    font-family: monospace;
+    font-size: 14px;
+    overflow: auto;
+    padding: 20px;
+}
+
+.Buttons button{
+    margin-left: 8px;
+}
+
+button .Disabled{
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}

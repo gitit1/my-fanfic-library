@@ -1,0 +1,13 @@
+@import '../../../../../../style/_colors';
+@import '../../../../../../style/_fonts';
+
+%nav_style_font{
+    font-family: $font_header;
+    font-weight: 600;
+    color: $color_header;    
+}
+
+
+button span{
+    @extend %nav_style_font
+}

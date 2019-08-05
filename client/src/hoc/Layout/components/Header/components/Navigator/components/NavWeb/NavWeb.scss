@@ -1,0 +1,41 @@
+
+@import '../../../../../../../../style/_colors';
+@import '../../../../../../../../style/_fonts';
+
+%nav_style_background{
+    background-color: $color_background;
+}
+%nav_style_font{
+    font-family: $font_header;
+    font-weight: 600;
+    color: $color_header;    
+}
+
+.navWeb{
+
+    button{   
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    @extend %nav_style_background;
+
+    .active span,.active span a{
+        color: $color_header_bold;
+        font-weight: 800;
+    }
+
+    a, button span{
+        @extend %nav_style_font
+    }
+
+}
+
+.menu{
+    ul{
+        @extend %nav_style_background;    
+    }
+    ul li a{
+        @extend %nav_style_font;
+    }
+}
+
