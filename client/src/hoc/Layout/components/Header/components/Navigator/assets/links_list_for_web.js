@@ -35,12 +35,20 @@ export const navLinks = [
         auth_manager: true,
         subLinks:[
             {
-                label: 'Manage Downloader',       
-                link: '/manageDownloader',                
+                label:  'Fandoms',       
+                link:   '/manageFandoms',                
             },
             {
-                label: 'Manage Fandoms',       
-                link: '/manageFandoms',                
+                label:  'Downloader',
+                link:   '/manageDownloader'
+            },
+            {
+                label: 'AO3 Downloader',       
+                link: '/ao3Downloader',                
+            },           
+            {
+                label: 'Other Sites Downloader',       
+                link: '/otherSitesDownloder',                
             }
         ]
     }

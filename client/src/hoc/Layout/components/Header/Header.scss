@@ -1,0 +1,77 @@
+@import '../../../../style/_colors';
+@import '../../../../style/_fonts';
+
+%headers_style_font {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: $color_header_bold;
+    text-decoration: none;
+}
+
+.header{
+    background-color: $color_background;
+    
+    .logo{
+        margin: 5px 0 0 1%;   
+        float: left;
+        width: 20%;
+        text-align: left;
+        
+        a{   
+            @extend %headers_style_font;     
+        }
+    }
+
+    .navigator{
+        float: left;
+        // margin-left: 30%;
+        width: 58%;
+    }
+
+    .login{
+        margin: 0 1% 0 0;
+        float: right;
+        text-align: right;
+        width: 20%;
+
+        button span a{
+            font-family: $font_header;
+            font-weight: 600;
+            color: $color_header_bold;  
+        }
+    }
+}
+
+
+
+@media only screen and (max-width: 750px) {
+
+    .header{
+        background-color: $color_background;
+        
+        .logo{
+            margin-left: 0; 
+            float: right;
+            width: auto;
+        }
+    
+        .navigator{
+            // float: left;
+            width: auto;
+            margin-left: 0
+        }
+    
+        .login{
+            margin: 8px 1% 0 0;
+            float: right;
+            width: auto;
+            font-weight: 400;
+
+            button span a{
+                font-size: 1em;
+                font-weight: 600; 
+            }
+        }
+    }    
+}
+

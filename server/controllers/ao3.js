@@ -23,6 +23,8 @@ const fanficsPath = "public/fandoms"
 const pLimit = require('p-limit');
 
 exports.getFanficsOfFandom =  async (fandom,method) => {
+    // TODO: ADD CHOSE FANFDOM FOR THE DOWNLOADER
+    // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
    console.log(clc.blue('[ao3 controller] getFanficsOfFandom()'));
 
    await this.loginToAO3()
@@ -363,6 +365,7 @@ const getPublishDate = async (url)=>{
     });
 }
 
+
 exports.checkIfFileExsistHandler = async (req,res) =>{
     console.log(clc.bgGreenBright('[ao3 controller] checkIfFileExsistHandler()'));
     fandomName = 'Clexa'
@@ -578,17 +581,6 @@ const downloader = (url, filename) => {
             console.log(`TimeOut - redownloading: ${url}`)
             downloader(url, fileName);
         });  
-
-        // request.head({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
-        //     if (err){
-        //         reject(console.log('There was an error in: downloader(): ',err))
-        //     }
-            
-        //     request({url,jar, credentials: 'include'}).pipe(fs.createWriteStream(filename))
-        //     .on( "finish", () => resolve(0) )
-        //     .on('close', () =>  {})
-        //     .on('error',() => reject(console.log('There was an error in: downloader(): '+url+' , filename: ',+filename)))        
-        // }); 
     })
 };
 
@@ -721,6 +713,9 @@ const getUrlBodyFromAo3 = url =>{
     });
 }
 //UTILITIES FOR getDataFromAO3FandomPage()
+exports.saveFanficToDBHandler = (fandomName,fanfic) =>{
+    saveFanficToDB(fandomName,fanfic)
+}
 
 const saveFanficToDB = (fandomName,fanfic) =>{
     // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fanfic));  

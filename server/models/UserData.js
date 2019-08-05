@@ -15,16 +15,18 @@ const UserFanficsSchema = new Schema({
     {
       FanficID:         {type: Number, unique: true},
       FandomName:       {type: String},
+      Follow:           {type: Boolean},
       Favorite:         {type: Boolean},
       Ignore:           {type: Boolean},
       Status:           {type: String}, 
       ChapterStatus:    {type: Number},
       Image:            {type: String},
+      ReadingList:      [],
       SavedFic:         {type: Boolean},       
-      SavedType:        [],
-      ReadingList:      [],       
+      SavedType:        [],     
     }
   ],
+  ReadingList:      [],  
   FanficIgnoreList: []
 });
 
@@ -33,3 +35,14 @@ let UserFanfics = mongoose.dbUsers.model('UserData', UserFanficsSchema);
  
  
 module.exports = UserFanfics;
+
+
+/*
+
+{
+    Name:{type: String, unique: true},
+    Fanfics:[],
+    createDate:{type: Number}
+}
+
+*/

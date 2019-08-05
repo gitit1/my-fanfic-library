@@ -40,7 +40,8 @@ class Fanfic extends Component{
             patreonFanficsCount:0,
             tumblrFanficsCount:0,
             wattpadFanficsCount:0,   
-        }
+        },
+        readingListAncor:null
     }
 
     componentWillMount(){     
@@ -105,7 +106,20 @@ class Fanfic extends Component{
                 }else{
                     userFanficsCopy.push({
                         SavedType:[],
-                        ReadingList:[],
+                        FanficID:fanficId,
+                        [markType]:!mark
+                    })
+                }
+                this.setState({
+                    userFanfics: userFanficsCopy
+                })
+                break;
+            case 'Follow':
+                if(objIndex!==-1){
+                    userFanficsCopy[objIndex].Follow = !mark;
+                }else{
+                    userFanficsCopy.push({
+                        SavedType:[],
                         FanficID:fanficId,
                         [markType]:!mark
                     })
@@ -120,7 +134,6 @@ class Fanfic extends Component{
                 }else{
                     userFanficsCopy.push({
                         SavedType:[],
-                        ReadingList:[],
                         FanficID:fanficId,
                         [markType]:!mark
                     })
@@ -287,9 +300,17 @@ class Fanfic extends Component{
         this.setState({drawerFilters: open});
     }
 
+    openReadingListBox=(event,inReadingList,fanficId)=>{
+        this.setState({readingListAncor:event.currentTarget})                
+    }
+
+    closeReadingListBox= (el) => {
+        this.setState({readingListAncor:el})
+    }   
+
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort} = this.state;
+        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,readingListAncor} = this.state;
 
         return(
             <Container header={this.props.match.params.FandomName}>
@@ -331,7 +352,6 @@ class Fanfic extends Component{
                         </div>
                     </Drawer>
 
-                    {/* {this.props.loading ? <Spinner/> : ( */}
                         {fanficsNumbers.fanficsCurrentCount===0 ? 
                             <p><b>Didn't found any fanfics with this search filters</b></p>
                         :
@@ -340,15 +360,12 @@ class Fanfic extends Component{
                                             markAs={this.markAsHandler}            
                                             markStatus={this.statusHandler}
                                             inputChapterToggle={this.inputChapterHandler}
-                                            inputChapter={inputChapterFlag} 
+                                            inputChapter={inputChapterFlag}
+                                            readingListAncor={readingListAncor}
+                                            openReadingListBox={this.openReadingListBox}
+                                            closeReadingListBox={()=>this.closeReadingListBox(null)}
                             />
                         }
-                    {/* )} */}
-                    {
-                        // this.props.fanfics.map(fanfic=>(
-                        //     <p>{fanfic.fileName}</p>
-                        // )
-                    }
             </Container>
         )
     }

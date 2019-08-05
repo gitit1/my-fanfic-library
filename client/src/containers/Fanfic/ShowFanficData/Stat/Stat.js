@@ -11,14 +11,18 @@ const Stat = (props) => (
     <dd>{props.fanfic.Words.toLocaleString(undefined, {maximumFractionDigits:2})}</dd>
     <dt>Chapters:</dt>
     <dd>{props.fanfic.NumberOfChapters}</dd>
-    <dt>Comments:</dt>
+    <dt>Comments (Reviews):</dt>
     <dd>{props.fanfic.Comments}</dd>
-    <dt>Kudos:</dt>
+    <dt>Kudos (Favs):</dt>
     <dd>{props.fanfic.Kudos}</dd>
-    <dt>Bookmarks:</dt>
+    <dt>Bookmarks (Follows):</dt>
     <dd>{props.fanfic.Bookmarks}</dd>
-    <dt>Hits:</dt>
-    <dd>{props.fanfic.Hits}</dd>
+    {props.fanfic.Hits &&
+      <React.Fragment>
+        <dt>Hits:</dt>
+        <dd>{props.fanfic.Hits}</dd>
+      </React.Fragment>
+    }
   </React.Fragment>
 );
 

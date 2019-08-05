@@ -5,6 +5,7 @@ const buildDir  = require('path').join(__dirname,'../build');
 
 const db = require('../controllers/db');
 const ao3 = require('../controllers/ao3');
+const otherfanficssites = require('../controllers/otherfanficssites');
 const users = require('../controllers/users');
 
 
@@ -19,15 +20,18 @@ try {
   router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
   router.post('/db/addFanficToUserMarks',db.addFanficToUserMarksInDB);
   router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);
-  // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
- 
+  router.get('/db/getLastUpdateDate',db.getLastUpdateDate);
+  
   
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
-
+  
   // checking:
   router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
-  router.get('/db/getLastUpdateDate',db.getLastUpdateDate)
+  router.get('/otherfanficssites/getFanficData',otherfanficssites.getFanficData)
+  // router.get('/otherfanficssites/downloadFanfic',otherfanficssites.downloadFanfic)
+  // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
+
   
   //if (!keys.nodeEnv==='development'){  
   //  router.get('/',function(req,res){

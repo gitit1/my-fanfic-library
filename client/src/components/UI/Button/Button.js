@@ -1,26 +1,28 @@
 import React,{Component} from 'react';
 import classes from './Button.module.css';
+import Button from '@material-ui/core/Button';
 
-class Button extends Component{
+class NewButton extends Component{
     render(){       
         return(
-            <button
+            <Button
+                variant="contained" 
                 disabled={this.props.disabled}
-                className={[classes.Button, classes[this.props.btnType]].join(' ')} 
+                className={[classes[this.props.btnType]].join(' ')} 
                 onClick={this.props.clicked}
-                style={{
-                    '--theme-primary-color': this.props.backColorFrimary,
-                    '--theme-secondery-color': this.props.backColorSecondary,
-                    'color': this.props.textColor
-                }}
+                // style={{
+                //     '--theme-primary-color': this.props.backColorFrimary,
+                //     '--theme-secondery-color': this.props.backColorSecondary,
+                //     'color': this.props.textColor
+                // }}
                 //style={{'backgroundColor':props.backColor,}}>
                 >
                 {this.props.children}
-            </button>
+            </Button>
         )
 
         
     }
 }
 
-export default Button;
+export default NewButton;

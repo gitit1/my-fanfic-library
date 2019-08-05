@@ -6,7 +6,7 @@ import store from "./store/store";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./store/actions";
 
-import Layout from './hoc/Layout';
+import Layout from './hoc/Layout/Layout';
 import PrivateRoute from "./components/private-route/PrivateRoute";
 
 import Index from './containers/Index/Index';
@@ -20,9 +20,11 @@ import Dashboard from './containers/UserData/Dashboard/Dashboard';
 import MyFandoms from './containers/UserData/MyFandoms/MyFandoms';
 import ReadingList from './containers/UserData/ReadingList/ReadingList';
 //Manage
-import ManageDownloader from './containers/Manage/ManageDownloader/ManageDownloader';
-import ManageFandoms from './containers/Manage/ManageFandoms/ManageFandoms';
-import AddNewFandom from './containers/Manage/ManageFandoms/AddNewFandom/AddNewFandom';
+import ManageFandoms from './containers/Manage/ManageFandoms';
+import ManageDownloader from './containers/Manage/ManageDownloader';
+import Ao3Downloader from './containers/Manage/Ao3Downloader';
+import AddNewFandom from './containers/Manage/ManageFandoms/components/AddNewFandom';
+import OtherSitesDownloader from './containers/Manage/OtherSitesDownloader'
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
@@ -58,21 +60,23 @@ function App() {
         <Route              path="/fandoms"             component={Fandoms}                     />
         <Route              path="/fanfics/:FandomName" component={Fanfic}                      />
         {/* Search */}
-        <Route              path="/search"              component={Search}                      />
+        {/* <Route              path="/search"              component={Search}                      /> */}
         {/* UserData */}  
-        <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} />
-        <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
-        <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
+        {/* <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} /> */}
+        {/* <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} /> */}
+        {/* <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} /> */}
         {/* Manage */}  
+        <PrivateRoute exact path="/ao3Downloader"       component={Ao3Downloader}     level={1} />
         <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
         <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
         <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
+        <PrivateRoute exact path="/otherSitesDownloder" component={OtherSitesDownloader}     level={1} />
         {/* Auth */}  
-        <Route              path="/registrer"           component={Registrer}                   />
-        <Route              path="/login"               component={Login}                       />
+        {/* <Route              path="/registrer"           component={Registrer}                   /> */}
+        {/* <Route              path="/login"               component={Login}                       /> */}
         {/* TODO: DELETE WHEN DONE */}  
-        <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} />
-        <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} />
+        {/* <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} /> */}
+        {/* <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} /> */}
 
 
 
