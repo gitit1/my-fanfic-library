@@ -714,11 +714,12 @@ const getUrlBodyFromAo3 = url =>{
 }
 //UTILITIES FOR getDataFromAO3FandomPage()
 exports.saveFanficToDBHandler = (fandomName,fanfic) =>{
+    console.log('saveFanficToDBHandler')
     saveFanficToDB(fandomName,fanfic)
 }
 
 const saveFanficToDB = (fandomName,fanfic) =>{
-    // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fanfic));  
+    console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fanfic));  
     return new Promise(async function(resolve, reject) {
         mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"] }, async function(err, dbFanfic) {
             if (err) { 

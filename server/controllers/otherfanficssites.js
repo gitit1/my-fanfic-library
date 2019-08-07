@@ -8,9 +8,7 @@ const FanficSchema = require('../models/Fanfic');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 
-const func = require('../helpers/functions');
 const ao3funcs = require('./ao3.js')
-const moment = require('moment');
 
 let request = require('request')
 let jar = request.jar();
@@ -20,17 +18,28 @@ request = request.defaults({
 });
 const fanficsPath = "public/fandoms"
 
+exports.saveDataOfFanficToDB = async (req,res) =>{
+    console.log(clc.blue('[otherFanficsSites controller] saveDataOfFanficToDB()'));   
+    
+    const {fandomName,download,url,image} = req.query;
+    ao3funcs.saveFanficToDBHandler(fandomName,req.query);
+    (download=='true') && downloadFanfic(url,req.body.Source,`${req.body.Author}_${req.body.FanficTitle} (${req.body.FanficID})`,'epub',req.body.FandomName,req.body.FanficID) 
+    res.send(true)
+}
+
 exports.getFanficData = async (req,res) =>{
     console.log(clc.blue('[otherFanficsSites controller] getFanficData()'));
     
     const {url,fandomName,download} = req.query;
 
     let fanfic = {},tags=[],freeforms =[],characters=[],relationships=[];
-    const siteUrl = getSiteUrl(url)
+    const fixedUrl = await getFixedUrl(url)
+    const siteUrl = await getSiteUrl(fixedUrl);
     let isChaptersAttr = false,isGnere = false,ischaractersTags = false,isLanguage=false;
 
-    let body = await getUrlBodyFromSite(url);
-    
+    let body = await getUrlBodyFromSite(fixedUrl);
+    console.log('fixedUrl:',fixedUrl)
+
     let $ = cheerio.load(body);
     // console.log('url:',url)
     // console.log('text:',$('#profile_top span.xgray').text())
@@ -92,8 +101,8 @@ exports.getFanficData = async (req,res) =>{
         fanfic.NumberOfChapters = 1
         fanfic.Oneshot = true
     }
-    fanfic.URL                  =       url
-    fanfic.Source               =       getSource(url)
+    fanfic.URL                  =       fixedUrl
+    fanfic.Source               =       getSource(fixedUrl)
     fanfic.FandomName           =       fandomName;
     fanfic.FanficTitle          =       $('#profile_top b.xcontrast_txt').first().text();
     fanfic.Author               =       $('#profile_top a.xcontrast_txt').first().text();
@@ -105,20 +114,54 @@ exports.getFanficData = async (req,res) =>{
 
     // console.log('text:',text)
     // console.log('fanfic:',fanfic)
-    ao3funcs.saveFanficToDBHandler(fandomName,fanfic)
-    download && downloadFanfic(url,fanfic.Source,`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`,'epub',fanfic.FandomName,fanfic.FanficID)
-    res.send(fanfic)
+    
+    //ao3funcs.saveFanficToDBHandler(fandomName,fanfic)
+    //download && downloadFanfic(url,fanfic.Source,`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`,'epub',fanfic.FandomName,fanfic.FanficID)
+
+    let checkForSimilarResult = await checkForSimilar(fanfic,fandomName)
+    // console.log('checkForSimilarResult:',checkForSimilarResult)
+    if(!checkForSimilarResult){
+        res.send([fanfic]) 
+    }else{
+        res.send([fanfic,checkForSimilarResult[0]])
+    }
+    //res.send(fanfic)
 }
 
+const checkForSimilar = async (fanfic,fandomName) =>{
+    console.log('checkForSimilar')
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    return new Promise(function(resolve, reject) {
+        FanficDB.find({'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'},'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}}).exec(async function(err, fanficResult) {
+            err && reject(err)
+            console.log('fanficResult:',fanficResult.length)
+            if(fanficResult.length===0){
+                resolve(false)
+            }else{
+                resolve(fanficResult)
+            }
+        })
+    })
+}
+
+const getFixedUrl = url =>{
+    url=   url.includes('fanfiction.net')  ? url.replace(/(.*?\/s\/[0-9].*?)\/[0-9]\/.*||(.*?\/s\/.*?[0-9]).*/gm,'$1') 
+         : url.includes('archiveofourown.org') ? url 
+         : url.includes('wattpad.com') ? url 
+         : 'Unknown';
+    if(url.endsWith("/")){return url;}else{return url+'/';}
+}
 const getSource = url =>{
     return url.includes('fanfiction.net')  ? 'FF' 
          : url.includes('archiveofourown.org') ? 'AO3' 
-         : url.includes('wattpad.com') ? 'wattpad' : 'Unknown';
+         : url.includes('wattpad.com') ? 'wattpad'
+         : 'Unknown';
 }
 const getSiteUrl = url =>{
     return url.includes('fanfiction.net')  ? 'https://www.fanfiction.net' 
          : url.includes('archiveofourown.org') ? 'https://archiveofourown.org' 
-         : url.includes('wattpad.com') ? 'https://www.wattpad.com' : 'Unknown';
+         : url.includes('wattpad.com') ? 'https://www.wattpad.com' 
+         : 'Unknown';
 }
 const getRating = rating =>{
     switch (rating) {
@@ -141,6 +184,7 @@ const getRating = rating =>{
 }
 
 const getUrlBodyFromSite = url =>{
+    console.log('getUrlBodyFromSite')
     return new Promise(function(resolve, reject) {
         request.get({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
             if(err){  

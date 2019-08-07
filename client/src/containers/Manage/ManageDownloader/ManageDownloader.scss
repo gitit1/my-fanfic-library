@@ -2,24 +2,24 @@
     width: 98%;
 
     select{
-        width:40%;
+        width: 200px;
         margin: 0 auto;
     }
 
     .grid_buttons{
         button{
-            margin-top: 3%;
-            width: 50%;
-            min-height: 40%
+            margin-top: 50px;
+            width: 200px;
+            height: 100px
         }
     }
     .grid_code {
         // margin-top: 2%;
 
-        div{
+        .code_box{
             width:60%;
-            margin-top: 3%;
-            min-height: 100%;
+            margin-top: 50px;
+            min-height: 350px;
             background: #eee;
             color: #666;
             border-radius: 5px;

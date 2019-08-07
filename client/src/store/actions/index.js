@@ -23,5 +23,6 @@ export {
 } from './users';
 
 export{
-    getDataOfFanfic
+    getDataOfFanfic,
+    saveDataOfFanficToDB
 }from './downloader'

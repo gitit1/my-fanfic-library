@@ -26,9 +26,11 @@ try {
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
   
+  router.get('/otherfanficssites/getFanficData',otherfanficssites.getFanficData)
+  router.post('/otherfanficssites/saveDataOfFanficToDB',otherfanficssites.saveDataOfFanficToDB)
+  
   // checking:
   router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
-  router.get('/otherfanficssites/getFanficData',otherfanficssites.getFanficData)
   // router.get('/otherfanficssites/downloadFanfic',otherfanficssites.downloadFanfic)
   // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
 
