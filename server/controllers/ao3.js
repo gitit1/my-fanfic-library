@@ -366,12 +366,10 @@ const getPublishDate = async (url)=>{
 }
 
 
-exports.checkIfFileExsistHandler = async (req,res) =>{
+exports.checkIfFileExsistHandler = async (fandomName) =>{
     console.log(clc.bgGreenBright('[ao3 controller] checkIfFileExsistHandler()'));
-    fandomName = 'Clexa'
-    await checkIfFileExsist(fandomName).then(sum=>
-        res.send(`saved ${sum} unsaved files`)
-    )
+
+    await checkIfFileExsist(fandomName).then(sum=>{return sum})
 }
 const checkIfFileExsist = async (fandomName) => {
     let counter = 0,sum = 0;
@@ -714,12 +712,12 @@ const getUrlBodyFromAo3 = url =>{
 }
 //UTILITIES FOR getDataFromAO3FandomPage()
 exports.saveFanficToDBHandler = (fandomName,fanfic) =>{
-    console.log('saveFanficToDBHandler')
+    // console.log('saveFanficToDBHandler')
     saveFanficToDB(fandomName,fanfic)
 }
 
 const saveFanficToDB = (fandomName,fanfic) =>{
-    console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fanfic));  
+    // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fanfic));  
     return new Promise(async function(resolve, reject) {
         mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"] }, async function(err, dbFanfic) {
             if (err) { 

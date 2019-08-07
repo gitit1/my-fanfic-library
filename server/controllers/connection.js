@@ -37,6 +37,11 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                             p = p.then(() => downloadFanficsToServerHandler(socket,fandom,method) )                                                          
                         ))
                         break;
+                    case 'checkIfFileExsists':
+                            await fetchedFandoms.map(fandom => promises.push(
+                                p = p.then(() => checkIfFileExsistsHandler(socket,fandom,method) )                                                          
+                            ))
+                            break;                        
                     case 'All'://TODO:need to add to client side
                         await fetchedFandoms.map(fandom => promises.push(
                             p = p.then(() => manageFandomFanficsHandler(socket,fandom) )                           
@@ -67,6 +72,8 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                 case 'saveFanfics':
                     await downloadFanficsToServerHandler(socket,fandom,method)
                     break;
+                case 'checkIfFileExsists':
+                    await checkIfFileExsistsHandler(socket,fandom)
                 case 'All':
                     await manageFandomFanficsHandler(socket,fandom)
                     await manageFandomFanficsHandler(socket,fandom)
@@ -162,4 +169,24 @@ const downloadFanficsToServerHandler = async (socket,fandom,method) => {
 
     console.log(clc.cyanBright(`End`));
     socket && socket.emit('getFanficsData', `End`);   
-} 
+}
+
+const checkIfFileExsistsHandler = async (socket,fandom) => {
+    const {FandomName} = fandom 
+
+    console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
+    socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${FandomName}`);
+
+    socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">checkIfFileExsist()</span> to save the missing fanfics`);
+
+    let startTime = now(); 
+    let sum = await ao3.checkIfFileExsistHandler(FandomName);
+    console.log(`saved ${sum} unsaved files`)
+    let endTime = now();  
+
+    socket && socket.emit('getFanficsData', `Saved ${sum} unsaved files</b></span>`)
+    socket && socket.emit('getFanficsData', `<b>The function:</b> <span style="color:brown">checkIfFileExsist()</span> was running for ${((endTime-startTime)/1000).toFixed(2)} seconds`);
+
+    console.log(clc.cyanBright(`End`));
+    socket && socket.emit('getFanficsData', `End`);     
+}
