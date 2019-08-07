@@ -3,7 +3,7 @@ import axios from '../axios-server';
 
 export const downloaderStart    = ()            =>      {return{type: actionTypes.DOWNLOADER_START}};
 export const downloaderFail     = (error)       =>      {return{type: actionTypes.DOWNLOADER_FAIL,error: error};};
-export const downloaderSuccess  = (fanficData)  =>      {return{type: actionTypes.GET_FANFIC_DATA_SUCCESS}};
+export const downloaderSuccess  = ()            =>      {return{type: actionTypes.GET_FANFIC_DATA_SUCCESS}};
 
 export const getDataOfFanficSuccess = (fanficData) =>{
     console.log('[actions: fandom.js] - getFandomsFromDBSuccess')

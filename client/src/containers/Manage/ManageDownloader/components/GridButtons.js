@@ -8,7 +8,9 @@ const GridButtons = (props) => (
         <br/>
         <Button variant="contained" onClick={()=>props.sendRequestsToServer('getDeletedFanfics')}>Get/Update Deleted Fanfics</Button>  
         <br/>
-        <Button variant="contained" onClick={()=>props.addNewFanfic()}>Add New Fanfic</Button>
+        <Button variant="contained" onClick={()=>props.sendRequestsToServer('getDeletedFanfics')}>Add New Fanfic</Button>
+        <br/>
+        <Button variant="contained" onClick={()=>props.sendRequestsToServer('checkIfFileExsists')}>Save Missing Fanfics</Button>
         <br/>
     </Grid>
 );
