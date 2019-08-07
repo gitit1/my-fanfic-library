@@ -1,6 +1,10 @@
 import React from 'react';
 import classes from './Input.module.css';
 
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+
 const input = (props) => {
     let inputElement =null;
     const inputClasses = [classes.InputElement];
@@ -26,17 +30,28 @@ const input = (props) => {
                                 onChange={props.changed}/>
             break;
         case ('select'):
-            inputElement = <select 
-                                className={inputClasses.join(' ')}                                     
-                                value={props.value}
-                                onChange={props.changed}>
-                                {props.elementConfig.options.map(option =>(
-                                    <option key={option.value} 
-                                            value={option.value}>
-                                        {option.displayValue}
-                                    </option>
-                                ))}                                    
-                            </select>
+            inputElement =  <React.Fragment>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
+                                    <Select 
+                                        native
+                                        inputProps={{
+                                            name: props.id,
+                                            id: props.id,
+                                        }}
+                                        // className={inputClasses.join(' ')}                                     
+                                        value={props.value}
+                                        onChange={props.changed}>
+                                            <option value="" disabled/>
+                                        {props.elementConfig.options.map(option =>(
+                                            <option key={option.value} 
+                                                    value={option.value}>
+                                                {option.displayValue}
+                                            </option>
+                                        ))}                                    
+                                    </Select>
+                                </FormControl>
+                            </React.Fragment>
             break;  
         case ('checkbox'):
             inputElement = <div>
@@ -64,7 +79,8 @@ const input = (props) => {
     return(
         <div className={props.visible ? classes.Show : classes.Hidden}>
         {/* // classes.Input */}
-            <label className={classes.Label}>{props.label}</label>
+            {/* <label className={classes.Label}>{props.label}</label> */}
+            
             {inputElement}
         </div>
     )

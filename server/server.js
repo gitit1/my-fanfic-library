@@ -41,7 +41,6 @@ if (keys.nodeEnv==='development'){
      app.listen(port, () => console.log(`Listening on port ${port} - development mode`));
  }else{
 	 app.get('*', function(req, res) {
-		 console.log('heree')
 		 res.sendFile(require('path').join(buildDir,'/index.html'));
 	 });
 	 app.listen(port, () => console.log(`Listening on port ${port} - production mode`));

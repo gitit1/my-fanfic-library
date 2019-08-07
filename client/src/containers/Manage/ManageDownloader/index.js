@@ -5,16 +5,21 @@ import io from 'socket.io-client';
 import * as actions from '../../../store/actions';
 
 import Container from '../../../components/UI/Container/Container';
+
 import Button from '@material-ui/core/Button';
-import Input from '../../../components/UI/Input/Input';
 import { Grid } from '@material-ui/core';
 
+import GridChooseFandom from './components/GridChooseFnadom'
+import GridButtons from './components/GridButtons'
+import GridDataBox from './components/GridDataBox';
 import './ManageDownloader.scss';
 
 const socket = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') 
 ? io('ws://localhost:8080', {transports: ['websocket']}, {secure:false}) 
 : io(window.location.origin.replace(/^http/, 'ws') + ':8080', {transports: ['websocket']}, {secure:false}) ;
 
+
+  
 
 class ManageDownloader extends Component{
 
@@ -23,60 +28,49 @@ class ManageDownloader extends Component{
         fandomSelect: {
             label: 'Choose Fandom',
             elementType:'select', 
-            elementConfig:{
-                options: []
-            },
-            value:'All',
-            validation:{},
-            valid: true,
+            elementConfig:{options: []},
+            value:'',
             visible: true,
-            ready: false
+            ready: false,
+            id:'select-fandom'
         },
         typeSelect: {
           label: 'Choose Type for saving fanfics',
           elementType:'select', 
           elementConfig:{
-            options: [{value: 'azw3' ,displayValue:  'azw3' ,checked: false},
-            {value: 'epub' ,displayValue: 'epub'  ,checked: false},
-            {value: 'mobi' ,displayValue: 'mobi'  ,checked: false},
-            {value: 'pdf'  ,displayValue:  'pdf'  ,checked: false},
-            {value: 'html' ,displayValue: 'html'  ,checked: false}]
+            options: [
+                {value: 'azw3' ,displayValue:  'azw3' ,checked: false},
+                {value: 'epub' ,displayValue: 'epub'  ,checked: false},
+                {value: 'mobi' ,displayValue: 'mobi'  ,checked: false},
+                {value: 'pdf'  ,displayValue:  'pdf'  ,checked: false},
+                {value: 'html' ,displayValue: 'html'  ,checked: false}]
           },
           value:'epub',
           visible: true,
           ready: true
-      },
+        },
         serverData: null,
-        logs: []
+        logs: [],
+        switches:{
+            save:false
+        },
+        showData:0
     }
 
-    componentDidMount(){
-        this.createOptionsForFandomSelect()
-        socket.removeAllListeners()
-    }
+    componentDidMount(){this.createOptionsForFandomSelect(); socket.removeAllListeners();}
 
-    componentWillUnmount(){
-        this.props.onGetFandoms()
-    }
+    componentWillUnmount(){this.props.onGetFandoms()}
 
     createOptionsForFandomSelect = () =>{
         let options =[{value: 'All',displayValue: 'All'}];
         this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName)).map(fandom=>{
-              options.push({
-                value: fandom.FandomName,
-                displayValue: fandom.FandomName
-              }
-            )
+            options.push({value: fandom.FandomName,displayValue: fandom.FandomName})
             return null
         });
         this.setState(prevState =>({
-          fandomSelect: {
-                ...prevState.fandomSelect,
-                  'elementConfig':{
-                      ...prevState.fandomSelect.elementConfig.options,
-                      options:options
-                  },
-                  ready:true
+          fandomSelect: {...prevState.fandomSelect,
+                            'elementConfig':{ ...prevState.fandomSelect.elementConfig.options,options:options},
+                            ready:true
           }
         }));  
     
@@ -84,96 +78,73 @@ class ManageDownloader extends Component{
 
     sendRequestsToServerHandler = async (choice) =>{
         socket.removeAllListeners()
-        this.setState({serverData:null,logs:[]})
+        this.setState({serverData:null,logs:[],showData:0})
 
         socket.on('getFanficsData', serverData =>{
             this.setState({serverData})
             this.state.logs.push(this.state.serverData)
             if(this.state.serverData==='End'){
-                this.state.logs.push('Done!')
-                this.props.onGetFandoms()
+                this.state.logs.push('Done!');
+                this.props.onGetFandoms();
             }
-        })
+        });
+
         switch (choice) {
             case 'saveFanfics':
-                let method = this.state.typeSelect.value
+                let method = this.state.typeSelect.value;
                 socket.emit('getFandomFanfics', this.state.fandom,choice,method);
-            break;
+                break;
         
             default:
-            socket.emit('getFandomFanfics', this.state.fandom,choice);
-            break;
+                socket.emit('getFandomFanfics', this.state.fandom,choice);
+                break;
         }
             
     }
 
     inputChangedHandler = (event) =>{
-    socket.removeAllListeners()
+        socket.removeAllListeners()
 
-    let selectedFandom = event.target.value;
-    let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.FandomName===selectedFandom)[0])
-    
-    this.setState(prevState =>({
-        fandomSelect: {
-            ...prevState.fandomSelect,
-                value: selectedFandom
-        },
-        fandom:fandom,
-        serverData: null,
-        logs: []
-    }));  
+        const selectedFandom = event.target.value,logs=[],serverData=null;
+        let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.FandomName===selectedFandom)[0]);
+        let showData = (selectedFandom==='All') ? 0 : 1;
+
+        this.setState(prevState =>({
+            
+            fandom,serverData,logs,showData,
+            fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
+            switches:{...prevState.switches,save:fandom.AutoSave}
+        }));  
     }
 
     typeInputChangedHandler = (event) =>{
-    socket.removeAllListeners()
+        socket.removeAllListeners()
 
-    let selectedMethod = event.target.value;
-    
-    this.setState(prevState =>({
-        typeSelect: {
-            ...prevState.typeSelect,
-                value: selectedMethod
-        }
-    }));  
+        let selectedMethod = event.target.value;
+        
+        this.setState(prevState =>({typeSelect: {...prevState.typeSelect,value: selectedMethod}}));  
     }
     
+    switchChangeHandler = (type) =>{
+        this.setState(prevState =>({switches:{...prevState.switches,save:!this.state.switches[type]}}));  
+    }
+
+    addNewFanficHandler = () =>{this.setState({showData:2})}
 
     render(){
-        const {fandomSelect,logs} = this.state
+        const {fandom,fandomSelect,switches,logs,showData} = this.state
+   
         return(
             <Container header='Downloader' className='managedownloader'>
                 <Grid container className='downloader' spacing={2}>
-                    <Grid item xs={12}>
-                        <Input
-                            label={fandomSelect.label}
-                            elementType={fandomSelect.elementType} 
-                            elementConfig={fandomSelect.elementConfig} 
-                            value={fandomSelect.value} 
-                            invalid={!fandomSelect.valid}
-                            shouldValidate={fandomSelect.validation}
-                            touched={fandomSelect.touched}
-                            visible={fandomSelect.visible}
-                            changed={(event) => this.inputChangedHandler(event)}
-                        />
-                    </Grid>
-                    <Grid className='grid_buttons' item xs={6}>
-                        <Button variant="contained" onClick={()=>this.sendRequestsToServerHandler('getFandomFanfics')}>Get/Update Fandom Fanfics</Button>
-                        <br/>
-                        <Button variant="contained" onClick={()=>this.sendRequestsToServerHandler('getDeletedFanfics')}>Get/Update Deleted Fanfics of this Fandom</Button>  
-                        <br/>
-                        <Button variant="contained"  >Add New Fanfic to Fandom</Button>
-                   </Grid>
-                    <Grid className='grid_code' item xs={6}>
-                        <div>
-                            {
-                            logs.map((log,index)=>(
-                                <p key={index} dangerouslySetInnerHTML={{ __html:log}}/>
-
-                            ))
-                            }
-                            test
-                        </div>
-                    </Grid>
+                    <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
+                    {
+                     fandomSelect.value!='' &&
+                        <React.Fragment> 
+                            <GridButtons sendRequestsToServer={this.sendRequestsToServerHandler} addNewFanfic={this.addNewFanficHandler}/>
+                            <GridDataBox fandom={fandom} showData={showData} logs={logs} switches={switches}/>
+                        </React.Fragment>
+                    }
                 </Grid>
             </Container>
         )
