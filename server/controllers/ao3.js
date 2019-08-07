@@ -206,6 +206,9 @@ const getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,s
 
     fanficUpdateDate                =       page.find('p.datetime').text();
     fanfic["LastUpdateOfFic"]       =       fanficUpdateDate ==="" ? 0 : new Date(fanficUpdateDate).getTime();
+    if(fanficUpdateDate ===""){
+        console.log(clc.red('ERROR IN FANFIC DATE:',fanfic["FanficID"]))
+    }
 
     fanfic["NumberOfChapters"]      =       Number(page.find('dd.chapters').text().split('/')[0]);  
 
