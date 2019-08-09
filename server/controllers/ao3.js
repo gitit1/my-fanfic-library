@@ -371,8 +371,23 @@ const getPublishDate = async (url)=>{
 
 exports.checkIfFileExsistHandler = async (fandomName) =>{
     console.log(clc.bgGreenBright('[ao3 controller] checkIfFileExsistHandler()'));
-
-    await checkIfFileExsist(fandomName).then(sum=>{return sum})
+    let sum = 0;
+    await checkIfFileExsist(fandomName).then(async sum=>{
+        const savedFanficsAll = await mongoose.dbFanfics.collection(fandomName).countDocuments({'SavedFic':true});
+        await FandomModal.updateOne({ 'FandomName': fandomName },
+        { $set: {   'SavedFanfics':savedFanficsAll,
+        'LastUpdate':new Date().getTime(),
+        'FanficsLastUpdate':new Date().getTime(),
+        'SavedFanficsLastUpdate':new Date().getTime()
+    }},
+    (err, result) => {
+        if (err) throw err;
+        
+    }
+    );
+        console.log('sum1:',sum)
+    })
+    return sum
 }
 const checkIfFileExsist = async (fandomName) => {
     let counter = 0,sum = 0;
@@ -416,7 +431,7 @@ const checkIfFileExsist = async (fandomName) => {
                 }
                 if(dbFanfic[index].Deleted===undefined || (dbFanfic[index].Deleted && !dbFanfic[index].Deleted)){
                     await methods.map(async (method) => {
-                        path = `${fanficsPath}/${fandomName}/fanfics/${dbFanfic[index].fileName}.${method}`;
+                        path = `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${dbFanfic[index].fileName}.${method}`;
                         counter = await checkIfExist(dbFanfic[index],path,method)
                         sum = sum+counter;
                     })

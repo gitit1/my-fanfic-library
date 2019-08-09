@@ -60,11 +60,11 @@ function App() {
         <Route              path="/fandoms"             component={Fandoms}                     />
         <Route              path="/fanfics/:FandomName" component={Fanfic}                      />
         {/* Search */}
-        {/* <Route              path="/search"              component={Search}                      /> */}
+        <Route              path="/search"              component={Search}                      />
         {/* UserData */}  
-        {/* <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} /> */}
-        {/* <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} /> */}
-        {/* <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} /> */}
+        <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} />
+        <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
+        <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
         {/* Manage */}  
         <PrivateRoute exact path="/ao3Downloader"       component={Ao3Downloader}     level={1} />
         <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
@@ -72,8 +72,8 @@ function App() {
         <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
         <PrivateRoute exact path="/otherSitesDownloder" component={OtherSitesDownloader}     level={1} />
         {/* Auth */}  
-        {/* <Route              path="/registrer"           component={Registrer}                   /> */}
-        {/* <Route              path="/login"               component={Login}                       /> */}
+        <Route              path="/registrer"           component={Registrer}                   />
+        <Route              path="/login"               component={Login}                       />
         {/* TODO: DELETE WHEN DONE */}  
         {/* <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} /> */}
         {/* <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} /> */}

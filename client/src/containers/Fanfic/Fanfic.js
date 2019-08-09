@@ -334,9 +334,9 @@ class Fanfic extends Component{
                     />
                     <div>
                     {/* <div className={FanficsNumbers}> */}
-                        <p>There is a total of <b>{fanficsNumbers.fanficsTotalCount}</b> fanfics in <b>{this.props.match.params.FandomName}</b> Fandom</p>
-                        <p>Sources: <b style={{color:'#8A0407'}}>AO3:</b> <b>{fanficsNumbers.ao3FanficsCount}</b> , <b style={{color:'#0a48ab'}}>Backup (Deleted from sites):</b> <b>{fanficsNumbers.fanficsDeletedCount}</b> </p>
-                        <p><b>{fanficsNumbers.fanficsIgnoredCount}</b> of the fanfics are ignored (filter by ignore to see them and reactive them)</p>
+                        <p>There is a total of <b>{fanficsNumbers.fanficsTotalCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> fanfics in <b>{this.props.match.params.FandomName.toLocaleString(undefined, {maximumFractionDigits:2})}</b> Fandom</p>
+                        <p>Sources: <b style={{color:'#8A0407'}}>AO3:</b> <b>{fanficsNumbers.ao3FanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> , <b style={{color:'#0a48ab'}}>Backup (Deleted from sites):</b> <b>{fanficsNumbers.fanficsDeletedCount}</b> </p>
+                        <p><b>{fanficsNumbers.fanficsIgnoredCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> of the fanfics are ignored (filter by ignore to see them and reactive them)</p>
                     </div>
                     </div>
 

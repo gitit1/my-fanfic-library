@@ -74,6 +74,7 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                     break;
                 case 'checkIfFileExsists':
                     await checkIfFileExsistsHandler(socket,fandom)
+                    break;
                 case 'All':
                     await manageFandomFanficsHandler(socket,fandom)
                     await manageFandomFanficsHandler(socket,fandom)

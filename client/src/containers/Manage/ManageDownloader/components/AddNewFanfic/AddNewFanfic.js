@@ -7,12 +7,6 @@ import * as actions from '../../../../../store/actions';
 import Button from '../../../../../components/UI/Button/Button';
 import Spinner from '../../../../../components/UI/Spinner/Spinner';
 
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
-
 import './style/managefanfics.scss';
 
 import UrlForSearch from './components/urlForSearch'
