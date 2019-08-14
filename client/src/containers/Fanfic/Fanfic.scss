@@ -1,0 +1,39 @@
+.fanfics{
+    width: 98%;
+
+    .containerGrid{
+        width: 100%;
+        text-align: center
+    }
+
+    .paginationGrid{
+        width: 100%;
+        margin: 0 auto;
+    }
+    .paginationGridButtom{
+        margin-top: 1%;
+    }
+    .fanficNumbers{
+        width: 100%;
+        text-align: left;
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+    }
+
+    .buttons{
+        text-align: center;
+        width: 100%;
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+    }
+
+
+
+    .main{
+        width: 100%
+    }
+}
+
+.filterDrewer{
+    width: 300px!important;
+}

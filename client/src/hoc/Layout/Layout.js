@@ -10,21 +10,37 @@ import Footer from './components/Footer/Footer';
 class Layout extends Component{
     state = {
         loading:true,
-        lastUpdateDate:null
+        lastUpdateDate:null,
+        mobileSize: 736,
+        medSize:1000
     }
+
     componentDidMount(){
         this.props.onGetFandoms().then(()=>{
             this.props.onGetLastUpdateDate().then(lastUpdateDate=>{
                 this.setState({loading:false,lastUpdateDate:Number(lastUpdateDate)})
             })
         })
+        this.handleResize();
+        window.addEventListener('resize', this.handleResize)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize)
     }
 
     logoutHandler = () =>{
-        this.props.onLogout()
+        this.props.onLogout();
     }
 
+    handleResize = () => {
+        const {medSize,mobileSize} = this.state
+        let screenSize = window.innerWidth;
+        let size =  (screenSize>medSize) ? 'l' : (screenSize>mobileSize) ? 'm' : 's'  
+        this.props.onSaveScreenSize(size)
+    }
     render(){
+        console.log('size:',this.state.size)
         let page = this.state.loading ? null :(
             <div className='layout'>
                 <header>
@@ -50,7 +66,8 @@ const mapStateToProps = state =>{
     return{
         fandoms:        state.fandoms.fandoms,
         loading:        state.fandoms.loading,
-        auth:           state.auth
+        auth:           state.auth,
+        size:           state.sceenSize.size
     };   
 }
   
@@ -59,7 +76,8 @@ const mapDispatchedToProps = dispatch =>{
         // initFandom:     () => dispatch(actions.fandomInit()),
         onGetFandoms:           ()      =>      dispatch(actions.getFandomsFromDB()),
         onGetLastUpdateDate:    ()      =>      dispatch(actions.getLastUpdateDate()),
-        onLogout:               ()      =>      dispatch(actions.logoutUser())
+        onLogout:               ()      =>      dispatch(actions.logoutUser()),
+        onSaveScreenSize:       (size)  =>      dispatch(actions.saveScreenSize(size))
     };
 }
 

@@ -1,6 +1,7 @@
 .Container{
-    margin: 0 auto;
-    margin-top: 1%;
+    margin: 0 auto!important;
+    margin-top: 1%!important;
+    margin-bottom: 1%!important;
 }
 .Header{
     height: 40px;     

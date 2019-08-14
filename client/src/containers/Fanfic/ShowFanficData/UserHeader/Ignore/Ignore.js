@@ -1,13 +1,18 @@
 import React from 'react';
-import ReactSVG from 'react-svg';
+//import ReactSVG from 'react-svg';
 //import classes from '../../ShowFanficData.module.css';
-import IgnoreSvg from '../../../../../assets/images/icons/ignore.svg'
+//import IgnoreSvg from '../../../../../assets/images/icons/ignore.svg'
+
+import Button from '@material-ui/core/Button';
 
 const Ignore = (props) => (
-    <div onClick={() =>props.props.markAs(props.fanfic.FanficID,'Ignore',props.isIgnored[3])} className={props.isIgnored[0]}>
-        <ReactSVG  src={IgnoreSvg} className={props.isIgnored[1]} wrapper='span' alt='Ignore'  title='Ignore' />
-        <span className={props.isIgnored[2]}>Ignore Fanfic</span>                                
-    </div>
+   <div  className={props.isIgnored[0]}>
+      <Button  onClick={() =>props.props.markAs(props.fanfic.FanficID,'Ignore',props.isIgnored[1])} 
+               color='primary' className={props.isIgnored[2] ? 'userData_red' : null}>
+                   {!props.isIgnored[2] ? 'Ignore' : 'Unignore'}
+                  
+      </Button>                                
+   </div>
 );
 
 export default Ignore;

@@ -26,3 +26,7 @@ export{
     getDataOfFanfic,
     saveDataOfFanficToDB
 }from './downloader'
+
+export{
+    saveScreenSize
+}from './screenSize'
