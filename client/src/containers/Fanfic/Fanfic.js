@@ -3,9 +3,6 @@ import {connect} from 'react-redux';
 import Pagination from 'rc-pagination';
 
 
-import classes from './Fanfic.module.css';
-import './Pagination.css';
-
 import * as actions from '../../store/actions';
 
 import Container from '../../components/UI/Container/Container';
@@ -18,6 +15,11 @@ import {filtersArrayInit} from './Filters/FiltersArray'
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 
+import { Grid } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+
+import './Fanfic.scss'
+import './Pagination.css';
 
 class Fanfic extends Component{    
     state={
@@ -41,18 +43,15 @@ class Fanfic extends Component{
             tumblrFanficsCount:0,
             wattpadFanficsCount:0,   
         },
-        readingListAncor:null
+        readingListAncor:null,
+        showTags: (this.props.size==='s') ? false : true
     }
 
-    componentWillMount(){     
-        this.getFanfics()
-    }
+    componentWillMount(){this.getFanfics()}
 
     getFanfics = async () =>{
-        console.log('[Fanfic.js] getFanfics()')
         const {pageNumber,pageLimit,fanficsNumbers} = this.state
-        const {fandoms,onGetFandoms,onGetFanfics,counter} = this.props
-        console.log('counter:',counter)
+        const {fandoms,onGetFandoms,onGetFanfics} = this.props
         const fandomName = this.props.match.params.FandomName;
         const userEmail = this.props.userEmail ? this.props.userEmail : null;
         
@@ -86,7 +85,6 @@ class Fanfic extends Component{
 
     paginationClickHandler = async (page) =>{
         const {filterArr} = this.state;
-        console.log('page: ',page)
         await this.setState({pageNumber: page}, async () => {
             (filterArr.length===0) ? await this.getFanfics() : await this.activeFiltersHandler()
         })       
@@ -262,21 +260,13 @@ class Fanfic extends Component{
         return null
     }
 
-    FilterHandler = async(filter,event,type)=>{
+    filterHandler = async(filter,event,type)=>{
         const {filters} = this.state;
-        console.log('FilterHandler()')
         switch (type) {
             case 'sort':
-                 console.log('sort')
-                this.setState({
-                    currentSort:event.target.value,
-                    filters: {...filters,
-                              [event.target.value]: !filters[filter]}
-                }) 
-                console.log('sort-state',this.state.currentSort)
+                this.setState({currentSort:event.target.value,filters: {...filters,[event.target.value]: !filters[filter]}}) 
                 break;
             case 'filter':
-                console.log('filter')
                 if(event){
                     this.setState({filters: {...filters,[filter]: event.target.value}})  
                 }else{
@@ -288,84 +278,83 @@ class Fanfic extends Component{
                 break;
         }
     }
-    cancelFiltersHandler = async() =>{
-        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'},await this.getFanfics)
-    }
+    cancelFiltersHandler = async() =>{this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'},await this.getFanfics)}
 
-    toggleDrawer = (open) => event => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-          return;
-        }
-    
-        this.setState({drawerFilters: open});
-    }
+    toggleDrawer = (open) => event => {if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return}this.setState({drawerFilters: open})}
 
-    openReadingListBox=(event,inReadingList,fanficId)=>{
-        this.setState({readingListAncor:event.currentTarget})                
-    }
+    openReadingListBox=(event,inReadingList,fanficId)=>{this.setState({readingListAncor:event.currentTarget})                }
 
-    closeReadingListBox= (el) => {
-        this.setState({readingListAncor:el})
-    }   
+    closeReadingListBox= (el) => {this.setState({readingListAncor:el})}   
+
+    showTagsToggle=()=> {this.setState({showTags:!this.state.showTags})}
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
         let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,readingListAncor} = this.state;
 
         return(
-            <Container header={this.props.match.params.FandomName}>
-                    <div className={'Pagination'}>
-                    {/* TODO: switch button "gallery mode" - add/edit/delete image , fixed Image () in user settings*/}
-                    {/* TODO: switch limit (5.10,20,30)*/}
-                    {/* TODO: drewer for filters*/}
-                    {/* TODO: error checker for filters*/}
-                    {/* TODO: add routing to page (pagination)- if not exist - redirect to first page*/}
-                    {/* TODO: pagination movining from middle if the pages are smaller then 8 */}
-                    {/* TODO: animation for ignore delete */}
-                    {/* TODO: if fanfic not complete - cant mark as finished*/}
-                    {/* TODO: if fanfic in progress limit it to the chapters the fanfic does have*/}
-                    {/* TODO: Add filter: hiatus fanfic*/}
-                    <Pagination onChange={this.paginationClickHandler} 
+            <Container header={this.props.match.params.FandomName} className='fanfics'>
+                <Grid container className='containerGrid'>
+                    <Grid className={'paginationGrid'}>
+                        <Pagination onChange={this.paginationClickHandler} 
                                 current={pageNumber} 
                                 total={fanficsNumbers.fanficsCurrentCount}
-                                className={classes.Pagination}
+                                className={'pagination'}
                                 defaultPageSize={pageLimit}
                                 showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} Works`}
-                    />
-                    <div>
-                    {/* <div className={FanficsNumbers}> */}
+                        />
+                    {/* <Divider variant="fullWidth" /> */}
+                    </Grid>
+                    <Grid  className={'fanficNumbers'}>
                         <p>There is a total of <b>{fanficsNumbers.fanficsTotalCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> fanfics in <b>{this.props.match.params.FandomName.toLocaleString(undefined, {maximumFractionDigits:2})}</b> Fandom</p>
                         <p>Sources: <b style={{color:'#8A0407'}}>AO3:</b> <b>{fanficsNumbers.ao3FanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> , <b style={{color:'#0a48ab'}}>Backup (Deleted from sites):</b> <b>{fanficsNumbers.fanficsDeletedCount}</b> </p>
                         <p><b>{fanficsNumbers.fanficsIgnoredCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> of the fanfics are ignored (filter by ignore to see them and reactive them)</p>
-                    </div>
-                    </div>
-
-                    <Button onClick={this.toggleDrawer(true)}>Filters</Button>
-                    <Drawer anchor="right" open={this.state.drawerFilters} onClose={this.toggleDrawer(false)}>
-                        <div className={classes.FilterDrewer} role="presentation">
-                            <Button onClick={this.toggleDrawer(false)}>Close</Button>
-                            <Filters    filter={this.FilterHandler}
-                                        sort={currentSort}
-                                        cancelFilters={this.cancelFiltersHandler}
-                                        filtersAction={this.activeFiltersHandler}
-                                        checked={filters}/>
-                        </div>
-                    </Drawer>
-
+                        <Divider/>
+                    </Grid>
+                    <Grid className={'buttons'}>
+                        <Button onClick={this.toggleDrawer(true)}>Filters</Button>
+                        <Drawer anchor="right" open={this.state.drawerFilters} onClose={this.toggleDrawer(false)}>
+                            <div className='filterDrewer' role="presentation">
+                                <Button onClick={this.toggleDrawer(false)}>Close</Button>
+                                <Filters filter={this.filterHandler}
+                                            sort={currentSort}
+                                            cancelFilters={this.cancelFiltersHandler}
+                                            filtersAction={this.activeFiltersHandler}
+                                            checked={filters}
+                                            />
+                            </div>
+                        </Drawer>
+                        <Divider variant='insent'/>
+                    </Grid>
+                    <Grid className={'main'}>
                         {fanficsNumbers.fanficsCurrentCount===0 ? 
-                            <p><b>Didn't found any fanfics with this search filters</b></p>
-                        :
-                            <ShowFanficData fanfics={fanfics}
-                                            userFanfics={userFanfics}
-                                            markAs={this.markAsHandler}            
-                                            markStatus={this.statusHandler}
-                                            inputChapterToggle={this.inputChapterHandler}
-                                            inputChapter={inputChapterFlag}
-                                            readingListAncor={readingListAncor}
-                                            openReadingListBox={this.openReadingListBox}
-                                            closeReadingListBox={()=>this.closeReadingListBox(null)}
-                            />
-                        }
+                                <p><b>Didn't found any fanfics with this search filters</b></p>
+                            :
+                                <ShowFanficData fanfics={fanfics}
+                                                userFanfics={userFanfics}
+                                                markAs={this.markAsHandler}            
+                                                markStatus={this.statusHandler}
+                                                inputChapterToggle={this.inputChapterHandler}
+                                                inputChapter={inputChapterFlag}
+                                                readingListAncor={readingListAncor}
+                                                openReadingListBox={this.openReadingListBox}
+                                                closeReadingListBox={()=>this.closeReadingListBox(null)}
+                                                size={this.props.size}
+                                                showTags={this.state.showTags}
+                                                showTagsToggle={this.showTagsToggle}
+                                />
+                            }
+                    </Grid>
+                </Grid>
+                <Grid  item className={'paginationGrid paginationGridButtom'}>
+                        <Pagination onChange={this.paginationClickHandler} 
+                                current={pageNumber} 
+                                total={fanficsNumbers.fanficsCurrentCount}
+                                className={'pagination'}
+                                defaultPageSize={pageLimit}
+                                // showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} Works`}
+                        />
+                </Grid>
             </Container>
         )
     }
@@ -380,7 +369,8 @@ const mapStateToProps = state =>{
         message:        state.fanfics.message,
         loading:        state.fanfics.loading,
         ignoredCount:   state.fanfics.ignoredCount,
-        userEmail:      state.auth.user.email
+        userEmail:      state.auth.user.email,
+        size:           state.sceenSize.size
     };   
 }
   

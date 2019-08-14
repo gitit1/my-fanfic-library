@@ -6,7 +6,6 @@ import * as actions from '../../../store/actions';
 
 import Container from '../../../components/UI/Container/Container';
 
-import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 
 import GridChooseFandom from './components/GridChooseFnadom'

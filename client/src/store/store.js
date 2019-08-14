@@ -4,6 +4,7 @@ import fandomsReducer from './reducers/fandomsReducer';
 import downloderReducer from './reducers/downloaderReducer';
 import fanficsReducer from './reducers/fanficsReducer';
 import usersReducer from './reducers/usersReducer';
+import sizeReducer from './reducers/sizeReducer';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 //const composeEnhancers = compose;
@@ -11,8 +12,9 @@ const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX
 const rootReducer = combineReducers({
     fandoms:            fandomsReducer,
     fanfics:            fanficsReducer,
-    downloader:          downloderReducer,
-    auth:               usersReducer
+    downloader:         downloderReducer,
+    auth:               usersReducer,
+    sceenSize:          sizeReducer
 });
 
 const store = createStore(rootReducer,composeEnhancers(

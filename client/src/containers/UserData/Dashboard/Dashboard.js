@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {logoutUser} from "../../../store/actions";
+import Container from '../../../components/UI/Container/Container';
+
 
 class Dashboard extends Component {
   onLogoutClick = e => {
@@ -11,15 +13,13 @@ class Dashboard extends Component {
 render() {
     const { user } = this.props.auth;
 return (
+    <Container header='Dashboard Page'>
+      <img src="/images/work-in-progress.jpg" alt="wip"/>
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
           <div className="col s12 center-align">
             <h4>
               <b>Hey there,</b> {user.name.split(" ")[0]}
-              <p className="flow-text grey-text text-darken-1">
-                You are logged into a full-stack{" "}
-                <span style={{ fontFamily: "monospace" }}>MERN</span> app 👏
-              </p>
             </h4>
             <button
               style={{
@@ -36,6 +36,7 @@ return (
           </div>
         </div>
       </div>
+    </Container>
     );
   }
 }

@@ -1,26 +1,26 @@
 import React from 'react';
-//import classes from '../ShowFanficData.module.css';
+import Typography from '@material-ui/core/Typography';
 
 const Stat = (props) => (
   <React.Fragment>
-    <dt>Publish Date:</dt>
-    <dd>{new Date(props.fanfic.PublishDate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</dd>
-    <dt>Language:</dt>
-    <dd>{props.fanfic.Language}</dd>
-    <dt>Words:</dt>
-    <dd>{props.fanfic.Words.toLocaleString(undefined, {maximumFractionDigits:2})}</dd>
-    <dt>Chapters:</dt>
-    <dd>{props.fanfic.NumberOfChapters}</dd>
-    <dt>Comments (Reviews):</dt>
-    <dd>{props.fanfic.Comments}</dd>
-    <dt>Kudos (Favs):</dt>
-    <dd>{props.fanfic.Kudos}</dd>
-    <dt>Bookmarks (Follows):</dt>
-    <dd>{props.fanfic.Bookmarks}</dd>
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Publish Date:</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{new Date(props.fanfic.PublishDate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</Typography>
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Language:</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.Language}</Typography >
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Words:</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.Words.toLocaleString(undefined, {maximumFractionDigits:2})}</Typography >
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Chapters:</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.NumberOfChapters}</Typography >
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Comments (Reviews):</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.Comments}</Typography >
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Kudos (Favs):</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.Kudos.toLocaleString(undefined, {maximumFractionDigits:2})}</Typography >
+    <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Bookmarks (Follows):</Typography>
+    <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.Bookmarks}</Typography >
     {props.fanfic.Hits &&
       <React.Fragment>
-        <dt>Hits:</dt>
-        <dd>{props.fanfic.Hits}</dd>
+        <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Hits:</Typography>
+        <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{props.fanfic.Hits.toLocaleString(undefined, {maximumFractionDigits:2})}</Typography >
       </React.Fragment>
     }
   </React.Fragment>

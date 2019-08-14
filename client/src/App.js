@@ -33,6 +33,7 @@ import TodoListClient from './containers/TodoListClient/TodoListClient';
 import TodoListServer from './containers/TodoListServer/TodoListServer';
 
 
+
 if (localStorage.jwtToken) {
   // Set auth token header auth
   const token = localStorage.jwtToken;
@@ -53,36 +54,34 @@ if (localStorage.jwtToken) {
 
 function App() {
   return (
-    <Layout>
-      <Switch>
-        <Route        exact path="/"                    component={Index}                       />
-        {/* Fandoms */}
-        <Route              path="/fandoms"             component={Fandoms}                     />
-        <Route              path="/fanfics/:FandomName" component={Fanfic}                      />
-        {/* Search */}
-        <Route              path="/search"              component={Search}                      />
-        {/* UserData */}  
-        <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} />
-        <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
-        <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
-        {/* Manage */}  
-        <PrivateRoute exact path="/ao3Downloader"       component={Ao3Downloader}     level={1} />
-        <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
-        <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
-        <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
-        <PrivateRoute exact path="/otherSitesDownloder" component={OtherSitesDownloader}     level={1} />
-        {/* Auth */}  
-        <Route              path="/registrer"           component={Registrer}                   />
-        <Route              path="/login"               component={Login}                       />
-        {/* TODO: DELETE WHEN DONE */}  
-        {/* <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} /> */}
-        {/* <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} /> */}
+      <Layout>
+        <Switch>
+          <Route        exact path="/"                    component={Index}                       />
+          {/* Fandoms */}
+          <Route              path="/fandoms"             component={Fandoms}                     />
+          <Route              path="/fanfics/:FandomName" component={Fanfic}                      />
+          {/* Search */}
+          <Route              path="/search"              component={Search}                      />
+          {/* UserData */}  
+          <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} />
+          <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
+          <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
+          {/* Manage */}  
+          <PrivateRoute exact path="/ao3Downloader"       component={Ao3Downloader}     level={1} />
+          <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
+          <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
+          <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
+          <PrivateRoute exact path="/otherSitesDownloder" component={OtherSitesDownloader}     level={1} />
+          {/* Auth */}  
+          <Route              path="/registrer"           component={Registrer}                   />
+          <Route              path="/login"               component={Login}                       />
+          {/* TODO: DELETE WHEN DONE */}  
+          {/* <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} /> */}
+          {/* <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} /> */}
 
-
-
-        <Redirect to="/" />
-      </Switch>
-    </Layout>
+          <Redirect to="/" />
+        </Switch>
+      </Layout>
   );
 }
 

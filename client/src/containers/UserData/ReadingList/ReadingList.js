@@ -1,8 +1,10 @@
 import React from 'react';
-import classes from './ReadingList.module.css';
+import Container from '../../../components/UI/Container/Container';
 
 const ReadingList = () => (
-  <div className={classes.ReadingList}>Reading List</div>
+  <Container header='Reading List'>
+    <img src="/images/work-in-progress.jpg" alt="wip"/>
+  </Container>
 );
 
 export default ReadingList;

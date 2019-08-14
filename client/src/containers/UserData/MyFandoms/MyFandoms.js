@@ -71,6 +71,7 @@ class ManageFandoms extends Component{
 
     return(
       <Container header={'My Fandoms'}>
+        <img src="/images/work-in-progress.jpg" alt="wip"/>
           { this.props.loading ?
               <Spinner/>
               :

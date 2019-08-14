@@ -1,8 +1,10 @@
 import React from 'react';
-import classes from './Search.module.css'
+import Container from '../../components/UI/Container/Container';
 
 const Search = () => (
-  <div className={classes.Search}>Search Page</div>
+  <Container header='Search Page'>
+    <img src="/images/work-in-progress.jpg" alt="wip"/>
+  </Container>
 );
 
 export default Search;

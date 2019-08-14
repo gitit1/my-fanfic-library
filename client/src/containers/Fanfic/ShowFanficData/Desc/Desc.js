@@ -1,7 +1,8 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 const Desc = (props) => (
-    <div dangerouslySetInnerHTML={{ __html:props.fanfic.Description}}></div>  
+    <Typography variant="body2" gutterBottom dangerouslySetInnerHTML={{ __html:props.fanfic.Description}}></Typography>  
 );
 
 export default Desc;
