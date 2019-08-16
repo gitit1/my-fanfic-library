@@ -9,8 +9,8 @@ const BoxContent = (props) => (
     <CardActionArea>
         <Link to={`/fanfics/${props.fandom.FandomName}`}>
             <CardMedia  className='fandoms_card_media'
-                        image={props.fandom.Image_Name !== '' 
-                                ? `/fandoms/${props.fandom.FandomName.toLowerCase()}/${props.fandom.Image_Name}`
+                        image={props.fandom.Image_Name_Main !== '' 
+                                ? `/fandoms/${props.fandom.FandomName.toLowerCase()}/${props.fandom.Image_Name_Main}`
                                 : `/fandoms/nophoto.png`
                         } 
                         title={props.fandom.FandomName}/>
@@ -18,7 +18,6 @@ const BoxContent = (props) => (
                 {(props.screenSize==='l'||props.screenSize==='m')
                 ?                                                  
                     <React.Fragment>
-                        {console.log('heree..')}
                         <Typography gutterBottom variant="h5" component="h2" className='fandoms_fandom_caption'>{props.fandom.FandomName}</Typography>
                         <Typography variant="body1" color="textSecondary" component="p">
                             <span>Fanfics in Fandoms: </span><b>{props.fandom.FanficsInFandom.toLocaleString(undefined, {maximumFractionDigits:2})}</b>

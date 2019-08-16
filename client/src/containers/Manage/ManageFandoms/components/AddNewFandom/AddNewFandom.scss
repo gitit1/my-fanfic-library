@@ -1,0 +1,69 @@
+@import '../../../../../style/_colors';
+@import '../../../../../style/_fonts';
+
+.add_new_fandom{
+    width: 80%;
+    margin: 0 auto;
+    height: 75vh;
+    text-align: center;
+
+    .add_new_fandom_box{
+        margin-top: 2%;
+
+        .add_new_fandom_main_image{
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+    
+        .add_new_fandom_content{
+            margin: 0 auto;
+            width: 80%;
+
+            .MuiFormControl-root {
+                width: 80%;
+                margin-top: 10px;
+            }
+            .save_method_checkbox{
+                margin: 0 auto;
+                margin-top: 10px;
+                margin-left: 90px;
+                text-align: left;
+            }
+            // display: flex;
+        }
+
+        .add_new_fandom_images_card{
+            width: 98%;
+            margin: 0 auto;
+            height: auto;
+            text-align: center;
+            background-color: $color_background;
+            margin-top: 5%;
+            .add_new_fandom_images_card_content{
+                padding: 8px;
+                h2{
+                    color:$color_text_1;
+                    font-family: $font_header;
+                }
+            }
+        }
+    }
+    .image_upload{
+        width:200px;
+        margin: 0 auto;
+        margin-top: 1%;
+        // margin-left: 2%;
+        .fandoms_mobile_overlay{
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            width: 100%;
+            background: rgba(25, 25, 25, .5);
+            transform: translate(-50%, -50%);
+            color: $color_header;
+            font-family: $font_header;
+            font-weight: bold;
+        }
+    }
+}

@@ -1,6 +1,9 @@
 import React,{Component} from 'react';
-import './ImageUpload.css';
+import './ImageUpload.scss';
 import Button from '../UI/Button/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Typography from '@material-ui/core/Typography';
 
 class ImageUpload extends Component {
   constructor(props) {
@@ -11,20 +14,7 @@ class ImageUpload extends Component {
   componentDidMount() {
         if(this.props.fileName !== null){
           let fileSrc = (this.props.fileName !== '') ? (`/fandoms/${this.props.FandomName}/${this.props.fileName}`): (`/fandoms/nophoto.png`);
-          // let fileSrc=null;
-          // if(this.props.edit==='add'){
-          //   let reader = new FileReader();
-          //    reader.onloadend = () => {
-          //      this.setState({
-          //        file: this.props.fileName,
-          //        imagePreviewUrl: reader.result
-          //      });
-          //   }
-          // }else{
-          //    fileSrc = (this.props.fileName !== '') ? (`/fandoms/${this.props.FandomName}/${this.props.fileName}`): (`/fandoms/nophoto.png`);
-          // }
-          console.log('fileSrc: ',fileSrc)
-          console.log('this.props.fileName : ',this.props.fileName )
+
           this.setState({
             imagePreviewUrl:fileSrc
           })
@@ -60,23 +50,30 @@ class ImageUpload extends Component {
   
     render() {
       let {imagePreviewUrl} = this.state;
+      let {id,label,imageLabel} = this.props;
       let $imagePreview = null;
       if (imagePreviewUrl) {
-        $imagePreview = (<img src={imagePreviewUrl} alt={'upload'}/>);
+        $imagePreview = (
+          <span>
+            <img  src={imagePreviewUrl} alt={'upload'}/>
+            <Typography gutterBottom variant="body2" component="span" className='fandoms_mobile_overlay'>{imageLabel}</Typography>
+          </span>);
       } else {
-        $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+        $imagePreview = (<div className="image_upload_image_text">{label}</div>);
       }
   
       return (
-        <div className="previewComponent">
-          <div className="imgPreview">
-            {$imagePreview}
-          </div>
-          <input type="file" id="selectedFile"  className="fileInput"  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
-          <span className="fileInputButton">
-            <Button clicked={() => {document.getElementById('selectedFile').click()}} >Browse...</Button> 
-          </span>
-        </div>
+        <Card className="image_upload">
+          {/* <div className="image_upload_image_box"> */}
+            <CardActionArea onClick={() => {document.getElementById(id).click()}}>
+              <input type="file" id={id}  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
+              {$imagePreview}
+            </CardActionArea>
+          {/* </div> */}
+          {/* <span className="image_upload_button">
+            <Button clicked={() => {document.getElementById(this.props.id).click()}} >Browse...</Button> 
+          </span> */}
+        </Card>
       )
     }
 }

@@ -11,30 +11,29 @@ const FanficSchema = require('../models/Fanfic');
 exports.addEditFandomToDB =  async (req,res) =>{
     console.log(clc.blue('[db controller] addEditFandomToDB()'));
 
-    let {fandomName,mode,image,imageDate} = req.query
-    let resultMessage = '';
-    let pathForImage = 'public/fandoms/';
+    let {fandomName,mode,date,mainImage,iconImage} = req.query;
     fandomName = fandomName.replace("%26","&");
-    let fandomNameLowerCase = fandomName.toLowerCase();
-    
-    let isImage = JSON.parse(image);
-    let imageName = fandomNameLowerCase+'_'+imageDate;
+    const pathForImage = 'public/fandoms/',fandomNameLowerCase = fandomName.toLowerCase();
+    let   images=[],resultMessage = '';
+ 
+    mainImage && images.push('Image_Name_Main')
+    iconImage && images.push('Image_Name_Icon')
 
-    //check if path for image exsist (if fandom exsist) and if image was requested 
-    if (!fs.existsSync(pathForImage+fandomNameLowerCase) && isImage){
+    if (images.length>0 && !fs.existsSync(pathForImage+fandomNameLowerCase)){
         fs.mkdirSync(pathForImage+fandomNameLowerCase,{recursive: true});
     }
-    //setting of multer
+
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
         cb(null, pathForImage+fandomNameLowerCase)
         },
         filename: function (req, file, cb) {
-        cb(null,  imageName + path.extname(file.originalname))
+        cb(null,   file.fieldname)
         }
-    })
-    let upload = multer({ storage: storage }).single('file');
+    });
     
+    let upload = multer({ storage: storage }).any();
+
     await upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
             console.log('Muller Error',res.status(500).json(err));
@@ -46,21 +45,24 @@ exports.addEditFandomToDB =  async (req,res) =>{
             return res.send(resultMessage);
         }
         //check if I have an updated image/prev image/no image
-        if(mode === 'add'){
-            imageName = isImage ? (imageName + path.extname(req.file.originalname)) : '';
+        if(mode === 'add'){ 
+            ImageMain = mainImage   ?   mainImage : '';
+            ImageIcon = iconImage   ?   iconImage : '';
         }else{
-            imageName = isImage ? (imageName + path.extname(req.file.originalname)) : req.body.Image_Name
-            console.log('req.body.Image_Name:',req.body.Image_Name)
-            if(isImage){
-                let path = pathForImage+fandomNameLowerCase+'/'+req.body.Image_Name;
+            ImageMain = mainImage   ?   mainImage : req.body.Image_Name_Main;
+            ImageIcon = iconImage   ?   iconImage : req.body.Image_Name_Icon;
+            
+            console.log('images:',images)
+            images.forEach(image => {
+                let path = pathForImage+fandomNameLowerCase+'/'+req.body[image];
                 //if image is changed delete the old one
                 fs.unlink(path, (err) => {
                     if (err) {
                         console.error(err)
                         return
                     }
-                });
-            }
+                });               
+            });
         }
         const fandom = {    
             "id":                       req.body.id,
@@ -73,8 +75,9 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "CompleteFanfics":          Number(req.body.CompleteFanfics),
             "SavedFanfics":             Number(req.body.SavedFanfics),
             "LastUpdate":               Date.now(),
-            "Image_Name":               imageName,
-            "Image_Path":               req.body.FandomName
+            "Image_Name_Main":          ImageMain,
+            "Image_Name_Icon":          ImageIcon,
+            "Image_Name_Path":          req.body.FandomName
         }
         if(req.body.AutoSave === 'true'){
             fs.mkdirSync(pathForImage+fandomNameLowerCase+'/fanfics',{recursive: true});

@@ -6,7 +6,7 @@ import './ShowFandomData.scss'
 
 
 const ShowFandomData = (props) => {
-    const {screenSize,fandoms,editFandom,deleteFandomHandler} = props;
+    const {screenSize,fandoms,editFandom,deleteFandom} = props;
 
     const cellHeight = (props.cellHeight && !(screenSize==='s')) ? props.cellHeight : (screenSize==='s') ? 300 : props.cellHeight ?   props.cellHeight : 400;
     let length = fandoms.length;
@@ -18,7 +18,7 @@ const ShowFandomData = (props) => {
                 <GridList cellHeight={cellHeight} className='fandoms_grid' cols={cols}>
                     {fandoms.map(fandom=>(
                         <Card className='fandoms_card fandoms_fandom' key={fandom.FandomName} >
-                            {React.cloneElement(props.boxContent,{fandom:fandom,screenSize:screenSize,height:cellHeight,editFandom:editFandom,deleteFandomHandler:deleteFandomHandler})}
+                            {React.cloneElement(props.boxContent,{fandom:fandom,screenSize:screenSize,height:cellHeight,editFandom:editFandom,deleteFandom:deleteFandom})}
                         </Card>
                     ))} 
                     {( (screenSize==='l'||screenSize==='m') && (length>cols && (length%cols!==0) && ((length-(Math.floor(length/cols)*cols)<=1)) ) ) && <Card className='fandoms_card fandoms_fandom fandoms_dummy' />}

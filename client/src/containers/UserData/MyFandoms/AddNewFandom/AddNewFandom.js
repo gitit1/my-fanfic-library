@@ -88,7 +88,7 @@ class AddNewFandom extends Component{
                 }
             },
             formIsValid:true,
-            imageName: this.props.fandom.Image_Name
+            imageName: this.props.fandom.Image_Name_Main
         }));
     }
 
@@ -121,7 +121,7 @@ class AddNewFandom extends Component{
         fandom.append("LastUpdate", new Date().getTime())
         fandom.append("fandomsNames", fandomsNames)
         this.state.editMode &&  fandom.append("FandomID", this.props.fandom.id)
-        this.state.editMode &&  fandom.append("Image_Name", this.props.fandom.Image_Name)
+        this.state.editMode &&  fandom.append("", this.props.fandom.Image_Name_Main)
         fandom.append('file', this.formRef.current.state.file)
 
         let image = (this.formRef.current.state.file===undefined

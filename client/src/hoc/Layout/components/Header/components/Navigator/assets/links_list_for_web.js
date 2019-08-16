@@ -41,14 +41,6 @@ export const navLinks = [
             {
                 label:  'Downloader',
                 link:   '/manageDownloader'
-            },
-            {
-                label: 'AO3 Downloader',       
-                link: '/ao3Downloader',                
-            },           
-            {
-                label: 'Other Sites Downloader',       
-                link: '/otherSitesDownloder',                
             }
         ]
     }
