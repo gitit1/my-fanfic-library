@@ -1,0 +1,22 @@
+@import '../../../style/_colors';
+@import '../../../style/_fonts';
+
+.app_container{
+    margin: 0 auto!important;
+    margin-top: 1%!important;
+    margin-bottom: 1%!important;
+
+    .app_container_header{
+        height: 40px;
+
+        h3{
+            font-size: 1.75em;
+            line-height: 1.75em;
+            font-family: $font_header;
+            color: $color_text_1;
+        }
+    }
+    .app_container_main{
+        margin-top: 1%;
+    }
+}

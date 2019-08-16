@@ -34,17 +34,17 @@ class Layout extends Component{
     }
 
     handleResize = () => {
-        const {medSize,mobileSize} = this.state
+        const {medSize,mobileSize} = this.state;
         let screenSize = window.innerWidth;
         let size =  (screenSize>medSize) ? 'l' : (screenSize>mobileSize) ? 'm' : 's'  
         this.props.onSaveScreenSize(size)
     }
     render(){
-        console.log('size:',this.state.size)
+        console.log('size:',this.props.size)
         let page = this.state.loading ? null :(
             <div className='layout'>
                 <header>
-                    <Header auth={this.props.auth} logout={()=>this.logoutHandler()}/>
+                    <Header auth={this.props.auth} logout={()=>this.logoutHandler()} size={this.props.size}/>
                 </header>
                 <main>
                     {this.props.children}

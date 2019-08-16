@@ -1,0 +1,69 @@
+@import '../../../../style/_colors';
+@import '../../../../style/_fonts';
+
+@mixin caption{
+    color: $color_header;
+    font-family: $font_header;
+    font-weight: bold;
+}
+
+.fandoms{
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    margin: 0 auto;
+
+    .fandoms_grid{
+        width: 100%;
+        height: auto;
+        justify-content: center;
+        
+        .fandoms_card{
+            max-width: 400px;
+            
+            .fandoms_card_media{
+                height:300px;
+            }
+            .fandoms_card_content{
+                text-align: center;
+            }
+        }
+
+        .fandoms_fandom{
+            margin:1% 1%;
+        }
+
+        .fandoms_fandom_caption{
+            @include caption         
+        }
+
+        .fandoms_fandom_buttons{
+            justify-content: center;
+            display: flex;
+        }
+    }
+}
+
+.fandoms_dummy{
+    visibility: hidden;
+} 
+
+@media(max-width: 736px){
+    .fandoms_mobile{
+        padding: 0!important;
+    }
+    .fandoms_mobile_overlay{
+        position: relative;
+        width: 100%;
+        bottom: 40px;
+        margin: 0;
+        background: rgba(25, 25, 25, .5);
+        border-radius: 2%;
+        
+        .fandoms_mobile_overlay_caption{
+           @include caption
+        }
+     }
+    
+}
+

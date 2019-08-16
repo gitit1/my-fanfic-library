@@ -1,8 +1,10 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 
+import Grid from '@material-ui/core/Grid';
+
 import Spinner from '../../components/UI/Spinner/Spinner';
-import Container from '../../components/UI/Container/Container'
+import Container from '../../components/UI/Container/Container';
 import IndexContainer from './components/IndexContainer/IndexContainer';
 import IndexFandoms from './components/Sections/Fandoms/Fandoms'
 import LatestUpdates from './components/Sections/LatestUpdates/LatestUpdates'
@@ -17,14 +19,15 @@ class Index extends Component{
 
         return(
             <Container>
-                {/* TODO: NEED TO BE FROM SERVER */}
                 { this.props.loading ? <Spinner/> :
-                    <React.Fragment>
-                        <IndexContainer header='Fandoms'><IndexFandoms fandoms={this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/></IndexContainer>
+                    <Grid container  spacing={4}>
+                        <IndexContainer header='Fandoms'>
+                            <IndexFandoms fandoms={this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
+                        </IndexContainer>
                         <IndexContainer header='Latest Updates'><LatestUpdates /></IndexContainer>
                         <IndexContainer header='My Fanfics Updates'><MyFanfics /></IndexContainer>
                         <IndexContainer header='My Latest Activities'><MyLatestActivity /></IndexContainer>
-                    </React.Fragment>
+                    </Grid>
                 }
             </Container>
         )
@@ -40,3 +43,5 @@ const mapStateToProps = state =>{
 
 
 export default connect(mapStateToProps)(Index);
+
+//TODO: NEED TO BE FROM SERVER

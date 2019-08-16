@@ -71,6 +71,7 @@ function App() {
           <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
           <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
           <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
+          <PrivateRoute exact path="/editfandom"          component={AddNewFandom}      level={1} />
           <PrivateRoute exact path="/otherSitesDownloder" component={OtherSitesDownloader}     level={1} />
           {/* Auth */}  
           <Route              path="/registrer"           component={Registrer}                   />

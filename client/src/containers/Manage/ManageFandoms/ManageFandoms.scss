@@ -1,0 +1,29 @@
+.manageFandoms{
+    .fandoms{
+        .fandoms_grid{
+            .fandoms_card{
+                max-width: 400px;
+                
+                .fandoms_card_media{
+                    height:250px;
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 736px){
+    .manageFandoms{
+        .fandoms{
+            .fandoms_grid{
+                .fandoms_card{
+                    max-width: 400px;
+                    
+                    .fandoms_card_media{
+                        height:250px;
+                    }
+                }
+            }
+        }
+    }
+}

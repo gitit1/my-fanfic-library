@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
-// import classes from './IndexFandoms.module.css';
 
 const IndexFandoms = (props) => (
   <div>
