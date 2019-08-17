@@ -1,3 +1,5 @@
+@import '../../../style/_varibles';
+
 .root{
     display: 'flex';
     flex-wrap: 'wrap';
@@ -178,7 +180,7 @@
     }
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: $screenSizeS) {
     .root{
         .card{
 

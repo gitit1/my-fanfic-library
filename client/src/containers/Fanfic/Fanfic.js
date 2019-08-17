@@ -370,7 +370,7 @@ const mapStateToProps = state =>{
         loading:        state.fanfics.loading,
         ignoredCount:   state.fanfics.ignoredCount,
         userEmail:      state.auth.user.email,
-        size:           state.sceenSize.size
+        size:           state.screenSize.size
     };   
 }
   

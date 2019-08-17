@@ -22,7 +22,7 @@ const ShowFandomData = (props) => {
                         </Card>
                     ))} 
                     {( (screenSize==='l'||screenSize==='m') && (length>cols && (length%cols!==0) && ((length-(Math.floor(length/cols)*cols)<=1)) ) ) && <Card className='fandoms_card fandoms_fandom fandoms_dummy' />}
-                    {( (screenSize==='l'||screenSize==='m') && (length>cols && (length%cols!==0) && ((length-(Math.floor(length/cols)*cols)===2)) ) ) && <Card className='fandoms_card fandoms_fandom fandoms_dummy' />}
+                    {( (screenSize==='l'||screenSize==='m') && (length>cols && (length%cols!==0) && ((length-(Math.floor(length/cols)*cols)===1||length-(Math.floor(length/cols)*cols)===2)) ) ) && <Card className='fandoms_card fandoms_fandom fandoms_dummy' />}
                 </GridList>
             </div>
         </React.Fragment>  

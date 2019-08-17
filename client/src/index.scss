@@ -1,5 +1,6 @@
 @import './style/_colors';
 @import './style/_fonts';
+@import './style/_varibles';
 
 
 * { margin: 0;}
@@ -13,7 +14,7 @@
     clear: both;
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: $screenSizeM) {
     .responsive_show{
         display: block
     }

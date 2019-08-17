@@ -11,8 +11,11 @@ class Layout extends Component{
     state = {
         loading:true,
         lastUpdateDate:null,
-        mobileSize: 736,
-        medSize:1000
+        xs: 400,
+        s: 736,
+        xm: 935,
+        m: 1200,
+        l: 1500
     }
 
     componentDidMount(){
@@ -34,9 +37,9 @@ class Layout extends Component{
     }
 
     handleResize = () => {
-        const {medSize,mobileSize} = this.state;
+        const {medSize,mobileSize,xs,s,xm,m,l} = this.state;
         let screenSize = window.innerWidth;
-        let size =  (screenSize>medSize) ? 'l' : (screenSize>mobileSize) ? 'm' : 's'  
+        let size = (screenSize>l) ? 'l' : (screenSize>m) ? 'm' : (screenSize>xm) ? 'xm' : (screenSize>m) ? 'm' : (screenSize>s) ? 's' : 'xs'
         this.props.onSaveScreenSize(size)
     }
     render(){
@@ -67,7 +70,7 @@ const mapStateToProps = state =>{
         fandoms:        state.fandoms.fandoms,
         loading:        state.fandoms.loading,
         auth:           state.auth,
-        size:           state.sceenSize.size
+        size:           state.screenSize.size
     };   
 }
   

@@ -96,7 +96,7 @@ const mapStateToProps = state =>{
       fandoms:    state.fandoms.fandoms,
       message:    state.fandoms.message,
       loading:    state.fandoms.loading,
-      size:       state.sceenSize.size
+      size:       state.screenSize.size
   };   
 }
 

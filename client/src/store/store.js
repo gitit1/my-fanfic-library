@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
     fanfics:            fanficsReducer,
     downloader:         downloderReducer,
     auth:               usersReducer,
-    sceenSize:          sizeReducer
+    screenSize:          sizeReducer
 });
 
 const store = createStore(rootReducer,composeEnhancers(

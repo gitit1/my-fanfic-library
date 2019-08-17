@@ -7,7 +7,7 @@ import NavMobile from './components/NavMobile/NavMobile'
 const Navigator = (props) =>(
     
     <React.Fragment>
-      {(props.size==='l'||props.size==='m') ? <NavWeb  auth={props.auth}/> : <NavMobile auth={props.auth}/>}
+      {(props.size==='l') ? <NavWeb  auth={props.auth}/> : <NavMobile auth={props.auth}/>}
     </React.Fragment>
 );
 

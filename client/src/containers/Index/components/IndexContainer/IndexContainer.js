@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
-import './IndexContainer.scss';
+
 
 const IndexContainer = (props) => (
   <Grid item sm={6} className='index_container' >
