@@ -13,7 +13,7 @@ class ImageUpload extends Component {
   
   componentDidMount() {
         if(this.props.fileName !== null){
-          let fileSrc = (this.props.fileName !== '') ? (`/fandoms/${this.props.FandomName}/${this.props.fileName}`): (`/fandoms/nophoto.png`);
+          let fileSrc = (this.props.fileName !== '') ? (`/fandoms/${this.props.FandomName.toLowerCase()}/${this.props.fileName}`): (`/fandoms/nophoto.png`);
 
           this.setState({
             imagePreviewUrl:fileSrc
