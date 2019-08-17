@@ -1,0 +1,15 @@
+
+$screenSizeXS:     400px;
+$screenSizeS:     736px;
+$screenSizeXM:     935px;
+$screenSizeM:     1200px;
+$screenSizeL:     1500px;
+
+@mixin overlay{
+    position: relative;
+    width: 100%;
+    bottom: 40px;
+    margin: 0;
+    background: rgba(25, 25, 25, .5);
+    border-radius: 2%;
+}

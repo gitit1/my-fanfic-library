@@ -10,9 +10,9 @@ import Container from '../../../components/UI/Container/Container';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 
-
-import ShowFandomData from './components/ShowFandomData';
-
+import ShowFandomData from '../../Fandoms/components/ShowFandomData/ShowFandomData';
+import BoxContent from './components/BoxContent';
+import './ManageFandoms.scss'
 
 class ManageFandoms extends Component{
 
@@ -62,10 +62,13 @@ class ManageFandoms extends Component{
           )
       }else{
           const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
-          page = (<ShowFandomData 
-                                  fandoms={sortedFandomList}
-                                  editFandom={this.editFandomHandler}
-                                  deleteFandom={this.deleteFandomHandler}/>)
+      page = (<ShowFandomData fandoms={sortedFandomList}  
+                              cellHeight={500} 
+                              screenSize={this.props.size}
+                              editFandom={this.editFandomHandler} 
+                              deleteFandom={this.deleteFandomHandler} 
+                              boxContent={<BoxContent />} />)
+          // page = (<ShowFandomData fandoms={sortedFandomList} editFandom={this.editFandomHandler} deleteFandom={this.deleteFandomHandler} screenSize={this.props.size}/>)
                   
       }
     }
@@ -75,16 +78,10 @@ class ManageFandoms extends Component{
           { this.props.loading ?
               <Spinner/>
               :
-              <React.Fragment>
-                <div className={classes.AddNew}>
-                  <Button clicked={this.routeChange}>Add New Fandom</Button>
-                </div>
-                <div className={classes.Fandoms}>
-                  {page}
-                </div>  
-                <div className={classes.Clear}></div>
-              </React.Fragment>
-          
+              <div className='manageFandoms'>
+                <div className={classes.AddNew}><Button clicked={this.routeChange}>Add New Fandom</Button></div>
+                <div className={classes.Fandoms}>{page}</div>  
+              </div>          
           }
         </Container>
 
@@ -98,7 +95,8 @@ const mapStateToProps = state =>{
   return{
       fandoms:    state.fandoms.fandoms,
       message:    state.fandoms.message,
-      loading:    state.fandoms.loading
+      loading:    state.fandoms.loading,
+      size:       state.screenSize.size
   };   
 }
 

@@ -1,0 +1,31 @@
+@import '../../../style/_varibles';
+
+.manageFandoms{
+    .fandoms{
+        .fandoms_grid{
+            .fandoms_card{
+                max-width: 400px;
+                
+                .fandoms_card_media{
+                    height:250px;
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: $screenSizeS){
+    .manageFandoms{
+        .fandoms{
+            .fandoms_grid{
+                .fandoms_card{
+                    max-width: 400px;
+                    
+                    .fandoms_card_media{
+                        height:250px;
+                    }
+                }
+            }
+        }
+    }
+}

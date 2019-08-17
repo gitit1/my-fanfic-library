@@ -1,4 +1,5 @@
 @import '../../../../style/_colors';
+@import '../../../../style/_varibles';
 
 %headers_font_style {
     font-size: 1em;
@@ -52,7 +53,7 @@
 //     }
 // }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: $screenSizeS) {
     .footer .disclaimer{
         float: none;
         p{

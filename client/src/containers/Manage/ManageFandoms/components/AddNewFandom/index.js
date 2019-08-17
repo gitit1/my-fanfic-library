@@ -3,30 +3,36 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import * as actions from '../../../../../store/actions';
-import classes from './AddNewFandom.module.css';
 
-import Input from '../../../../../components/UI/Input/Input';
-import Button from '../../../../../components/UI/Button/Button';
 import Spinner from '../../../../../components/UI/Spinner/Spinner';
 import Container from '../../../../../components/UI/Container/Container';
 
 
 import {updateObject} from '../../../../../utils/sharedFunctions';
+import {fandomGeneralForm} from './assets/FandomGeneralDataForm';
 import ImageUpload from '../../../../../components/ImageUpload/ImageUpload'
-
-import {fandomGeneralForm} from '../../../../../components/Forms/FandomGeneralDataForm';
 import {checkValidity} from '../../../../../components/Forms/functions';
+
+import ErrorMessages from './components/ErrorMessages'
+import BuildForm from './components/BuildForm'
+
+import './AddNewFandom.scss'
+
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
 
 class AddNewFandom extends Component{
     
-    formRef = React.createRef();
+    mainImageRef= React.createRef();
+    iconImageRef= React.createRef();
     
     state ={
         fandomForm:fandomGeneralForm[0],
         formIsValid:false,
         fandomAddedFlag:0,
         editMode:false,
-        imageName:null
+        imageNameMain:null,
+        imageNameIcon:null
     }
   
     componentWillMount(){
@@ -88,54 +94,74 @@ class AddNewFandom extends Component{
                 }
             },
             formIsValid:true,
-            imageName: this.props.fandom.Image_Name
+            imageNameMain: this.props.fandom.Image_Name_Main,
+            imageNameIcon: this.props.fandom.Image_Name_Icon
         }));
     }
 
 
-    sendFandomToServerHandler = (event) => {
-        event.preventDefault();
+    sendFandomToServerHandler = () => {
+        console.log('here..')
+        // event.preventDefault();
 
         let fandomsNames = [];
-        this.props.fandoms.map(fandom=>(
+        const {fandom,fandoms} = this.props
+        const {fandomForm,editMode} = this.state
+        
+        fandoms.map(fandom=>(
             fandomsNames.push(fandom.FandomName)
         ));
 
         this.setState({uploading:true})
         let saveType = []
-        this.state.fandomForm['SaveMethod'].elementConfig.options.map(type=>{
+        fandomForm['SaveMethod'].elementConfig.options.map(type=>{
             type.checked && saveType.push(type.value)
             return null
         })
-        const fandomName = this.state.fandomForm['FandomName'].value;
+        const fandomName = fandomForm['FandomName'].value;
 
-        let fandom = new FormData();
-        fandom.append("FandomName", fandomName)
-        fandom.append("SearchKeys", this.state.fandomForm['SearchKeys'].value)
-        fandom.append("AutoSave",   this.state.fandomForm['AutoSave'].value)
-        fandom.append("SaveMethod", saveType)
-        fandom.append("FanficsInFandom", 0)
-        fandom.append("OnGoingFanfics", 0)
-        fandom.append("CompleteFanfics", 0)
-        fandom.append("SavedFanfics", 0)
-        fandom.append("LastUpdate", new Date().getTime())
-        fandom.append("fandomsNames", fandomsNames)
-        this.state.editMode &&  fandom.append("FandomID", this.props.fandom.id)
-        this.state.editMode &&  fandom.append("Image_Name", this.props.fandom.Image_Name)
-        fandom.append('file', this.formRef.current.state.file)
-
-        let image = (this.formRef.current.state.file===undefined
-                      ||this.formRef.current.state.file===null
-                      ||!this.formRef.current.state.file) ? false : true;
-        let imageDate = new Date().getTime();
-        let mode =  this.state.editMode ? 'edit' : 'add';
+        let fandomFormData = new FormData();
+        fandomFormData.append("FandomName", fandomName);
+        fandomFormData.append("SearchKeys", fandomForm['SearchKeys'].value);
+        fandomFormData.append("AutoSave",   fandomForm['AutoSave'].value);
+        fandomFormData.append("SaveMethod", saveType);
+        fandomFormData.append("FanficsInFandom", (editMode ? fandom.FanficsInFandom : 0));
+        fandomFormData.append("OnGoingFanfics", (editMode ? fandom.OnGoingFanfics : 0));
+        fandomFormData.append("CompleteFanfics", (editMode ? fandom.CompleteFanfics : 0));
+        fandomFormData.append("SavedFanfics", (editMode ? fandom.SavedFanfics : 0));
+        fandomFormData.append("LastUpdate", new Date().getTime());
+        fandomFormData.append("fandomsNames", fandomsNames);
+        (editMode)  &&  fandomFormData.append("FandomID", fandom.id);
+        (editMode && fandom.Image_Name_Main!=='' )  &&  fandomFormData.append("Image_Name_Main", fandom.Image_Name_Main);
+        (editMode && fandom.Image_Name_Icon!=='' )  &&  fandomFormData.append("Image_Name_Icon", fandom.Image_Name_Icon);
         
-        if(this.formRef.current.state.file.name){
-            this.setState({imageName:fandomName+'_'+imageDate+'.'+this.formRef.current.state.file.name.split('.')[1]});
+        let isMainImage = (this.mainImageRef.current.state.file===undefined||this.mainImageRef.current.state.file===null||!this.mainImageRef.current.state.file) ? false : true;
+        let isIconImage = (this.iconImageRef.current.state.file===undefined||this.iconImageRef.current.state.file===null||!this.iconImageRef.current.state.file) ? false : true;
+
+        let imageDate = new Date().getTime();
+        let mainImage = false,iconImage = false;
+        
+        if(isMainImage){
+            let type= this.mainImageRef.current.state.file.name.split('.');
+            type = type[type.length-1];
+            mainImage = `${fandomName.toLowerCase()}_${imageDate}.${type}`;
+            fandomFormData.append(mainImage, this.mainImageRef.current.state.file)
+        }
+        console.log('isIconImage',isIconImage)
+        if(isIconImage){
+            let type= this.iconImageRef.current.state.file.name.split('.');
+            type = type[type.length-1];
+            iconImage = `${fandomName.toLowerCase()}_icon_${imageDate}.${type}`;
+            fandomFormData.append(iconImage, this.iconImageRef.current.state.file)
         }
 
+        let mode =  this.state.editMode ? 'edit' : 'add';
+        
+        if(this.mainImageRef.current.state.file.name){this.setState({imageNameMain:fandomName+'_'+imageDate+'.'+this.mainImageRef.current.state.file.name.split('.')[1]})}
+        if(this.iconImageRef.current.state.file.name){this.setState({imageNameIcon:fandomName+'_'+imageDate+'.'+this.iconImageRef.current.state.file.name.split('.')[1]})}
 
-        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandom,image,imageDate).then(()=>{
+
+        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandomFormData,mainImage,iconImage).then(()=>{
         
             switch  (this.props.message) {
                 case 'Success':
@@ -227,70 +253,47 @@ class AddNewFandom extends Component{
         
     }
 
+    test = () =>{
+        console.log('test...')
+        console.log('test...')
+    }
+
     render(){
+        const {fandomForm,editMode,fandomAddedFlag,formIsValid,imageNameMain,imageNameIcon} = this.state;
+        const {loading} = this.props;
+
         const formElementsArray = [];
-        for(let key in this.state.fandomForm){
+        for(let key in fandomForm){
             formElementsArray.push({
                 id:key,
-                config: this.state.fandomForm[key]
+                config: fandomForm[key]
             })
         }
-        let form = (
-            <form onSubmit={this.sendFandomToServerHandler}>
-                {formElementsArray.map(formElement=>(
-                        <Input
-                            label={formElement.config.label}
-                            key={formElement.id}
-                            elementType={formElement.config.elementType} 
-                            elementConfig={formElement.config.elementConfig} 
-                            value={formElement.config.value} 
-                            invalid={!formElement.config.valid}
-                            shouldValidate={formElement.config.validation}
-                            touched={formElement.config.touched}
-                            visible={formElement.config.visible}
-                            disabled={formElement.config.disabled}
-                            checked={(event) => this.inputCheckedHandler(event,formElement.id)}
-                            changed={(event) => this.inputChangedHandler(event,formElement.id)}/>
-                ))}
-                <br/>                               
-                <Button  btnType="Success" disabled={!this.state.formIsValid}>SEND</Button>
-                {/* <Button  btnType="Success" disabled={!this.state.formIsValid}>{this.state.editMode ? 'EDIT': 'ADD'} </Button> */}
-            </form>
-        );
-        let addFandomStatus = null;
-        switch (this.state.fandomAddedFlag) {
-            case 1:
-                addFandomStatus = <p className={classes.Message} style={{color:'green'}}>Fandom Added Successfully</p>;
-                break;               
-            case 2:
-                addFandomStatus = <p className={classes.Message} style={{color:'red'}}>Fandom Alredy Exsist!!</p>;
-                break;
-            case 3:
-                addFandomStatus = <p className={classes.Message} style={{color:'red'}}>There was an error</p>;
-                break;   
-            default:
-                addFandomStatus = null;
-                break;             
-        }
-        let header = (this.state.editMode && !this.props.loading) ? `Edit ${this.state.fandomForm['FandomName'].value} Fandom` : 'Add New Fandom'
-        let page = (this.props.loading) ? <Container><Spinner/></Container> : (
+ 
+        let header = (editMode && !loading) ? `Edit ${fandomForm['FandomName'].value} Fandom` : 'Add New Fandom';
+        let page = (loading) ? <Container><Spinner/></Container> : (
             <Container header={header}>
-                <div className={classes.FormBox}>
-                    <div className={classes.ImageDiv}>
-                        <ImageUpload 
-                                        ref={this.formRef} 
-                                        edit={this.state.editMode} 
-                                        FandomName={this.state.fandomForm['FandomName'].value} 
-                                        fileName={this.state.imageName}/>
-                    </div>
-                    <div className={classes.FormDiv}>
-                        {form}
-                    <div>
-                        {addFandomStatus}
-                    </div>
-                    </div>
-                    <div className={classes.Clear}></div>
-                </div>
+                <Card className='add_new_fandom'>
+                    <Grid container className='add_new_fandom_box'>
+                        <Grid item xs={4} className='add_new_fandom_main_image'>
+                            <ImageUpload id='main' ref={this.mainImageRef} edit={editMode} fileName={imageNameMain} FandomName={fandomForm['FandomName'].value} 
+                                         label='Please Select Main Image' imageLabel='Main Image'/>
+                        </Grid>
+                        <Grid item xs={8} className='add_new_fandom_content'>
+                            <BuildForm onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
+                                       changed={this.inputChangedHandler} disabled={!formIsValid} />
+                            <ErrorMessages fandomAddedFlag={fandomAddedFlag}/>
+                        </Grid>
+                        <Card className='add_new_fandom_images_card'>
+                            <Grid item className='add_new_fandom_images_card_content'>
+                                <h2>Add images for fanfics:</h2>
+                                <ImageUpload id='icon' ref={this.iconImageRef} edit={editMode} fileName={imageNameIcon} FandomName={fandomForm['FandomName'].value}
+                                             label='Please Select Icon Image' imageLabel='Icon Image'/>
+                            </Grid>
+                        </Card>
+                        {/* <div className={classes.Clear}></div> */}
+                    </Grid>
+                </Card>
             </Container>
         );
         return(
@@ -312,9 +315,9 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
-        onGetFandoms:       ()                                          =>      dispatch(actions.getFandomsFromDB()),
-        onAddFandom:        (FandomName,mode,fandom,image,imageDate)    =>      dispatch(actions.addFandomToDB(FandomName,mode,fandom,image,imageDate)),
-        onPostFandom:       (fandom)                                    =>      dispatch(actions.getFandom(fandom))
+        onGetFandoms:       ()                                                          =>      dispatch(actions.getFandomsFromDB()),
+        onAddFandom:        (FandomName,mode,fandom,mainImage,iconImage)                =>      dispatch(actions.addFandomToDB(FandomName,mode,fandom,mainImage,iconImage)),
+        onPostFandom:       (fandom)                                                    =>      dispatch(actions.getFandom(fandom))
 
     };
 }

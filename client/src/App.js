@@ -22,9 +22,7 @@ import ReadingList from './containers/UserData/ReadingList/ReadingList';
 //Manage
 import ManageFandoms from './containers/Manage/ManageFandoms';
 import ManageDownloader from './containers/Manage/ManageDownloader';
-import Ao3Downloader from './containers/Manage/Ao3Downloader';
 import AddNewFandom from './containers/Manage/ManageFandoms/components/AddNewFandom';
-import OtherSitesDownloader from './containers/Manage/OtherSitesDownloader'
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
@@ -67,11 +65,10 @@ function App() {
           <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
           <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
           {/* Manage */}  
-          <PrivateRoute exact path="/ao3Downloader"       component={Ao3Downloader}     level={1} />
           <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
           <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
           <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
-          <PrivateRoute exact path="/otherSitesDownloder" component={OtherSitesDownloader}     level={1} />
+          <PrivateRoute exact path="/editfandom"          component={AddNewFandom}      level={1} />
           {/* Auth */}  
           <Route              path="/registrer"           component={Registrer}                   />
           <Route              path="/login"               component={Login}                       />

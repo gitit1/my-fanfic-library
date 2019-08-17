@@ -64,11 +64,15 @@ export const editFandomDataFail = (error) =>{
     };
 };
 
-export const addFandomToDB = (fandomName,mode,fandom,image,imageDate) =>{
+export const addFandomToDB = (fandomName,mode,fandom,mainImage,iconImage) =>{
     console.log('[actions: fandom.js] - addFandomToDB')
+    let images = '';
+    images = (mainImage!==false) ? (images+`&mainImage=${mainImage}`) : '';
+    images = (iconImage!==false) ? (images+`&iconImage=${iconImage}`) : images;
+
     return dispatch =>{
         dispatch(editFandomDataStart())
-        return axios.post(`/db/addEditFandom?fandomName=${fandomName.replace("&","%26")}&mode=${mode}&image=${image}&imageDate=${imageDate}`,fandom)
+        return axios.post(`/db/addEditFandom?fandomName=${fandomName.replace("&","%26")}&mode=${mode}${images}`,fandom)
         .then(res =>{
             dispatch(getFandomsFromDB())
             dispatch(editFandomDataSuccess(res.data));

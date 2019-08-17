@@ -27,6 +27,8 @@
     background-color: #ccc;
 }
 
+
+
 .Invalid{
     border: 1px solid red;
     background-color: salmon;
@@ -45,13 +47,3 @@
     display: 'flex';
     flex-wrap: 'wrap';
 }
-
-.formControl{
-    margin: spacing(1);
-    min-width: 120;
-}
-
-/* [type="checkbox"]:not(:checked){
-    position: relative;
-    opacity: 1;
-} */
