@@ -1,14 +1,14 @@
 const clc = require("cli-color");
 const cheerio = require('cheerio');
-const mongoose = require('../config/mongoose');
+const mongoose = require('../../../config/mongoose');
 
-const FandomModal = require('../models/Fandom');
-const FanficSchema = require('../models/Fanfic');
+const FandomModal = require('../../../models/Fandom');
+const FanficSchema = require('../../../models/Fanfic');
 
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 
-const ao3funcs = require('./ao3.js')
+const ao3funcs = require('../ao3/ao3')
 
 let request = require('request')
 let jar = request.jar();

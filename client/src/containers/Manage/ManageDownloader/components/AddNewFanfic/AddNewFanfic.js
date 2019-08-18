@@ -147,7 +147,7 @@ class OtherSitesDownloader extends Component{
                   <React.Fragment>
                     <ShowFanficData fanfic={fanfic} size={size} showUserData={showUserData} userData={userData}
                                     markAs={this.markAsHandler} markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler}/>
-                    <Button color="primary" clicked={()=>this.saveFanficData(true)}>Save</Button> 
+                    {msg!=='' && <Button color="primary" clicked={()=>this.saveFanficData(true)}>Save</Button>}
                   </React.Fragment> 
                        
               } 

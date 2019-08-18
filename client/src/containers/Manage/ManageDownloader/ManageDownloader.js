@@ -102,7 +102,9 @@ class ManageDownloader extends Component{
             }
         });
 
+        
         switch (choice) {
+            //TODO:
             case 'saveFanfics':
                 let method = this.state.typeSelect.value;
                 socket.emit('getFandomFanfics', this.state.fandom,choice,method);
