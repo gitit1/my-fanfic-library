@@ -31,6 +31,7 @@ try {
   
   // checking:
   router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
+  router.get('/otherfanficssites/testpath',otherfanficssites.testpath)
   // router.get('/otherfanficssites/downloadFanfic',otherfanficssites.downloadFanfic)
   // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
 

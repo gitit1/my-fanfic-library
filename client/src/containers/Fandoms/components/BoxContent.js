@@ -14,8 +14,8 @@ const BoxContent = (props) => (
                                 : `/fandoms/nophoto.png`
                         } 
                         title={props.fandom.FandomName}/>
-            <CardContent className={`fandoms_card_content ${props.screenSize==='s' ? 'fandoms_mobile' : null}`}>
-                {(props.screenSize==='l'||props.screenSize==='m')
+            <CardContent className={`fandoms_card_content ${props.smallSize && 'fandoms_mobile'}`}>
+                {!props.smallSize
                 ?                                                  
                     <React.Fragment>
                         <Typography gutterBottom variant="h5" component="h2" className='fandoms_fandom_caption'>{props.fandom.FandomName}</Typography>

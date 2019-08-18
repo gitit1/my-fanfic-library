@@ -25,8 +25,8 @@ const IndexFandoms = (props) => (
             </Box>
           )
         } 
-        {/* {( (props.screenSize==='l'||props.screenSize==='m') && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==props.dummy) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)<=1)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />} */}
-        {/* {( (props.screenSize==='l'||props.screenSize==='m') && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==props.dummy) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===2)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}        */}
+        {( (props.screenSize==='l'||props.screenSize==='m') && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==props.dummy) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)<=1)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}
+        {( (props.screenSize==='l'||props.screenSize==='m') && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==props.dummy) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===1||props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===2)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}       
       </GridList>
       {props.numOfFandoms>9 && <Grid item xs={12}><Link to={`/fandoms`}>See All</Link></Grid>}
     </Grid>

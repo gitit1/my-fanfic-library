@@ -21,7 +21,7 @@ import MyFandoms from './containers/UserData/MyFandoms/MyFandoms';
 import ReadingList from './containers/UserData/ReadingList/ReadingList';
 //Manage
 import ManageFandoms from './containers/Manage/ManageFandoms';
-import ManageDownloader from './containers/Manage/ManageDownloader';
+import ManageDownloader from './containers/Manage/ManageDownloader/ManageDownloader';
 import AddNewFandom from './containers/Manage/ManageFandoms/components/AddNewFandom';
 //Auth
 import Registrer from './containers/Auth/Register'

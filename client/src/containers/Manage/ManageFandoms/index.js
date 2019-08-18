@@ -52,19 +52,22 @@ class ManageFandoms extends Component{
   }
 
   render(){
-    let page =  null
-    if(!this.props.loading){
-      if(this.props.fandoms.length === 0||this.props.fandoms ===null){
+    let page =  null;
+    const {fandoms,loading,size,smallSize} = this.props;
+
+    if(!loading){
+      if(fandoms.length === 0||fandoms ===null){
           page = (
             <div>
               <p>There Are No Fandoms On Your List - Please Add at least one</p>             
             </div>
           )
       }else{
-          const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
+          const sortedFandomList = fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
       page = (<ShowFandomData fandoms={sortedFandomList}  
                               cellHeight={500} 
-                              screenSize={this.props.size}
+                              screenSize={size}
+                              smallSize={smallSize}
                               editFandom={this.editFandomHandler} 
                               deleteFandom={this.deleteFandomHandler} 
                               boxContent={<BoxContent />} />)
@@ -96,7 +99,8 @@ const mapStateToProps = state =>{
       fandoms:    state.fandoms.fandoms,
       message:    state.fandoms.message,
       loading:    state.fandoms.loading,
-      size:       state.screenSize.size
+      size:       state.screenSize.size,
+      smallSize:  state.screenSize.smallSize
   };   
 }
 

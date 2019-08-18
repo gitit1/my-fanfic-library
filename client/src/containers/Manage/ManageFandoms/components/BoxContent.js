@@ -20,10 +20,10 @@ const BoxContent = (props) => (
                                 title={props.fandom.FandomName}/>
                 </Link> 
             </CardActionArea>
-            <CardContent className={`fandoms_card_content ${props.screenSize==='s' ? 'fandoms_mobile' : null}`} 
-                         style={(props.screenSize==='s') ? {height:props.height-300} : {height:props.height-360}}>
+            <CardContent className={`fandoms_card_content ${props.smallSize ? 'fandoms_mobile' : null}`} 
+                         style={props.smallSize ? {height:props.height-300} : {height:props.height-360}}>
                 {
-                        (props.screenSize==='l'||props.screenSize==='m')
+                        !props.smallSize
                         ?                                                  
                             <React.Fragment>
                                 <Typography gutterBottom variant="h5" component="h2" className='fandoms_fandom_caption'>{props.fandom.FandomName}</Typography>
