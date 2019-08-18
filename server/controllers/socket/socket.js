@@ -26,7 +26,7 @@ var io = require('socket.io')(server,{
       cookie: false
 });
 
-const func = require('../connection');
+const func = require('../connection/connection');
 
 server.listen(8080);
 
