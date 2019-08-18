@@ -777,7 +777,7 @@ exports.saveFanficToDBHandler = (fandomName,fanfic) =>{
 }
 
 const saveFanficToDB = (fandomName,fanfic) =>{
-    // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fanfic));  
+    // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fandomName));   
     return new Promise(async function(resolve, reject) {
         mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"] }, async function(err, dbFanfic) {
             if (err) { 

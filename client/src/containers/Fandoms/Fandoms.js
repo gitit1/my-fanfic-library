@@ -21,7 +21,7 @@ class AllFandoms extends Component{
               )
           }else{
               const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
-              page = (<ShowFandomData fandoms={sortedFandomList} screenSize={this.props.size} hadButtons={false} boxContent={<BoxContent />}/>)
+              page = (<ShowFandomData fandoms={sortedFandomList} screenSize={this.props.size} smallSize={this.props.smallSize} hadButtons={false} boxContent={<BoxContent />}/>)
                       
           }
         }
@@ -35,7 +35,8 @@ const mapStateToProps = state =>{
         fandoms:    state.fandoms.fandoms,
         message:    state.fandoms.message,
         loading:    state.fandoms.loading,
-        size:       state.screenSize.size
+        size:       state.screenSize.size,
+        smallSize:  state.screenSize.smallSize
     };   
   }
   

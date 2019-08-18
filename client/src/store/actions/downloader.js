@@ -3,7 +3,7 @@ import axios from '../axios-server';
 
 export const downloaderStart    = ()            =>      {return{type: actionTypes.DOWNLOADER_START}};
 export const downloaderFail     = (error)       =>      {return{type: actionTypes.DOWNLOADER_FAIL,error: error};};
-export const downloaderSuccess  = ()            =>      {return{type: actionTypes.GET_FANFIC_DATA_SUCCESS}};
+export const downloaderSuccess  = ()            =>      {return{type: actionTypes.DOWNLOAD_FANFIC_DATA_SUCCESS}};
 
 export const getDataOfFanficSuccess = (fanficData) =>{
     console.log('[actions: fandom.js] - getFandomsFromDBSuccess')
@@ -22,8 +22,7 @@ export const getDataOfFanfic = (url,fandomName,download,image) =>{
         dispatch(downloaderStart())
         return axios.get(`/otherfanficssites/getFanficData?url=${url}&fandomName=${fandomName}&download=${download}&image=${image}`)
         .then(fetchedData =>{
-            dispatch(getDataOfFanficSuccess(fetchedData.data));
-            return true;
+            dispatch(getDataOfFanficSuccess(fetchedData.data)).then(()=>{return true});
         })
         .catch(error =>{
             dispatch(downloaderFail(error))

@@ -5,7 +5,7 @@ import AddNewFanfic from './AddNewFanfic/AddNewFanfic'
 class GridDataBox extends Component{
     render(){
         let grid = '';
-        const {fandom,logs,showData,switches} = this.props;
+        const {fandom,logs,showData,switches,showBox} = this.props;
 
         switch (showData) {
             case 0:
@@ -26,7 +26,9 @@ class GridDataBox extends Component{
             default:
                 break;
         }
-        return(<Grid className='grid_code' item xs={6}>{grid}</Grid>)
+        return(
+            showBox ? <Grid className='grid_code' item xs={this.props.smallSizeMode ? 12 : 6}>{grid}</Grid> : null
+        )
     }
 
 };

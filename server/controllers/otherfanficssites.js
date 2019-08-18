@@ -18,13 +18,35 @@ request = request.defaults({
 });
 const fanficsPath = "public/fandoms"
 
-exports.saveDataOfFanficToDB = async (req,res) =>{
+exports.testpath = async (req,res) =>{
+    url = 'https://www.fanfiction.net/s/9502491'
+    console.log('getUrlBodyFromSite')
+    const headers = { 
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36',
+        'gzip': true
+     };
+    return new Promise(function(resolve, reject) {
+        request.get({url,gzip: true,jar,credentials: 'include'}, function (err, httpResponse, body) {
+            if(err){  
+                console.log(clc.red('Error in getUrlBodyFromSite()',err))          
+                console.log(clc.red('URL:',url))          
+                res.send(false)
+            }else{
+            //    console.log('httpResponse:',httpResponse.body)
+                res.send(httpResponse.body)
+            }        
+        });
+    });
+    
+}
+
+exports.saveDataOfFanficToDB =async (req,res) =>{
     console.log(clc.blue('[otherFanficsSites controller] saveDataOfFanficToDB()'));   
     
     const {fandomName,download,url,image} = req.query;
-    ao3funcs.saveFanficToDBHandler(fandomName,req.query);
-    (download=='true') && downloadFanfic(url,req.body.Source,`${req.body.Author}_${req.body.FanficTitle} (${req.body.FanficID})`,'epub',req.body.FandomName,req.body.FanficID) 
-    res.send(true)
+    await ao3funcs.saveFanficToDBHandler(fandomName,req.body)
+    download=='true' && await downloadFanfic(url,req.body.Source,`${req.body.Author}_${req.body.FanficTitle} (${req.body.FanficID})`,'epub',req.body.FandomName,req.body.FanficID) 
+    res.send()
 }
 
 exports.getFanficData = async (req,res) =>{
@@ -34,6 +56,7 @@ exports.getFanficData = async (req,res) =>{
 
     let fanfic = {},tags=[],freeforms =[],characters=[],relationships=[];
     const fixedUrl = await getFixedUrl(url)
+
     const siteUrl = await getSiteUrl(fixedUrl);
     let isChaptersAttr = false,isGnere = false,ischaractersTags = false,isLanguage=false;
 
@@ -42,7 +65,7 @@ exports.getFanficData = async (req,res) =>{
 
     let $ = cheerio.load(body);
     // console.log('url:',url)
-    // console.log('text:',$('#profile_top span.xgray').text())
+
     $('#profile_top span.xgray').text().split(' - ').forEach(attr => {
         if(attr.includes('Rated:')){
             fanfic.Rating =  getRating($('#profile_top span.xgray a[target=rating]').text());
@@ -132,15 +155,22 @@ const checkForSimilar = async (fanfic,fandomName) =>{
     console.log('checkForSimilar')
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     return new Promise(function(resolve, reject) {
-        FanficDB.find({'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'},'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}}).exec(async function(err, fanficResult) {
-            err && reject(err)
-            console.log('fanficResult:',fanficResult.length)
-            if(fanficResult.length===0){
-                resolve(false)
-            }else{
+        FanficDB.find({'FanficID':fanfic.FanficID}).exec(async function(err, fanficResult) {
+            if(fanficResult.length!==0){
+                console.log('fanficResult:',fanficResult)
                 resolve(fanficResult)
+            }else{
+                FanficDB.find({'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'},'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}}).exec(async function(err, fanficResult) {
+                    err && reject(err)
+                    console.log('fanficResult:',fanficResult.length)
+                    if(fanficResult.length===0){
+                        resolve(false)
+                    }else{
+                        resolve(fanficResult)
+                    }
+                });
             }
-        })
+        });
     })
 }
 
@@ -185,14 +215,17 @@ const getRating = rating =>{
 
 const getUrlBodyFromSite = url =>{
     console.log('getUrlBodyFromSite')
+    // const headers = { 
+    //     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36'
+    //  };
     return new Promise(function(resolve, reject) {
-        request.get({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
+        request.get({url,jar,gzip: true,credentials: 'include'}, function (err, httpResponse, body) {
             if(err){  
                 console.log(clc.red('Error in getUrlBodyFromSite()',err))          
                 console.log(clc.red('URL:',url))          
                 reject(false)
             }else{
-                // console.log('httpResponse:',httpResponse)
+            //    console.log('httpResponse:',httpResponse.body)
                 resolve(httpResponse.body)
             }        
         });

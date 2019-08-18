@@ -15,7 +15,7 @@ class Layout extends Component{
         s: 736,
         xm: 935,
         m: 1200,
-        l: 1500
+        l: 1500,
     }
 
     componentDidMount(){
@@ -39,11 +39,12 @@ class Layout extends Component{
     handleResize = () => {
         const {medSize,mobileSize,xs,s,xm,m,l} = this.state;
         let screenSize = window.innerWidth;
-        let size = (screenSize>l) ? 'l' : (screenSize>m) ? 'm' : (screenSize>xm) ? 'xm' : (screenSize>m) ? 'm' : (screenSize>s) ? 's' : 'xs'
-        this.props.onSaveScreenSize(size)
+        let size = (screenSize>l) ? 'l' : (screenSize>m) ? 'm' : (screenSize>xm) ? 'xm' : (screenSize>m) ? 'm' : (screenSize>s) ? 's' : 'xs';
+        let smallSize = (screenSize<=s) ? true : false;
+        this.props.onSaveScreenSize(size,smallSize)
     }
     render(){
-        console.log('size:',this.props.size)
+        // console.log('size:',this.props.size)
         let page = this.state.loading ? null :(
             <div className='layout'>
                 <header>
@@ -80,7 +81,7 @@ const mapDispatchedToProps = dispatch =>{
         onGetFandoms:           ()      =>      dispatch(actions.getFandomsFromDB()),
         onGetLastUpdateDate:    ()      =>      dispatch(actions.getLastUpdateDate()),
         onLogout:               ()      =>      dispatch(actions.logoutUser()),
-        onSaveScreenSize:       (size)  =>      dispatch(actions.saveScreenSize(size))
+        onSaveScreenSize:       (size,smallSize)  =>      dispatch(actions.saveScreenSize(size,smallSize))
     };
 }
 

@@ -31,7 +31,8 @@ const reducer = (state = initialState,action) =>{
         case actionTypes.DOWNLOADER_START:                      return getFanficDataStart(state,action)                                    
         case actionTypes.DOWNLOADER_FAIL:                       return getFanficDataFail(state,action)                                                                                                       
         case actionTypes.GET_FANFIC_DATA_SUCCESS:               return getFanficDataSuccess(state,action)                                    
-        case actionTypes.GET_FANFIC_DATA_SUCCESS:               return saveFanficDataSuccess(state,action)                                    
+        case actionTypes.DOWNLOAD_FANFIC_DATA_SUCCESS:          return saveFanficDataSuccess(state,action)                                    
+                                 
         
         default: return state;
     }
