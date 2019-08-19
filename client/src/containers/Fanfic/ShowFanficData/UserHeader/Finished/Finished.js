@@ -6,9 +6,9 @@ import Button from '@material-ui/core/Button';
 
 const Finished = (props) => (
     <div  className={props.isFinished[0]}>
-    <Button  onClick={() =>props.props.markStatus(props.fanfic.FanficID,'Finished',props.isInProgress[5])} className={props.isFinished[1]}
+    <Button  onClick={() =>props.props.markStatus(props.fanfic.FanficID,'Finished',props.isFinished[2])} 
              color='primary' className={props.isFinished[1] ? 'userData_green' : null}>
-                {props.isFinished[1] ? 'Finished' : 'Mard As Finished'}
+                {props.isFinished[1] ? 'Finished' : 'Mark As Finished'}
     </Button>                                
  </div>
 );

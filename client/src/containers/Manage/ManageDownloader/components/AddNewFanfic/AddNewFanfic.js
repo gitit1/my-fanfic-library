@@ -19,6 +19,7 @@ class OtherSitesDownloader extends Component{
       showData:false,
       msg:'',
       showUserData:false,
+      showSaveButton:false,
       userData:{
         Follow:false,
         Favorite:false,
@@ -31,13 +32,18 @@ class OtherSitesDownloader extends Component{
     getFanficData = () => {
         const {url} = this.state;
         this.setState({loadingFlag:true,showData:false});
+
         if(url===''){
           this.setState({msg:'please enter an url'})
         }else{
           this.setState({msg:''})
+
           const {switches,fandomName} = this.props, download = switches.save;
+
           this.props.onGetFanficData(url,fandomName,download).then(()=>{
-            this.setState({loadingFlag:false,showData:true});
+            !this.props.fanfic 
+              ? this.setState({loadingFlag:false,msg:'This is Acceptable URL',showSaveButton:false}) 
+              : this.setState({loadingFlag:false,showData:true,showSaveButton:true});    
           });
       }
     } 
@@ -49,9 +55,8 @@ class OtherSitesDownloader extends Component{
       if(save){
           this.setState({showData:true,showUserData:true})
           this.props.onSaveFanficDataToDB(fandomName,fanfic,switches.save,url,false).then((res=>{
-              console.log('res:',res)
               let msg = <p>Saved Fanfic to DB</p>
-              this.setState({msg})
+              this.setState({msg,showSaveButton:false})
           }))
       }else{
           let msg = <p>Didn't save fanfic</p>
@@ -131,7 +136,7 @@ class OtherSitesDownloader extends Component{
     }
 
     render(){
-      const {url,loadingFlag,showData,showUserData,userData,msg} = this.state;
+      const {url,loadingFlag,showData,showUserData,userData,showSaveButton} = this.state;
       const {size,loading,fanfic,similarFanfic} = this.props;
       //TODO: CHECK IF FANFIC ALREADY EXIST
       return(            
@@ -147,7 +152,7 @@ class OtherSitesDownloader extends Component{
                   <React.Fragment>
                     <ShowFanficData fanfic={fanfic} size={size} showUserData={showUserData} userData={userData}
                                     markAs={this.markAsHandler} markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler}/>
-                    {msg!=='' && <Button color="primary" clicked={()=>this.saveFanficData(true)}>Save</Button>}
+                    {showSaveButton && (similarFanfic===null) && <Button color="primary" clicked={()=>this.saveFanficData(true)}>Save</Button>}
                   </React.Fragment> 
                        
               } 

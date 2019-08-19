@@ -21,11 +21,7 @@ const ShowFandomData = (props) => {
                             {React.cloneElement(props.boxContent,{fandom:fandom,smallSize:smallSize,height:cellHeight,editFandom:editFandom,deleteFandom:deleteFandom})}
                         </Card>
                     ))} 
-                    {console.log('!smallSize',!smallSize)}
-                    {console.log('length',length)}
-                    {console.log('cols',cols)}
-                    {console.log('lengthcols',length%cols)}
-                    {console.log('length-(Math.floor(length/cols)*cols)',length-(Math.floor(length/cols)*cols))}
+
                     {( !smallSize && (length>cols && (length%cols!==0) && ((length-(Math.floor(length/cols)*cols)<=1)) ) ) && <Card className='fandoms_card fandoms_fandom fandoms_dummy' />}
                     {( !smallSize && (length>cols && (length%cols!==0) && ((length-(Math.floor(length/cols)*cols)===1||length-(Math.floor(length/cols)*cols)===2)) ) ) && <Card className='fandoms_card fandoms_fandom fandoms_dummy' />}
                 </GridList>

@@ -5,6 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
+import {completeFanfics,onGoingFanfics} from './functions';
+
 const BoxContent = (props) => (
     <CardActionArea>
         <Link to={`/fanfics/${props.fandom.FandomName}`}>
@@ -23,10 +25,10 @@ const BoxContent = (props) => (
                             <span>Fanfics in Fandoms: </span><b>{props.fandom.FanficsInFandom.toLocaleString(undefined, {maximumFractionDigits:2})}</b>
                         </Typography>       
                         <Typography variant="body1" color="textSecondary" component="p">
-                        <span>Complete Fanfics: </span>{props.fandom.CompleteFanfics.toLocaleString(undefined, {maximumFractionDigits:2})}
+                        <span>Complete Fanfics: </span>{completeFanfics(props.fandom)}
                         </Typography>       
                         <Typography variant="body1" color="textSecondary" component="p">
-                        <span>In Progress Fanfics: </span>{props.fandom.OnGoingFanfics.toLocaleString(undefined, {maximumFractionDigits:2})} 
+                        <span>In Progress Fanfics: </span>{onGoingFanfics(props.fandom)} 
                         </Typography>       
                     </React.Fragment>
                 :  <div  className='fandoms_mobile_overlay'>

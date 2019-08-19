@@ -9,7 +9,7 @@ import ShowFandomData from './components/ShowFandomData/ShowFandomData';
 import BoxContent from './components/BoxContent'
 
 class AllFandoms extends Component{
-    
+
     render(){
         let page =  null;
         if(!this.props.loading){

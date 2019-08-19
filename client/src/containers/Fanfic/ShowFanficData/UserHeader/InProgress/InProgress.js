@@ -13,12 +13,12 @@ const InProgress = (props) => (
             </Button> 
         </div> 
         {(props.props.inputChapter===props.fanfic.FanficID) &&
-            <div className={classes.UserData}>
+            <div className='userData'>
                 <input  type="number" 
                         placeholder={props.isInProgress[1] 
                             ? props.userData.ChapterStatus 
                             : 'Number of Chapter'} 
-                        onKeyDown={(event)=>props.props.markStatus(props.fanfic.FanficID,'In Progress',props.isInProgress[5],event)}
+                        onKeyDown={(event)=>props.props.markStatus(props.fanfic.FanficID,'In Progress',props.isInProgress[4],event)}
                 />                                
             </div>
         }

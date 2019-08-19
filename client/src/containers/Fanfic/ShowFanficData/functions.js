@@ -45,12 +45,13 @@ export const favoriteFilter = (userData) =>{
 export const finishedFilter = (userData) => {
 // export const finishedFilter = (userData,greenClasses,MarkedAsRead,MarkAsRead) => {
     const   isFinished          =   (userData && userData.Status==='Finished') ? true : false,
+            status              =   isFinished ? 'Finished' : '',
             finishedClassDiv    =   'userData';
             //finishedClassDiv    =   isFinished ? greenClasses[1] : greenClasses[0],
             //finishedClassIcon   =   isFinished ? greenClasses[3] : greenClasses[2],
             //finishedSvgSrc      =   isFinished ?  MarkedAsRead : MarkAsRead;
 
-    return([finishedClassDiv,isFinished])
+    return([finishedClassDiv,isFinished,status])
     // return([isFinished,finishedClassDiv,finishedClassIcon,finishedSvgSrc])
 }
 export const inProgressFilter = (userData,greenClasses,isFinished,MarkedAsRead,MarkAsRead) => {

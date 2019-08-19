@@ -14,9 +14,10 @@ import {filtersArrayInit} from './Filters/FiltersArray'
 
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
+
+import {deletedFanfics} from '../Fandoms/components/functions';
 
 import './Fanfic.scss'
 import './Pagination.css';
@@ -59,10 +60,11 @@ class Fanfic extends Component{
         await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(()=>{
             let fandom = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0];
             let fanficsTotalCount = fandom.FanficsInFandom
-            let fanficsDeletedCount = (fandom.DeletedFanfics) ? fandom.DeletedFanfics : 0//"Bacup" fanfics
+            let fanficsDeletedCount = deletedFanfics(fandom)//"Bacup" fanfics
             let fanficsIgnoredCount = (this.props.ignoredCount) ? this.props.ignoredCount : 0
             // TODO: check for duplicates in DeletedFanfics and ignoredCount
-            let ao3FanficsCount = fanficsTotalCount - fanficsDeletedCount;
+            let ao3FanficsCount = fandom.AO3FanficsInFandom-fandom.AO3DeletedFanfics;
+            let ffFanficsCount = fandom.FFFanficsInFandom;
             let fanficsCurrentCount = fanficsTotalCount - fanficsIgnoredCount;
             let userFanfics  = this.props.userFanfics
             let fanfics      = this.props.fanfics
@@ -75,6 +77,7 @@ class Fanfic extends Component{
                                fanficsDeletedCount,
                                fanficsIgnoredCount,
                                ao3FanficsCount,
+                               ffFanficsCount
                                // TODO: need to change the way of saving in server - add counter to each source                            
                            }
             })
@@ -174,6 +177,7 @@ class Fanfic extends Component{
         console.log('statusType::',statusType)
         switch (statusType) {
             case 'Finished':
+                console.log('status:',status)
                 newStatus = (status!==null && status==='Finished') ? 'Need to Read' : 'Finished'
                 // newStatusFalse = (newStatus==='Finished') ? 'Need to Read' : 'Finished'
                 await this.props.onStatusHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,statusType,newStatus)
