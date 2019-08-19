@@ -38,11 +38,6 @@ const ShowFanficData = (props) => {
                         const inReadingList =   functions.readingListFilter(userData)
                         return(
                             <Card className='card'  key={fanfic.FanficID}>
-                                {/* <CardMedia
-                                    className='card_media'
-                                    image="https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/rainbow-unicorn-clouds-and-stars-crista-forest.jpg"
-                                    title="Live from space album cover"
-                                /> */}
                                 <CardContent className='card_content'>                           
                                     <section className='card_content_header'>
                                         <Header fanfic={fanfic} size={props.size} showTagsToggle={props.showTagsToggle} showTags={props.showTags}/>
@@ -77,56 +72,6 @@ const ShowFanficData = (props) => {
                 </GridList>
             </div>
         </React.Fragment>
-        // <React.Fragment>
-        //     <div className={classes.Fanfics}>
-        //         { props.fanfics.map(fanfic=>{
-        //             let userData = props.userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
-        //             userData = userData.length!==0 ? Object.values(userData)[0]: null;
-
-        //             const redClasses    =   functions.redClassesHandler()
-        //             const greenClasses  =   functions.greenClassesHandler()
-        //             const isFavorite    =   functions.favoriteFilter(userData,redClasses)    
-        //             const isFollowed    =   functions.followFilter(userData,greenClasses,MarkedAsRead,MarkAsRead)    
-        //             const isFinished    =   functions.finishedFilter(userData,greenClasses,MarkedAsRead,MarkAsRead)
-        //             const isInProgress  =   functions.inProgressFilter(userData,greenClasses,isFinished[0],MarkedAsRead,MarkAsRead)
-        //             const isIgnored     =   functions.ignoreFilter(userData,redClasses)
-        //             const inReadingList =   functions.readingListFilter(userData)
-
-        //             return(
-        //                     <div className={classes.Fanfic} key={fanfic.FanficID}>
-        //                     {/* TODO: show only if autinticate */}                         
-        //                         <section className={classes.UserHeader}>
-        //                             <UserHeader props={props} 
-        //                                         fanfic={fanfic}
-        //                                         redClasses={redClasses}
-        //                                         userData={userData}
-        //                                         greenClasses={greenClasses} 
-        //                                         isFollowed={isFollowed}
-        //                                         isFavorite={isFavorite}
-        //                                         isFinished={isFinished}
-        //                                         isInProgress={isInProgress}
-        //                                         isIgnored={isIgnored}
-        //                                         inReadingList={inReadingList}
-        //                             />
-        //                         </section>
-        //                         <section className={classes.Header}>
-        //                             <Header fanfic={fanfic}/>
-        //                         </section>
-        //                         <section className={classes.Tags}>
-        //                             <Tags fanfic={fanfic}/> 
-        //                         </section>
-        //                         <section className={classes.Desc}>
-        //                             <Desc fanfic={fanfic}/>                        
-        //                         </section>
-        //                         <section className={classes.Stat}>
-        //                            <Stat fanfic={fanfic}/> 
-        //                         </section>
-                            
-        //                 </div>
-        //             )
-        //         })}
-        //          </div>
-        // </React.Fragment>  
     )
 };
 

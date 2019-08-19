@@ -1,5 +1,5 @@
 
-export const fanficsNumbers = {
+export const fanficsNumbersList = {
     fanficsTotalCount:0,
     fanficsCurrentCount:0,
     fanficsDeletedCount:0,

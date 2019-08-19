@@ -1,4 +1,4 @@
-import {deletedFanfics} from '../../Fandoms/components/functions';
+import {deletedFanfics} from '../../../../Fandoms/components/functions';
 
 export const fanficsNumbersFunc = (fandom,ignoredCount) => {
     const AO3DeletedFanfics = fandom.AO3DeletedFanfics ? fandom.AO3DeletedFanfics : 0;
@@ -9,7 +9,7 @@ export const fanficsNumbersFunc = (fandom,ignoredCount) => {
             fanficsCurrentCount:    fandom.FanficsInFandom - ignoredCount,
             fanficsIgnoredCount:    ignoredCount ? ignoredCount : 0,
             ao3FanficsCount:        fandom.AO3FanficsInFandom-AO3DeletedFanfics,
-            ffFanficsCount:         fandom.AO3FanficsInFandom-FFDeletedFanfics,
+            ffFanficsCount:         fandom.FFFanficsInFandom-FFDeletedFanfics,
             fanficsDeletedCount:    Number(deletedFanfics(fandom)),
     };
 
