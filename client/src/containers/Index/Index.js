@@ -17,7 +17,7 @@ import './Index.scss';
 class Index extends Component{
     
     render(){
-        const {fandoms,loading,screenSize} = this.props;
+        const {fandoms,loading,screenSize,smallSize} = this.props;
         const shuffledFandoms = fandoms.sort(() => 0.5 - Math.random());
         let selected = (screenSize==='m'|screenSize==='xm') ? shuffledFandoms.slice(0, 6) : screenSize!=='l' ? shuffledFandoms.slice(0, 3) : shuffledFandoms.slice(0, 9);
         const cols = (fandoms.length < 6||screenSize==='m'|screenSize==='xm') ? 3 : screenSize!=='l' ? 1 : 4
@@ -26,7 +26,7 @@ class Index extends Component{
                 { loading ? <Spinner/> :
                     <Grid container className='index_page'>
                         <IndexContainer header='Fandoms'>
-                            <IndexFandoms cols={cols} numOfFandoms={fandoms.length} dummy={fandoms.length%2===0 ? 0 : 1} screenSize={screenSize} 
+                            <IndexFandoms cols={cols} numOfFandoms={fandoms.length} smallSize={smallSize} 
                                           fandoms={selected.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
                         </IndexContainer>
                         <IndexContainer header='Latest Updates'><LatestUpdates /></IndexContainer>
@@ -43,7 +43,8 @@ const mapStateToProps = state =>{
     return{
         fandoms:    state.fandoms.fandoms,
         loading:    state.fandoms.loading,
-        screenSize:  state.screenSize.size
+        screenSize:  state.screenSize.size,
+        smallSize:  state.screenSize.smallSize
     };   
   }   
 

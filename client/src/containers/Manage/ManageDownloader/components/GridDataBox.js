@@ -2,6 +2,8 @@ import React,{Component} from 'react';
 import { Grid } from '@material-ui/core';
 import AddNewFanfic from './AddNewFanfic/AddNewFanfic'
 
+import {savedFanfics,deletedFanfics} from '../../../Fandoms/components/functions'
+
 class GridDataBox extends Component{
     render(){
         let grid = '';
@@ -16,8 +18,8 @@ class GridDataBox extends Component{
                 <div className='code_box'>
                     <p><b>Fandom Name:</b> {fandom.FandomName}</p>
                     <p><b>Fanfics in Fandom:</b> {fandom.FanficsInFandom}</p>
-                    <p><b>Saved Fanfics:</b> {fandom.SavedFanfics}</p>
-                    <p><b>Deleted Fanfics:</b> {fandom.DeletedFanfics ? fandom.DeletedFanfics : 0 }</p>
+                    <p><b>Saved Fanfics:</b> {savedFanfics(fandom)}</p>
+                    <p><b>Deleted Fanfics:</b> {deletedFanfics(fandom)}</p>
                     <p><b>Last Update:</b> {new Date(fandom.FanficsLastUpdate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                 </div>
                 break;

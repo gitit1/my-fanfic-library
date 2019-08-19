@@ -1,83 +1,61 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import Pagination from 'rc-pagination';
-
 
 import * as actions from '../../store/actions';
 
 import Container from '../../components/UI/Container/Container';
 // import Spinner from '../../components/UI/Spinner/Spinner';
 
-import ShowFanficData from './ShowFanficData/ShowFanficData';
 import Filters from './Filters/Filters';
 import {filtersArrayInit} from './Filters/FiltersArray'
 
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
+import ShowFanficData from './ShowFanficData/ShowFanficData';
+import Pagination from './components/Pagination/Pagination';
+import FanficsNumbers from './components/FanficsNumbers/FanficsNumbers';
+import {fanficsNumbersList} from './components/FanficsNumbers/assets/fanficsNumbersList';
+import {fanficsNumbersFunc} from './components/FanficsNumbers/components/fanficsNumbersFunc';
+
 import './Fanfic.scss'
-import './Pagination.css';
+
 
 class Fanfic extends Component{    
     state={
         fanfics:[],
         userFanfics:[],
+        filters: filtersArrayInit,
+        filterArr: [],
         pageNumber:1,
         pageLimit:10,
-        filters: filtersArrayInit,
         currentSort:'dateLastUpdate',
-        filterArr: [],
-        inputChapterFlag:null,
         drawerFilters: false,
-        fanficsNumbers:{
-            fanficsTotalCount:0,
-            fanficsCurrentCount:0,
-            fanficsDeletedCount:0,
-            fanficsIgnoredCount:0,
-            ao3FanficsCount:0,
-            ffFanficsCount:0,
-            patreonFanficsCount:0,
-            tumblrFanficsCount:0,
-            wattpadFanficsCount:0,   
-        },
+        fanficsNumbers:fanficsNumbersList,
+        inputChapterFlag:null,
         readingListAncor:null,
-        showTags: (this.props.size==='s') ? false : true
+        showTags: (this.props.size==='s') ? false : true,
+        showData: false
     }
 
     componentWillMount(){this.getFanfics()}
 
     getFanfics = async () =>{
-        const {pageNumber,pageLimit,fanficsNumbers} = this.state
+        const {pageNumber,pageLimit} = this.state
         const {fandoms,onGetFandoms,onGetFanfics} = this.props
         const fandomName = this.props.match.params.FandomName;
         const userEmail = this.props.userEmail ? this.props.userEmail : null;
         
         (fandoms.length===0) &&  await onGetFandoms()
         await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(()=>{
+            const {fanfics,userFanfics,ignoredCount}  = this.props
             let fandom = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0];
-            let fanficsTotalCount = fandom.FanficsInFandom
-            let fanficsDeletedCount = (fandom.DeletedFanfics) ? fandom.DeletedFanfics : 0//"Bacup" fanfics
-            let fanficsIgnoredCount = (this.props.ignoredCount) ? this.props.ignoredCount : 0
-            // TODO: check for duplicates in DeletedFanfics and ignoredCount
-            let ao3FanficsCount = fanficsTotalCount - fanficsDeletedCount;
-            let fanficsCurrentCount = fanficsTotalCount - fanficsIgnoredCount;
-            let userFanfics  = this.props.userFanfics
-            let fanfics      = this.props.fanfics
-            // this.setState({pageTotal:Math.ceil(fanficsCount/pageLimit)})
-            this.setState({userFanfics,fanfics,
-                           fanficsNumbers:{
-                               ...fanficsNumbers,
-                               fanficsTotalCount,
-                               fanficsCurrentCount,
-                               fanficsDeletedCount,
-                               fanficsIgnoredCount,
-                               ao3FanficsCount,
-                               // TODO: need to change the way of saving in server - add counter to each source                            
-                           }
-            })
+            const fanficsNumbers = fanficsNumbersFunc(fandom,ignoredCount);
+
+            this.setState({userFanfics,fanfics,fanficsNumbers:fanficsNumbers,showData:true});
+            console.log(this.state.fanficsNumbers)
         })
 
         return null
@@ -174,6 +152,7 @@ class Fanfic extends Component{
         console.log('statusType::',statusType)
         switch (statusType) {
             case 'Finished':
+                console.log('status:',status)
                 newStatus = (status!==null && status==='Finished') ? 'Need to Read' : 'Finished'
                 // newStatusFalse = (newStatus==='Finished') ? 'Need to Read' : 'Finished'
                 await this.props.onStatusHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,statusType,newStatus)
@@ -282,7 +261,7 @@ class Fanfic extends Component{
 
     toggleDrawer = (open) => event => {if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return}this.setState({drawerFilters: open})}
 
-    openReadingListBox=(event,inReadingList,fanficId)=>{this.setState({readingListAncor:event.currentTarget})                }
+    openReadingListBox=(event)=>{this.setState({readingListAncor:event.currentTarget})                }
 
     closeReadingListBox= (el) => {this.setState({readingListAncor:el})}   
 
@@ -291,42 +270,33 @@ class Fanfic extends Component{
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
         let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,readingListAncor} = this.state;
-
         return(
             <Container header={this.props.match.params.FandomName} className='fanfics'>
                 <Grid container className='containerGrid'>
-                    <Grid className={'paginationGrid'}>
-                        <Pagination onChange={this.paginationClickHandler} 
-                                current={pageNumber} 
-                                total={fanficsNumbers.fanficsCurrentCount}
-                                className={'pagination'}
-                                defaultPageSize={pageLimit}
-                                showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} Works`}
-                        />
-                    {/* <Divider variant="fullWidth" /> */}
+                    <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
+                                total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
+
+                    <Grid container className='containerGrid'>
+                        <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={this.props.match.params.FandomName.toLocaleString(undefined, {maximumFractionDigits:2})}/>
+                        <Grid className={'buttons'} item xs={3}>
+                            <Button onClick={this.toggleDrawer(true)}>Filters</Button>
+                            <Drawer anchor="right" open={this.state.drawerFilters} onClose={this.toggleDrawer(false)}>
+                                <div className='filterDrewer' role="presentation">
+                                    <Button onClick={this.toggleDrawer(false)}>Close</Button>
+                                    <Filters filter={this.filterHandler}
+                                                sort={currentSort}
+                                                cancelFilters={this.cancelFiltersHandler}
+                                                filtersAction={this.activeFiltersHandler}
+                                                checked={filters}
+                                                />
+                                </div>
+                            </Drawer>
+                        </Grid>
+                        
                     </Grid>
-                    <Grid  className={'fanficNumbers'}>
-                        <p>There is a total of <b>{fanficsNumbers.fanficsTotalCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> fanfics in <b>{this.props.match.params.FandomName.toLocaleString(undefined, {maximumFractionDigits:2})}</b> Fandom</p>
-                        <p>Sources: <b style={{color:'#8A0407'}}>AO3:</b> <b>{fanficsNumbers.ao3FanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> , <b style={{color:'#0a48ab'}}>Backup (Deleted from sites):</b> <b>{fanficsNumbers.fanficsDeletedCount}</b> </p>
-                        <p><b>{fanficsNumbers.fanficsIgnoredCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b> of the fanfics are ignored (filter by ignore to see them and reactive them)</p>
-                        <Divider/>
-                    </Grid>
-                    <Grid className={'buttons'}>
-                        <Button onClick={this.toggleDrawer(true)}>Filters</Button>
-                        <Drawer anchor="right" open={this.state.drawerFilters} onClose={this.toggleDrawer(false)}>
-                            <div className='filterDrewer' role="presentation">
-                                <Button onClick={this.toggleDrawer(false)}>Close</Button>
-                                <Filters filter={this.filterHandler}
-                                            sort={currentSort}
-                                            cancelFilters={this.cancelFiltersHandler}
-                                            filtersAction={this.activeFiltersHandler}
-                                            checked={filters}
-                                            />
-                            </div>
-                        </Drawer>
-                        <Divider variant='insent'/>
-                    </Grid>
+                    
                     <Grid className={'main'}>
+                    <Divider/>
                         {fanficsNumbers.fanficsCurrentCount===0 ? 
                                 <p><b>Didn't found any fanfics with this search filters</b></p>
                             :
@@ -346,15 +316,8 @@ class Fanfic extends Component{
                             }
                     </Grid>
                 </Grid>
-                <Grid  item className={'paginationGrid paginationGridButtom'}>
-                        <Pagination onChange={this.paginationClickHandler} 
-                                current={pageNumber} 
-                                total={fanficsNumbers.fanficsCurrentCount}
-                                className={'pagination'}
-                                defaultPageSize={pageLimit}
-                                // showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} Works`}
-                        />
-                </Grid>
+                <Pagination gridClass='paginationGrid paginationGridButtom'  onChange={this.paginationClickHandler} showTotal={false} current={pageNumber} 
+                            total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
             </Container>
         )
     }

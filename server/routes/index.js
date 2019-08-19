@@ -3,9 +3,9 @@ const router = express.Router();
 
 
 const db = require('../controllers/db');
-const ao3 = require('../controllers/downloader/ao3/ao3');
-const otherfanficssites = require('../controllers/downloader/ff/otherfanficssites');
 const users = require('../controllers/users');
+const downloader = require('../controllers/downloader/downloader.js');
+// const otherfanficssites = require('../controllers/downloader/ff/otherfanficssites');
 
 
 try {
@@ -25,12 +25,12 @@ try {
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
   
-  router.get('/otherfanficssites/getFanficData',otherfanficssites.getFanficData)
-  router.post('/otherfanficssites/saveDataOfFanficToDB',otherfanficssites.saveDataOfFanficToDB)
+  router.get('/downloader/getFanficData',downloader.getNewFanfic)
+  router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
   
   // checking:
   // router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
-  router.get('/otherfanficssites/testpath',otherfanficssites.testpath)
+  // router.get('/otherfanficssites/testpath',otherfanficssites.testpath)
   // router.get('/otherfanficssites/downloadFanfic',otherfanficssites.downloadFanfic)
   // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
 

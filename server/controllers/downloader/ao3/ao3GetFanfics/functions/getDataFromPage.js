@@ -12,8 +12,8 @@ request = request.defaults({
 
 
 const {getPublishDate} = require('./getPublishDate');
-const {saveFanficToServerHandler} = require('../../helpers/saveFanficsToServer.js')
-const {saveFanficToDB} = require('../../helpers/saveFanficToDB.js');
+const {saveFanficToServerHandler} = require('../../helpers/saveFanficsToServer');
+const {saveFanficToDB} = require('../../../helpers/saveFanficToDB');
 
 exports.getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));  
