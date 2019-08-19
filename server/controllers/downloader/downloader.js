@@ -9,7 +9,7 @@ TODO:  function/router: ao3SaveFanfic
 TODO:  function/router: ffGetFanfics                        
 TODO:  function/router: ffGetDeletedFanfics
 TODO:  function/router: ffAddNewFanfic                      |DONE
-TODO:  function/router: ffSaveFanfic
+TODO:  function/router: ffSaveFanfic                        |DONE
 TODO:  function/router: ffSaveMissingFanfics
 
 TODO:  function/router: wattpadGetFanfics

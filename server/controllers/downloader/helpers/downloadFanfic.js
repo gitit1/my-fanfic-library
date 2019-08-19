@@ -1,7 +1,10 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer');
+let request = require('request');
 
-let request = require('request')
+const mongoose = require('../../../config/mongoose');
+const FandomModal = require('../../../models/Fandom');
+
 let jar = request.jar();
 request = request.defaults({
   jar: jar,
@@ -10,8 +13,8 @@ request = request.defaults({
 
 const fanficsPath = "public/fandoms";
 
-exports.downloadFanfic = async (url,source,filename,type,fandomName,id) =>{
-    let fullFilename = `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${filename}.${type}`
+exports.downloadFanfic = async (url,source,fileName,savedAs,fandomName,fanficId) =>{
+    let fullFilename = `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${fileName}.${savedAs}`
     let sourceCode = (source==='FF') ? 'ffnet' : null
 
     const browser = await puppeteer.launch();
@@ -24,9 +27,9 @@ exports.downloadFanfic = async (url,source,filename,type,fandomName,id) =>{
     console.log('url:',url)
     
     setTimeout(() => {
-        url = `http://ff2ebook.com/download.php?source=${sourceCode}&id=${id}&filetype=${type}`
+        url = `http://ff2ebook.com/download.php?source=${sourceCode}&id=${fanficId}&filetype=${savedAs}`
         new Promise((resolve, reject) => {
-            console.log('filename:',fullFilename)
+            console.log('fileName:',fullFilename)
             console.log('url:',url)
             const file = fs.createWriteStream(fullFilename);
             request({url,jar, credentials: 'include'}).pipe(file);
@@ -37,13 +40,41 @@ exports.downloadFanfic = async (url,source,filename,type,fandomName,id) =>{
                 fs.readFileSync(fullFilename, 'utf8');    
             }).on('error',() => 
                 reject(console.log(`There was an error in: downloader(): ${url} , filename: ${fullFilename}`)
-            )).on('timeout', function(e) {
+            )).on('timeout', async function(e) {
                 console.log(`TimeOut - redownloading: ${url}`)
-                downloadFanfic(source,filename,type,fandomName);
+                downloadFanfic(source,fileName,savedAs,fandomName);
             });  
+            updateSavedFandomData(fandomName,source,fanficId,fileName,savedAs)
         })
     }, 20000);
     return null;
 }
 
+const updateSavedFandomData = async (fandomName,source,fanficId,fileName,savedAs) =>{
+    await savedFanficDBdata(fandomName,fanficId,fileName,savedAs);
+    await savedFandomDBdata(fandomName,source);
+    return null;
+}
+
+const savedFanficDBdata = (fandomName,fanficId,filename,savedAs) =>{ 
+    return new Promise(function(resolve, reject) {
+        mongoose.dbFanfics.collection(fandomName)
+        .updateOne({'FanficID':fanficId},{$set: {'SavedFic':true,'NeedToSaveFlag':false,'fileName':filename,'savedAs':savedAs}}
+        ,function (error, result) {
+            error && reject(error);
+            resolve(result)
+        })
+    });
+}
+const savedFandomDBdata = async (fandomName,source) =>{ 
+    const attr = (source==='AO3') ? 'AO3SavedFanfics' : (source==='FF') ? 'FFSavedFanfics' : 'Wattpad';
+    const savedNum = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':source,'SavedFic':true})
+
+    return new Promise(function(resolve, reject) {
+        FandomModal.updateOne({'FandomName': fandomName},{$set: {[attr]:savedNum}},(error, result) => {
+            error && reject(error);
+            resolve(result)
+        });
+    });
+}
 //http://ff2ebook.com/download.php?source=ffnet&id=13198013&filetype=epub
