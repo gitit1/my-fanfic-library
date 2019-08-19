@@ -57,18 +57,13 @@ class ManageDownloader extends Component{
         },
         showData:0,
         showGridDataBox:false,
-        showGridButtons:true,
-        smallSizeMode: false
+        showGridButtons:true
     }
 
     componentDidMount(){
         this.createOptionsForFandomSelect(); 
         socket.removeAllListeners();
-        if(this.props.size==='xs'||this.props.size==='s'){
-            this.setState({smallSizeMode:true,showGridDataBox:false})
-        }else{
-            this.setState({showGridDataBox:true})
-        }
+        !this.props.smallSize && this.setState({showGridDataBox:true})
     }
 
     componentWillUnmount(){this.props.onGetFandoms()}
@@ -89,9 +84,11 @@ class ManageDownloader extends Component{
     }
 
     sendRequestsToServerHandler = async (choice) =>{
+        // const {serverData} = this.state;
+        const {smallSize} = this.props;
         socket.removeAllListeners()
         this.setState({serverData:null,logs:[],showData:0})
-        this.state.smallSizeMode && this.setState({showGridDataBox: true,showGridButtons: false});
+        smallSize && this.setState({showGridDataBox: true,showGridButtons: false});
 
         socket.on('getFanficsData', serverData =>{
             this.setState({serverData})
@@ -124,7 +121,7 @@ class ManageDownloader extends Component{
         let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.FandomName===selectedFandom)[0]);
         let showData = (selectedFandom==='All') ? 0 : 1;
 
-        this.state.smallSizeMode && this.setState({showGridDataBox: false,showGridButtons: true});
+        this.props.smallSizeMode && this.setState({showGridDataBox: false,showGridButtons: true});
         this.setState(prevState =>({
             fandom,serverData,logs,showData,
             fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
@@ -146,25 +143,25 @@ class ManageDownloader extends Component{
 
     addNewFanficHandler = () =>{
         this.setState({showData:2})
-        this.state.smallSizeMode && this.setState({showGridDataBox: true,showGridButtons: false})
+        this.props.smallSize && this.setState({showGridDataBox: true,showGridButtons: false})
     }
     toggleBottons= () =>{
-        this.state.smallSizeMode && this.setState({showGridDataBox: false,showGridButtons: true});
+        this.props.smallSize && this.setState({showGridDataBox: false,showGridButtons: true});
     }
 
     render(){
-        const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox,smallSizeMode} = this.state
-   
+        const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox} = this.state
+        const {smallSize} = this.props
         return(
             <Container header='Downloader' className='managedownloader'>
                 <Grid container className='downloader' spacing={2}>
                     <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
-                    {smallSizeMode && showGridDataBox &&  <Button variant="contained" className='backButton' onClick={()=>this.toggleBottons()}>Back to Bottons</Button>}
+                    {this.props.smallSize && showGridDataBox &&  <Button variant="contained" className='backButton' onClick={()=>this.toggleBottons()}>Back to Bottons</Button>}
                     {
                      fandomSelect.value!='' &&
                         <React.Fragment> 
                             <GridButtons sendRequestsToServer={this.sendRequestsToServerHandler} addNewFanfic={this.addNewFanficHandler} showBox={showGridButtons}/>
-                            <GridDataBox fandom={fandom} showData={showData} logs={logs} switches={switches} showBox={showGridDataBox} smallSizeMode={smallSizeMode}/>
+                            <GridDataBox fandom={fandom} showData={showData} logs={logs} switches={switches} showBox={showGridDataBox} smallSizeMode={smallSize}/>
                         </React.Fragment>
                     }
                 </Grid>
@@ -176,7 +173,8 @@ class ManageDownloader extends Component{
 const mapStateToProps = state =>{
     return{
         fandoms:        state.fandoms.fandoms,
-        size:           state.screenSize.size
+        size:           state.screenSize.size,
+        smallSize:      state.screenSize.smallSize
     };   
   }
   
