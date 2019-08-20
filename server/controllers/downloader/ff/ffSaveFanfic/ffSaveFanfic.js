@@ -12,19 +12,19 @@ request = request.defaults({
 const {saveFanficToDB} = require('../../helpers/saveFanficToDB')
 const {downloadFanfic} = require('../../helpers/downloadFanfic')
 
-exports.ffSaveFanfic = async (fandomName,download,url,fandom) =>{ 
+exports.ffSaveFanfic = async (fandomName,download,url,fanfic) =>{ 
     return await new Promise(async function(resolve, reject) {  
-        const status = await saveFanficToDB(fandomName,fandom);
-        status && await updateFandomData(fandom)
-        download=='true' && await downloadFanfic(url,fandom.Source,`${fandom.Author}_${fandom.FanficTitle} (${fandom.FanficID})`,'epub',fandom.FandomName,fandom.FanficID)     
+        const status = await saveFanficToDB(fandomName,fanfic);
+        status && await updateFandomData(fanfic)
+        download=='true' && await downloadFanfic(url,fanfic.Source,`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`,'epub',fanfic.FandomName,fanfic.FanficID)     
         resolve();
     });
 }
 
 
-const updateFandomData = async (fandom) =>{
-    const fandomName = fandom.FandomName;
-    const isComplete = fandom.Complete ? 'FFCompleteFanfics' : 'FFOnGoingFanfics'
+const updateFandomData = async (fanfic) =>{
+    const fandomName = fanfic.FandomName;
+    const isComplete = fanfic.Complete ? 'FFCompleteFanfics' : 'FFOnGoingFanfics'
 
     const fanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({});
     const FFFanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'FF'});

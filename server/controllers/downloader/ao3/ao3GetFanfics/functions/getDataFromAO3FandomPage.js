@@ -7,8 +7,7 @@ request = request.defaults({
   jar: jar,
   followAllRedirects: true
 });
-const {getDataFromPage} = require('./getDataFromPage');
-
+const {getDataFromFanficPage} = require('./getDataFromFanficPage/getDataFromFanficPage');
 
 exports.getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {  
     console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));    
@@ -16,38 +15,15 @@ exports.getDataFromAO3FandomPage =  async (page,fandom,savedNotAuto) => {
             let $ = cheerio.load(page),donePromise = 0;
             let n = $('ol.work').children('li').length;
             let counter = 0,timer = 0;
-            // return new Promise(async function(resolve, reject) {
-                for(let count = 0; count < n; count++){
-                    let page = $('ol.work').children('li').eq(count)
-                    // timer = (fandom.SavedFanficsLastUpdate===undefined) ? 6000 : 1000;
-                    // func.delay(timer).then(async () => {
-                        await getDataFromPage(page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto).then(res=>{
-                            donePromise++;
-                            // console.log('res:',res)
-                            res===0 && counter++;
-                            // if(res!==0){
-                            //     console.log(clc.red('page:',page.attr('id')))
-                            // }
+            for(let count = 0; count < n; count++){
+                let page = $('ol.work').children('li').eq(count)
+                    await getDataFromFanficPage(page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto).then(res=>{
+                        donePromise++;
+                        res===0 && counter++;
 
-                        })
-                        // console.log('donePromise:',donePromise)
-                        // console.log('counter:',counter)
-                        if (donePromise == n) {   
-                            // console.log('.......:')
-                            // console.log('1.1',counter)                
-                            // resolve(counter)
-                            return counter
-                        }                
-                    // });
-                }
-            // })
-            //return counter
+                    })
+                    if (donePromise == n) {return counter}                
+            }
             
- 
-        } catch(e) {
-            console.log(e);
-        }
-
-
-
+        } catch(e) {console.log(e);}
 }

@@ -16,6 +16,7 @@
     "react": "^16.8.6",
     "react-breadcrumbs-dynamic": "^1.2.0",
     "react-dom": "^16.8.6",
+    "react-ga": "^2.6.0",
     "react-load-image": "^0.1.7",
     "react-paginate": "^6.3.0",
     "react-redux": "^7.0.3",

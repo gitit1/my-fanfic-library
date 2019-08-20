@@ -2,8 +2,8 @@
 TODO:  function/router: ao3GetFanfics                       |DONE
 TODO:  function/router: ao3GetDeletedFanfics                |DONE
 TODO:  function/router: ao3SaveMissingFanfics               |DONE
+TODO:  function/router: ao3AddNewFanfic                     |DONE
 
-TODO:  function/router: ao3AddNewFanfic
 TODO:  function/router: ao3SaveFanfic
 
 TODO:  function/router: ffGetFanfics                        
@@ -39,7 +39,7 @@ exports.saveMissingFanfics = async (fandom) =>{
 exports.getNewFanfic = async (req,res) =>{
     const {url,fandomName} = req.query;
     const data =  url.includes('fanfiction.net')  ? await ff.ffAddNewFanfic(url,fandomName) 
-                : url.includes('archiveofourown.org') ? await 'AO3' 
+                : url.includes('archiveofourown.org') ? await ao3.ao3AddNewFanfic(url,fandomName) 
                 // : url.includes('wattpad.com') ? await 'wattpad'
                 : null;
     res.send(data);
@@ -48,8 +48,12 @@ exports.getNewFanfic = async (req,res) =>{
 
 exports.saveNewFanfic = async (req,res) =>{
     const {fandomName,download,url,image} = req.query;
-    const fandom = req.body;
-    await ff.ffSaveFanfic(fandomName,download,url,fandom).then(()=>{
+    const fanfic = req.body;
+
+    url.includes('fanfiction.net') && await ff.ffSaveFanfic(fandomName,download,url,fanfic).then(()=>{
+        res.send();
+    })
+    url.includes('archiveofourown.org') && await ao3.ao3SaveFanfic(fandomName,download,url,fanfic).then(()=>{
         res.send();
     })
 }

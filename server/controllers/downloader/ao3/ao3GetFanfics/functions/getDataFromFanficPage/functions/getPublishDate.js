@@ -8,7 +8,7 @@ request = request.defaults({
   followAllRedirects: true
 });
 
-const {getUrlBodyFromAo3} = require('../../helpers/getUrlBodyFromAo3');
+const {getUrlBodyFromAo3} = require('../../../../helpers/getUrlBodyFromAo3');
 
 exports.getPublishDate = async (url)=>{
     console.log(clc.bgGreenBright('[ao3 controller] getPublishDate()'));
