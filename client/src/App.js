@@ -2,6 +2,8 @@ import React from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
 
+import ReactGA from 'react-ga';
+
 import store from "./store/store";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./store/actions";
@@ -30,7 +32,8 @@ import Login from './containers/Auth/Login'
 import TodoListClient from './containers/TodoListClient/TodoListClient';
 import TodoListServer from './containers/TodoListServer/TodoListServer';
 
-
+ReactGA.initialize('UA-146053520-01');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -50,7 +53,11 @@ if (localStorage.jwtToken) {
   }
 }
 
+
+
 function App() {
+
+
   return (
       <Layout>
         <Switch>
