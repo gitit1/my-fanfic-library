@@ -49,12 +49,15 @@ exports.saveFanficsToServer = async (fandom,method) =>{
     }
 }
 exports.saveFanficToServerHandler = async (url,fandomName,saveMethod,savedNotAuto) =>{
-    console.log('saveFanficToServerHandler:',url,fandomName,saveMethod,savedNotAuto)
+    // console.log('saveFanficToServerHandler:',url,fandomName,saveMethod,savedNotAuto)
+    // return await new Promise(async function(resolve, reject) { 
+    //     resolve(saveFanficToServer(url,fandomName,saveMethod,savedNotAuto))
+    //  })
     return saveFanficToServer(url,fandomName,saveMethod,savedNotAuto)
 }
 
 const saveFanficToServer = async (url,fandomName,saveMethod,savedNotAuto)=>{
-    console.log('saveFanficToServer:',url,fandomName,saveMethod,savedNotAuto)
+    // console.log('saveFanficToServer:',url,fandomName,saveMethod,savedNotAuto)
     try {
         let links = [],methods=[];
         let fanficId = 0

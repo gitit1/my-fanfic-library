@@ -7,7 +7,6 @@ request = request.defaults({
 });
 
 
-
 exports.getPagesOfFandomData = async (url,numberOfPages) => {
     let pages = [], promises = [];
     await [...Array(Number(numberOfPages))].forEach(async (num,index) => {promises.push(

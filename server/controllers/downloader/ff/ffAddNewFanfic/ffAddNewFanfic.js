@@ -10,7 +10,7 @@ request = request.defaults({
 
 const {getFixedUrl} = require('../helpers/getFixedUrl');
 const {getDataFromPage} = require('../helpers/getDataFromPage');
-const {checkForSimilar} = require('./functions/checkForSimilar')
+const {checkForSimilar} = require('../../helpers/checkForSimilar')
 
 exports.ffAddNewFanfic = async (url,fandomName) =>{ 
     const fixedUrl                  =   await getFixedUrl(url);

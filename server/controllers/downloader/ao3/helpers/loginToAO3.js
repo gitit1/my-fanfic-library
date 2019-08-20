@@ -11,7 +11,7 @@ request = request.defaults({
   followAllRedirects: true
 });
 
-exports.loginToAO3 = async (fandomName)=>{
+exports.loginToAO3 = () =>{
     console.log(clc.bgGreenBright('[ao3 controller] loginToAO3()'));
     let url = "https://archiveofourown.org/users/login/",utf8='',authenticity_token='',isLogin = false;
     return new Promise(async function(resolve, reject) {
