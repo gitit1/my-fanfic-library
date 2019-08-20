@@ -129,9 +129,14 @@ exports.getDataFromPage = async (page,fandomName,savedFanficsLastUpdate,autoSave
         updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
 
         // console.log('updated:',updated)
-        if (updated||newFic){
-            fanfic["NeedToSaveFlag"] = true
-        }
+        fanfic["NeedToSaveFlag"] = (updated||newFic) && true;
+        fanfic["Status"] = newFic ? 'new' : 'updated';
+
+        fanfic["StatusDetails"] =   updated && (
+                                        (fanfic["Complete"] !== oldFanficData.Complete) ? 'Completed' :
+                                        (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ? 'Chapter' :
+                                        (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) ? 'Title' : null
+                                    );
     }
 
     if(savedFanficsLastUpdate===undefined || newFic){

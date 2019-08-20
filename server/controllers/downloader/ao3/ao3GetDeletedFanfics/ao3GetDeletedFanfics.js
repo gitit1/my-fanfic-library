@@ -6,7 +6,7 @@ const pLimit = require('p-limit');
 
 const FandomModal = require('../../../../models/Fandom');
 const FanficSchema = require('../../../../models/Fanfic');
-const func = require('../../../../helpers/functions');
+const func = require('../../helpers/generalFunctions');
 
 let jar = request.jar();
 request = request.defaults({
