@@ -70,7 +70,7 @@ function App() {
           <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
           <PrivateRoute exact path="/editfandom"          component={AddNewFandom}      level={1} />
           {/* Auth */}  
-          <Route              path="/registrer"           component={Registrer}                   />
+          <Route              path="/register"           component={Registrer}                   />
           <Route              path="/login"               component={Login}                       />
           {/* TODO: DELETE WHEN DONE */}  
           {/* <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} /> */}

@@ -8,7 +8,7 @@ const passport = require("passport");
 const publicDir = require('path').join(__dirname,'/public');
 const buildDir  = require('path').join(__dirname,'/build');
 require('./config/mongoose.js')
-require('./controllers/socket/socket');
+require('./controllers/connection/socket/socket');
 
 //require('./cronJobs/cron')
 

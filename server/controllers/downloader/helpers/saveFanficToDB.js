@@ -1,5 +1,5 @@
 const mongoose = require('../../../config/mongoose');
-const func = require('../../../helpers/functions');
+const func = require('../helpers/generalFunctions');
 
 let request = require('request')
 let jar = request.jar();

@@ -1,6 +1,6 @@
 
 const clc = require("cli-color");
-const db  =  require('../db')
+const db  =  require('../db/db')
 const funcs = require('./functions/index')
 
 exports.manageDownloader = async (socket,fandom,choice,method) =>{
@@ -83,8 +83,4 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
     } catch(e) {
         console.log(e);
     }
-}
-
-exports.manageAddNewFanfic = async (req,res) =>{
-
 }

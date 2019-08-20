@@ -30,6 +30,8 @@ const FanficSchema = new Schema({
     Source:                 {type: String},
     Oneshot:                {type: Boolean},
     Image:                  {type: String},      
+    Status:                 {type: String},      
+    StatusDetails:          {type: String},      
  });
  
  
