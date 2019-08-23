@@ -15,7 +15,9 @@ import './Index.scss';
 
 
 class Index extends Component{
-    
+    componentWillMount(){
+
+    }
     render(){
         const {fandoms,loading,screenSize,smallSize} = this.props;
         const shuffledFandoms = fandoms.sort(() => 0.5 - Math.random());
@@ -29,7 +31,9 @@ class Index extends Component{
                             <IndexFandoms cols={cols} numOfFandoms={fandoms.length} smallSize={smallSize} 
                                           fandoms={selected.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
                         </IndexContainer>
-                        <IndexContainer header='Latest Updates'><LatestUpdates /></IndexContainer>
+                        <IndexContainer header='Latest Updates'>
+                            <LatestUpdates />
+                        </IndexContainer>
                         <IndexContainer header='My Fanfics Updates'><MyFanfics /></IndexContainer>
                         <IndexContainer header='My Latest Activities'><MyLatestActivity /></IndexContainer>
                     </Grid>

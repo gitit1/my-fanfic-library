@@ -37,7 +37,7 @@ class Layout extends Component{
     }
 
     handleResize = () => {
-        const {medSize,mobileSize,xs,s,xm,m,l} = this.state;
+        const {s,xm,m,l} = this.state;
         let screenSize = window.innerWidth;
         let size = (screenSize>l) ? 'l' : (screenSize>m) ? 'm' : (screenSize>xm) ? 'xm' : (screenSize>m) ? 'm' : (screenSize>s) ? 's' : 'xs';
         let smallSize = (screenSize<=s) ? true : false;

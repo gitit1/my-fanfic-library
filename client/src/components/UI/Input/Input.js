@@ -39,12 +39,10 @@ const input = (props) => {
                                     <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
                                     <Select 
                                         native
-                                        value={props.label}
                                         inputProps={{
                                             name: props.id,
                                             id: props.id,
-                                        }}
-                                        // className={inputClasses.join(' ')}                                     
+                                        }}                                 
                                         value={props.value}
                                         onChange={props.changed}>
                                             

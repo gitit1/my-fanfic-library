@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ReadingList from './ReadingList';
+// import ReadingList from './ReadingList';
 import Follow from './Follow/Follow';
 import Favorite from './Favorite/Favorite';
 import Finished from './Finished/Finished';

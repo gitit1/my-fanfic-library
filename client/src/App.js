@@ -28,9 +28,6 @@ import AddNewFandom from './containers/Manage/ManageFandoms/components/AddNewFan
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
-//TODO: DELETE WHEN DONE
-import TodoListClient from './containers/TodoListClient/TodoListClient';
-import TodoListServer from './containers/TodoListServer/TodoListServer';
 
 ReactGA.initialize('UA-146053520-01');
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -79,9 +76,6 @@ function App() {
           {/* Auth */}  
           <Route              path="/register"           component={Registrer}                   />
           <Route              path="/login"               component={Login}                       />
-          {/* TODO: DELETE WHEN DONE */}  
-          {/* <PrivateRoute exact path="/todolistClient"      component={TodoListClient}    level={1} /> */}
-          {/* <PrivateRoute exact path="/todolistServer"      component={TodoListServer}    level={1} /> */}
 
           <Redirect to="/" />
         </Switch>

@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import './ImageUpload.scss';
-import Button from '../UI/Button/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';

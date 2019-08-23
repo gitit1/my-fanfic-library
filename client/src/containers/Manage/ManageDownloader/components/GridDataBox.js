@@ -25,6 +25,7 @@ class GridDataBox extends Component{
                 break;
             case 2:
                 grid = <AddNewFanfic fandomName={fandom.FandomName} switches={switches}/>
+                break;
             default:
                 break;
         }

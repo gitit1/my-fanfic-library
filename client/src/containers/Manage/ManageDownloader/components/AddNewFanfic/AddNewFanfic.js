@@ -210,4 +210,4 @@ const mapDispatchedToProps = dispatch =>{
 
 export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(OtherSitesDownloader));
 
-{/* TODO: add checkbox for image fanfic doanload*/}
+// TODO: add checkbox for image fanfic doanload
