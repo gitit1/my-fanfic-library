@@ -6,10 +6,7 @@ const mongoose = require('../../../config/mongoose');
 const FandomModal = require('../../../models/Fandom');
 
 let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
+request = request.defaults({jar: jar,followAllRedirects: true});
 
 const fanficsPath = "public/fandoms";
 

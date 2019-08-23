@@ -1,7 +1,7 @@
 const moment = require('moment');
 const mongoose = require('../../../../../../../config/mongoose');
 
-exports.checkIfFanficIsNewOrUpdated = async fanfic =>{
+exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
     let oldFanficData = false,fandom = null;
     let isThisWeek =  moment(new Date(fanficUpdateDate)).isSame(new Date(), 'week')
     
@@ -9,27 +9,51 @@ exports.checkIfFanficIsNewOrUpdated = async fanfic =>{
         
         fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
         fandom!==null && (oldFanficData = fandom)
-        
-        let isThisWeekOldData =  moment(new Date(oldFanficData.LastUpdateOfFic)).isSame(new Date(), 'week')
-        
-        updated =   (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
-                    (fanfic["LastUpdateOfNote"] > oldFanficData.LastUpdateOfNote) ||
-                    (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ? true : false;
-        
+        console.log(`-----${fanfic["FanficTitle"]}------`)
+
+        // let isThisWeekOldData =  moment(new Date(oldFanficData.LastUpdateOfFic)).isSame(new Date(), 'week')
+        console.log(new Date(oldFanficData.LastUpdateOfFic))
+        // console.log('isThisWeekOldData',isThisWeekOldData)
+
+        console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
+        console.log('fanfic["LastUpdateOfFic"]',fanfic["LastUpdateOfFic"])
+        console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
+        console.log('fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic',fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfNote)
+
+
         newFic = (fandom===null) ? true : false
-        updated = isThisWeekOldData ? false : updated
+        updated =   (!newFic && ((fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
+        (fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic) ||
+        (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ||
+        (fanfic["Author"] !== oldFanficData.Author) ))  ? true : false;
+        
+        console.log('updated',updated)
+        console.log('newFic',newFic)
+        // updated = (!isThisWeekOldData && !newFic) ? updated : false;
 
         newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
         updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
-
-        fanfic["NeedToSaveFlag"] = (updated||newFic) && true;
-        fanfic["Status"] = newFic ? 'new' : 'updated';
-
-        fanfic["StatusDetails"] =   updated && (
-                                        (fanfic["Complete"] !== oldFanficData.Complete) ? 'Completed' :
+        
+        fanfic["Status"] = newFic ? 'new' : updated ? 'updated' : 'old';
+        
+        console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
+        console.log('NumberOfChapters',fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters)
+        console.log('FanficTitle',fanfic["FanficTitle"] !== oldFanficData.FanficTitle)
+        
+        if(!updated && !newFic){
+            fanfic["StatusDetails"] = 'old';
+        }else if(updated){
+            fanfic["StatusDetails"] =   (fanfic["Complete"] !== oldFanficData.Complete) ? 'Completed' :
                                         (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ? 'Chapter' :
-                                        (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) ? 'Title' : null
-                                    );
+                                        (fanfic["Author"] !== oldFanficData.Author) ? 'Author' :
+                                        (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) ? 'Title' : 'old';
+        }else{
+            fanfic["StatusDetails"] =   fanfic["Oneshot"] ? 'Oneshot' : 'old';
+        }
+       
+        console.log('Status',fanfic["Status"]);
+        console.log('Status Details',fanfic["StatusDetails"]);
+        console.log(`------------------`)
         return ([newFic,updated,fanfic])
     }else{
         return([false,false,fanfic])

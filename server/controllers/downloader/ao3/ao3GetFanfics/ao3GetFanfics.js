@@ -1,25 +1,19 @@
 const clc = require("cli-color");
 const cheerio = require('cheerio');
 let request = require('request')
-const mongoose = require('../../../../config/mongoose');
-const FandomModal = require('../../../../models/Fandom');
-
-const ao3Funcs = require('./functions')
-
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
 const pLimit = require('p-limit');
 
-exports.ao3GetFanfics =  async (fandom,method) => {
+const mongoose = require('../../../../config/mongoose');
+const FandomModal = require('../../../../models/Fandom');
+const ao3Funcs = require('./functions')
+
+exports.ao3GetFanfics =  async (jar,fandom,method) => {
     // TODO: ADD CHOSE FANFDOM FOR THE DOWNLOADER
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
     console.log(clc.blue('[ao3 controller] ao3GetFanfics()'));
+    request = request.defaults({jar: jar,followAllRedirects: true});
 
-    await ao3Funcs.loginToAO3()
+    await ao3Funcs.loginToAO3(jar);
     const savedNotAuto = (method||!method===null) ? method : null;   
     const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
     
@@ -28,7 +22,7 @@ exports.ao3GetFanfics =  async (fandom,method) => {
     
     let numberOfPages = 0,fanficsInFandom,savedFanficsCurrent=0;
 
-    let body = await ao3Funcs.getUrlBodyFromAo3(ao3URL)
+    let body = await ao3Funcs.getUrlBodyFromAo3(jar,ao3URL)
             
     let $ = cheerio.load(body);
             
@@ -39,16 +33,17 @@ exports.ao3GetFanfics =  async (fandom,method) => {
     }else{
         numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
     }
-    
-    let pagesArray = await ao3Funcs.getPagesOfFandomData(ao3URL,numberOfPages);
+
+    let pagesArray = await ao3Funcs.getPagesOfFandomData(jar,ao3URL,numberOfPages);
 
     const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 50;
 
     const limit = pLimit(limitConn)
 
-    let promises2 = []
+    let promises2 = [];
+
     for (let i = 0; i < pagesArray.length; i++) {
-        promises2.push(limit(() => ao3Funcs.getDataFromAO3FandomPage(pagesArray[i],fandom,savedNotAuto)));
+        promises2.push(limit(() => ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)));
     }
   
     await Promise.all(promises2).then(async results=> {

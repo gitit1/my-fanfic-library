@@ -1,14 +1,6 @@
 const cheerio = require('cheerio');
-let request = require('request')
-let jar = request.jar();
-
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
 
 const {getUrlBodyFromSite} = require('./getUrlBodyFromSite')
-
 
 exports.getDataFromPage = async (url,fandomName) =>{
     let fanfic = {},tags=[],freeforms =[],characters=[],relationships=[];

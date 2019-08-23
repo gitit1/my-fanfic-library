@@ -5,11 +5,11 @@ const cheerio = require('cheerio');
 const {loginToAO3} = require('../../helpers/loginToAO3');
 const {getUrlBodyFromAo3} = require('../../helpers/getUrlBodyFromAo3');
 
-exports.getDataFromPage = (url,fandomName) =>{
+exports.getDataFromPage = (jar,url,fandomName) =>{
     return new Promise(async function(resolve, reject) { 
-    //    await loginToAO3();
+       await loginToAO3();
 
-        let body = await getUrlBodyFromAo3(url + '?view_adult=true');
+        let body = await getUrlBodyFromAo3(jar,url + '?view_adult=true');
         let $ = cheerio.load(body);
 
         let fanfic = {};

@@ -1,22 +1,14 @@
 const clc = require("cli-color");
 const fs = require('fs');
-let request = require('request')
 
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
-
-let jar = request.jar();
-request = request.defaults({
-    jar: jar,
-    followAllRedirects: true
-  });
-
-const fanficsPath = "public/fandoms"
-
 const {saveFanficToServerHandler} = require('../helpers/saveFanficsToServer.js')
 const {loginToAO3} = require('../helpers/loginToAO3.js')
 
-exports.ao3SaveMissingFanfics = async (fandomName) =>{
+const fanficsPath = "public/fandoms"
+
+exports.ao3SaveMissingFanfics = async (jar,fandomName) =>{
     console.log(clc.bgGreenBright('[ao3 controller] checkIfFileExsistHandler()'));
     let sum = 0;
 

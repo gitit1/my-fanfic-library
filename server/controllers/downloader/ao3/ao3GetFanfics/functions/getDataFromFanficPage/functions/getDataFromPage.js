@@ -11,6 +11,7 @@ exports.getDataFromPage = (page,fandomName) =>{
         fanfic["FandomName"]            =       fandomName;
         fanfic["Source"]                =       'AO3';
         fanfic["FanficID"]              =       Number(page.attr('id').replace('work_',''));
+        // console.log('fanfic["FanficID"]:',fanfic["FanficID"])
     
         fanficUpdateDate                =       page.find('p.datetime').text();
         fanfic["LastUpdateOfFic"]       =       fanficUpdateDate ==="" ? 0 : new Date(fanficUpdateDate).getTime();

@@ -2,14 +2,9 @@
 const clc = require("cli-color");
 let request = require('request');
 
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
-exports.getUrlBodyFromAo3 = url =>{
+exports.getUrlBodyFromAo3 = (jar,url) =>{
     return new Promise(function(resolve, reject) {
+        // request = request.defaults({jar: jar,followAllRedirects: true});
         request.get({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
             if(err){  
                 console.log(clc.red('Error in getUrlBodyFromAo3()',err))          

@@ -1,14 +1,6 @@
 const mongoose = require('../../../config/mongoose');
 const func = require('../helpers/generalFunctions');
 
-let request = require('request')
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
-
 exports.saveFanficToDB = (fandomName,fanfic) =>{
     // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fandomName));   
     return new Promise(async function(resolve, reject) {

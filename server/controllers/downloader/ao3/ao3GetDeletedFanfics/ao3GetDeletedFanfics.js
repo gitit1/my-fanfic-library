@@ -7,18 +7,12 @@ const pLimit = require('p-limit');
 const FandomModal = require('../../../../models/Fandom');
 const FanficSchema = require('../../../../models/Fanfic');
 const func = require('../../helpers/generalFunctions');
-
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
 const {loginToAO3} = require('../helpers/loginToAO3');
 
-exports.ao3GetDeletedFanfics = async (fandomName,fanficsSum) =>{   
+exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{   
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
-    await loginToAO3()
+    request = request.defaults({jar: jar,followAllRedirects: true});
+    await loginToAO3(jar)
     
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     let skip=0,limit=100,promises=[],promises2=[],gotDeletedArray = [],newDeletedCounter=0,allDeletedCounter=0;
@@ -30,13 +24,13 @@ exports.ao3GetDeletedFanfics = async (fandomName,fanficsSum) =>{
             FanficDB.find({Source:'AO3'}).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).exec(async function(err, fanfics) { 
                 const limit = pLimit(50)
                 for (let i = 0; i < fanfics.length; i++) {
-                    await promises2.push(limit(() => checkIfDeleted(fanfics[i])));
+                    await promises2.push(limit(() => checkIfDeleted(jar,fanfics[i])));
                 }
                 resolve();
             });
         });
     }
-    const checkIfDeleted = (fanfic) =>{
+    const checkIfDeleted = (jar,fanfic) =>{
 
         let url = fanfic.URL;
 
@@ -99,3 +93,5 @@ exports.ao3GetDeletedFanfics = async (fandomName,fanficsSum) =>{
         return DeletedCounter
     }).catch(error => console.log(clc.red('Error in checkIfDeletedFromAO3()',error))); 
 }
+
+//TODO: add status deleted too fanfic for my update follow up

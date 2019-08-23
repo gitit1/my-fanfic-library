@@ -1,13 +1,3 @@
-
-let request = require('request')
-let jar = request.jar();
-
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
-
 const {getFixedUrl} = require('../helpers/getFixedUrl');
 const {getDataFromPage} = require('../helpers/getDataFromPage');
 const {checkForSimilar} = require('../../helpers/checkForSimilar')
