@@ -2,13 +2,6 @@
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 
-let request = require('request')
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
 const {saveFanficToDB} = require('../../helpers/saveFanficToDB')
 const {downloadFanfic} = require('../../helpers/downloadFanfic')
 

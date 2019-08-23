@@ -2,13 +2,6 @@
 const mongoose = require('../../../config/mongoose');
 const FanficSchema = require('../../../models/Fanfic');
 
-let request = require('request')
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
 exports.checkForSimilar = (fanfic,fandomName) =>{
     console.log('checkForSimilar')
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);

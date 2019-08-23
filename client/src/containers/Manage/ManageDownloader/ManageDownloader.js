@@ -158,7 +158,7 @@ class ManageDownloader extends Component{
                     <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
                     {this.props.smallSize && showGridDataBox &&  <Button variant="contained" className='backButton' onClick={()=>this.toggleBottons()}>Back to Bottons</Button>}
                     {
-                     fandomSelect.value!='' &&
+                     fandomSelect.value!=='' &&
                         <React.Fragment> 
                             <GridButtons sendRequestsToServer={this.sendRequestsToServerHandler} addNewFanfic={this.addNewFanficHandler} showBox={showGridButtons}/>
                             <GridDataBox fandom={fandom} showData={showData} logs={logs} switches={switches} showBox={showGridDataBox} smallSizeMode={smallSize}/>

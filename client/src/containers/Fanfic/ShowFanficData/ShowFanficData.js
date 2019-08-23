@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from './ShowFanficData.module.css';
 import './showFandomData.scss'
 
 import MarkAsRead from '../../../assets/images/icons/markAsRead.svg'
@@ -77,21 +76,23 @@ const ShowFanficData = (props) => {
 
 export default ShowFanficData;
 
-{/* TODO: Reading List: 
+/* 
+TODO: Reading List: 
     first step - just general to make it work
     when click - modal ask where to save - general or create new list (per user...) , 
     in filter - add filter between deffrent reading lists
-{/* TODO: if mark as finished is marked - disable mark in progress
-{/* TODO: <span>options to create reading lists (one shot ... if not created - save to general)</span>
-{/* TODO: <span>is saved? and how</span> */}
-{/* TODO: Add user tage - add/edir/delete */}
-{/* TODO: <span>add image</span> */}
-{/* TODO: <span>hiatus</span> */}
-{/* TODO: <span>page filters (order by: fav,date(asc,dsc),words.....)</span> */}
-{/* TODO: <span>save individual fanfics from ff - later</span> */}
-{/* TODO: Source filter */}
-{/* TODO: deleted indication */}
-{/* TODO: in manage - add single fanfiction - to chosen fandon - with choise of source*/}
-{/* TODO: add and save fanfics from ff.net */}
-{/* TODO: add and save fanfics from wattpad */}
-{/* TODO: <span>add from backup (upload epub/mobi/pdf...) - later</span> */}
+ TODO: if mark as finished is marked - disable mark in progress
+ TODO: <span>options to create reading lists (one shot ... if not created - save to general)</span>
+ TODO: <span>is saved? and how</span> 
+ TODO: Add user tage - add/edir/delete 
+ TODO: <span>add image</span> 
+ TODO: <span>hiatus</span> 
+ TODO: <span>page filters (order by: fav,date(asc,dsc),words.....)</span> 
+ TODO: <span>save individual fanfics from ff - later</span> 
+ TODO: Source filter 
+ TODO: deleted indication 
+ TODO: in manage - add single fanfiction - to chosen fandon - with choise of source
+ TODO: add and save fanfics from ff.net
+ TODO: add and save fanfics from wattpad 
+ TODO: <span>add from backup (upload epub/mobi/pdf...) - later</span> 
+ */

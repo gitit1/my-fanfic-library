@@ -549,39 +549,3 @@ exports.getLastUpdateDate = async (req,res) =>{
 
     res.send(String(lastUpdate))
 }
-
-/* OLD - NOT IN USE */
-const MixedFiltersHandler = async (userEmail,fandomName,filtersArrays,pageLimit,pageNumber) =>{
-    console.log(clc.bgGreenBright('[db controller] MixedFiltersHandler()')); 
-
-    let filteredUserData = await userDataFiltersHandler(userEmail,fandomName,filtersArrays[0],0,0);
-
-    // console.log('filteredUserData[0].length: ',filteredUserData[0].length)
-    // let filteredFanficsData = await fanficsDataFiltersHandler(userEmail,fandomName,filtersArrays[1],0,0)
-
-    // var filteredFanfics = await compare(filteredUserData[0], filteredFanficsData[0]);
-    // let userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,filteredFanfics)
-    // console.log('filteredList.length:',filteredFanfics.length)
-    // return([filteredFanfics,userData,filteredFanfics.length])
-    
-}
-const getOneFanficFromDB = (fanficId,fandomName,filters) =>{  
-    console.log(clc.bgGreenBright('[db controller] getOneFanficFromDB()'));  
-    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
-    const filterObj = Object.assign({FanficID:fanficId}, ...filters);
-    return new Promise(function(resolve, reject) {
-        FanficDB.find(filterObj).exec(async function(err, fanfic) { 
-            err && reject(err);
-            resolve(fanfic[0])
-        });
-    });
-}
-
-function compare() {
-    console.log(clc.bgGreenBright('[db controller] compare()'));  
-	let arr = [...arguments]
-	// console.log('arr:',arr)
-	return arr.shift().filter( y => 
-  	arr.every( x => x.some( j => j.FanficID === y.FanficID) )
-  )
-}

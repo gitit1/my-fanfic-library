@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 
+import * as actions from '../../store/actions';
+
 import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../../components/UI/Spinner/Spinner';
@@ -15,21 +17,37 @@ import './Index.scss';
 
 
 class Index extends Component{
-    
+    state={
+        latestUpdates:[],
+        loading:false
+    }
+    componentWillMount(){
+        const {fandoms} = this.props;
+        //LatestUpdates
+        // const fandomsNames = fandoms.map(fandom=> {return fandom.FandomName});
+        // this.props.onGetLatestUpdates(fandomsNames).then(()=>{
+        //     this.setState({loading:false})
+        // })
+    }
     render(){
-        const {fandoms,loading,screenSize,smallSize} = this.props;
+        const {loading} = this.state;
+        const {fandoms,screenSize,smallSize,latestUpdates} = this.props;
+        //IndexFandoms
         const shuffledFandoms = fandoms.sort(() => 0.5 - Math.random());
-        let selected = (screenSize==='m'|screenSize==='xm') ? shuffledFandoms.slice(0, 6) : screenSize!=='l' ? shuffledFandoms.slice(0, 3) : shuffledFandoms.slice(0, 9);
+        const selectedFandoms = (screenSize==='m'|screenSize==='xm') ? shuffledFandoms.slice(0, 6) : screenSize!=='l' ? shuffledFandoms.slice(0, 3) : shuffledFandoms.slice(0, 9);
         const cols = (fandoms.length < 6||screenSize==='m'|screenSize==='xm') ? 3 : screenSize!=='l' ? 1 : 4
+        
         return(
             <Container>
                 { loading ? <Spinner/> :
                     <Grid container className='index_page'>
                         <IndexContainer header='Fandoms'>
                             <IndexFandoms cols={cols} numOfFandoms={fandoms.length} smallSize={smallSize} 
-                                          fandoms={selected.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
+                                          fandoms={selectedFandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
                         </IndexContainer>
-                        <IndexContainer header='Latest Updates'><LatestUpdates /></IndexContainer>
+                        <IndexContainer header='Latest Updates'>
+                            {/* <LatestUpdates updates={latestUpdates}/> */}
+                        </IndexContainer>
                         <IndexContainer header='My Fanfics Updates'><MyFanfics /></IndexContainer>
                         <IndexContainer header='My Latest Activities'><MyLatestActivity /></IndexContainer>
                     </Grid>
@@ -41,14 +59,21 @@ class Index extends Component{
 
 const mapStateToProps = state =>{
     return{
-        fandoms:    state.fandoms.fandoms,
-        loading:    state.fandoms.loading,
-        screenSize:  state.screenSize.size,
-        smallSize:  state.screenSize.smallSize
+        fandoms:        state.fandoms.fandoms,
+        loading:        state.fandoms.loading,
+        screenSize:     state.screenSize.size,
+        smallSize:      state.screenSize.smallSize,
+        latestUpdates:  state.updates.latestUpdates,
+        loadingUpdate:  state.updates.loading,
     };   
-  }   
+}   
 
-
-export default connect(mapStateToProps)(Index);
+const mapDispatchedToProps = dispatch =>{
+    return{
+        onGetLatestUpdates:    (fandoms)   =>  dispatch(actions.getLatestUpdates(fandoms))
+    }
+}
+  
+  export default connect(mapStateToProps,mapDispatchedToProps)(Index);
 
 //TODO: NEED TO BE FROM SERVER

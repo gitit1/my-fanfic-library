@@ -5,15 +5,12 @@ let request = require('request')
 
 const ao3UserKeys = require("../../../../config/keys");
 
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
-
-exports.loginToAO3 = () =>{
+exports.loginToAO3 = (jar) =>{
     console.log(clc.bgGreenBright('[ao3 controller] loginToAO3()'));
     let url = "https://archiveofourown.org/users/login/",utf8='',authenticity_token='',isLogin = false;
+    
+    request = request.defaults({jar: jar,followAllRedirects: true});
+    
     return new Promise(async function(resolve, reject) {
         request.get({
             url: url,

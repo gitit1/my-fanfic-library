@@ -1,14 +1,9 @@
 const clc = require("cli-color");
 let request = require('request')
-let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
 
-
-exports.getPagesOfFandomData = async (url,numberOfPages) => {
+exports.getPagesOfFandomData = async (jar,url,numberOfPages) => {
     let pages = [], promises = [];
+    request = request.defaults({jar: jar,followAllRedirects: true});
     await [...Array(Number(numberOfPages))].forEach(async (num,index) => {promises.push(
         new Promise(async(resolve, reject) => {
             request.get({url: `${url}?page=${index+1}`,jar: jar, credentials: 'include'}, async function (err, httpResponse, body) {
@@ -23,7 +18,7 @@ exports.getPagesOfFandomData = async (url,numberOfPages) => {
     e => ({e, status: "rejected" }));
 
     await Promise.all(promises.map(reflect))
-    promises = []
+    promises = [];
     return pages
 
 }

@@ -2,10 +2,7 @@ const clc = require("cli-color");
 
 let request = require('request')
 let jar = request.jar();
-request = request.defaults({
-  jar: jar,
-  followAllRedirects: true
-});
+request = request.defaults({jar: jar,followAllRedirects: true});
 
 exports.getUrlBodyFromSite = url =>{
     console.log('getUrlBodyFromSite')

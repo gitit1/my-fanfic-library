@@ -60,7 +60,7 @@ export const inProgressFilter = (userData,greenClasses,isFinished,MarkedAsRead,M
             inProgressClassDiv  =   'userData',
             // inProgressClassDiv  =   isInProgress ? greenClasses[1] : greenClasses[0],
             // inProgressClassIcon =   isInProgress ? greenClasses[3] : greenClasses[2],
-            isDisabled          =   isFinished   ? '${inProgressClassDiv} ${classes.Disabled}' : inProgressClassDiv,
+            isDisabled          =   isFinished   ? `${inProgressClassDiv} Disabled` : inProgressClassDiv,
             // inProgressSvgSrc    =   isInProgress ?  MarkedAsRead : MarkAsRead,
             statusClick         =   (userData && userData.Status) ? userData.Status : null;
 

@@ -20,7 +20,7 @@ const StyledSwitch = withStyles({
   })(Switch);
 
 const switched = (props) => (
-    props.fandomSelect.value!='' &&               
+    props.fandomSelect.value!=='' &&               
         <FormControlLabel control={<StyledSwitch                                             
                                             checked={props.switches.save}
                                             onChange={()=>props.changed('save')}

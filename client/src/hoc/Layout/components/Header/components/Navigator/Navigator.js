@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React from 'react';
 
 import NavWeb from './components/NavWeb/NavWeb'
 import NavMobile from './components/NavMobile/NavMobile'
