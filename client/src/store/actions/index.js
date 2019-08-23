@@ -14,6 +14,9 @@ export {
     getFilteredFanficsFromDB
 } from './fanfics';
 
+export {
+    getLatestUpdates
+} from './updates';
 
 export {
     registerUser,
