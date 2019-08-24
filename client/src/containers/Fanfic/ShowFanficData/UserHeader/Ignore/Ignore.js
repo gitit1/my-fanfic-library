@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 
 const Ignore = (props) => (
    <div  className={props.isIgnored[0]}>
-      <Button  onClick={() =>props.props.markAs(props.fanfic.FanficID,'Ignore',props.isIgnored[1])} 
+      <Button  onClick={() =>props.props.markAs(props.fanfic.FanficID,props.fanfic.FanficTitle,'Ignore',props.isIgnored[1])} 
                color='primary' className={props.isIgnored[2] ? 'userData_red' : null}>
                    {!props.isIgnored[2] ? 'Ignore' : 'Unignore'}
                   

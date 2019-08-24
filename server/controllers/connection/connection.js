@@ -8,7 +8,6 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
     try {
         if(fandom=='All'){
             let fetchedFandoms = await db.getAllFandoms().then(fetchedFandoms=>{
-                console.log('fetchedFandoms:',fetchedFandoms)
                 if(!fetchedFandoms){
                     return false
                 }else{

@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 
 const Follow = (props) => (
    <div  className={props.isFollowed[0]}>
-      <Button  onClick={() =>props.props.markAs(props.fanfic.FanficID,'Follow',props.isFollowed[1])}
+      <Button  onClick={() =>props.props.markAs(props.fanfic.FanficID,props.fanfic.FanficTitle,'Follow',props.isFollowed[1])}
                color='primary' className={props.isFollowed[2] ? 'userData_green' : null}>
                   {props.isFollowed[2] ? 'Following' : 'Follow'}
       </Button>                                

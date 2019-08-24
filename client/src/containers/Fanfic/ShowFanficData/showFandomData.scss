@@ -168,14 +168,7 @@
                 margin-left: 0.5%; 
 
                 .userData{
-                    // display: inline-block;
-                    // cursor: pointer;
-                    // margin-top: 1%;
-                    // margin-right: 15px;
-                    // outline: none;
                     float: left;
-                    // margin-left: 1%; 
-                    //margin-bottom: 1%
                 } 
 
                 .userData_icon{
@@ -274,6 +267,12 @@
                     }
                     .tags_chip{
                         font-size: 0.7em;
+                    }
+                }
+
+                .card_content_userData{                
+                    .userData button span{
+                        color:$color_text;
                     }
                 }
             }

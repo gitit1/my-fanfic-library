@@ -20,16 +20,18 @@ exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
         console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
         console.log('fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic',fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfNote)
 
-        newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
-        updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
+        newFic = (fandom===null) ? true : false;
+
+
         
-        newFic = (fandom===null) ? true : false
         updated =   (!newFic && (
                     (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ||
                     (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
                     (fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic) ||
                     (fanfic["Author"] !== oldFanficData.Author) ))  ? true : false;
-        
+
+        newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
+        updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
         console.log('updated',updated)
         console.log('newFic',newFic)
         // updated = (!isThisWeekOldData && !newFic) ? updated : false;

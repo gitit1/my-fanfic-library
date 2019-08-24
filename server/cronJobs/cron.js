@@ -8,3 +8,6 @@ cron.schedule('0 1 * * *', () => {
   console.log(clc.bgRed('CronJob Awoke: [Get Fanfics of all fandoms]'));
     getFanfics.manageDownloader(null,'All','All')
 });
+
+
+//TODO: ARCHIVE LATESTUPDATE - IF COUNT > LIMIT - TAKE THE EXTRA TO ARCHIVE BY MONTH;

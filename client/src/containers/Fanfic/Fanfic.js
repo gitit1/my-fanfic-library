@@ -70,9 +70,9 @@ class Fanfic extends Component{
         return null
     }
     //UPDATE USERDATA:
-    markAsHandler = async(fanficId,markType,mark) =>{
+    markAsHandler = async(fanficId,fanficTitle,markType,mark) =>{
         console.log('!mark,,,',!mark)
-        await this.props.onMarkHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,markType,!mark)
+        await this.props.onMarkHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,fanficTitle,markType,!mark)
         const userFanficsCopy = [...this.state.userFanfics];
 
         let objIndex = userFanficsCopy.findIndex((fanfic => fanfic.FanficID === fanficId));      
@@ -147,7 +147,7 @@ class Fanfic extends Component{
         }  
     }
     //Need to Read, Finished, In Progress
-    statusHandler = async(fanficId,statusType,status,event) =>{
+    statusHandler = async(fanficId,fanficTitle,statusType,status,event) =>{
         let newStatus='',newStatusFalse='',flag=false,chapterNum;
         console.log('status::',status)
         console.log('statusType::',statusType)
@@ -156,7 +156,7 @@ class Fanfic extends Component{
                 console.log('status:',status)
                 newStatus = (status!==null && status==='Finished') ? 'Need to Read' : 'Finished'
                 // newStatusFalse = (newStatus==='Finished') ? 'Need to Read' : 'Finished'
-                await this.props.onStatusHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,statusType,newStatus)
+                await this.props.onStatusHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,fanficTitle,statusType,newStatus)
                 flag = true;
                 break;
             case 'In Progress':
@@ -345,11 +345,11 @@ const mapStateToProps = state =>{
   
 const mapDispatchedToProps = dispatch =>{
     return{
-        onGetFandoms:           ()                                                          =>  dispatch(actions.getFandomsFromDB()),
-        onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail)                 =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail)),
-        onMarkHandler:          (userEmail,fandomName,fanficId,markType,mark)               =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,markType,mark)),
-        onStatusHandler:        (userEmail,fandomName,fanficId,statusType,status,data)      =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,statusType,status,data)),
-        onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)         =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber))
+        onGetFandoms:           ()                                                                  =>  dispatch(actions.getFandomsFromDB()),
+        onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail)                         =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail)),
+        onMarkHandler:          (userEmail,fandomName,fanficId,fanficTitle,markType,mark)           =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,fanficTitle,markType,mark)),
+        onStatusHandler:        (userEmail,fandomName,fanficId,fanficTitle,statusType,status,data)  =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,fanficTitle,statusType,status,data)),
+        onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber))
     }
 }
   
