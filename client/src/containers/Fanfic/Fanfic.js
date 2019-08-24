@@ -7,7 +7,7 @@ import Container from '../../components/UI/Container/Container';
 // import Spinner from '../../components/UI/Spinner/Spinner';
 
 import Filters from './Filters/Filters';
-import {filtersArrayInit} from './Filters/FiltersArray'
+import {filtersArrayInit} from './Filters/assets/FiltersArray'
 
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
@@ -32,6 +32,7 @@ class Fanfic extends Component{
         pageNumber:1,
         pageLimit:10,
         currentSort:'dateLastUpdate',
+        currentSource:'all',
         drawerFilters: false,
         fanficsNumbers:fanficsNumbersList,
         inputChapterFlag:null,
@@ -242,6 +243,9 @@ class Fanfic extends Component{
     filterHandler = async(filter,event,type)=>{
         const {filters} = this.state;
         switch (type) {
+            case 'source':
+                this.setState({currentSource:event.target.value,filters: {...filters,[event.target.value]: !filters[filter]}}) 
+                break;
             case 'sort':
                 this.setState({currentSort:event.target.value,filters: {...filters,[event.target.value]: !filters[filter]}}) 
                 break;
@@ -269,7 +273,8 @@ class Fanfic extends Component{
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,readingListAncor} = this.state;
+        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,
+             inputChapterFlag,currentSort,readingListAncor,currentSource} = this.state;
         return(
             <Container header={this.props.match.params.FandomName} className='fanfics'>
                 <Grid container className='containerGrid'>
@@ -285,6 +290,7 @@ class Fanfic extends Component{
                                     <Button onClick={this.toggleDrawer(false)}>Close</Button>
                                     <Filters filter={this.filterHandler}
                                                 sort={currentSort}
+                                                source={currentSource}
                                                 cancelFilters={this.cancelFiltersHandler}
                                                 filtersAction={this.activeFiltersHandler}
                                                 checked={filters}
