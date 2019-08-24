@@ -5,8 +5,6 @@ let jar = request.jar();
 request = request.defaults({jar: jar,followAllRedirects: true});
 
 exports.getUrlBodyFromSite = url =>{
-    console.log('getUrlBodyFromSite')
-
     return new Promise(function(resolve, reject) {
         request.get({url,jar,gzip: true,credentials: 'include'}, function (err, httpResponse, body) {
             if(err){  

@@ -44,10 +44,10 @@ exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
         if(!updated && !newFic){
             fanfic["StatusDetails"] = 'old';
         }else if(updated){
-            fanfic["StatusDetails"] =   (fanfic["Complete"] !== oldFanficData.Complete) ? 'Completed' :
-                                        (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ? 'Chapter' :
-                                        (fanfic["Author"] !== oldFanficData.Author) ? 'Author' :
-                                        (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) ? 'Title' : 'old';
+            fanfic["StatusDetails"] =   (fanfic["Complete"] !== oldFanficData.Complete) ? 'completed' :
+                                        (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ? 'chapter' :
+                                        (fanfic["Author"] !== oldFanficData.Author) ? 'author' :
+                                        (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) ? 'title' : 'old';
         }else{
             fanfic["StatusDetails"] =   fanfic["Oneshot"] ? 'Oneshot' : 'new';
         }

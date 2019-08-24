@@ -3,8 +3,6 @@ const mongoose = require('../../../config/mongoose');
 const UpdatesModal = require('../../../models/Updates');
 const moment = require('moment');
 
-const pLimit = require('p-limit');
-const limit = pLimit(20);
 const daysLimit=5;
 
 exports.latestUpdates = async () =>{ 
@@ -12,6 +10,10 @@ exports.latestUpdates = async () =>{
 
     return await UpdatesModal.find({"Date": {$gte : dayLimit}}, async function(err, dbUpdate) {
         console.log('dbUpdate:',dbUpdate)
-        return dbUpdate;
+        let latestArr=0; 
+        dbUpdate.forEach(date => {
+            date.Fandom.length>0 && latestArr.push(date)
+        });
+        return latestArr;
     })
 }

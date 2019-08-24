@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UpdatesSchema = new Schema({
     Date:       {type: Number, unique: true},
-    Fandoms:     [
+    Fandom:     [
                     {
                         FandomName:{type: String},
                         New:{type: Number},

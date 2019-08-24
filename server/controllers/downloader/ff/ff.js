@@ -1,6 +1,7 @@
 const ff = { 
-    ...require('./ffAddNewFanfic/ffAddNewFanfic.js'),
-    ...require('./ffSaveFanfic/ffSaveFanfic.js')
+    ...require('./ffGetFanfics/ffGetFanfics'),
+    ...require('./ffAddNewFanfic/ffAddNewFanfic'),
+    ...require('./ffSaveFanfic/ffSaveFanfic')
 }
 
 module.exports=ff;

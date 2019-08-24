@@ -24,7 +24,7 @@ const LatestUpdates = (props) => (
                     </h4>
                     {
                         update.Fandom.map(fandom=>
-                            <span className='latestUpdates_fandom_box'>
+                            <span  key={fandom.FandomName} className='latestUpdates_fandom_box'>
                                 <h4>{fandom.FandomName}</h4>
                                 <p>{fandom.Updated>0  && `${fandom.Updated} fanfics got updated`}</p>
                                 <p>{fandom.New>0  && `${fandom.New} was added to the fandom`}</p>
