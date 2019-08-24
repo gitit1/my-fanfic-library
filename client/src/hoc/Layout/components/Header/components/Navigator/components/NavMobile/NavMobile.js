@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import { Link } from "react-router-dom";
 
 import './NavMobile.scss'
 
@@ -53,7 +54,7 @@ class NavMobile extends Component{
             </div>
         </Drawer>
    
-        <p className='title'>My Fanfic Lybrary</p>
+        <Link to="/" className="btn-flat waves-effect"><p className='title'>My Fanfic Lybrary</p></Link>
         <div className='clear'></div>
       </div>
     )

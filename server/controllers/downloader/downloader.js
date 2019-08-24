@@ -1,5 +1,4 @@
 /*
-TODO:  function/router: ffGetFanfics                        
 TODO:  function/router: ffGetDeletedFanfics
 TODO:  function/router: ffSaveMissingFanfics
 
@@ -14,7 +13,6 @@ const ff = require('./ff/ff');
 
 let request = require('request')
 let jar = request.jar();
-// request = request.defaults({jar: jar,followAllRedirects: true});
 
 exports.getFanfics = async (fandom,method) =>{
     let getFanficsAO3 = await ao3.ao3GetFanfics(jar,fandom,method);
