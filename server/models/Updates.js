@@ -3,14 +3,14 @@ const Schema = mongoose.Schema;
 
 const UpdatesSchema = new Schema({
     Date:       {type: Number, unique: true},
-    Fandom:     [
+    Fandoms:     [
                     {
                         FandomName:{type: String},
                         New:{type: Number},
                         Updated:{type: Number},
                         FanficsIds:[
                             {
-                                FanficID:       {type: Number, unique: true},
+                                FanficID:       {type: Number},
                                 Status:         {type: String},      
                                 StatusDetails:  {type: String},  
                             }

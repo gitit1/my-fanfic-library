@@ -13,3 +13,9 @@ $screenSizeL:     1500px;
     background: rgba(25, 25, 25, .5);
     border-radius: 2%;
 }
+
+@mixin header_2{
+    color: $color_header;
+    font-family: $font_header;
+    font-weight: bold;
+}

@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const clc = require("cli-color");
 
-const getFanfics = require('../controllers/connection');
+const getFanfics = require('../controllers/connection/connection');
  
 //Frequency: At 01:00 on every day-of-week from Sunday through Sunday. (https://crontab.guru/)
 cron.schedule('0 1 * * *', () => {

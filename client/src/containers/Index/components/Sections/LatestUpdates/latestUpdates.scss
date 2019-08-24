@@ -1,0 +1,27 @@
+@import '../../../../../style/_colors';
+@import '../../../../../style/_fonts';
+@import '../../../../../style/_varibles';
+
+.latestUpdates{
+    width:100%;
+
+    .latestUpdates_slider{
+        .slick-dots{
+            bottom: 0;
+            left: 0;
+        }
+        min-height: 370px;
+    }
+    .latestUpdates_date_header{
+        @include header_2;
+    }
+
+    .latestUpdates_fandom_box{
+        h4{
+            margin-top: 2%;
+        }
+        p{
+            line-height: 1.2em
+        }
+    }
+}

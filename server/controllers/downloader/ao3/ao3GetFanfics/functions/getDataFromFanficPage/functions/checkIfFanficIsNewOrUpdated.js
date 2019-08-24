@@ -20,19 +20,20 @@ exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
         console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
         console.log('fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic',fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfNote)
 
-
+        newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
+        updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
+        
         newFic = (fandom===null) ? true : false
-        updated =   (!newFic && ((fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
-        (fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic) ||
-        (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ||
-        (fanfic["Author"] !== oldFanficData.Author) ))  ? true : false;
+        updated =   (!newFic && (
+                    (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ||
+                    (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
+                    (fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic) ||
+                    (fanfic["Author"] !== oldFanficData.Author) ))  ? true : false;
         
         console.log('updated',updated)
         console.log('newFic',newFic)
         // updated = (!isThisWeekOldData && !newFic) ? updated : false;
 
-        newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
-        updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
         
         fanfic["Status"] = newFic ? 'new' : updated ? 'updated' : 'old';
         
@@ -48,7 +49,7 @@ exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
                                         (fanfic["Author"] !== oldFanficData.Author) ? 'Author' :
                                         (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) ? 'Title' : 'old';
         }else{
-            fanfic["StatusDetails"] =   fanfic["Oneshot"] ? 'Oneshot' : 'old';
+            fanfic["StatusDetails"] =   fanfic["Oneshot"] ? 'Oneshot' : 'new';
         }
        
         console.log('Status',fanfic["Status"]);
