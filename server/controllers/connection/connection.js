@@ -42,9 +42,8 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                             break;                        
                     case 'All'://TODO:need to add to client side
                         await fetchedFandoms.map(fandom => promises.push(
-                            p = p.then(() => getFandomFanfics(socket,fandom) )                           
-                            // p = p.then(() => getFandomFanfics(socket,fandom) ),                              
-                            // p = p.then(() => getDeletedFanfics(socket,fandom) )                           
+                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) ),  
+                            p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
                         ))
                         break;
                 }

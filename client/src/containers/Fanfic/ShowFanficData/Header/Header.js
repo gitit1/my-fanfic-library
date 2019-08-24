@@ -16,6 +16,7 @@ const Header = (props) => {
                         <a href={props.fanfic.URL} target="_blank" rel="noopener noreferrer" className='title'>{props.fanfic.FanficTitle}</a>
                             {(props.size==='s') ? <br/> :  ' '} by&nbsp; 
                         <a href={props.fanfic.AuthorURL} target="_blank" rel="noopener noreferrer">{props.fanfic.Author}</a>
+                        &nbsp; TODO: TEMP id - {props.fanfic.FanficID}
                         {(props.size==='s') ? 
                            <React.Fragment>
                                 <div className='fandom_tags_container'>{props.fanfic.FandomsTags && props.fanfic.FandomsTags.map(tag=>(<Chip key={tag} className='fandom_tags' size="small" label={tag} />))}</div>

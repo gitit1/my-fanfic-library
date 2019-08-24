@@ -19,15 +19,15 @@ import './Index.scss';
 class Index extends Component{
     state={
         latestUpdates:[],
-        loading:false
+        loading:true
     }
     componentWillMount(){
         const {fandoms} = this.props;
         //LatestUpdates
         // const fandomsNames = fandoms.map(fandom=> {return fandom.FandomName});
-        // this.props.onGetLatestUpdates(fandomsNames).then(()=>{
-        //     this.setState({loading:false})
-        // })
+        this.props.onGetLatestUpdates().then(()=>{
+            this.setState({loading:false})
+        })
     }
     render(){
         const {loading} = this.state;
@@ -46,7 +46,7 @@ class Index extends Component{
                                           fandoms={selectedFandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
                         </IndexContainer>
                         <IndexContainer header='Latest Updates'>
-                            {/* <LatestUpdates updates={latestUpdates}/> */}
+                            <LatestUpdates updates={latestUpdates}/>
                         </IndexContainer>
                         <IndexContainer header='My Fanfics Updates'><MyFanfics /></IndexContainer>
                         <IndexContainer header='My Latest Activities'><MyLatestActivity /></IndexContainer>

@@ -10,8 +10,6 @@ const buildDir  = require('path').join(__dirname,'/build');
 require('./config/mongoose.js')
 require('./controllers/connection/socket/socket');
 
-//require('./cronJobs/cron')
-
 const app = express();
 const keys = require("./config/keys");
 
@@ -40,6 +38,7 @@ app.use('/',routes);
 if (keys.nodeEnv==='development'){  
      app.listen(port, () => console.log(`Listening on port ${port} - development mode`));
  }else{
+	 require('./cronJobs/cron');
 	 app.get('*', function(req, res) {
 		 res.sendFile(require('path').join(buildDir,'/index.html'));
 	 });

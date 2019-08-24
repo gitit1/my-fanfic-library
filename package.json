@@ -24,6 +24,7 @@
     "performance": "^1.1.1",
     "performance-now": "^2.1.0",
     "puppeteer": "^1.19.0",
+    "react-slick": "^0.25.2",
     "tough-cookie": "^3.0.1"
   }
 }

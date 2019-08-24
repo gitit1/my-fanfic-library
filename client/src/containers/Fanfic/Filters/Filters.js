@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import classes from './Filters.module.css';
-import {filtersArray} from './FiltersArray';
+import {filtersArray} from './assets/FiltersArray';
 
 const Filters = (props) => (
     <div>
@@ -37,8 +37,41 @@ const Filters = (props) => (
                         }
                 </Select>
             </FormControl>
+            <FormControl className={classes.FormControl}>
+                <InputLabel htmlFor="source-filters">Source</InputLabel>
+                <Select className={classes.SortSelect}
+                        value={props.source}
+                        onChange={(event)=>props.filter(null,event,'source')}
+                        inputProps={{
+                            name: 'source',
+                            id: 'source-filters',
+                        }}
+                        >
+                        {
+                            filtersArray.Source.map(filter=>(
+                                <MenuItem   key={filter.name}
+                                            value={filter.name} 
+                                            >
+                                    {filter.display}
+                                </MenuItem>
+                            ))  
+                        }
+                </Select>
+            </FormControl>
             <FormControl component="fieldset">
                 <FormLabel focused={false} className={classes.FiltersFanficLabel}>General Filters:</FormLabel>
+                <TextField
+                    id="id"
+                    label="Fanfic ID"
+                    // style={{ margin: 8 }}
+                    // fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    value={props.checked['fanficId']}
+                    onChange={(event)=>props.filter('fanficId',event,'filter')}
+                />
                 <TextField
                     id="words_from"
                     label="Words Count"

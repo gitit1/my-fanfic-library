@@ -10,14 +10,14 @@ const FanficsNumbers = (props) => (
         <p>Sources:&nbsp;&nbsp; 
             {props.fanficsNumbers.ao3FanficsCount>0 &&
                 <React.Fragment>
-                    <b style={{color:'#8A0407'}}>AO3:&nbsp;</b> 
+                    <b className='color_AO3'>AO3:&nbsp;</b> 
                     <b>{props.fanficsNumbers.ao3FanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}</b>
                 </React.Fragment>
             }
             {props.fanficsNumbers.ffFanficsCount>0 &&
                 <React.Fragment>
                     &nbsp;,&nbsp;
-                    <b style={{color:'#333398'}}>FF:&nbsp;</b>
+                    <b className='color_FF'>FF:&nbsp;</b>
                     <b>{props.fanficsNumbers.ffFanficsCount}</b>
                 </React.Fragment>
             }

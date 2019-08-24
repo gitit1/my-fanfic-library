@@ -21,11 +21,11 @@ export const getUpdatesFail = (error) =>{
     };
 };
 
-export const getLatestUpdates = (fandoms) =>{
+export const getLatestUpdates = () =>{
     console.log('[actions: fandom.js] - getLatestUpdates')
     return dispatch =>{
         dispatch(getUpdatesStart())
-        return axios.post('/updates/latestUpdates',fandoms)
+        return axios.get('/updates/latestUpdates')
         .then(latestUpdates =>{
             dispatch(getLatestUpdatesSuccess(latestUpdates.data));
             return true;

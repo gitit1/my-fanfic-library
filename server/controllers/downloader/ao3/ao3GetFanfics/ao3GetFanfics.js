@@ -77,6 +77,6 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
         }
     );
 
-    return [fanficsInFandom,savedFanficsCurrent]  
+    return [AO3FanficsInFandom,savedFanficsCurrent]  
         
 }

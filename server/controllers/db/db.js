@@ -373,6 +373,9 @@ const getFiltersRules = async (filters,userEmail) =>{
         console.log('filterKey:',filterKey)
         switch (filterKey) {
             //User Data Filters:
+            case 'follow':
+                filtersUserList.push({'FanficList.Follow':true})
+                break;
             case 'favorite':
                 filtersUserList.push({'FanficList.Favorite':true})
                 break;
@@ -398,7 +401,7 @@ const getFiltersRules = async (filters,userEmail) =>{
                 break;
             case 'deleted':
                 filtersFanficList.push({'Deleted':true})
-                break;            
+                break;             
             //Sort Filters:
             case 'dateLastUpdate':
                 sortList.push({'LastUpdateOfFic':-1})
@@ -410,11 +413,11 @@ const getFiltersRules = async (filters,userEmail) =>{
                 sortList.push({'Author':1})
                 break;
             case 'titleSort':
-                    sortList.push({'FanficTitle':1})
-                    break;
+                sortList.push({'FanficTitle':1})
+                break;
             case 'hits':
-                    sortList.push({'Hits':-1})
-                    break; 
+                sortList.push({'Hits':-1})
+                break; 
             case 'kudos':
                 sortList.push({'Kudos':-1})
                 break;
@@ -424,7 +427,20 @@ const getFiltersRules = async (filters,userEmail) =>{
             case 'comments':
                 sortList.push({'Comments':-1})
                 break;
+            //Source Filters: 
+            case 'all':
+                    filtersFanficList.push({})
+                    break;
+            case 'ao3':
+                filtersFanficList.push({'Source':'AO3'})
+                break;
+            case 'ff':
+                filtersFanficList.push({'Source':'FF'})
+                break;  
             //Search:
+            case 'fanficId':
+                filtersFanficList.push({'FanficID':Number(filterValue)})
+                break;                 
             case 'author'://author with text
                 filtersFanficList.push({'Author': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
                 break;
