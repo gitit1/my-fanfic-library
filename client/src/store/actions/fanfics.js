@@ -46,9 +46,9 @@ export const getFanficsFromDB = (fandomName,pageNumber,pageLimit,userEmail) =>{
 };
 
 //FOLLOW , FAVORITE , IGNORE
-export const addFanficToUserMarks = (userEmail,fandomName,fanficId,fanficTitle,markType,mark) =>{
+export const addFanficToUserMarks = (userEmail,fandomName,fanficId,author,fanficTitle,markType,mark) =>{
     return dispatch =>{
-        return axios.post(`/db/addFanficToUserMarks?fandomName=${fandomName}&fanficId=${fanficId}&fanficTitle=${fanficTitle}&userEmail=${userEmail}&markType=${markType}&mark=${mark}`)
+        return axios.post(`/db/addFanficToUserMarks?fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&userEmail=${userEmail}&markType=${markType}&mark=${mark}`)
         .then(res =>{
             return true;
         })
@@ -58,11 +58,11 @@ export const addFanficToUserMarks = (userEmail,fandomName,fanficId,fanficTitle,m
     };      
 }
 
-export const addFanficToUserStatus = (userEmail,fandomName,fanficId,fanficTitle,statusType,status,data) =>{
+export const addFanficToUserStatus = (userEmail,fandomName,fanficId,author,fanficTitle,statusType,status,data) =>{
     let dateArg = data ? `&data=${data}` : '';
 
     return dispatch =>{
-        return axios.post(`/db/addFanficToUserStatus?fandomName=${fandomName}&fanficId=${fanficId}&fanficTitle=${fanficTitle}&userEmail=${userEmail}&statusType=${statusType}&status=${status}${dateArg}`)
+        return axios.post(`/db/addFanficToUserStatus?fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&userEmail=${userEmail}&statusType=${statusType}&status=${status}${dateArg}`)
         .then(res =>{
             // dispatch(addFanficToUserFavoritesSuccess(fetchedFanfics.data));
             return true;

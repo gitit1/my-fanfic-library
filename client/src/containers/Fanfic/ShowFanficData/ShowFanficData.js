@@ -50,20 +50,23 @@ const ShowFanficData = (props) => {
                                     <section className='card_content_stat'>
                                         <Stat fanfic={fanfic}/> 
                                     </section>
-                                    <section className='card_content_userData'>
-                                        <UserHeader props={props} 
-                                                    fanfic={fanfic}
-                                                    redClasses={redClasses}
-                                                    userData={userData}
-                                                    greenClasses={greenClasses} 
-                                                    isFollowed={isFollowed}
-                                                    isFavorite={isFavorite}
-                                                    isFinished={isFinished}
-                                                    isInProgress={isInProgress}
-                                                    isIgnored={isIgnored}
-                                                    inReadingList={inReadingList}
-                                        />
-                                    </section>
+                                    { props.isAuthenticated &&
+                                        <section className='card_content_userData'>
+                                            <UserHeader props={props} 
+                                                        fanfic={fanfic}
+                                                        redClasses={redClasses}
+                                                        userData={userData}
+                                                        greenClasses={greenClasses} 
+                                                        isFollowed={isFollowed}
+                                                        isFavorite={isFavorite}
+                                                        isFinished={isFinished}
+                                                        isInProgress={isInProgress}
+                                                        isIgnored={isIgnored}
+                                                        inReadingList={inReadingList}
+                                            />
+                                        </section>
+
+                                    }
                                 </CardContent>
                             </Card>
                         )

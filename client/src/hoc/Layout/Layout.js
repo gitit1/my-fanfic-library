@@ -15,7 +15,7 @@ class Layout extends Component{
         s: 736,
         xm: 935,
         m: 1200,
-        l: 1500,
+        l: 1499,
     }
 
     componentDidMount(){

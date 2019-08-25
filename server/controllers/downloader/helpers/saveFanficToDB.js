@@ -39,11 +39,13 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
     return new Promise(async function(resolve, reject) {
         UpdatesModal.findOne({Date: date}, async function(err, dbUpdate) {
             if (err) { 
+                console.log('---error')
                 func.delay(1000).then(async () => reject(false))
                 return reject()
             }
             let isExist = (dbUpdate===null) ? false : true;
             if(!isExist){
+                console.log('---date not exist')
                 let type = fanfic.Status==='new' ? 'New' : 'Updated';
     
                 let update= {
@@ -67,13 +69,16 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                 await fandomData.save();
                 resolve();
             }else{ 
+                console.log('---date exist')
                 UpdatesModal.findOne({ 'Date': date, 'Fandom.FandomName': fandomName }, async function(err, dbUpdate) {
                     if (err) { 
+                        console.log('---date exist error')
                         func.delay(1000).then(async () => reject(false))
                         return reject()
                     }
                     let isExist = (dbUpdate===null) ? false : true;
                     if(!isExist){
+                        console.log('---date exist  - fandom dont exist')
                         let type = fanfic.Status==='new' ? 'New' : 'Updated';
 
                         await UpdatesModal.updateOne({'Date': date},
@@ -81,6 +86,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                             'FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]} }
                         });
                     }else{
+                        console.log('---date exist  - fandom  exist')
                         let type = fanfic.Status==='new' ? 'Fandom.$.New' : 'Fandom.$.Updated';
                         await UpdatesModal.updateOne({ 'Date': date, 'Fandom.FandomName': fandomName },
                         {   $inc: { [type]:1} , 
