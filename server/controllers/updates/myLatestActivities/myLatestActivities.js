@@ -7,7 +7,7 @@ exports.myLatestActivities = async (limit,userEmail) =>{
         limit = Number(limit);
         UserActivitiesDB.find({"userEmail": userEmail}).limit(limit).exec(async function(err, fanfics) {
             err && reject(err)
-            resolve(fanfics)
+            resolve(fanfics.LatestActivities)
         })
     })
 }
