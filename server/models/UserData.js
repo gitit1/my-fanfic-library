@@ -13,6 +13,7 @@ const UserFanficsSchema = new Schema({
   },
   FanficList: [
     {
+      Date:             {type: Number}, 
       FanficID:         {type: Number, unique: true},
       FandomName:       {type: String},
       Follow:           {type: Boolean},
@@ -23,7 +24,7 @@ const UserFanficsSchema = new Schema({
       Image:            {type: String},
       ReadingList:      [],
       SavedFic:         {type: Boolean},       
-      SavedType:        [],     
+      SavedType:        []
     }
   ],
   ReadingList:      [],  

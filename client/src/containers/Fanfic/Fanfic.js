@@ -356,3 +356,6 @@ const mapDispatchedToProps = dispatch =>{
 }
   
   export default connect(mapStateToProps,mapDispatchedToProps)(Fanfic);
+
+
+  //TODO: only manager - edit fanfic - and if get update stay with the edit

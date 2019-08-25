@@ -10,11 +10,13 @@ import Container from '../../components/UI/Container/Container';
 import IndexContainer from './components/IndexContainer/IndexContainer';
 import IndexFandoms from './components/Sections/Fandoms/Fandoms'
 import LatestUpdates from './components/Sections/LatestUpdates/LatestUpdates'
-import MyFanfics from './components/Sections/MyFanfics/MyFanfics'
+import MyFanficsUpdates from './components/Sections/MyFanficsUpdates/MyFanficsUpdates'
 import MyLatestActivity from './components/Sections/MyLatestActivity/MyLatestActivity'
 
 import './Index.scss';
 
+const LIMIT_FOR_LATEST_UPDATES = 3;
+const LIMIT_FOR_MY__LATEST_ACTIVITIES = 10;
 
 class Index extends Component{
     state={
@@ -22,16 +24,19 @@ class Index extends Component{
         loading:true
     }
     componentWillMount(){
-        const {fandoms} = this.props;
-        //LatestUpdates
-        // const fandomsNames = fandoms.map(fandom=> {return fandom.FandomName});
-        this.props.onGetLatestUpdates().then(()=>{
-            this.setState({loading:false})
+        const {userEmail,isAuthenticated} = this.props;
+        this.props.onGetLatestUpdates(LIMIT_FOR_LATEST_UPDATES).then(()=>{
+            if(isAuthenticated){
+                this.props.onGetMyLatestActivities(LIMIT_FOR_MY__LATEST_ACTIVITIES,userEmail).then(()=>
+                this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY__LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES).then(()=>this.setState({loading:false})));
+            }else{
+                this.setState({loading:false})
+            }
         })
     }
     render(){
         const {loading} = this.state;
-        const {fandoms,screenSize,smallSize,latestUpdates} = this.props;
+        const {fandoms,screenSize,smallSize,latestUpdates,myLatestActivities,isAuthenticated,myFanficsUpdates} = this.props;
         //IndexFandoms
         const shuffledFandoms = fandoms.sort(() => 0.5 - Math.random());
         const selectedFandoms = (screenSize==='m'|screenSize==='xm') ? shuffledFandoms.slice(0, 6) : screenSize!=='l' ? shuffledFandoms.slice(0, 3) : shuffledFandoms.slice(0, 9);
@@ -48,8 +53,16 @@ class Index extends Component{
                         <IndexContainer header='Latest Updates'>
                             <LatestUpdates updates={latestUpdates}/>
                         </IndexContainer>
-                        <IndexContainer header='My Fanfics Updates'><MyFanfics /></IndexContainer>
-                        <IndexContainer header='My Latest Activities'><MyLatestActivity /></IndexContainer>
+                        {isAuthenticated && 
+                            <React.Fragment>
+                                <IndexContainer header='My Fanfics Updates'>
+                                    <MyFanficsUpdates updates={myFanficsUpdates}/>
+                                </IndexContainer>
+                                <IndexContainer header='My Latest Activities'>
+                                    <MyLatestActivity updates={myLatestActivities} />
+                                </IndexContainer>
+                            </React.Fragment>
+                        }
                     </Grid>
                 }
             </Container>
@@ -59,18 +72,24 @@ class Index extends Component{
 
 const mapStateToProps = state =>{
     return{
-        fandoms:        state.fandoms.fandoms,
-        loading:        state.fandoms.loading,
-        screenSize:     state.screenSize.size,
-        smallSize:      state.screenSize.smallSize,
-        latestUpdates:  state.updates.latestUpdates,
-        loadingUpdate:  state.updates.loading,
+        fandoms:                state.fandoms.fandoms,
+        loading:                state.fandoms.loading,
+        screenSize:             state.screenSize.size,
+        smallSize:              state.screenSize.smallSize,
+        latestUpdates:          state.updates.latestUpdates,
+        myLatestActivities:     state.updates.myLatestActivities,
+        myFanficsUpdates:       state.updates.myFanficsUpdates,
+        loadingUpdate:          state.updates.loading,
+        isAuthenticated:        state.auth.isAuthenticated,
+        userEmail:              state.auth.user.email
     };   
 }   
 
 const mapDispatchedToProps = dispatch =>{
     return{
-        onGetLatestUpdates:    (fandoms)   =>  dispatch(actions.getLatestUpdates(fandoms))
+        onGetLatestUpdates:         (limit)                         =>  dispatch(actions.getLatestUpdates(limit)),
+        onGetMyLatestActivities:    (limit,userEmail)               =>  dispatch(actions.getMyLatestActivities(limit,userEmail)),
+        onGetMyFanficsUpdates:      (userEmail,limit,daysLimit)     =>  dispatch(actions.myFanficsUpdates(userEmail,limit,daysLimit))
     }
 }
   

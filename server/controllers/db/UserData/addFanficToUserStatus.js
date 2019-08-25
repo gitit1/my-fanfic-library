@@ -16,6 +16,7 @@ exports.addFanficToUserStatus = async (req,res)=>{
             if(!isExist){
                 console.log('not exist!!')
                 user.FanficList.push({
+                    Date: new Date().getTime(),
                     FanficID: fanficId,
                     FandomName: fandomName,
                     Status: status,
@@ -28,7 +29,7 @@ exports.addFanficToUserStatus = async (req,res)=>{
                 console.log('exist!!')
                 FandomUserData.updateOne(
                     { userEmail: userEmail , "FanficList.FanficID": fanficId },
-                    { $set: {"FanficList.$.Status": status,"FanficList.$.ChapterStatus": (data!==undefined)?Number(data):undefined }},
+                    { $set: {"Date":new Date().getTime(),"FanficList.$.Status": status,"FanficList.$.ChapterStatus": (data!==undefined)?Number(data):undefined }},
                     (err, result) => {
                         if (err) throw err;
                         console.log('User updated!');
@@ -42,6 +43,7 @@ exports.addFanficToUserStatus = async (req,res)=>{
             const newUser = new FandomUserData({
                 userEmail: userEmail,
                 FanficList: {
+                    Date:             new Date().getTime(),
                     FanficID:         fanficId,
                     FandomName:       fandomName,
                     Status:           status,

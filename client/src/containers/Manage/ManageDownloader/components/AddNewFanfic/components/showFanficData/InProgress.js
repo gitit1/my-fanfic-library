@@ -1,21 +1,25 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-const InProgress = (props) => (
-    <div className='userData'>      
-        <Button onClick={() =>props.toggleChapterB()}
-                color='primary' className={props.userData.status==='In Progress' ? 'userData_green' : null}>
-            {props.userData.status==='In Progress' ? `In Progress - Chapter ${props.userData.chapter}`  : 'Mark in Progress'}
-        </Button> 
-        {props.userData.toggleChpter &&
-            <div className='userData'>
-                <input  type="number" 
-                        placeholder={props.userData.status==='In Progress' ? props.userData.chapter : 'Number of Chapter'} 
-                        onKeyDown={(event)=>props.markStatus(props.fanfic.FanficID,'In Progress',event)}
-                />                                
-            </div>
-        }
-    </div>  
-);
+const InProgress = (props) => {
+    const {FanficID,Author,FanficTitle} = props.fanfic;
+    const {status,chapter,toggleChpter} = props.userData;
+    return(
+        <div className='userData'>      
+            <Button onClick={() =>props.toggleChapterB()}
+                    color='primary' className={status==='In Progress' ? 'userData_green' : null}>
+                {status==='In Progress' ? `In Progress - Chapter ${chapter}`  : 'Mark in Progress'}
+            </Button> 
+            {toggleChpter &&
+                <div className='userData'>
+                    <input  type="number" 
+                            placeholder={status==='In Progress' ? chapter : 'Number of Chapter'} 
+                            onKeyDown={(event)=>props.markStatus(FanficID,Author,FanficTitle,'In Progress',event)}
+                    />                                
+                </div>
+            }
+        </div> 
+    ) 
+};
 
 export default InProgress;

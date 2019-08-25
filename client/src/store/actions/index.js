@@ -15,7 +15,9 @@ export {
 } from './fanfics';
 
 export {
-    getLatestUpdates
+    getLatestUpdates,
+    getMyLatestActivities,
+    myFanficsUpdates
 } from './updates';
 
 export {

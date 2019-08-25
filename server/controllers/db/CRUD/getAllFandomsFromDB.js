@@ -12,6 +12,6 @@ exports.getAllFandoms = async () =>{
     console.log(clc.blue('[db controller] getAllFandoms()'));
     let fetchedFandoms = await FandomModal.find({}, function(err, fandoms) {
             if (err){throw err;}
-    }); 
+    });
     return fetchedFandoms
 }
