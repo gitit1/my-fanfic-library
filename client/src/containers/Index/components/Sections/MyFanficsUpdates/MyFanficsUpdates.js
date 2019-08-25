@@ -1,14 +1,15 @@
 import React from 'react';
 
-const myFanficsUpdates = (props) => (
-    <div className='myFanficsUpdates'>
-        {/* TODO:FIX LINK TO ALL */}
-        {props.updates.map(fanfics=>(
-            <p>{fanfics.FanficID}</p>
-        ))}
-        
-    </div>
-);
+const myFanficsUpdates = (props) => {
+    const {updates} = props;
+    return(
+        <div className='myFanficsUpdates'>
+            {updates.map(fanfics=>(
+                <p key={fanfics.FanficID}>{`${fanfics.FanficID} - ${fanfics.Status} - ${fanfics.StatusDetails}`}</p>
+            ))}
+        </div>
+    )
+};
 
 export default myFanficsUpdates;
 

@@ -24,15 +24,10 @@ exports.checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics,type)=>{
                     if(isExist){
                         if(type==='update'){
                             addedDate = new Date(fanfic.Date);
-                            console.log('addedDate:',addedDate)
                             addedDate = addedDate.getFullYear() + "/" + (addedDate.getMonth() + 1) + "/" + addedDate.getDate();
-                            console.log('addedDate 2:',addedDate)
                             addedDate = new Date(fanfic.Date).getTime();
-                            console.log('addedDate 3:',addedDate)
-                            console.log('today:',today)
-                            if(addedDate<today){
-                                data.push(isExist)
-                            }
+   
+                            if(addedDate<today){data.push(isExist)}
                         }else{
                             data.push(isExist) 
                         }

@@ -34,13 +34,11 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
 
 const saveUpdatesToDB = (fandomName,fanfic) =>{
     console.log('***************************************saveUpdatesToDB');
-    
-    let newDate = new Date(fanfic.LastUpdateOfFic);
-    newDate = newDate.getFullYear() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getDate();
-    let date = new Date(newDate).getTime();
+    let fanficDate = new Date(new Date(fanfic.LastUpdateOfFic).setHours(0,0,0,0)).getTime();
+
 
     return new Promise(async function(resolve, reject) {
-        UpdatesModal.findOne({Date: date}, async function(err, dbUpdate) {
+        UpdatesModal.findOne({Date: fanficDate}, async function(err, dbUpdate) {
             if (err) { 
                 console.log('---error')
                 func.delay(1000).then(async () => reject(false))
@@ -52,7 +50,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                 let type = fanfic.Status==='new' ? 'New' : 'Updated';
     
                 let update= {
-                    'Date':date,
+                    'Date':fanficDate,
                     'Fandom':[
                         {
                             'FandomName': fandomName,
@@ -73,7 +71,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                 resolve();
             }else{ 
                 console.log('---date exist')
-                UpdatesModal.findOne({ 'Date': date, 'Fandom.FandomName': fandomName }, async function(err, dbUpdate) {
+                UpdatesModal.findOne({ 'Date': fanficDate, 'Fandom.FandomName': fandomName }, async function(err, dbUpdate) {
                     if (err) { 
                         console.log('---date exist error')
                         func.delay(1000).then(async () => reject(false))
@@ -84,17 +82,21 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                         console.log('---date exist  - fandom dont exist')
                         let type = fanfic.Status==='new' ? 'New' : 'Updated';
 
-                        await UpdatesModal.updateOne({'Date': date},
+                        await UpdatesModal.updateOne({'Date': fanficDate},
                         {   $push: { 'Fandom': {'FandomName':fandomName,[type]:1, 
                             'FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]} }
                         });
                     }else{
                         console.log('---date exist  - fandom  exist')
                         let type = fanfic.Status==='new' ? 'Fandom.$.New' : 'Fandom.$.Updated';
-                        await UpdatesModal.updateOne({ 'Date': date, 'Fandom.FandomName': fandomName },
+                        await UpdatesModal.updateOne({ 'Date': fanficDate, 'Fandom.FandomName': fandomName },
                         {   $inc: { [type]:1} , 
-                            $push: {'Fandom.$.FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]} 
-                        });
+                            $push: {'Fandom.$.FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]}
+                        },
+                        (err, result) => {
+                            if (err){console.log(clc.red('Error in save update',err))};
+                            reject()
+                         });
                     }
                     resolve()
                 })
