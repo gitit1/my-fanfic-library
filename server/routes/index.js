@@ -29,6 +29,8 @@ try {
   router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
   
   router.get('/updates/latestUpdates',updates.latestUpdates)
+  router.get('/updates/myLatestActivities',updates.myLatestActivities)
+  router.get('/updates/myFanficsUpdate',updates.myFanficsUpdate)
   // checking:
   // router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
   // router.get('/otherfanficssites/testpath',otherfanficssites.testpath)

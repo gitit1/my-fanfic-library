@@ -15,6 +15,7 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
             if(!isExist){
                 console.log('not exist!!')
                 user.FanficList.push({
+                    Date: new Date().getTime(),
                     FanficID: fanficId,
                     FandomName: fandomName,
                     [markType]: Boolean(mark)                     
@@ -29,16 +30,16 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
                 //TODO: function to clean "empty" userdata in userdataDb (if all settings are init not needed)
                 switch (markType) {
                     case 'Favorite':
-                        saveAs = {"FanficList.$.Favorite":mark}
+                        saveAs = {"FanficList.$.Favorite":mark,"Date":new Date().getTime()}
                         break;
                     case 'Follow':
-                        saveAs = {"FanficList.$.Follow":mark}
+                        saveAs = {"FanficList.$.Follow":mark,"Date":new Date().getTime()}
                         break;
                     case 'Ignore':           
                         if(markType==='Ignore' && mark==='true'){
-                            saveAs = { $set: {"FanficList.$.Ignore":mark}, $push: {"FanficIgnoreList":fanficId} }
+                            saveAs = { $set: {"FanficList.$.Ignore":mark,"Date":new Date().getTime()}, $push: {"FanficIgnoreList":fanficId} }
                         }else if(markType==='Ignore' && mark==='false'){
-                            saveAs = {$set: {"FanficList.$.Ignore":mark}, $pull: {"FanficIgnoreList":fanficId} }
+                            saveAs = {$set: {"FanficList.$.Ignore":mark,"Date":new Date().getTime()}, $pull: {"FanficIgnoreList":fanficId} }
                         }
                         break;
                 }
@@ -59,6 +60,7 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
             const newUser = new FandomUserData({
                 userEmail: userEmail,
                 FanficList: {
+                    Date:             new Date().getTime(),
                     FanficID:         fanficId,
                     FandomName:       fandomName,
                     [markType]:       Boolean(mark)   

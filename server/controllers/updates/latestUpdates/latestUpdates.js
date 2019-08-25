@@ -1,9 +1,13 @@
 const UpdatesModal = require('../../../models/Updates');
 const moment = require('moment');
 
-const daysLimit=5;
+exports.latestUpdates = async (req,res) =>{
+    const {limit} = req.query;
+    let updatedData = await this.getlatestUpdates(limit);
+    res.send(updatedData.reverse());
+}
 
-exports.latestUpdates = async () =>{ 
+exports.getlatestUpdates = async (daysLimit) =>{ 
     const dayLimit = new Date(moment().subtract(daysLimit, 'day')).getTime();
 
     return await UpdatesModal.find({"Date": {$gte : dayLimit}}, async function(err, dbUpdate) {

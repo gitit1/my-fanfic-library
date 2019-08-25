@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "cross-env": "^5.0.5",
-    "download": "^7.1.0",
     "increase-memory-limit": "^1.0.7"
   }
 }

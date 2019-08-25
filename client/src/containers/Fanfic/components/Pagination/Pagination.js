@@ -5,7 +5,7 @@ import './Pagination.css';
 
 const Pagination = (props) => (
     <Grid className={props.gridClass}>
-        <RCPagination   onChange={() => props.onChange} 
+        <RCPagination   onChange={(e) => props.onChange(e)} 
                         current={props.current} 
                         total={props.total}
                         className={props.paginationClass}

@@ -33,8 +33,11 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
 }
 
 const saveUpdatesToDB = (fandomName,fanfic) =>{
-    console.log('***************************************saveUpdatesToDB')
-    const date = fanfic.LastUpdateOfFic;
+    console.log('***************************************saveUpdatesToDB');
+    
+    let newDate = new Date(fanfic.LastUpdateOfFic);
+    newDate = newDate.getFullYear() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getDate();
+    let date = new Date(newDate).getTime();
 
     return new Promise(async function(resolve, reject) {
         UpdatesModal.findOne({Date: date}, async function(err, dbUpdate) {
