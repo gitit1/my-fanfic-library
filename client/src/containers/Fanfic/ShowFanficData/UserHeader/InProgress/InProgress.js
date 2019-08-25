@@ -16,7 +16,7 @@ const InProgress = (props) => (
                         placeholder={props.isInProgress[1] 
                             ? props.userData.ChapterStatus 
                             : 'Number of Chapter'} 
-                        onKeyDown={(event)=>props.props.markStatus(props.fanfic.FanficID,'In Progress',props.isInProgress[4],event)}
+                        onKeyDown={(event)=>props.props.markStatus(props.fanfic.FanficID,props.fanfic.Author,props.fanfic.FanficTitle,'In Progress',props.isInProgress[4],event)}
                 />                                
             </div>
         }

@@ -1,9 +1,11 @@
 const UserActivitiesDB = require('../../../models/UserActivities');
 
-exports.addActivityToUserActivities = (userEmail,fanficId,fanficTitle,fandomName,type,typeFlag,chapter) =>{
+exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fandomName,type,typeFlag,chapter) =>{
     return new Promise(function(resolve, reject) {
         console.log('addActivityToUserActivities')
+        console.log(userEmail,fanficId,author,fanficTitle,fandomName,type,typeFlag,chapter)
         let activity='';
+        typeFlag = (typeFlag==='true'||typeFlag==='Finished'||typeFlag==='In Progress') ? true : false;
         switch (type) {
             case 'Favorite':
                 activity = typeFlag ? 'Favorite' : 'Unfavorite'
@@ -23,20 +25,15 @@ exports.addActivityToUserActivities = (userEmail,fanficId,fanficTitle,fandomName
             default:
                 break;
         }
-        console.log(userEmail,fanficId,fanficTitle,activity)
+
         UserActivitiesDB.findOne({userEmail: userEmail}, async function(err, user) {  
             if (err) { return 'there is an error'; }
             if (user) {
                 console.log('found user!!, '+user.userEmail)
-                activity = {
-                        Date:               new Date().getTime(),
-                        FanficID:           fanficId,
-                        FanficTitle:        fanficTitle,
-                        FandomName:         fandomName,
-                        ActivityType:       activity  
-                }
+                const userActivity = {Date:Number(new Date().getTime()),FanficID:Number(fanficId),
+                                      Author:author,FanficTitle:fanficTitle,FandomName:fandomName,ActivityType:activity  }
                 UserActivitiesDB.updateOne({userEmail: userEmail},
-                    { $push: { "LatestActivities": fanficId }},saveAs,(err, result) => {
+                    { $push: { "LatestActivities": userActivity }},(err, result) => {
                         if (err) throw err;
                         console.log('User updated!');
                      }
@@ -49,6 +46,7 @@ exports.addActivityToUserActivities = (userEmail,fanficId,fanficTitle,fandomName
                         {
                             Date:               new Date().getTime(),
                             FanficID:           fanficId,
+                            Author:             author,
                             FanficTitle:        fanficTitle,
                             FandomName:         fandomName,
                             ActivityType:       activity  

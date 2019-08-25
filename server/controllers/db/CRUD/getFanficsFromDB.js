@@ -1,8 +1,5 @@
 const clc = require("cli-color");
 
-const mongoose = require('../../../config/mongoose.js');
-const FanficSchema = require('../../../models/Fanfic');
-
 const {checkForUserDataInDBOnCurrentFanfics} = require('../helpers/checkForUserDataInDBOnCurrentFanfics')
 const {getFanfics} = require('../helpers/getFanfics')
 const {getIgnoredList} = require('../helpers/getIgnoredList');

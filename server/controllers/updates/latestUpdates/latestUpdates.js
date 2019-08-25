@@ -1,5 +1,3 @@
-
-const mongoose = require('../../../config/mongoose');
 const UpdatesModal = require('../../../models/Updates');
 const moment = require('moment');
 

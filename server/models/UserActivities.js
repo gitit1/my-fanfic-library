@@ -15,6 +15,7 @@ const UserActivitiesSchema = new Schema({
     {
         Date:               {type: Number},
         FanficID:           {type: Number, unique: true},
+        Author:             {type: String},
         FanficTitle:        {type: String},
         FandomName:         {type: String},
         ActivityType:       {type: String}  
@@ -24,6 +25,8 @@ const UserActivitiesSchema = new Schema({
     {
         Date:               {type: Number},
         FanficID:           {type: Number, unique: true},
+        Author:             {type: String},
+        FanficTitle:        {type: String},
         FandomName:         {type: String},
         ActivityType:       {type: String}      
     }

@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 
 const Favorite = (props) => (
     <div  className={props.isFavorite[0]}>
-        <Button onClick={() =>props.props.markAs(props.fanfic.FanficID,props.fanfic.FanficTitle,'Favorite',props.isFavorite[1])}
+        <Button onClick={() =>props.props.markAs(props.fanfic.FanficID,props.fanfic.Author,props.fanfic.FanficTitle,'Favorite',props.isFavorite[1])}
                 color='primary' className={props.isFavorite[2] ? 'userData_red' : null}>
                 Favorite
         </Button> 
