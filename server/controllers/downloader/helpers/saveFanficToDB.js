@@ -34,7 +34,9 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
 
 const saveUpdatesToDB = (fandomName,fanfic) =>{
     console.log('***************************************saveUpdatesToDB');
+    console.log('fanfic.LastUpdateOfFic:',fanfic.LastUpdateOfFic);
     let fanficDate = new Date(new Date(fanfic.LastUpdateOfFic).setHours(0,0,0,0)).getTime();
+    console.log('fanficDate:',fanficDate);
 
 
     return new Promise(async function(resolve, reject) {
@@ -86,6 +88,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                         {   $push: { 'Fandom': {'FandomName':fandomName,[type]:1, 
                             'FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]} }
                         });
+                        resolve()
                     }else{
                         console.log('---date exist  - fandom  exist')
                         let type = fanfic.Status==='new' ? 'Fandom.$.New' : 'Fandom.$.Updated';
@@ -94,11 +97,14 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                             $push: {'Fandom.$.FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]}
                         },
                         (err, result) => {
-                            if (err){console.log(clc.red('Error in save update',err))};
+                            if(err){
+                            console.log(clc.red('Error in save update',err))
                             reject()
+                            };                           
+                            resolve()
                          });
                     }
-                    resolve()
+                    
                 })
             }
         });
