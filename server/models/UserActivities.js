@@ -14,10 +14,11 @@ const UserActivitiesSchema = new Schema({
   LatestActivities: [
     {
         Date:               {type: Number},
-        FanficID:           {type: Number, unique: true},
-        Author:             {type: String},
-        FanficTitle:        {type: String},
         FandomName:         {type: String},
+        FanficID:           {type: Number, unique: true},
+        FanficTitle:        {type: String},
+        Author:             {type: String},
+        Source:             {type: String},           
         ActivityType:       {type: String}  
     }
   ],

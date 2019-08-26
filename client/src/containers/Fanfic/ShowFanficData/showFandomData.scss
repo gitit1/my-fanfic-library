@@ -167,6 +167,15 @@
                 float: left;
                 margin-left: 0.5%; 
 
+                .userData input{
+                    margin-top: 10%;
+                    width:65px;
+                    border-radius: 10%;
+                }
+                .userData input::-webkit-input-placeholder {
+                    text-align: center;
+                 }
+                 
                 .userData{
                     float: left;
                 } 

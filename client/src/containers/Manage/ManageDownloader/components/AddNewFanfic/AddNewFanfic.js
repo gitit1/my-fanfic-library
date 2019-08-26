@@ -77,21 +77,21 @@ class OtherSitesDownloader extends Component{
       }
     }
 
-    markStatusHandler = async (fanficId,author,fanficTitle,statusType,event) =>{
+    markStatusHandler = async (fanficId,author,fanficTitle,source,statusType,event) =>{
       const {userData} = this.state;
       const {userEmail,fandomName} = this.props;
       let newStatus = '',chapterNum =0,flag=false;
       switch (statusType) {
         case 'Finished':
             newStatus = (userData.status!==null && userData.status==='Finished') ? 'Need to Read' : 'Finished';
-            await this.props.onStatusHandler(userEmail,fandomName,fanficId,author,fanficTitle,statusType,newStatus);
+            await this.props.onStatusHandler(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,newStatus);
             flag=true;
             break;
         case 'In Progress':
             if(event.key === 'Enter') {
                 chapterNum = event.target.value;
                 newStatus = 'In Progress';
-                await this.props.onStatusHandler(userEmail,fandomName,fanficId,author,fanficTitle,statusType,newStatus,chapterNum);
+                await this.props.onStatusHandler(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,newStatus,chapterNum);
                 flag=true;
             }
             break;
@@ -112,11 +112,11 @@ class OtherSitesDownloader extends Component{
       }
     }
 
-    markAsHandler = (fanficId,author,fanficTitle,markType) =>{
+    markAsHandler = (fanficId,author,fanficTitle,source,markType) =>{
       const {userData} = this.state;
       const {userEmail,fandomName} = this.props;
 
-      this.props.onMarkHandler(userEmail,fandomName,fanficId,author,fanficTitle,markType,!userData[markType])
+      this.props.onMarkHandler(userEmail,fandomName,fanficId,author,fanficTitle,markType,source,!userData[markType])
       this.setState({      
         userData:{
           ...userData,
@@ -201,10 +201,10 @@ const mapStateToProps = state =>{
 
 const mapDispatchedToProps = dispatch =>{
   return{
-      onGetFanficData:        (url,fandomName,download,image)                                             =>  dispatch(actions.getDataOfFanfic(url,fandomName,download,image)),
-      onSaveFanficDataToDB:   (fandomName,fanfic,download,url,image)                                      =>  dispatch(actions.saveDataOfFanficToDB(fandomName,fanfic,download,url,image)),
-      onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,markType,mark)            =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,markType,mark)),
-      onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,statusType,status,data)   =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,statusType,status,data)),
+      onGetFanficData:        (url,fandomName,download,image)                                                   =>  dispatch(actions.getDataOfFanfic(url,fandomName,download,image)),
+      onSaveFanficDataToDB:   (fandomName,fanfic,download,url,image)                                            =>  dispatch(actions.saveDataOfFanficToDB(fandomName,fanfic,download,url,image)),
+      onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)           =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
+      onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)  =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
   };
 }
 

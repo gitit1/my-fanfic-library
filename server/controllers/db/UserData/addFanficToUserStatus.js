@@ -4,7 +4,7 @@ const {addActivityToUserActivities} = require('./addActivityToUserActivities');
 
 exports.addFanficToUserStatus = async (req,res)=>{
     console.log(clc.blue('[db controller] addFanficToUserStatus()'));
-    let {userEmail,fanficId,author,fanficTitle,fandomName,statusType,status,data} = req.query;
+    let {userEmail,fanficId,author,fanficTitle,fandomName,source,statusType,status,data} = req.query;
 
     FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
         if (err) { return 'there is an error'; }
@@ -17,13 +17,16 @@ exports.addFanficToUserStatus = async (req,res)=>{
                 console.log('not exist!!')
                 user.FanficList.push({
                     Date: new Date().getTime(),
-                    FanficID: fanficId,
-                    FandomName: fandomName,
-                    Status: status,
+                    FanficID:       fanficId,
+                    FandomName:     fandomName,
+                    FanficTitle:    fanficTitle,
+                    Author:         author,
+                    Source:         source,
+                    Status:         status,
                     ChapterStatus: (data!==undefined) ? Number(data) : undefined                 
                 });
                 user.save();
-                await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,statusType,status,data)
+                await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,statusType,status,data)
                 res.send(true);
             }else{
                 console.log('exist!!')
@@ -35,7 +38,7 @@ exports.addFanficToUserStatus = async (req,res)=>{
                         console.log('User updated!');
                      }
                  )
-                 await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,statusType,status,data)
+                 await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,statusType,status,data)
                 res.send(true);
             }
         }else{
@@ -46,12 +49,15 @@ exports.addFanficToUserStatus = async (req,res)=>{
                     Date:             new Date().getTime(),
                     FanficID:         fanficId,
                     FandomName:       fandomName,
+                    FanficTitle:      fanficTitle,
+                    Author:           author,
+                    Source:           source,
                     Status:           status,
                     ChapterStatus: (data!==undefined) ? Number(data) : undefined   
                 }
             });
             await newUser.save();
-            await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,statusType,status,data)
+            await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,statusType,status,data)
             res.send(true);
         }
     }) 

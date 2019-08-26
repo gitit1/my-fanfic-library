@@ -4,7 +4,7 @@ const {addActivityToUserActivities} = require('./addActivityToUserActivities');
 
 exports.addFanficToUserMarksInDB = async (req,res)=>{
     console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
-    let {userEmail,fanficId,author,fanficTitle,fandomName,markType,mark} = req.query,saveAs;
+    let {userEmail,fanficId,author,fanficTitle,fandomName,source,markType,mark} = req.query,saveAs;
     fanficId = Number(fanficId)
     FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  
         if (err) { return 'there is an error'; }
@@ -15,16 +15,19 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
             if(!isExist){
                 console.log('not exist!!')
                 user.FanficList.push({
-                    Date: new Date().getTime(),
-                    FanficID: fanficId,
-                    FandomName: fandomName,
-                    [markType]: Boolean(mark)                     
+                    Date:           new Date().getTime(),
+                    FandomName:     fandomName,
+                    FanficID:       fanficId,
+                    FanficTitle:    fanficTitle,
+                    Author:         author,
+                    Source:         source,
+                    [markType]:     Boolean(mark)                     
                 });
                 if(markType==='Ignore' && mark){
                     user.FanficIgnoreList.push(fanficId);
                 }
                 user.save();
-                await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,markType,mark)
+                await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,markType,mark)
                 res.send(true);
             }else{
                 //TODO: function to clean "empty" userdata in userdataDb (if all settings are init not needed)
@@ -52,7 +55,7 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
                         console.log('User updated!');
                      }
                  )
-                await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,markType,mark)
+                await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,markType,mark)
                 res.send(true);
             }
         }else{
@@ -60,15 +63,18 @@ exports.addFanficToUserMarksInDB = async (req,res)=>{
             const newUser = new FandomUserData({
                 userEmail: userEmail,
                 FanficList: {
-                    Date:             new Date().getTime(),
-                    FanficID:         fanficId,
-                    FandomName:       fandomName,
-                    [markType]:       Boolean(mark)   
+                    Date:               new Date().getTime(),
+                    FandomName:         fandomName,
+                    FanficID:           fanficId,
+                    FanficTitle:        fanficTitle,
+                    Author:             author,
+                    Source:             source,
+                    [markType]:         Boolean(mark)   
                 },
                 FanficIgnoreList: (markType==='Ignore' && mark) ? fanficId : undefined
             });
             await newUser.save();
-            await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,markType,mark)
+            await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,markType,mark)
             res.send(true);
          }
     }) 

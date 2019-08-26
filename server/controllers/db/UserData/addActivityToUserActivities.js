@@ -1,9 +1,9 @@
 const UserActivitiesDB = require('../../../models/UserActivities');
 
-exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fandomName,type,typeFlag,chapter) =>{
+exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fandomName,source,type,typeFlag,chapter) =>{
     return new Promise(function(resolve, reject) {
         console.log('addActivityToUserActivities')
-        console.log(userEmail,fanficId,author,fanficTitle,fandomName,type,typeFlag,chapter)
+        console.log(userEmail,fanficId,author,fanficTitle,fandomName,source,type,typeFlag,chapter)
         let activity='';
         typeFlag = (typeFlag==='true'||typeFlag==='Finished'||typeFlag==='In Progress') ? true : false;
         switch (type) {
@@ -31,7 +31,7 @@ exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fan
             if (user) {
                 console.log('found user!!, '+user.userEmail)
                 const userActivity = {Date:Number(new Date().getTime()),FanficID:Number(fanficId),
-                                      Author:author,FanficTitle:fanficTitle,FandomName:fandomName,ActivityType:activity  }
+                                      Author:author,FanficTitle:fanficTitle,FandomName:fandomName,Source:source,ActivityType:activity  }
                 UserActivitiesDB.updateOne({userEmail: userEmail},
                     { $push: { "LatestActivities": userActivity }},(err, result) => {
                         if (err) throw err;
@@ -49,6 +49,7 @@ exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fan
                             Author:             author,
                             FanficTitle:        fanficTitle,
                             FandomName:         fandomName,
+                            Source:             source,
                             ActivityType:       activity  
                         }
                     ]
