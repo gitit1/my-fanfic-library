@@ -273,8 +273,10 @@ class Fanfic extends Component{
 
     render(){
         // TODO: FIX LOADING TO BE LIKE A03 
-        let {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,
+        const {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,
              inputChapterFlag,currentSort,readingListAncor,currentSource} = this.state;
+        const {isManager} = this.props;
+        
         return(
             <Container header={this.props.match.params.FandomName} className='fanfics'>
                 <Grid container className='containerGrid'>
@@ -319,6 +321,7 @@ class Fanfic extends Component{
                                                 size={this.props.size}
                                                 showTags={this.state.showTags}
                                                 showTagsToggle={this.showTagsToggle}
+                                                isManager={isManager}
                                 />
                             }
                     </Grid>
@@ -341,6 +344,7 @@ const mapStateToProps = state =>{
         ignoredCount:       state.fanfics.ignoredCount,
         userEmail:          state.auth.user.email,
         isAuthenticated:    state.auth.isAuthenticated,
+        isManager:          state.auth.isManager,
         size:               state.screenSize.size
     };   
 }
