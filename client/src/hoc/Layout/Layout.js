@@ -20,8 +20,9 @@ class Layout extends Component{
 
     componentDidMount(){
         this.props.onGetFandoms().then(()=>{
+            console.log('done')
             this.props.onGetLastUpdateDate().then(lastUpdateDate=>{
-                this.setState({loading:false,lastUpdateDate:Number(lastUpdateDate)})
+                 this.setState({loading:false,lastUpdateDate:Number(lastUpdateDate)})
             })
         })
         this.handleResize();
@@ -44,14 +45,16 @@ class Layout extends Component{
         this.props.onSaveScreenSize(size,smallSize)
     }
     render(){
-        // console.log('size:',this.props.size)
-        let page = this.state.loading ? null :(
+        const {loading} = this.state;
+        const {auth,children,size} = this.props;
+        console.log('loading:',loading)
+        let page = loading ? null :(
             <div className='layout'>
                 <header>
-                    <Header auth={this.props.auth} logout={()=>this.logoutHandler()} size={this.props.size}/>
+                    <Header auth={auth} logout={()=>this.logoutHandler()} size={size}/>
                 </header>
                 <main>
-                    {this.props.children}
+                    {children}
                 </main>
                 <footer>
                     <Footer lastUpdateDate={this.state.lastUpdateDate}/>

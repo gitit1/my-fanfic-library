@@ -35,7 +35,9 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
 const saveUpdatesToDB = (fandomName,fanfic) =>{
     console.log('***************************************saveUpdatesToDB');
     console.log('fanfic.LastUpdateOfFic:',fanfic.LastUpdateOfFic);
-    let fanficDate = new Date(new Date(fanfic.LastUpdateOfFic).setHours(0,0,0,0)).getTime();
+    let fanficDate = new Date(fanfic.LastUpdateOfFic)
+    fanficDate = fanficDate.getFullYear() + "/" + (fanficDate.getMonth() + 1) + "/" + fanficDate.getDate();
+    fanficDate = new Date(new Date(fanficDate).setHours(0,0,0,0)).getTime();
     console.log('fanficDate:',fanficDate);
 
 
@@ -47,6 +49,14 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                 return reject()
             }
             let isExist = (dbUpdate===null) ? false : true;
+            let FanficsIds = [{
+                    'FanficID':fanfic.FanficID,
+                    'FanficTitle':fanfic.FanficTitle,
+                    'Author':fanfic.Author,
+                    'Source':fanfic.Source,
+                    'Status':fanfic.Status,
+                    'StatusDetails':fanfic.StatusDetails
+            }]
             if(!isExist){
                 console.log('---date not exist')
                 let type = fanfic.Status==='new' ? 'New' : 'Updated';
@@ -57,13 +67,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                         {
                             'FandomName': fandomName,
                             [type]:1,
-                            FanficsIds:[
-                                {
-                                    'FanficID':fanfic.FanficID,
-                                    'Status':fanfic.Status,
-                                    'StatusDetails':fanfic.StatusDetails
-                                }
-                            ]
+                            'FanficsIds':FanficsIds
                         }
                     ]
                 }
@@ -86,7 +90,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
 
                         await UpdatesModal.updateOne({'Date': fanficDate},
                         {   $push: { 'Fandom': {'FandomName':fandomName,[type]:1, 
-                            'FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]} }
+                            'FanficsIds':FanficsIds} }
                         });
                         resolve()
                     }else{
@@ -94,7 +98,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                         let type = fanfic.Status==='new' ? 'Fandom.$.New' : 'Fandom.$.Updated';
                         await UpdatesModal.updateOne({ 'Date': fanficDate, 'Fandom.FandomName': fandomName },
                         {   $inc: { [type]:1} , 
-                            $push: {'Fandom.$.FanficsIds':[{'FanficID':fanfic.FanficID,'Status':fanfic.Status,'StatusDetails':fanfic.StatusDetails}]}
+                            $push: {'Fandom.$.FanficsIds':FanficsIds}
                         },
                         (err, result) => {
                             if(err){

@@ -11,8 +11,11 @@ const UpdatesSchema = new Schema({
                         FanficsIds:[
                             {
                                 FanficID:       {type: Number},
+                                FanficTitle:    {type: String},
+                                Author:         {type: String},
+                                Source:         {type: String},
                                 Status:         {type: String},      
-                                StatusDetails:  {type: String},  
+                                StatusDetails:  {type: String}, 
                             }
                         ]
                     }

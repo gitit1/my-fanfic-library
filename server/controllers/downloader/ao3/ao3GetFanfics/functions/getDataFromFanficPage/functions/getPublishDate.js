@@ -10,7 +10,7 @@ exports.getPublishDate = async (jar,url)=>{
         await getUrlBodyFromAo3(jar,url).then(urlBody=>{
             let $ = cheerio.load(urlBody);
             publishDate =  $('dd.published').text()
-            // console.log('publishDate 1:',publishDate)
+            console.log('publishDate 1:',publishDate)
             publishDate = (publishDate) ==="" ? 0 : new Date(publishDate).getTime();
             // console.log('publishDate 2:',publishDate)
             resolve(publishDate)

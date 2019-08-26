@@ -25,14 +25,15 @@ class Index extends Component{
     }
     componentWillMount(){
         const {userEmail,isAuthenticated} = this.props;
-        this.props.onGetLatestUpdates(LIMIT_FOR_LATEST_UPDATES).then(()=>{
-            if(isAuthenticated){
-                this.props.onGetMyLatestActivities(LIMIT_FOR_MY__LATEST_ACTIVITIES,userEmail).then(()=>
-                this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY__LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES).then(()=>this.setState({loading:false})));
-            }else{
-                this.setState({loading:false})
-            }
-        })
+        this.props.onGetLatestUpdates(LIMIT_FOR_LATEST_UPDATES).then(async ()=>{
+             if(isAuthenticated){
+                 await this.props.onGetMyLatestActivities(LIMIT_FOR_MY__LATEST_ACTIVITIES,userEmail)
+                 await this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY__LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES)
+                 this.setState({loading:false})
+             }else{
+                 this.setState({loading:false})
+             }
+         })
     }
     render(){
         const {loading} = this.state;

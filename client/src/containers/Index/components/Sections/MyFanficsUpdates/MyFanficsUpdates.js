@@ -18,3 +18,4 @@ export default myFanficsUpdates;
 SERVER: 
             - EACH MONTH TO PUT IN ARCHIVE
 */
+//add announcment if empty 
