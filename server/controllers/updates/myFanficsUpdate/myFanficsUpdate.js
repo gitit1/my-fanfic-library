@@ -4,15 +4,15 @@ const {checkForUserDataInDBOnCurrentFanfics} = require('../../db/helpers/checkFo
 const {getlatestUpdates} = require('../latestUpdates/latestUpdates');
 
 exports.myFanficsUpdate = async (req,res) =>{
-    console.log('[db controller] - myLatestActivities');
+    console.log('[db controller] - myFanficsUpdate');
     const {userEmail,limit,daysLimit} = req.query;
-    let myLatestActivities = await getMyFanficsUpdate(userEmail,limit,daysLimit);
+    let myFanficsUpdate = await getMyFanficsUpdate(userEmail,limit,daysLimit);
 
-    res.send(myLatestActivities);
+    res.send(myFanficsUpdate);
 }
 
 const getMyFanficsUpdate = async (userEmail,limit,daysLimit) =>{ 
-    userEmail='git@test.com',daysLimit=5;
+    console.log('[db controller] - myFanficsUpdate - getMyFanficsUpdate');
     let fanficsArr = [];
     
     let latestUpdatedFics = await getlatestUpdates(daysLimit);
@@ -20,8 +20,6 @@ const getMyFanficsUpdate = async (userEmail,limit,daysLimit) =>{
         fanficsArr = fanficsArr.concat(fandom['FanficsIds'])
     }));
     let userFanfics = await checkForUserDataInDBOnCurrentFanfics(userEmail,fanficsArr,'update')
-    // console.log('userFanfics',userFanfics)
-
-    
+  
     return userFanfics.slice(0,limit);
 }

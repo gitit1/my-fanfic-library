@@ -8,7 +8,7 @@ class NewButton extends Component{
             <Button
                 variant="contained" 
                 disabled={this.props.disabled}
-                className={[classes[this.props.btnType]].join(' ')} 
+                className={[classes[this.props.className]].join(' ')} 
                 onClick={this.props.clicked}
                 // style={{
                 //     '--theme-primary-color': this.props.backColorFrimary,

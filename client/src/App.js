@@ -25,6 +25,7 @@ import ReadingList from './containers/UserData/ReadingList/ReadingList';
 import ManageFandoms from './containers/Manage/ManageFandoms';
 import ManageDownloader from './containers/Manage/ManageDownloader/ManageDownloader';
 import AddNewFandom from './containers/Manage/ManageFandoms/components/AddNewFandom';
+import AddNewFanfic from './containers/Manage/AddNewFanfic/AddNewFanfic';
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
@@ -72,7 +73,7 @@ function App() {
           <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
           <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
           <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
-          <PrivateRoute exact path="/editfandom"          component={AddNewFandom}      level={1} />
+          <PrivateRoute exact path="/addNewFanfic"        component={AddNewFanfic}      level={1} />
           {/* Auth */}  
           <Route              path="/register"           component={Registrer}                   />
           <Route              path="/login"               component={Login}                       />

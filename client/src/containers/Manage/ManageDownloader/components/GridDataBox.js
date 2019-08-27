@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { Grid } from '@material-ui/core';
-import AddNewFanfic from './AddNewFanfic/AddNewFanfic'
+import AddNewFanficAutomatic from '../../AddNewFanfic/components/AddNewFanficAutomatic/AddNewFanficAutomatic'
 
 import {savedFanfics,deletedFanfics} from '../../../Fandoms/components/functions'
 
@@ -24,7 +24,7 @@ class GridDataBox extends Component{
                 </div>
                 break;
             case 2:
-                grid = <AddNewFanfic fandomName={fandom.FandomName} switches={switches}/>
+                grid = <AddNewFanficAutomatic fandomName={fandom.FandomName} switches={switches}/>
                 break;
             default:
                 break;

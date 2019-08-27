@@ -21,7 +21,7 @@ const BuildForm = (props) => (
                     changed={(event) => props.changed(event,formElement.id)}/>
         ))}
         <br/>                               
-        <Button  type="submit" disabled={props.disabled} clicked={()=>props.onSubmit()}>SEND</Button>
+        <Button  type="submit" disabled={props.disabled} clicked={()=>props.onSubmit()}>{props.buttonSendLabel}</Button>
         {/* <Button  btnType="Success" disabled={!this.state.formIsValid}>{this.state.editMode ? 'EDIT': 'ADD'} </Button> */}
     </form>
 );

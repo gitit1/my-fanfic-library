@@ -185,4 +185,4 @@ const mapStateToProps = state =>{
     };
   }
   
-  export default connect(mapStateToProps,mapDispatchedToProps)(ManageDownloader);;
+  export default connect(mapStateToProps,mapDispatchedToProps)(ManageDownloader);

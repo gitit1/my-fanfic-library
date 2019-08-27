@@ -25,8 +25,8 @@ const IndexFandoms = (props) => (
             </Box>
           )
         } 
-        {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)<=1)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}
-        {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===1||props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===2)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}       
+        {/* {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)<=1)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />} */}
+        {/* {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===1||props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===2)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}        */}
       </GridList>
       {props.numOfFandoms>9 && <Grid item xs={12}><Link to={`/fandoms`}>See All</Link></Grid>}
     </Grid>

@@ -19,7 +19,7 @@ mongoose.dbUsers = mongoose.createConnection(dbUrl.dbUsers, {
   console.log("myfanficslybrary_users is connected")
 })
 
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 module.exports = mongoose;
 

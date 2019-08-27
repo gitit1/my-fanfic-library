@@ -2,11 +2,12 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 const InProgress = (props) => {
-    const {FanficID,Author,FanficTitle} = props.fanfic;
+    const {FanficID,Author,FanficTitle,Source} = props.fanfic;
     const {status,chapter,toggleChpter} = props.userData;
+    const {markStatus,toggleChapterB} = props;
     return(
         <div className='userData'>      
-            <Button onClick={() =>props.toggleChapterB()}
+            <Button onClick={() =>toggleChapterB()}
                     color='primary' className={status==='In Progress' ? 'userData_green' : null}>
                 {status==='In Progress' ? `In Progress - Chapter ${chapter}`  : 'Mark in Progress'}
             </Button> 
@@ -14,7 +15,7 @@ const InProgress = (props) => {
                 <div className='userData'>
                     <input  type="number" 
                             placeholder={status==='In Progress' ? chapter : 'Number of Chapter'} 
-                            onKeyDown={(event)=>props.markStatus(FanficID,Author,FanficTitle,'In Progress',event)}
+                            onKeyDown={(event)=>markStatus(FanficID,Author,FanficTitle,Source,'In Progress',event)}
                     />                                
                 </div>
             }

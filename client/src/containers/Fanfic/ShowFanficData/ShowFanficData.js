@@ -19,12 +19,12 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const ShowFanficData = (props) => {
-
+    const {fanfics,isManager} = props;
     return(
         <React.Fragment>
             <div className='root' style={{width:'100%'}}>
                 <GridList cellHeight='auto' className='grid_list' cols={1}>
-                    { props.fanfics.map(fanfic=>{
+                    { fanfics.map(fanfic=>{
                         let userData = props.userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
                         userData = userData.length!==0 ? Object.values(userData)[0]: null;
                         const redClasses    =   functions.redClassesHandler()
@@ -63,6 +63,7 @@ const ShowFanficData = (props) => {
                                                         isInProgress={isInProgress}
                                                         isIgnored={isIgnored}
                                                         inReadingList={inReadingList}
+                                                        isManager={isManager}
                                             />
                                         </section>
 
