@@ -16,7 +16,7 @@ import MyLatestActivity from './components/Sections/MyLatestActivity/MyLatestAct
 import './Index.scss';
 
 const LIMIT_FOR_LATEST_UPDATES = 3;
-const LIMIT_FOR_MY__LATEST_ACTIVITIES = 10;
+const LIMIT_FOR_MY_LATEST_ACTIVITIES = 10;
 
 class Index extends Component{
     state={
@@ -27,8 +27,8 @@ class Index extends Component{
         const {userEmail,isAuthenticated} = this.props;
         this.props.onGetLatestUpdates(LIMIT_FOR_LATEST_UPDATES).then(async ()=>{
              if(isAuthenticated){
-                 await this.props.onGetMyLatestActivities(LIMIT_FOR_MY__LATEST_ACTIVITIES,userEmail)
-                 await this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY__LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES)
+                 await this.props.onGetMyLatestActivities(LIMIT_FOR_MY_LATEST_ACTIVITIES,userEmail)
+                 await this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY_LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES)
                  this.setState({loading:false})
              }else{
                  this.setState({loading:false})

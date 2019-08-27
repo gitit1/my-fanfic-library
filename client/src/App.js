@@ -26,6 +26,10 @@ import ManageFandoms from './containers/Manage/ManageFandoms';
 import ManageDownloader from './containers/Manage/ManageDownloader/ManageDownloader';
 import AddNewFandom from './containers/Manage/ManageFandoms/components/AddNewFandom';
 import AddNewFanfic from './containers/Manage/AddNewFanfic/AddNewFanfic';
+//Updates
+import FullLatestUpdates from './containers/Updates/FullLatestUpdates/FullLatestUpdates'
+import FullMyLatestActivity from './containers/Updates/FullMyLatestActivity/FullMyLatestActivity'
+import FullMyFanficsUpdates from './containers/Updates/FullMyFanficsUpdates/FullMyFanficsUpdates'
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
@@ -60,6 +64,11 @@ function App() {
       <Layout>
         <Switch>
           <Route        exact path="/"                    component={Index}                       />
+          {/* Updates */}
+          <Route              path="/latestUpdates"       component={FullLatestUpdates}           />
+          <Route              path="/latestActivity"      component={FullMyLatestActivity}        />
+          <Route              path="/myFanficsUpdates"      component={FullMyFanficsUpdates}      />
+          
           {/* Fandoms */}
           <Route              path="/fandoms"             component={Fandoms}                     />
           <Route              path="/fanfics/:FandomName" component={Fanfic}                      />

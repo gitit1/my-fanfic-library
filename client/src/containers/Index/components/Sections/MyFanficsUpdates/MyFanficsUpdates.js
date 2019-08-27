@@ -1,17 +1,22 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+import './MyFanficsUpdates.scss';
 
-const myFanficsUpdates = (props) => {
+const MyFanficsUpdates = (props) => {
     const {updates} = props;
     return(
-        <div className='myFanficsUpdates'>
-            {updates.map(fanfics=>(
-                <p key={fanfics.FanficID}>{`${fanfics.FanficID} - ${fanfics.Status} - ${fanfics.StatusDetails}`}</p>
-            ))}
-        </div>
+        <React.Fragment>
+            <div className='myFanficsUpdates'>
+                {updates.map(fanfics=>(
+                    <p key={fanfics.FanficID}>{`${fanfics.FanficID} - ${fanfics.Status} - ${fanfics.StatusDetails}`}</p>
+                ))}
+            </div>
+            <div className='link_see_all'><Link to="/myFanficsUpdates">See All</Link></div>
+        </React.Fragment>
     )
 };
 
-export default myFanficsUpdates;
+export default MyFanficsUpdates;
 
 
 /*TODO: FULL PAGE OF My Fanfics: BY MONTH/YEAR
