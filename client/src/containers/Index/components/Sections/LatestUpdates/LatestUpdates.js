@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from "react-slick";
+import { Link } from "react-router-dom";
 import './latestUpdates.scss'
 
 const settings = {
@@ -34,8 +35,7 @@ const LatestUpdates = (props) => (
                 </div>
             ))}
         </Slider>
-
-        
+        <Link to="/latestUpdates">See All</Link> 
     </div>
 );
 

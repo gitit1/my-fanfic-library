@@ -1,15 +1,15 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 
 const SavedFile = (props) => {
-    const {fileName,savedAs,FandomName,method} = props.fanfic;
+    const {fileName,savedAs,FandomName} = props.fanfic;
     return(
         <div className='SavedFile'>
         {fileName && 
             <React.Fragment>
                 <span>Saved on server:</span>
                 {savedAs.split(',').map(method=>(
-                    <a target='_blank' href={`http://myfanficlybrary.tk/fandoms/${FandomName.toLowerCase()}/fanfics/${fileName}.${method}`}>{method} </a>
+                    <a  target='_blank' rel="noopener noreferrer" 
+                        href={`http://myfanficlybrary.tk/fandoms/${FandomName.toLowerCase()}/fanfics/${fileName}.${method}`}>{method} </a>
                 ))}
             </React.Fragment>
             

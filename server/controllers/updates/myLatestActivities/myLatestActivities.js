@@ -24,6 +24,7 @@ const getMyLatestActivities = async (limit,userEmail) =>{
                                   'Author':'$LatestActivities.Author',
                                   'FanficTitle':'$LatestActivities.FanficTitle',
                                   'FandomName':'$LatestActivities.FandomName',
+                                  'Source':'$LatestActivities.Source',
                                   'ActivityType':'$LatestActivities.ActivityType'} }]
         , async function(err, filtered) {
             // console.log('got it',filtered)
