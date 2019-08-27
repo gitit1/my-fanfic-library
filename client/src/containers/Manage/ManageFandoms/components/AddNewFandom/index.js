@@ -44,10 +44,7 @@ class AddNewFandom extends Component{
             this.editFandomInitialState()
         }
     }
-    // componentWillUnmount(){
-    //     this.props.onLeavingPage();
-    // }
-    
+
 
     editFandomInitialState = () =>{
         let options =[];
@@ -281,7 +278,7 @@ class AddNewFandom extends Component{
                         </Grid>
                         <Grid item xs={8} className='add_new_fandom_content'>
                             <BuildForm onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
-                                       changed={this.inputChangedHandler} disabled={!formIsValid} />
+                                       changed={this.inputChangedHandler} disabled={!formIsValid} buttonSendLabel='SEND'/>
                             <ErrorMessages fandomAddedFlag={fandomAddedFlag}/>
                         </Grid>
                         <Card className='add_new_fandom_images_card'>

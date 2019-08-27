@@ -41,7 +41,11 @@ export const navLinks = [
             {
                 label:  'Downloader',
                 link:   '/manageDownloader'
-            }
+            },
+            {
+                label:  'Add New Fanfic',
+                link:   '/AddNewFanfic'
+            } 
         ]
     }
 ]

@@ -99,14 +99,8 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                         await UpdatesModal.updateOne({ 'Date': fanficDate, 'Fandom.FandomName': fandomName },
                         {   $inc: { [type]:1} , 
                             $push: {'Fandom.$.FanficsIds':FanficsIds}
-                        },
-                        (err, result) => {
-                            if(err){
-                            console.log(clc.red('Error in save update',err))
-                            reject()
-                            };                           
-                            resolve()
-                         });
+                        });
+                        resolve()
                     }
                     
                 })

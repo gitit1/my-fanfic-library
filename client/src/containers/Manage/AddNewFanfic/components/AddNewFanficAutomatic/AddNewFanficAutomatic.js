@@ -12,7 +12,7 @@ import './style/managefanfics.scss';
 import UrlForSearch from './components/urlForSearch'
 import ShowFanficData from './components/showFanficData/showFanficData'
 
-class OtherSitesDownloader extends Component{
+class AddNewFanficAutomatic extends Component{
     state = {
       url:'',
       loadingFlag:true,
@@ -208,6 +208,6 @@ const mapDispatchedToProps = dispatch =>{
   };
 }
 
-export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(OtherSitesDownloader));
+export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(AddNewFanficAutomatic));
 
 // TODO: add checkbox for image fanfic doanload
