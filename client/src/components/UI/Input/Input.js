@@ -6,7 +6,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import DateFnsUtils from "@date-io/date-fns";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 const input = (props) => {
     let inputElement =null;
     const inputClasses = [classes.InputElement];
@@ -15,10 +16,11 @@ const input = (props) => {
         inputClasses.push(classes.Invalid)
     }
 
+
     switch(props.elementType){
         case ('input'):
             inputElement = <TextField 
-                                className={inputClasses.join(' ')} 
+                                className={`${inputClasses.join(' ')} ${props.classNameCustom}`} 
                                 label={props.label}
                                 {...props.elementConfig} 
                                 value={props.value}
@@ -28,14 +30,34 @@ const input = (props) => {
             break;
         case ('textarea'):
             inputElement = <textarea 
-                                className={inputClasses.join(' ')} 
+                                className={`${inputClasses.join(' ')} ${props.classNameCustom}`} 
                                 {...props.elementConfig}
                                 value={props.value}
                                 onChange={props.changed}/>
             break;
+        case ('date'):
+            inputElement =  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    className={`${inputClasses.join(' ')} ${props.classNameCustom}`}
+                                    disableToolbar
+                                    variant="inline"
+                                    format="MM/dd/yyyy"
+                                    margin="normal"
+                                    id="date-picker-inline"
+                                    label={props.label}
+                                    value={props.value}
+                                    onChange={props.changed}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+                            
+
+            break;            
         case ('select'):
             inputElement =  <React.Fragment>
-                                <FormControl className={classes.FormControl}>
+                                <FormControl className={`${classes.FormControl} ${props.classNameCustom}`}>
                                     <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
                                     <Select 
                                         native

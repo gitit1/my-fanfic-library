@@ -1,6 +1,7 @@
 export const fanficDataForm = [{
     FanficID: {
             label: 'Fanfic ID:',
+            classNameCustom:'FanficID',
             elementType: 'input', 
             elementConfig:{
                 type: 'number',
@@ -15,11 +16,236 @@ export const fanficDataForm = [{
             visible: true,
             disabled:false
     },
-    NumberOfChapters: {
-        label: 'Number of Chapters:',
+    Rating: {
+        label: 'Rating',
+        classNameCustom:'Rating',
+        elementType:'select', 
+        elementConfig:{
+            options: [
+                        {value: 'none',displayValue: 'None'},
+                        {value: 'general',displayValue: 'General'},
+                        {value: 'teen',displayValue: 'Teen'},
+                        {value: 'mature',displayValue: 'Mature'},
+                        {value: 'explicit',displayValue: 'Explicit'},       
+                      ]
+        },
+        value:'',
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
+    },
+    FanficTitle: {
+        label: 'Fanfic Title:',
+        classNameCustom:'FanficTitle',
         elementType:'input', 
         elementConfig:{
             type: 'text',
+            placeholder: 'Fanfic Title'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Author: {
+        label: 'Author:',
+        classNameCustom:'Author',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Author'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    FandomsTags: {
+        label: 'Fandoms Tags:',
+        classNameCustom:'FandomsTags',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Fandoms Tags - Seperate by comma , Example: "tag 1,tag 2"'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Warnings: {
+        label: 'Warnings:',
+        classNameCustom:'Warnings',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Warnings - Seperate by comma , Example: "tag 1,tag 2"'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Relationships: {
+        label: 'Relationships:',
+        classNameCustom:'Relationships',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Relationships - Seperate by comma , Example: "tag 1,tag 2"'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Characters: {
+        label: 'Characters:',
+        classNameCustom:'Characters',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Characters - Seperate by comma , Example: "tag 1,tag 2"'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Tags: {
+        label: 'Free Tags:',
+        classNameCustom:'Tags',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Free Tags - Seperate by comma , Example: "tag 1,tag 2"'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Summary: {
+        label: 'Summary:',
+        classNameCustom:'Summary',
+        elementType:'textarea', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Summary'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Source: {
+        label: 'Source',
+        classNameCustom:'Source',
+        elementType:'select', 
+        elementConfig:{
+            options: [
+                        {value: 'Backup',displayValue: 'Backup'},
+                        {value: 'Patreon',displayValue: 'Patreon'},
+                        {value: 'Tumblr',displayValue: 'Tumblr'}
+                      ]
+        },
+        value:'',
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
+    },
+    PublishDate: {
+        label: 'Publish Date',
+        classNameCustom:'PublishDate',
+        elementType:'date', 
+        value:'',
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
+    },
+    UpdateDate: {
+        label: 'Update Date',
+        classNameCustom:'UpdateDate',
+        elementType:'date', 
+        value:'',
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
+    },
+    Language: {
+        label: 'Language',
+        classNameCustom:'Language',
+        elementType:'select', 
+        elementConfig:{
+            options: [
+                        {value: 'English',displayValue: 'English'},
+                      ]
+        },
+        value:'',
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
+    },
+    Words: {
+        label: 'Words:',
+        classNameCustom:'Words',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'Number of Words'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    NumberOfChapters: {
+        label: 'Number of Chapters:',
+        classNameCustom:'NumberOfChapters',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
             placeholder: 'Number of Chapters'
         },
         value:'',
@@ -33,6 +259,7 @@ export const fanficDataForm = [{
     },
     Complete: {
         label: 'Complete',
+        classNameCustom:'Complete',
         elementType:'select', 
         elementConfig:{
             options: [{value: false,displayValue: 'No'},
@@ -47,6 +274,7 @@ export const fanficDataForm = [{
     },
     Oneshot: {
         label: 'Oneshot',
+        classNameCustom:'Oneshot',
         elementType:'select', 
         elementConfig:{
             options: [{value: false,displayValue: 'No'},
@@ -58,5 +286,73 @@ export const fanficDataForm = [{
         valid: true,
         visible: true,
         disabled:false
-    }
+    },
+    Comments: {
+        label: 'Comments (Reviews):',
+        classNameCustom:'Comments',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'Comments (Reviews)'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Kudos: {
+        label: 'Kudos (Favs)',
+        classNameCustom:'Kudos',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'Kudos (Favs)'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Bookmarks: {
+        label: 'Bookmarks (Follows):',
+        classNameCustom:'Bookmarks',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'Bookmarks (Follows)'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Hits: {
+        label: 'Hits:',
+        classNameCustom:'Hits',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'Hits'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
 }]
