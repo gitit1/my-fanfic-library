@@ -250,11 +250,6 @@ class AddNewFandom extends Component{
         
     }
 
-    test = () =>{
-        console.log('test...')
-        console.log('test...')
-    }
-
     render(){
         const {fandomForm,editMode,fandomAddedFlag,formIsValid,imageNameMain,imageNameIcon} = this.state;
         const {loading} = this.props;

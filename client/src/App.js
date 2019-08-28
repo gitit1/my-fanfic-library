@@ -63,29 +63,29 @@ function App() {
   return (
       <Layout>
         <Switch>
-          <Route        exact path="/"                    component={Index}                       />
+          <Route        exact path="/"                    component={Index}                           />
           {/* Updates */}
-          <Route              path="/latestUpdates"       component={FullLatestUpdates}           />
-          <Route              path="/latestActivity"      component={FullMyLatestActivity}        />
-          <Route              path="/myFanficsUpdates"      component={FullMyFanficsUpdates}      />
+          <Route              path="/latestUpdates"       component={FullLatestUpdates}     level={2} />
+          <Route              path="/myLatestActivity"    component={FullMyLatestActivity}  level={2} />
+          <Route              path="/myFanficsUpdates"    component={FullMyFanficsUpdates}  level={2} />
           
           {/* Fandoms */}
-          <Route              path="/fandoms"             component={Fandoms}                     />
-          <Route              path="/fanfics/:FandomName" component={Fanfic}                      />
+          <Route              path="/fandoms"             component={Fandoms}                         />
+          <Route              path="/fanfics/:FandomName" component={Fanfic}                          />
           {/* Search */}
-          <Route              path="/search"              component={Search}                      />
+          <Route              path="/search"              component={Search}                          />
           {/* UserData */}  
-          <PrivateRoute exact path="/dashboard"           component={Dashboard}         level={2} />
-          <PrivateRoute exact path="/myFandoms"           component={MyFandoms}         level={2} />
-          <PrivateRoute exact path="/readingList"         component={ReadingList}       level={2} />
+          <PrivateRoute exact path="/dashboard"           component={Dashboard}             level={2} />
+          <PrivateRoute exact path="/myFandoms"           component={MyFandoms}             level={2} />
+          <PrivateRoute exact path="/readingList"         component={ReadingList}           level={2} />
           {/* Manage */}  
-          <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}  level={1} />
-          <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}     level={1} />
-          <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}      level={1} />
-          <PrivateRoute exact path="/addNewFanfic"        component={AddNewFanfic}      level={1} />
+          <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}      level={1} />
+          <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}         level={1} />
+          <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}          level={1} />
+          <PrivateRoute exact path="/addNewFanfic"        component={AddNewFanfic}          level={1} />
           {/* Auth */}  
-          <Route              path="/register"           component={Registrer}                   />
-          <Route              path="/login"               component={Login}                       />
+          <Route              path="/register"            component={Registrer}                       />
+          <Route              path="/login"               component={Login}                           />
 
           <Redirect to="/" />
         </Switch>

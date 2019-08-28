@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from '../../../../../../components/UI/Input/Input';
-import Button from '../../../../../../components/UI/Button/Button';
+import Button from '@material-ui/core/Button';
 
 const BuildForm = (props) => (
     <form>
@@ -21,8 +21,7 @@ const BuildForm = (props) => (
                     changed={(event) => props.changed(event,formElement.id)}/>
         ))}
         <br/>                               
-        <Button  type="submit" disabled={props.disabled} clicked={()=>props.onSubmit()}>{props.buttonSendLabel}</Button>
-        {/* <Button  btnType="Success" disabled={!this.state.formIsValid}>{this.state.editMode ? 'EDIT': 'ADD'} </Button> */}
+        <Button  type="submit" variant="contained"  className='send_button' disabled={props.disabled} onClick={()=>props.onSubmit()}>{props.buttonSendLabel}</Button>
     </form>
 );
 

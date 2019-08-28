@@ -20,6 +20,7 @@ class AddNewFanfic extends Component{
             ready: false,
             id:'select-fandom'
         },
+        disable:true,
         show:0
     }
 
@@ -28,17 +29,15 @@ class AddNewFanfic extends Component{
     }
 
     inputChangedHandler = (event) =>{
-
-        const selectedFandom = event.target.value,logs=[],serverData=null;
-        let fandom = (selectedFandom==='All') ? 'All' : (this.props.fandoms.filter(fandom => fandom.FandomName===selectedFandom)[0]);
+        const selectedFandom = event.target.value;
 
         this.setState(prevState =>({
-            fandomSelect: {...prevState.fandomSelect,value: selectedFandom}
+            fandomSelect: {...prevState.fandomSelect,value: selectedFandom},disable:false
         }));  
     }
 
     createOptionsForFandomSelect = () =>{
-        let options =[{value: 'All',displayValue: 'All'}];
+        let options =[];
         this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName)).map(fandom=>{
             options.push({value: fandom.FandomName,displayValue: fandom.FandomName})
             return null
@@ -53,15 +52,15 @@ class AddNewFanfic extends Component{
     }
 
     render(){
-        const {show,fandomSelect} = this.state;
+        const {show,fandomSelect,disable} = this.state;
 
         return(
             <Container header='Add New Fanfic' className='addNewFanfic'>
                 <div className='ChooseFandom'><ChooseFandom fandomSelect={fandomSelect} changed={this.inputChangedHandler}/></div>
                 
                 <React.Fragment>
-                    <Button variant="contained" className='addNewFanficManuallyBTN' onClick={()=>this.setState({show:1})}>Manually</Button>
-                    <Button variant="contained" className='addNewFanficAutomaticBTN' onClick={()=>this.setState({show:2})}>Automatic</Button>
+                    <Button variant="contained" disabled={disable} className='addNewFanficManuallyBTN' onClick={()=>this.setState({show:1})}>Manually</Button>
+                    <Button variant="contained" disabled={disable} className='addNewFanficAutomaticBTN' onClick={()=>this.setState({show:2})}>Automatic</Button>
                 </React.Fragment> 
 
                 {(show===1) ? 
