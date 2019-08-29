@@ -9,7 +9,7 @@ const ChooseFandom = (props) => (
         elementConfig={props.fandomSelect.elementConfig} 
         value={props.fandomSelect.value} 
         visible={props.fandomSelect.visible}
-        changed={(event) => props.changed(event)}
+        changed={props.changed}
     />
 );
 

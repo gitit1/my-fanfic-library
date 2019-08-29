@@ -8,8 +8,10 @@ TODO:  function/router: wattpadAddNewFanfic
 TODO:  function/router: wattpadDownloadFanfic
 TODO:  function/router: wattpadSaveMissingFanfics
 */
+const multer = require('multer');
 const ao3 = require('./ao3/ao3');
 const ff = require('./ff/ff');
+const manually = require('./manually/manually');
 
 let request = require('request')
 let jar = request.jar();
@@ -33,23 +35,40 @@ exports.saveMissingFanfics = async (fandom) =>{
 }
 
 exports.getNewFanfic = async (req,res) =>{
-    const {url,fandomName} = req.query;
-    const data =    url.includes('archiveofourown.org') ? await ao3.ao3AddNewFanfic(jar,url,fandomName) : 
-                    url.includes('fanfiction.net')  ? await ff.ffAddNewFanfic(url,fandomName) 
-                 
+    const {type,url,fandomName} = req.query;
+    let data =null;
+    if(type==='manually'){
+        let upload = multer({}).single();
+        await upload(req, res, async function (err) {
+            data = await manually.addNewFanfic(fandomName,req.body)
+            res.send(data);
+        })
+    }else{
+        data =  url.includes('archiveofourown.org') ? await ao3.ao3AddNewFanfic(jar,url,fandomName) : 
+                url.includes('fanfiction.net')  ? await ff.ffAddNewFanfic(url,fandomName) 
                 // : url.includes('wattpad.com') ? await 'wattpad'
                 : null;
-    res.send(data);
+        res.send(data);
+    }
+
+    
 
 }
 exports.saveNewFanfic = async (req,res) =>{
     const {fandomName,download,url,image} = req.query;
+    console.log('fandomName,download,url,image:',fandomName,download,url,image)
     const fanfic = req.body;
-    url.includes('archiveofourown.org') && await ao3.ao3SaveFanfic(fandomName,download,url,fanfic).then(()=>{
-        res.send();
-    })
-    url.includes('fanfiction.net') && await ff.ffSaveFanfic(fandomName,download,url,fanfic).then(()=>{
-        res.send();
-    })
+    if(url==='null'){
+        await manually.saveNewFanfic(fandomName,download,req.body).then(()=>{
+            res.send();
+        });
+    }else{
+        url.includes('archiveofourown.org') && await ao3.ao3SaveFanfic(fandomName,download,url,fanfic).then(()=>{
+            res.send();
+        })
+        url.includes('fanfiction.net') && await ff.ffSaveFanfic(fandomName,download,url,fanfic).then(()=>{
+            res.send();
+        })
+    }
 
 }

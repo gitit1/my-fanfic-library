@@ -9,7 +9,8 @@ export const fanficDataForm = [{
             },
             value:'',
             validation: {
-                required: true
+                required: true,
+                minLength:4
             },
             valid:false,
             touched:false,
@@ -78,10 +79,8 @@ export const fanficDataForm = [{
             placeholder: 'Fandoms Tags - Seperate by comma , Example: "tag 1,tag 2"'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -95,10 +94,8 @@ export const fanficDataForm = [{
             placeholder: 'Warnings - Seperate by comma , Example: "tag 1,tag 2"'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -112,10 +109,8 @@ export const fanficDataForm = [{
             placeholder: 'Relationships - Seperate by comma , Example: "tag 1,tag 2"'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -129,10 +124,8 @@ export const fanficDataForm = [{
             placeholder: 'Characters - Seperate by comma , Example: "tag 1,tag 2"'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: { },
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -146,10 +139,8 @@ export const fanficDataForm = [{
             placeholder: 'Free Tags - Seperate by comma , Example: "tag 1,tag 2"'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: { },
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -183,8 +174,10 @@ export const fanficDataForm = [{
                       ]
         },
         value:'',
-        validation:{},
-        valid: true,
+        validation: {
+            required: true
+        },
+        valid: false,
         visible: true,
         disabled:false
     },
@@ -267,8 +260,10 @@ export const fanficDataForm = [{
                       ]
         },
         value:'',
-        validation:{},
-        valid: true,
+        validation: {
+            required: true
+        },
+        valid: false,
         visible: true,
         disabled:false
     },
@@ -296,10 +291,8 @@ export const fanficDataForm = [{
             placeholder: 'Comments (Reviews)'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -313,10 +306,8 @@ export const fanficDataForm = [{
             placeholder: 'Kudos (Favs)'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -330,10 +321,8 @@ export const fanficDataForm = [{
             placeholder: 'Bookmarks (Follows)'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
@@ -347,10 +336,8 @@ export const fanficDataForm = [{
             placeholder: 'Hits'
         },
         value:'',
-        validation: {
-            required: true
-        },
-        valid:false,
+        validation: {},
+        valid:true,
         touched:false,
         visible: true,
         disabled:false
