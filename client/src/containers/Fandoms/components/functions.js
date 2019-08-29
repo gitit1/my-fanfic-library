@@ -1,6 +1,7 @@
 export const completeFanfics = (fandom) =>{
-    let ao3 = fandom.AO3CompleteFanfics ? Number(fandom.AO3CompleteFanfics) : 0;
-    let ff = fandom.FFCompleteFanfics ? Number(fandom.FFCompleteFanfics) : 0;
+    console.log('fandom:',fandom)
+    let ao3 = fandom['AO3'] && fandom['AO3'].CompleteFanfics ? Number(fandom['AO3'].CompleteFanfics) : 0;
+    let ff =  fandom['FF'] && fandom['FF'].CompleteFanfics ? Number(fandom['FF'].CompleteFanfics) : 0;
 
     let count = ao3+ff;
 
@@ -8,8 +9,8 @@ export const completeFanfics = (fandom) =>{
 }
 
 export const onGoingFanfics = (fandom) =>{
-    let ao3 = fandom.AO3OnGoingFanfics ? Number(fandom.AO3OnGoingFanfics) : 0;
-    let ff = fandom.FFOnGoingFanfics ? Number(fandom.FFOnGoingFanfics) : 0;
+    let ao3 = fandom['AO3'] && fandom['AO3'].OnGoingFanfics ? Number(fandom['AO3'].OnGoingFanfics) : 0;
+    let ff = fandom['FF'] && fandom['FF'].OnGoingFanfics ? Number(fandom['FF'].OnGoingFanfics) : 0;
 
     let count = ao3+ff;
 
@@ -17,8 +18,8 @@ export const onGoingFanfics = (fandom) =>{
 }
 
 export const deletedFanfics = (fandom) =>{
-    let ao3 = fandom.AO3DeletedFanfics ? Number(fandom.AO3DeletedFanfics) : 0;
-    let ff = fandom.FFDeletedFanfics ? Number(fandom.FFDeletedFanfics) : 0;
+    let ao3 = fandom['AO3'] && fandom['AO3'].DeletedFanfics ? Number(fandom['AO3'].DeletedFanfics) : 0;
+    let ff = fandom['FF'] && fandom['FF'].DeletedFanfics ? Number(fandom['FF'].DeletedFanfics) : 0;
 
     let count = ao3+ff;
 
@@ -26,8 +27,8 @@ export const deletedFanfics = (fandom) =>{
 }
 
 export const savedFanfics = (fandom) =>{
-    let ao3 = fandom.AO3SavedFanfics ? Number(fandom.AO3SavedFanfics) : 0;
-    let ff = fandom.FFSavedFanfics ? Number(fandom.FFSavedFanfics) : 0;
+    let ao3 = fandom['AO3'] && fandom['AO3'].SavedFanfics ? Number(fandom['AO3'].SavedFanfics) : 0;
+    let ff = fandom['FF'] && fandom['FF'].SavedFanfics ? Number(fandom['FF'].SavedFanfics) : 0;
 
     let count = ao3+ff;
 

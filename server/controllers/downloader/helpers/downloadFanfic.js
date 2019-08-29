@@ -64,7 +64,7 @@ const savedFanficDBdata = (fandomName,fanficId,filename,savedAs) =>{
     });
 }
 const savedFandomDBdata = async (fandomName,source) =>{ 
-    const attr = (source==='AO3') ? 'AO3SavedFanfics' : (source==='FF') ? 'FFSavedFanfics' : 'Wattpad';
+    const attr = (source==='AO3') ? 'AO3.SavedFanfics' : (source==='FF') ? 'FF.SavedFanfics' : 'Wattpad';
     const savedNum = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':source,'SavedFic':true})
 
     return new Promise(function(resolve, reject) {

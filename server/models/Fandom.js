@@ -3,7 +3,6 @@ const mongoose = require('../config/mongoose');
 const Schema = mongoose.Schema;
 
 const FandomSchema = new Schema({
-    id:                         {type: Number},
     FandomName:                 {type: String, unique: true},
     SearchKeys:                 {type: String},
     AutoSave:                   {type: Boolean},
@@ -11,16 +10,6 @@ const FandomSchema = new Schema({
     Image_Name_Main:            {type: String},
     Image_Name_Icon:            {type: String},
     FanficsInFandom:            {type: Number},
-    AO3FanficsInFandom:         {type: Number},
-    AO3OnGoingFanfics:          {type: Number},
-    AO3CompleteFanfics:         {type: Number},
-    AO3DeletedFanfics:          {type: Number},
-    AO3SavedFanfics:            {type: Number},
-    FFFanficsInFandom:          {type: Number}, 
-    FFOnGoingFanfics:           {type: Number},
-    FFCompleteFanfics:          {type: Number},
-    FFDeletedFanfics:           {type: Number},
-    FFSavedFanfics:             {type: Number},
     AO3:                     {
                                     FanficsInFandom:  {type: Number},
                                     OnGoingFanfics:   {type: Number},

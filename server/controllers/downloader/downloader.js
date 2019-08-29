@@ -19,10 +19,12 @@ let jar = request.jar();
 exports.getFanfics = async (fandom,method) =>{
     let getFanficsAO3 = await ao3.ao3GetFanfics(jar,fandom,method);
     console.log('getFanficsAO3:',getFanficsAO3)
-    let getFanficsFF = await ff.ffGetFanfics(fandom);
-    console.log('getFanficsFF:',getFanficsFF)
-    let fanficsInFandom = getFanficsAO3[0]+getFanficsFF[0]
-    let SavedFanfics = getFanficsAO3[1]+getFanficsFF[1]
+    // let getFanficsFF = await ff.ffGetFanfics(fandom);
+    // console.log('getFanficsFF:',getFanficsFF)
+    // let fanficsInFandom = getFanficsAO3[0]+getFanficsFF[0]
+    let fanficsInFandom = getFanficsAO3[0]
+    // let SavedFanfics = getFanficsAO3[1]+getFanficsFF[1]
+    let SavedFanfics = getFanficsAO3[1]
     return [fanficsInFandom,SavedFanfics];
 }
 exports.getDeletedFanfics = async (fandomName,numOfAO3Fanfics) =>{
@@ -30,6 +32,7 @@ exports.getDeletedFanfics = async (fandomName,numOfAO3Fanfics) =>{
     return getDeletedFanfics;
 }
 exports.saveMissingFanfics = async (fandom) =>{
+    //TODO: NOT WORKING PROPERLY - NEED TO FIX IT TO MATCH BOTH FF AND AO3
     let saveMissingFanfics = await ao3.ao3SaveMissingFanfics(jar,fandom);
     return saveMissingFanfics;
 }

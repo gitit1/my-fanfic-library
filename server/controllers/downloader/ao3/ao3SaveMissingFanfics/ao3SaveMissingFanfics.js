@@ -12,10 +12,10 @@ exports.ao3SaveMissingFanfics = async (jar,fandomName) =>{
     console.log(clc.bgGreenBright('[ao3 controller] checkIfFileExsistHandler()'));
     let sum = 0;
 
-    await checkIfFileExsist(fandomName).then(async sum=>{
+    await checkIfFileExsist(jar,fandomName).then(async sum=>{
         const savedFanficsAll = await mongoose.dbFanfics.collection(fandomName).countDocuments({'SavedFic':true});
         await FandomModal.updateOne({ 'FandomName': fandomName },
-        { $set: {   'AO3SavedFanfics':savedFanficsAll,
+        { $set: {   'AO3.SavedFanfics':savedFanficsAll,
         'LastUpdate':new Date().getTime(),
         'FanficsLastUpdate':new Date().getTime(),
         'SavedFanficsLastUpdate':new Date().getTime()
@@ -30,7 +30,7 @@ exports.ao3SaveMissingFanfics = async (jar,fandomName) =>{
     return sum
 }
 
-const checkIfFileExsist = async (fandomName) => {
+const checkIfFileExsist = async (jar,fandomName) => {
     let counter = 0,sum = 0;
     await loginToAO3();
 
@@ -43,7 +43,7 @@ const checkIfFileExsist = async (fandomName) => {
                 resolve(0)
             }else{
                 console.log(clc.red(`${path} is not exisisting... redownload it`))
-                fanficInfo = await saveFanficToServerHandler(url,fandomName,method,null)
+                fanficInfo = await saveFanficToServerHandler(jar,url,fandomName,method,null)
                 mongoose.dbFanfics.collection(fandomName).updateOne({FanficID: fanficId},
                                                                     {$set: {SavedFic:true,NeedToSaveFlag:false,fileName:fanficInfo[1],savedAs:fanficInfo[2]}}
                                                                     , async function (error, response) {
