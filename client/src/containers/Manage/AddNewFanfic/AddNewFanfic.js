@@ -23,10 +23,12 @@ class AddNewFanfic extends Component{
         disable:true,
         show:0,
         showDataManually:0,
+        showSwitches:false,
         switches:{
             save:false
         },
-        fandom:null
+        fandom:null,
+        showBtns:true
     }
 
     componentDidMount(){
@@ -46,7 +48,9 @@ class AddNewFanfic extends Component{
             fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
             disable:false,
             switches:{...prevState.switches,save:fandom.AutoSave},
-            fandom:fandom
+            fandom:fandom,
+            show:0,
+            showBtns:true
         })); 
         
     }
@@ -66,24 +70,33 @@ class AddNewFanfic extends Component{
     
     }
 
+    showBtns = (flag) =>{
+        this.setState({showBtns:flag})
+    }
+
     render(){
-        const {show,fandomSelect,disable,switches} = this.state;
+        const {show,fandomSelect,disable,switches,showSwitches,showBtns} = this.state;
         const {fandoms} = this.props;
         return(
             <Container header='Add New Fanfic' className='addNewFanfic'>
                 <div className='ChooseFandom'>
-                    <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
+                    <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} 
+                                      switchChange={this.switchChangeHandler}  showSwitches={showSwitches}/>
                 </div>
                 
-                <React.Fragment>
-                    <Button variant="contained" disabled={disable} className='addNewFanficManuallyBTN' onClick={()=>this.setState({show:1})}>Manually</Button>
-                    <Button variant="contained" disabled={disable} className='addNewFanficAutomaticBTN' onClick={()=>this.setState({show:2})}>Automatic</Button>
-                </React.Fragment> 
+                {showBtns &&
+                    <React.Fragment>
+                        <Button variant="contained" disabled={disable} className='addNewFanficManuallyBTN'  
+                                onClick={()=>this.setState({show:1,showSwitches:false})}>Manually</Button>
+                        <Button variant="contained" disabled={disable} className='addNewFanficAutomaticBTN' 
+                                onClick={()=>this.setState({show:2,showSwitches:true})}>Automatic</Button>
+                    </React.Fragment> 
+                }
 
                 {(show===1) ? 
-                <AddNewFanficManually fandomName={fandomSelect.value} fandoms={fandoms}  switches={switches}/>
+                <AddNewFanficManually fandomName={fandomSelect.value} fandoms={fandoms} showBtns={this.showBtns}/>
                 : (show===2) &&
-                <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} switches={switches}/>
+                <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} switches={switches} showBtns={this.showBtns}/>
                 
                 }
             </Container>

@@ -1,11 +1,11 @@
 export const fanficDataForm = [{
     FanficID: {
-            label: 'Fanfic ID:',
+            label: '(*) Fanfic ID:',
             classNameCustom:'FanficID',
             elementType: 'input', 
             elementConfig:{
                 type: 'number',
-                placeholder: 'Fanfic ID'
+                placeholder: '(*) Fanfic ID'
             },
             value:'',
             validation: {
@@ -37,12 +37,12 @@ export const fanficDataForm = [{
         disabled:false
     },
     FanficTitle: {
-        label: 'Fanfic Title:',
+        label: '(*) Fanfic Title:',
         classNameCustom:'FanficTitle',
         elementType:'input', 
         elementConfig:{
             type: 'text',
-            placeholder: 'Fanfic Title'
+            placeholder: '(*) Fanfic Title'
         },
         value:'',
         validation: {
@@ -54,12 +54,12 @@ export const fanficDataForm = [{
         disabled:false
     },
     Author: {
-        label: 'Author:',
+        label: '(*) Author:',
         classNameCustom:'Author',
         elementType:'input', 
         elementConfig:{
             type: 'text',
-            placeholder: 'Author'
+            placeholder: '(*) Author'
         },
         value:'',
         validation: {
@@ -151,7 +151,7 @@ export const fanficDataForm = [{
         elementType:'textarea', 
         elementConfig:{
             type: 'text',
-            placeholder: 'Summary'
+            placeholder: '(*) Summary'
         },
         value:'',
         validation: {
@@ -163,7 +163,7 @@ export const fanficDataForm = [{
         disabled:false
     },
     Source: {
-        label: 'Source',
+        label: '(*) Source',
         classNameCustom:'Source',
         elementType:'select', 
         elementConfig:{
@@ -182,7 +182,7 @@ export const fanficDataForm = [{
         disabled:false
     },
     PublishDate: {
-        label: 'Publish Date',
+        label: '(*) Publish Date',
         classNameCustom:'PublishDate',
         elementType:'date', 
         value:'',
@@ -192,7 +192,7 @@ export const fanficDataForm = [{
         disabled:false
     },
     UpdateDate: {
-        label: 'Update Date',
+        label: '(*) Update Date',
         classNameCustom:'UpdateDate',
         elementType:'date', 
         value:'',
@@ -217,12 +217,12 @@ export const fanficDataForm = [{
         disabled:false
     },
     Words: {
-        label: 'Words:',
+        label: '(*) Words:',
         classNameCustom:'Words',
         elementType:'input', 
         elementConfig:{
             type: 'number',
-            placeholder: 'Number of Words'
+            placeholder: '(*) Words'
         },
         value:'',
         validation: {
@@ -234,12 +234,12 @@ export const fanficDataForm = [{
         disabled:false
     },
     NumberOfChapters: {
-        label: 'Number of Chapters:',
+        label: '(*) Chapters:',
         classNameCustom:'NumberOfChapters',
         elementType:'input', 
         elementConfig:{
             type: 'number',
-            placeholder: 'Number of Chapters'
+            placeholder: '(*) Chapters'
         },
         value:'',
         validation: {
@@ -251,7 +251,7 @@ export const fanficDataForm = [{
         disabled:false
     },
     Complete: {
-        label: 'Complete',
+        label: '(*) Complete',
         classNameCustom:'Complete',
         elementType:'select', 
         elementConfig:{

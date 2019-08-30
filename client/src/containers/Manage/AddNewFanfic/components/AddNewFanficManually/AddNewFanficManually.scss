@@ -14,9 +14,11 @@
             justify-content: center;
         }
     
-        .addNewFanficManually_content{
+        .addNewFanficManually_content_form{
             margin: 0 auto;
-
+            form{
+                width:100%;
+            }
             .FanficID{
                 float: right;
                 width: 15%;
@@ -106,7 +108,7 @@
             .Hits{
                 float: left;
                 width: 10%;
-                margin-top:calc(9% + 100px);
+                margin-top:calc(7% + 100px);
                 
             }
             .Oneshot{
@@ -114,30 +116,60 @@
             }
             .Comments{
                 margin-left: -82%;
-                margin-top:calc(9% + 103px);
+                margin-top:calc(7% + 103px);
                 width:13%;
             }
             .Kudos{
                 margin-left: -67%;
-                margin-top:calc(9% + 103px);
+                margin-top:calc(7% + 103px);
             }
             .Bookmarks{
                 margin-left: -55%;
-                margin-top:calc(9% + 103px);
+                margin-top:calc(7% + 103px);
                 width:15%;
             }
             .Hits{
                 margin-left: -38%;
-                margin-top:calc(9% + 103px);
+                margin-top:calc(7% + 103px);
             }
 
             .send_button{
                 float: left;
-                margin-top:calc(10% + 103px);
-                margin-left: -7%;
+                margin-top:calc(7% + 106px);
+                margin-left: -5%;
             }
         }
 
-        
+    }
+    .addNewFanficManually_content{
+        margin: 0 auto;
+        display: block;  
+        width: 90%;
+        .GetFanficData_buttons{
+            margin: 0 auto;
+            margin-top: 0%;
+            button{
+                margin-top: 1%;
+            }
+
+        }
+    }
+    .doc_upload{
+        margin: 0 auto;
+        margin-top: 1%;
+        // width:125px;
+        width:100%;
+        height: 100px;;
+        box-shadow: none!important;
+    }
+    .doc_span_filename{
+        color:black;
+        margin-top: 0.2%;
+        width:100%;
+        height: 100%;
+        display: block;
+    }
+    .card_content{
+        height: auto;
     }
 }

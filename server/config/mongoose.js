@@ -3,18 +3,21 @@ const dbUrl = require("./keys");
 
 mongoose.set('useCreateIndex', true);
 mongoose.dbFandoms = mongoose.createConnection(dbUrl.dbFandoms, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    poolSize: 10
   }, () => {
     console.log("myfanficslybrary_fandoms is connected")
 })
 
 mongoose.dbFanfics = mongoose.createConnection(dbUrl.dbFanfics, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  poolSize: 10
 }, () => {
   console.log("myfanficslybrary_fanfics is connected")
 })
 mongoose.dbUsers = mongoose.createConnection(dbUrl.dbUsers, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  poolSize: 10
 }, () => {
   console.log("myfanficslybrary_users is connected")
 })
