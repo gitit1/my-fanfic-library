@@ -28,6 +28,10 @@ class AddNewFanficAutomatic extends Component{
       }
     }
 
+    componentWillMount(){
+      this.props.showBtns(false);
+    }
+
     getFanficData = () => {
         const {url} = this.state;
         this.setState({loadingFlag:true,showData:false});

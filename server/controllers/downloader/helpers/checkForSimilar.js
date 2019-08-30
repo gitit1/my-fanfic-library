@@ -10,7 +10,7 @@ exports.checkForSimilar = (fanfic,fandomName) =>{
             if(fanficResult.length!==0){
                 resolve(fanficResult)
             }else{
-                FanficDB.find({'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'},'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}).exec(async function(err, fanficResult) {
+                FanficDB.find({$or: [{'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}},{'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}]}).exec(async function(err, fanficResult) {
                     err && reject(err)
                     if(fanficResult.length===0){
                         resolve(false)

@@ -12,9 +12,15 @@ const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,us
                 :
                 (!loadingFlag && showData) && 
                 <React.Fragment>
+                    <div className='GetFanficData_data_box'>
                     <ShowFanficData fanfic={fanfic} size={size} showUserData={showUserData} userData={userData}
                                     markAs={markAs} markStatus={markStatus} toggleChapterB={toggleChapterB}/>
-                    {showSaveButton && (similarFanfic===null) && <Button color="primary" clicked={()=>saveFanficData(true)}>Save</Button>}
+                    </div> 
+                    {showSaveButton && (similarFanfic===null) && 
+                    <div className='GetFanficData_buttons'>
+                        <Button color="primary" clicked={()=>saveFanficData(true)}>Save</Button>
+                    </div> 
+                }
                 </React.Fragment> 
                     
             } 

@@ -13,9 +13,9 @@ const UserFanficsSchema = new Schema({
   },
   FanficList: [
     {
-      Date:             {type: Number}, 
+      Date:             {type: Number, unique: true}, 
       FandomName:       {type: String},
-      FanficID:         {type: Number, unique: true},
+      FanficID:         {type: Number},
       FanficTitle:      {type: String}, 
       Author:           {type: String}, 
       Source:           {type: String},          

@@ -49,7 +49,7 @@ class ImageUpload extends Component {
     }
   
     render() {
-      let {imagePreviewUrl} = this.state;
+      let {imagePreviewUrl,file} = this.state;
       let {id,label,imageLabel,type} = this.props;
       let $imagePreview = null,docPreview=null;
       if (imagePreviewUrl) {
@@ -65,6 +65,7 @@ class ImageUpload extends Component {
         docPreview =  <span>
                         <Button onClick={() => {document.getElementById(id).click()}} variant="contained">Upload File</Button>
                         <input type="file" id={id}  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
+                        <Typography gutterBottom variant="body2" component="span" className='doc_span_filename'>{file.name}</Typography>
                       </span>
       }
   

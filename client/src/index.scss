@@ -18,6 +18,10 @@
 .color_FF{color:$color_FF}
 .mfl_text_bold{font-weight: bold}
 
+button:disabled{
+    opacity: 0.6;
+}
+
 @media only screen and (max-width: $screenSizeL) {
     .responsive_show{
         display: block
