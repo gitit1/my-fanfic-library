@@ -41,7 +41,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     const limit = pLimit(limitConn)
 
     let promises2 = [];
-
+                               
     for (let i = 0; i < pagesArray.length; i++) {
         promises2.push(limit(() => ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)));
     }
@@ -56,17 +56,17 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     fanficsInFandom = await mongoose.dbFanfics.collection(FandomName).countDocuments({});
 
     const AO3FanficsInFandom = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Source':'AO3'});
-    const AO3CompleteFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Complete':true});
-    const AO3SavedFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'SavedFic':true});
+    const AO3CompleteFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Source':'AO3','Complete':true});
+    const AO3SavedFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Source':'AO3','SavedFic':true});
     AO3SavedFanfics===0 ? savedFanficsCurrent : AO3SavedFanfics;
     const AO3OnGoingFanfics =  AO3FanficsInFandom-AO3CompleteFanfics;
 
     await FandomModal.updateOne({ 'FandomName': FandomName },
                                 { $set: { 'FanficsInFandom':fanficsInFandom, 
-                                        'AO3FanficsInFandom':AO3FanficsInFandom, 
-                                        'AO3CompleteFanfics':AO3CompleteFanfics, 
-                                        'AO3OnGoingFanfics':AO3OnGoingFanfics,
-                                        'AO3SavedFanfics':AO3SavedFanfics,
+                                        'AO3.FanficsInFandom':AO3FanficsInFandom, 
+                                        'AO3.CompleteFanfics':AO3CompleteFanfics, 
+                                        'AO3.OnGoingFanfics':AO3OnGoingFanfics,
+                                        'AO3.SavedFanfics':AO3SavedFanfics,
                                         'LastUpdate':new Date().getTime(),
                                         'FanficsLastUpdate':new Date().getTime(),
                                         'SavedFanficsLastUpdate':new Date().getTime()

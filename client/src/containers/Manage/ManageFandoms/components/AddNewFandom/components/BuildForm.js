@@ -21,7 +21,7 @@ const BuildForm = (props) => (
                     changed={(event) => props.changed(event,formElement.id)}/>
         ))}
         <br/>                               
-        <Button  type="submit" variant="contained"  className='send_button' disabled={props.disabled} onClick={()=>props.onSubmit()}>{props.buttonSendLabel}</Button>
+        <Button  type="submit" variant="contained"  className='send_button' disabled={props.disabled} onClick={(e)=>props.onSubmit(e)}>{props.buttonSendLabel}</Button>
     </form>
 );
 

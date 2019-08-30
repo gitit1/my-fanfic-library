@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import Container from '../../../components/UI/Container/Container';
 import Button from '@material-ui/core/Button';
-import ChooseFandom from '../ManageDownloader/components/GridChooseFnadom/chooseFandom';
+import GridChooseFandom from '../ManageDownloader/components/GridChooseFnadom/index';
 import  AddNewFanficAutomatic from './components/AddNewFanficAutomatic/AddNewFanficAutomatic';
 import  AddNewFanficManually from './components/AddNewFanficManually/AddNewFanficManually';
 
@@ -21,19 +21,34 @@ class AddNewFanfic extends Component{
             id:'select-fandom'
         },
         disable:true,
-        show:0
+        show:0,
+        showDataManually:0,
+        switches:{
+            save:false
+        },
+        fandom:null
     }
 
     componentDidMount(){
         this.createOptionsForFandomSelect(); 
     }
 
+    switchChangeHandler = (type) =>{
+        this.setState(prevState =>({switches:{...prevState.switches,save:!this.state.switches[type]}}));  
+    }
+
     inputChangedHandler = (event) =>{
+        console.log('inputChangedHandler:')
         const selectedFandom = event.target.value;
+        const fandom = this.props.fandoms.filter(fandom => fandom.FandomName===selectedFandom)[0];
 
         this.setState(prevState =>({
-            fandomSelect: {...prevState.fandomSelect,value: selectedFandom},disable:false
-        }));  
+            fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
+            disable:false,
+            switches:{...prevState.switches,save:fandom.AutoSave},
+            fandom:fandom
+        })); 
+        
     }
 
     createOptionsForFandomSelect = () =>{
@@ -52,11 +67,13 @@ class AddNewFanfic extends Component{
     }
 
     render(){
-        const {show,fandomSelect,disable} = this.state;
-
+        const {show,fandomSelect,disable,switches} = this.state;
+        const {fandoms} = this.props;
         return(
             <Container header='Add New Fanfic' className='addNewFanfic'>
-                <div className='ChooseFandom'><ChooseFandom fandomSelect={fandomSelect} changed={this.inputChangedHandler}/></div>
+                <div className='ChooseFandom'>
+                    <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
+                </div>
                 
                 <React.Fragment>
                     <Button variant="contained" disabled={disable} className='addNewFanficManuallyBTN' onClick={()=>this.setState({show:1})}>Manually</Button>
@@ -64,9 +81,9 @@ class AddNewFanfic extends Component{
                 </React.Fragment> 
 
                 {(show===1) ? 
-                <AddNewFanficManually />
+                <AddNewFanficManually fandomName={fandomSelect.value} fandoms={fandoms}  switches={switches}/>
                 : (show===2) &&
-                <AddNewFanficAutomatic />
+                <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} switches={switches}/>
                 
                 }
             </Container>

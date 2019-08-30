@@ -26,6 +26,7 @@ try {
   router.post('/users/login',users.login);
   
   router.get('/downloader/getFanficData',downloader.getNewFanfic)
+  router.post('/downloader/getFanficData',downloader.getNewFanfic)
   router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
   
   router.get('/updates/latestUpdates',updates.latestUpdates)

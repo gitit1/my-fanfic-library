@@ -17,25 +17,15 @@ exports.ffSaveFanfic = async (fandomName,download,url,fanfic) =>{
 
 const updateFandomData = async (fanfic) =>{
     const fandomName = fanfic.FandomName;
-    const isComplete = fanfic.Complete ? 'FFCompleteFanfics' : 'FFOnGoingFanfics'
+    const isComplete = fanfic.Complete ? 'FF.CompleteFanfics' : 'FF.OnGoingFanfics'
 
-    const fanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({});
-    const FFFanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'FF'});
-
-    const ffNum = (isComplete==='FFCompleteFanfics')
-    ? await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'FF','Complete':true})
-    : await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'FF','Complete':false});
-
-
-
-    await FandomModal.updateOne(   { 'FandomName': fandomName },
+    await FandomModal.updateOne({ 'FandomName': fandomName },
                                     {
-                                        $set: { 'FanficsInFandom':fanficsInFandom,
-                                                'FFFanficsInFandom':FFFanficsInFandom,
-                                                [isComplete]:ffNum
+                                        $inc: { 'FanficsInFandom':1,
+                                                'FF.FanficsInFandom':1,
+                                                [isComplete]:1
                                               },
-                                    }
-                                ,(err, result) => {if (err) throw err;});
+                                    });
 
     return null;
 }

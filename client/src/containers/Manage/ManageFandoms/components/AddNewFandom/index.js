@@ -97,9 +97,9 @@ class AddNewFandom extends Component{
     }
 
 
-    sendFandomToServerHandler = () => {
+    sendFandomToServerHandler = (event) => {
         console.log('here..')
-        // event.preventDefault();
+        event.preventDefault();
 
         let fandomsNames = [];
         const {fandom,fandoms} = this.props
@@ -132,8 +132,12 @@ class AddNewFandom extends Component{
         (editMode && fandom.Image_Name_Main!=='' )  &&  fandomFormData.append("Image_Name_Main", fandom.Image_Name_Main);
         (editMode && fandom.Image_Name_Icon!=='' )  &&  fandomFormData.append("Image_Name_Icon", fandom.Image_Name_Icon);
         
-        let isMainImage = (this.mainImageRef.current.state.file===undefined||this.mainImageRef.current.state.file===null||!this.mainImageRef.current.state.file) ? false : true;
-        let isIconImage = (this.iconImageRef.current.state.file===undefined||this.iconImageRef.current.state.file===null||!this.iconImageRef.current.state.file) ? false : true;
+        let isMainImage = ( this.mainImageRef.current.state.file===undefined||
+                            this.mainImageRef.current.state.file===null||
+                           !this.mainImageRef.current.state.file) ? false : true;
+        let isIconImage = ( this.iconImageRef.current.state.file===undefined||
+                            this.iconImageRef.current.state.file===null||
+                           !this.iconImageRef.current.state.file) ? false : true;
 
         let imageDate = new Date().getTime();
         let mainImage = false,iconImage = false;
@@ -269,7 +273,7 @@ class AddNewFandom extends Component{
                     <Grid container className='add_new_fandom_box'>
                         <Grid item xs={4} className='add_new_fandom_main_image'>
                             <ImageUpload id='main' ref={this.mainImageRef} edit={editMode} fileName={imageNameMain} FandomName={fandomForm['FandomName'].value} 
-                                         label='Please Select Main Image' imageLabel='Main Image'/>
+                                         label='Please Select Main Image' imageLabel='Main Image' type='image'/>
                         </Grid>
                         <Grid item xs={8} className='add_new_fandom_content'>
                             <BuildForm onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
@@ -280,7 +284,7 @@ class AddNewFandom extends Component{
                             <Grid item className='add_new_fandom_images_card_content'>
                                 <h2>Add images for fanfics:</h2>
                                 <ImageUpload id='icon' ref={this.iconImageRef} edit={editMode} fileName={imageNameIcon} FandomName={fandomForm['FandomName'].value}
-                                             label='Please Select Icon Image' imageLabel='Icon Image'/>
+                                             label='Please Select Icon Image' imageLabel='Icon Image' type='image'/>
                             </Grid>
                         </Card>
                         {/* <div className={classes.Clear}></div> */}

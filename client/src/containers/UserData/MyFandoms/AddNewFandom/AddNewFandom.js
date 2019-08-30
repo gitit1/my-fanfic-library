@@ -277,6 +277,7 @@ class AddNewFandom extends Component{
                                         ref={this.formRef} 
                                         edit={this.state.editMode} 
                                         FandomName={this.state.fandomForm['FandomName'].value} 
+                                        type='image'
                                         fileName={this.state.imageName}/>
                     </div>
                     <div className={classes.FormDiv}>

@@ -48,25 +48,15 @@ exports.ao3SaveFanfic = async (jar,fandomName,download,url,fanfic) =>{
 
 const updateFandomData = async (fanfic) =>{
     const fandomName = fanfic.FandomName;
-    const isComplete = fanfic.Complete ? 'AO3CompleteFanfics' : 'AO3OnGoingFanfics'
+    const isComplete = fanfic.Complete ? 'AO3.CompleteFanfics' : 'AO3.OnGoingFanfics'
 
-    const fanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({});
-    const AO3FanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'AO3'});
-
-    const ao3Num = (isComplete==='AO3CompleteFanfics')
-    ? await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'AO3','Complete':true})
-    : await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'AO3','Complete':false});
-
-
-
-    await FandomModal.updateOne(   { 'FandomName': fandomName },
+    await FandomModal.updateOne({ 'FandomName': fandomName },
                                     {
-                                        $set: { 'FanficsInFandom':fanficsInFandom,
-                                                'AO3FanficsInFandom':AO3FanficsInFandom,
-                                                [isComplete]:ao3Num
+                                        $inc: { 'FanficsInFandom':1,
+                                                'AO3.FanficsInFandom':1,
+                                                [isComplete]:1
                                               },
-                                    }
-                                ,(err, result) => {if (err) throw err;});
+                                    });
 
     return null;
 }

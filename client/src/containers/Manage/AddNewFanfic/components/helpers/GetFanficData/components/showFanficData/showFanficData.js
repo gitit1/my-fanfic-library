@@ -3,13 +3,13 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-import '../../../../../../Fanfic/ShowFanficData/showFandomData.scss'
+import '../../../../../../../Fanfic/ShowFanficData/showFandomData.scss'
 
 // import classes from '../../../../../Fanfic/ShowFanficData/ShowFanficData.module.css'
-import Header from '../../../../../../Fanfic/ShowFanficData/Header/Header';
-import Tags from '../../../../../../Fanfic/ShowFanficData/Tags/Tags';
-import Desc from '../../../../../../Fanfic/ShowFanficData/Desc/Desc';
-import Stat from '../../../../../../Fanfic/ShowFanficData/Stat/Stat';
+import Header from '../../../../../../../Fanfic/ShowFanficData/Header/Header';
+import Tags from '../../../../../../../Fanfic/ShowFanficData/Tags/Tags';
+import Desc from '../../../../../../../Fanfic/ShowFanficData/Desc/Desc';
+import Stat from '../../../../../../../Fanfic/ShowFanficData/Stat/Stat';
 
 import Follow from './Follow.js'
 import Favorite from './Favorite.js'

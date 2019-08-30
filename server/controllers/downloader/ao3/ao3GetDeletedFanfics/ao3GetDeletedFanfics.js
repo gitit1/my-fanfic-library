@@ -87,7 +87,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
     }).then(async res=>{
         let DeletedCounter=[];
         console.log('promise all')
-        FandomModal.updateOne({ 'FandomName': fandomName },{ $set: { 'AO3DeletedFanfics':gotDeletedArray.length}},(err, result) => {(err) ? console.log('error:',err) : console.log('update deleted!')});
+        FandomModal.updateOne({ 'FandomName': fandomName },{ $set: { 'AO3.DeletedFanfics':gotDeletedArray.length}},(err, result) => {(err) ? console.log('error:',err) : console.log('update deleted!')});
         DeletedCounter.push(gotDeletedArray.length)
         DeletedCounter.push(newDeletedCounter)
         return DeletedCounter
@@ -95,3 +95,5 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
 }
 
 //TODO: add status deleted too fanfic for my update follow up
+
+//problem : 20372752

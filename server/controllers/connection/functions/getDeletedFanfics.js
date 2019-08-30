@@ -6,7 +6,7 @@ const downloader =  require('../../downloader/downloader')
 const now  = require('performance-now')
 
 const getDeletedFanfics = async (socket,fandom) => {
-    const {FandomName,AO3FanficsInFandom} = fandom    
+    const {FandomName,AO3} = fandom    
 
     console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
     socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${FandomName}`);
@@ -15,7 +15,7 @@ const getDeletedFanfics = async (socket,fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">checkIfDeletedFromAO3()</span>`);
 
     let startTime = now(); 
-    let deletedCounters = await downloader.getDeletedFanfics(FandomName,AO3FanficsInFandom);
+    let deletedCounters = await downloader.getDeletedFanfics(FandomName,AO3.FanficsInFandom);
     console.log('deletedCounters',deletedCounters)
     let endTime = now();
     console.log(clc.cyanBright(`Deleted Fanfics data of ${FandomName} was updated!`));

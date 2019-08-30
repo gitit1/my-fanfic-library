@@ -14,18 +14,30 @@ export const getDataOfFanficSuccess = (fanficData) =>{
 };
 
 
-export const getDataOfFanfic = (url,fandomName,download,image) =>{
-    image=null;
-    console.log('[actions: fandom.js] - getFandomsFromDB')
+export const getDataOfFanfic = (type,fandomName,url,fanficData) =>{
+    console.log('[actions: fandom.js] - getFandomsFromDB');
+
     return dispatch =>{
         dispatch(downloaderStart())
-        return axios.get(`/downloader/getFanficData?url=${url}&fandomName=${fandomName}&download=${download}&image=${image}`)
-        .then(fetchedData =>{
-            dispatch(getDataOfFanficSuccess(fetchedData.data)).then(()=>{return true});
-        })
-        .catch(error =>{
-            dispatch(downloaderFail(error))
-        })  
+        if(type==='automatic'){
+            console.log(`getDataOfFanfic - ${type}`)
+            return axios.get(`/downloader/getFanficData?type=${type}&url=${url}&fandomName=${fandomName}` )
+                .then(fetchedData =>{
+                    dispatch(getDataOfFanficSuccess(fetchedData.data)).then(()=>{return true});
+                })
+                .catch(error =>{
+                    dispatch(downloaderFail(error))
+                })  
+        }else{
+            return axios.post(`/downloader/getFanficData?type=${type}&fandomName=${fandomName}`,fanficData)
+                .then(fetchedData =>{
+                    dispatch(getDataOfFanficSuccess(fetchedData.data)).then(()=>{return true});
+                })
+                .catch(error =>{
+                    dispatch(downloaderFail(error))
+                })  
+        }
+
     };
 };
 

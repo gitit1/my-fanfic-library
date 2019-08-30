@@ -3,6 +3,7 @@ import './ImageUpload.scss';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 class ImageUpload extends Component {
   constructor(props) {
@@ -49,8 +50,8 @@ class ImageUpload extends Component {
   
     render() {
       let {imagePreviewUrl} = this.state;
-      let {id,label,imageLabel} = this.props;
-      let $imagePreview = null;
+      let {id,label,imageLabel,type} = this.props;
+      let $imagePreview = null,docPreview=null;
       if (imagePreviewUrl) {
         $imagePreview = (
           <span>
@@ -60,18 +61,22 @@ class ImageUpload extends Component {
       } else {
         $imagePreview = (<div className="image_upload_image_text">{label}</div>);
       }
+      if(type==='doc'){
+        docPreview =  <span>
+                        <Button onClick={() => {document.getElementById(id).click()}} variant="contained">Upload File</Button>
+                        <input type="file" id={id}  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
+                      </span>
+      }
   
       return (
-        <Card className="image_upload">
-          {/* <div className="image_upload_image_box"> */}
-            <CardActionArea onClick={() => {document.getElementById(id).click()}}>
-              <input type="file" id={id}  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
-              {$imagePreview}
-            </CardActionArea>
-          {/* </div> */}
-          {/* <span className="image_upload_button">
-            <Button clicked={() => {document.getElementById(this.props.id).click()}} >Browse...</Button> 
-          </span> */}
+        <Card className={type==='image' ? "image_upload" : 'doc_upload'}>         
+              {(type==='image') ? 
+                <CardActionArea onClick={() => {document.getElementById(id).click()}}>
+                    <input type="file" id={id}  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
+                    {$imagePreview }
+                </CardActionArea>
+              : docPreview
+              }
         </Card>
       )
     }
