@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectCategories from '../../../../components/UI/Input/SelectAutoComplete';
+import SelectCategories from '../../../../../components/UI/Input/SelectAutoComplete';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -8,9 +8,7 @@ import {categories} from './assets/categoriesList'
 const Categories = (props) => {
     const {getCategories,saveCategories,fanfic,curFanfic,showSelectCategory,fanficCategories} = props;
     let isAlreadySaved = (fanficCategories && fanficCategories.FanficID===fanfic.FanficID) ? true : false
-    console.log('curFanfic:',curFanfic)
-    console.log('showSelectCategory:',showSelectCategory)
-    console.log('fanficCategories:',fanficCategories)
+    
     return(
          (((curFanfic!==fanfic.FanficID) && (fanfic.Categories && fanfic.Categories.length>0)) || (isAlreadySaved && !showSelectCategory))  ?
             <div className='card_content_categories_div'>
@@ -38,6 +36,3 @@ const Categories = (props) => {
 };
 
 export default Categories;
-
-
-// TODO: ADD CATEGORIES TO FILTER

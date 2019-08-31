@@ -195,7 +195,6 @@ class AddNewFanficAutomatic extends Component{
       const {url,loadingFlag,showData,showUserData,userData,showSaveButton,msg} = this.state;
       const {inputCategoryFlag,showSelectCategory,categoriesShowTemp} = this.state.userData
       const {size,loading,fanfic,similarFanfic} = this.props;
-      //TODO: CHECK IF FANFIC ALREADY EXIST
       return(            
             <div className='addNewFanfic_container'>
               <UrlForSearch url={url} inputChanged={this.inputChangedHandler}/>
@@ -236,5 +235,3 @@ const mapDispatchedToProps = dispatch =>{
 }
 
 export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(AddNewFanficAutomatic));
-
-// TODO: add checkbox for image fanfic doanload

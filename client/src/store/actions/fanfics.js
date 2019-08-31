@@ -114,7 +114,6 @@ export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit,
 
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        //TODO: solution to limit
         return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}&pageLimit=${pageLimit}&pageNumber=${pageNumber}`,filters)
         .then(fetchedData =>{
             dispatch(getFilteredFanficsFromDBSuccess(fetchedData.data));

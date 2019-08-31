@@ -17,10 +17,3 @@ const MyFanficsUpdates = (props) => {
 };
 
 export default MyFanficsUpdates;
-
-
-/*TODO: FULL PAGE OF My Fanfics: BY MONTH/YEAR
-SERVER: 
-            - EACH MONTH TO PUT IN ARCHIVE
-*/
-//add announcment if empty 

@@ -10,8 +10,9 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
     return await new Promise(async function(resolve, reject) {  
         console.log('[Manually] - saveNewFanfic');
 
-        fandomName = fandomName.replace("%26","&").toLowerCase();
-        const pathForDocs = `public/fandoms/${fandomName}/fanfics`;
+        fandomName = fandomName.replace("%26","&");
+        fandomNameLower = fandomName.toLowerCase();
+        const pathForDocs = `public/fandoms/${fandomNameLower}/fanfics`;
         
 
         let storage = multer.diskStorage({

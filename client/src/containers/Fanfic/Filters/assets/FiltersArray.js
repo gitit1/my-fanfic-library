@@ -93,6 +93,10 @@ export const filtersArray = {
             type : 'checkbox',
             name: 'ff',
             display: 'FF'
+        },{
+            type : 'checkbox',
+            name: 'backup',
+            display: 'Backup'
         }
     ]
 }

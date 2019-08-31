@@ -72,7 +72,7 @@ class Fanfic extends Component{
         })       
         return null
     }
-    //UPDATE USERDATA:
+
     markAsHandler = async(fanficId,author,fanficTitle,source,markType,mark) =>{
         console.log('!mark,,,',!mark)
         await this.props.onMarkHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,author,fanficTitle,source,markType,!mark)
@@ -304,7 +304,6 @@ class Fanfic extends Component{
     }
 
     render(){
-        // TODO: FIX LOADING TO BE LIKE A03 
         const {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,readingListAncor,
                currentSource,showSelectCategory,inputCategoryFlag,categoriesShowTemp} = this.state;
         const {isManager} = this.props;
@@ -400,6 +399,3 @@ const mapDispatchedToProps = dispatch =>{
 }
   
   export default connect(mapStateToProps,mapDispatchedToProps)(Fanfic);
-
-
-  //TODO: only manager - edit fanfic - and if get update stay with the edit

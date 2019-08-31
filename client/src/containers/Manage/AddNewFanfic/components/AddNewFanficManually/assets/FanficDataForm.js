@@ -1,4 +1,4 @@
-import  {categories} from '../../../../../Fanfic/ShowFanficData/Categories/assets/categoriesList'
+import  {categories} from '../../../../../Fanfic/ShowFanficData/FanficData/Categories/assets/categoriesList'
 
 export const fanficDataForm = [{
     FanficID: {
