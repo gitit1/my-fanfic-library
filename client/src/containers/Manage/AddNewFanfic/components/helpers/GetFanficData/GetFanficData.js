@@ -4,7 +4,10 @@ import Spinner from '../../../../../../components/UI/Spinner/Spinner';
 import ShowFanficData from './components/showFanficData/showFanficData'
 
 const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,userData,showSaveButton
-                        ,similarFanfic,msg,saveFanficData,markStatus,toggleChapterB,markAs}) => {
+                        ,similarFanfic,msg,saveFanficData,markStatus,toggleChapterB,markAs,inputCategoryFlag,
+                        showSelectCategory,showCategory,getCategories,saveCategories,categoriesTemp}) => {
+                            
+    const showFanfic = (similarFanfic!==null && similarFanfic.FanficID===fanfic.FanficID) ? similarFanfic : fanfic;
     return (
         <React.Fragment>
             { (loading) ?
@@ -13,8 +16,10 @@ const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,us
                 (!loadingFlag && showData) && 
                 <React.Fragment>
                     <div className='GetFanficData_data_box'>
-                    <ShowFanficData fanfic={fanfic} size={size} showUserData={showUserData} userData={userData}
-                                    markAs={markAs} markStatus={markStatus} toggleChapterB={toggleChapterB}/>
+                    <ShowFanficData fanfic={showFanfic} size={size} showUserData={showUserData} userData={userData}
+                                    markAs={markAs} markStatus={markStatus} toggleChapterB={toggleChapterB}
+                                    getCategories={getCategories} inputCategoryFlag={inputCategoryFlag} showSelectCategory={showSelectCategory}
+                                    showCategory={showCategory} saveCategories={saveCategories} categoriesTemp={categoriesTemp}/>
                     </div> 
                     {showSaveButton && (similarFanfic===null) && 
                     <div className='GetFanficData_buttons'>

@@ -27,3 +27,5 @@ exports.deleteFandomFromDB = async (req,res)=>{
         res.send('Error')
      }
 }
+
+//TODO: remove userdata/activities

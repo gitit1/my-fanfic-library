@@ -1,3 +1,5 @@
+import  {categories} from '../../../../../Fanfic/ShowFanficData/Categories/assets/categoriesList'
+
 export const fanficDataForm = [{
     FanficID: {
             label: '(*) Fanfic ID:',
@@ -139,6 +141,21 @@ export const fanficDataForm = [{
             placeholder: 'Free Tags - Seperate by comma , Example: "tag 1,tag 2"'
         },
         value:'',
+        validation: { },
+        valid:true,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    Categories: {
+        label: 'Categories:',
+        classNameCustom:'Categories',
+        elementType:'auto-select', 
+        elementConfig:{
+            suggestions:  categories,
+            placeholder: 'Select Categories'
+        },
+        value:[],
         validation: { },
         valid:true,
         touched:false,

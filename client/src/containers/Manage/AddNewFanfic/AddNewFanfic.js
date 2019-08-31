@@ -113,3 +113,11 @@ const mapStateToProps = state =>{
   
 
 export default connect(mapStateToProps,null)(AddNewFanfic);
+
+
+/*
+ - STYLE - ESPECIALLY BUTTONS
+ - CHECK FOR ISSUES
+ TODO: 
+ ADD CATEGORIES!!!
+*/

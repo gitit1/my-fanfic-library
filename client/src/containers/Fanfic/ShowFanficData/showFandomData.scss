@@ -12,6 +12,7 @@
         margin:0.5% 0.5%;
         max-width: 100%;
         background-color: #fafafa;
+        // z-index:888;
         
         // .border_AO3{border-top: 1px solid $color_AO3;}
         // .border_FF{border-top: 1px solid $color_FF;}
@@ -113,6 +114,41 @@
                 .deleted{
                     background-color: rgb(192, 43, 43);
                     border-color: rgb(192, 43, 43);
+                }
+            }
+            .card_content_categories{
+                text-align: left;
+                margin-left: 1%;
+
+                .card_content_categories_caption{
+                    float: left;
+                    font-weight:600;
+                    margin-top:0.6%!important;
+                }
+                
+                .card_content_categories_div{
+                    display: inline;
+                    font-size: 0.8em;
+
+                    .category_chip{
+                        // height: 20px !important;
+                        margin-top:0.3%;
+                        margin-left: 0.2%;
+                    }
+                }
+                .card_content_select_categories_div{
+                    .SelectCategories_container{
+                        position: absolute;
+                        margin-left: 5%;
+                        width:100%;
+                        .SelectCategories{
+                            float: left;
+                            width:40%;
+                        }
+                    }
+                    button{
+                        margin-left: 45%;
+                    }
                 }
             }
             .card_content_tags{

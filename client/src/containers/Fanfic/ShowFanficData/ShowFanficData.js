@@ -9,6 +9,7 @@ import * as functions from './functions';
 import UserHeader from './UserHeader/UserHeader'
 import Header from './Header/Header'
 import Tags from './Tags/Tags'
+import Categories from './Categories/Categories'
 import Desc from './Desc/Desc'
 import Stat from './Stat/Stat'
 
@@ -19,13 +20,16 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const ShowFanficData = (props) => {
-    const {fanfics,isManager} = props;
+    const {fanfics,userFanfics,isManager,showCategory,isAuthenticated,showSelectCategory,size,showTagsToggle,
+        showTags,getCategories,saveCategories,inputCategoryFlag,categoriesTemp} = props;
     return(
         <React.Fragment>
             <div className='root' style={{width:'100%'}}>
                 <GridList cellHeight='auto' className='grid_list' cols={1}>
                     { fanfics.map(fanfic=>{
-                        let userData = props.userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
+                        let fanficCategories = categoriesTemp.filter( categories => {return categories.FanficID === fanfic.FanficID})
+                        fanficCategories = fanficCategories.length!==0 ? Object.values(fanficCategories)[0]: null;
+                        let userData = userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
                         userData = userData.length!==0 ? Object.values(userData)[0]: null;
                         const redClasses    =   functions.redClassesHandler()
                         const greenClasses  =   functions.greenClassesHandler()
@@ -39,10 +43,14 @@ const ShowFanficData = (props) => {
                             <Card className='card'  key={fanfic.FanficID}>
                                 <CardContent className='card_content'>                           
                                     <section className='card_content_header'>
-                                        <Header fanfic={fanfic} size={props.size} showTagsToggle={props.showTagsToggle} showTags={props.showTags}/>
+                                        <Header fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags}/>
                                     </section>
                                     <section className='card_content_tags'>
-                                        <Tags fanfic={fanfic} size={props.size} showTags={props.showTags}/> 
+                                        <Tags fanfic={fanfic} size={size} showTags={showTags}/> 
+                                    </section>
+                                    <section className='card_content_categories'>
+                                        <Categories fanfic={fanfic} getCategories={getCategories} saveCategories={saveCategories}
+                                                    showSelectCategory={showSelectCategory} curFanfic={inputCategoryFlag} fanficCategories={fanficCategories}/> 
                                     </section>
                                     <section className='card_content_desc'>
                                         <Desc fanfic={fanfic}/>                        
@@ -50,7 +58,7 @@ const ShowFanficData = (props) => {
                                     <section className='card_content_stat'>
                                         <Stat fanfic={fanfic}/> 
                                     </section>
-                                    { props.isAuthenticated &&
+                                    { isAuthenticated &&
                                         <section className='card_content_userData'>
                                             <UserHeader props={props} 
                                                         fanfic={fanfic}
@@ -63,6 +71,9 @@ const ShowFanficData = (props) => {
                                                         isInProgress={isInProgress}
                                                         isIgnored={isIgnored}
                                                         inReadingList={inReadingList}
+                                                        isManager={isManager}
+                                                        showCategory={showCategory}
+                                                        showSelectCategory={showSelectCategory}
                                                         isManager={isManager}
                                             />
                                         </section>

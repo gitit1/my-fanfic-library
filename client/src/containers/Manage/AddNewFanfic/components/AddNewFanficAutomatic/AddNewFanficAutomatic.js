@@ -24,7 +24,11 @@ class AddNewFanficAutomatic extends Component{
         Favorite:false,
         status: null,
         chapter:0,
-        toggleChapter:false
+        toggleChapter:false,
+        categoriesArr:[],
+        inputCategoryFlag:null,
+        showSelectCategory:false,
+        categoriesShowTemp:[]
       }
     }
 
@@ -46,7 +50,9 @@ class AddNewFanficAutomatic extends Component{
           this.props.onGetFanficData('automatic',fandomName,url).then(()=>{
             !this.props.fanfic 
               ? this.setState({loadingFlag:false,msg:'This is Acceptable URL',showSaveButton:false}) 
-              : this.setState({loadingFlag:false,showData:true,showSaveButton:true});    
+              : (this.props.similarFanfic && this.props.similarFanfic.FanficID===this.props.fanfic.FanficID) 
+                ? this.setState({loadingFlag:false,showData:true,showUserData:true})
+                : this.setState({loadingFlag:false,showData:true,showSaveButton:true});    
           });
       }
     } 
@@ -139,8 +145,55 @@ class AddNewFanficAutomatic extends Component{
         })
     }
 
+    getCategories = (categoriesArr) =>{
+      const {userData} = this.state;
+      this.setState({
+        userData:{
+          ...userData,
+          categoriesArr:categoriesArr
+        }
+      })
+    }
+
+    showSelectCategoryHandler=(id)=>{
+      const {userData} = this.state;
+      const {showSelectCategory,inputCategoryFlag} = this.state.userData;
+      this.setState({
+        userData:{
+          ...userData,
+          showSelectCategory:!showSelectCategory,
+          inputCategoryFlag:(inputCategoryFlag===null) ? Number(id) : null
+        }
+      })
+    }
+
+    saveCategories = (fandomName,fanficId) =>{
+      this.props.onSaveCategories(fandomName,fanficId,this.state.userData.categoriesArr).then(()=>{
+        const categoriesTemp = [...this.state.userData.categoriesShowTemp];
+        let objIndex = categoriesTemp.findIndex((fanfic => fanfic.FanficID === fanficId));
+        if(objIndex!==-1){
+            categoriesTemp[objIndex].Categories = this.state.userData.categoriesArr;
+        }else{
+            categoriesTemp.push({
+                FanficID:fanficId,
+                Categories:this.state.userData.categoriesArr
+            })
+        }
+        this.setState({
+          userData:{
+            ...this.state.userData,
+            categoriesShowTemp: categoriesTemp,
+            categoriesArr:[],
+            showSelectCategory:false,
+            inputCategoryFlag:null
+          }
+        })
+    })
+    }
+
     render(){
       const {url,loadingFlag,showData,showUserData,userData,showSaveButton,msg} = this.state;
+      const {inputCategoryFlag,showSelectCategory,categoriesShowTemp} = this.state.userData
       const {size,loading,fanfic,similarFanfic} = this.props;
       //TODO: CHECK IF FANFIC ALREADY EXIST
       return(            
@@ -152,7 +205,8 @@ class AddNewFanficAutomatic extends Component{
               <GetFanficData loading={loading} loadingFlag={loadingFlag} showData={showData} similarFanfic={similarFanfic} showSaveButton={showSaveButton}
                              fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler} 
                              markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler} saveFanficData={this.saveFanficData} msg={msg}
-                             />
+                             getCategories={this.getCategories} inputCategoryFlag={inputCategoryFlag} showSelectCategory={showSelectCategory}
+                             showCategory={this.showSelectCategoryHandler} saveCategories={this.saveCategories} categoriesTemp={categoriesShowTemp}/>
             </div>
 
 
@@ -177,7 +231,8 @@ const mapDispatchedToProps = dispatch =>{
       onSaveFanficDataToDB:   (fandomName,fanfic,download,url,image)                                            =>  dispatch(actions.saveDataOfFanficToDB(fandomName,fanfic,download,url,image)),
       onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)           =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
       onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)  =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
-  };
+      onSaveCategories:       (fandomName,fanficId,categoriesArray)                                               =>  dispatch(actions.saveCategories(fandomName,fanficId,categoriesArray))
+    };
 }
 
 export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(AddNewFanficAutomatic));

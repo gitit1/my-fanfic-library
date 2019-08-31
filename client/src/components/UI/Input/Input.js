@@ -8,6 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
 import DateFnsUtils from "@date-io/date-fns";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import AutoSelect from './SelectAutoComplete';
+
 const input = (props) => {
     let inputElement =null;
     const inputClasses = [classes.InputElement];
@@ -52,8 +54,6 @@ const input = (props) => {
                                     }}
                                 />
                             </MuiPickersUtilsProvider>
-                            
-
             break;            
         case ('select'):
             inputElement =  <React.Fragment>
@@ -79,6 +79,11 @@ const input = (props) => {
                                 </FormControl>
                             </React.Fragment>
             break;  
+        case ('auto-select'): 
+            inputElement = <div className={props.classNameCustom}>
+                                <AutoSelect getDataArray={props.getCategories} suggestions={props.elementConfig.suggestions} placeholder={props.elementConfig.placeholder}/>
+                            </div>                                
+            break;
         case ('checkbox'):
             inputElement = <div className={props.classNameCustom}>
                                  {props.elementConfig.options.map(option =>(

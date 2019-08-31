@@ -172,6 +172,7 @@ const Filters = (props) => (
                         <option value="Spanish">Spanish</option>
                     </select>
                 </div> */}
+                {/* search by free filter (tags) */}
             {/* TODO: */}
             {/* <p>
             <label>
