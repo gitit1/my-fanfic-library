@@ -121,8 +121,8 @@
                 margin-left: 1%;
 
                 .card_content_categories_caption{
-                    float: left;
                     font-weight:600;
+                    float: left;
                     margin-top:0.6%!important;
                 }
                 
@@ -132,6 +132,10 @@
 
                     .category_chip{
                         // height: 20px !important;
+                        font-weight: 600;
+                        font-size: 1em;
+                        color:#383732;
+                        border-radius: 10px;
                         margin-top:0.3%;
                         margin-left: 0.2%;
                     }
@@ -159,6 +163,7 @@
                 .card_content_tags_caption{
                     display: inline;
                     font-weight:600;
+                    
                 }
                 .card_content_tags_div{
                     display: inline;
@@ -193,6 +198,9 @@
                 .card_content_stat_dt{
                     font-weight: 600;
                 }
+            }
+            .card_content_stat_source{
+                font-weight: 700;
             }
 
             .card_content_userData{                

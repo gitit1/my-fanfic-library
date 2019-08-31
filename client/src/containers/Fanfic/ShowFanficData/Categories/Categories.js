@@ -7,8 +7,12 @@ import {categories} from './assets/categoriesList'
 
 const Categories = (props) => {
     const {getCategories,saveCategories,fanfic,curFanfic,showSelectCategory,fanficCategories} = props;
+    let isAlreadySaved = (fanficCategories && fanficCategories.FanficID===fanfic.FanficID) ? true : false
+    console.log('curFanfic:',curFanfic)
+    console.log('showSelectCategory:',showSelectCategory)
+    console.log('fanficCategories:',fanficCategories)
     return(
-         ((curFanfic!==fanfic.FanficID) && (fanfic.Categories && fanfic.Categories.length>0))  ?
+         (((curFanfic!==fanfic.FanficID) && (fanfic.Categories && fanfic.Categories.length>0)) || (isAlreadySaved && !showSelectCategory))  ?
             <div className='card_content_categories_div'>
                 <Typography variant="subtitle2" gutterBottom  className='card_content_categories_caption'>Categories</Typography>
                 { fanficCategories!==null ? 
@@ -26,7 +30,7 @@ const Categories = (props) => {
             <div className='card_content_select_categories_div'>
                 <Typography variant="subtitle2" gutterBottom  className='card_content_categories_caption'>Categories</Typography>
                 <div className='SelectCategories_container'>
-                    <SelectCategories getDataArray={getCategories} suggestions={categories} exist={fanfic.Categories} placeholder={'Select Categories'}/>
+                    <SelectCategories getDataArray={getCategories} suggestions={categories} exist={isAlreadySaved ? fanficCategories.Categories : fanfic.Categories} placeholder={'Select Categories'}/>
                 </div>
                 <Button color='primary' onClick={()=>saveCategories(fanfic.FandomName,fanfic.FanficID)}>Save</Button>   
             </div>

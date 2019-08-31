@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 const Stat = (props) => (
   <React.Fragment>
     <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Source:</Typography>
-    <Typography className={`card_content_stat_dd color_${props.fanfic.Source}`} variant="subtitle2" gutterBottom>{props.fanfic.Source}</Typography >
+    <Typography className={`card_content_stat_dd card_content_stat_source color_${props.fanfic.Source}`} variant="subtitle2" gutterBottom>{props.fanfic.Source}</Typography >
     <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Publish Date:</Typography>
     <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{new Date(props.fanfic.PublishDate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</Typography>
     <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Language:</Typography>

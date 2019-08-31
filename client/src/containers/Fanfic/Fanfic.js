@@ -276,7 +276,8 @@ class Fanfic extends Component{
 
     showSelectCategoryHandler=(id)=>{
         console.log('this.state.inputCategoryFlag:',this.state.inputCategoryFlag)
-        this.setState({showSelectCategory:!this.state.showSelectCategory,inputCategoryFlag:(this.state.inputCategoryFlag===null) ? Number(id) : null  })
+        let showCat = (this.state.inputCategoryFlag===null) ? true : false;
+        this.setState({showSelectCategory:showCat,inputCategoryFlag:(this.state.inputCategoryFlag===null) ? Number(id) : null  })
     }
 
     getCategories = (categoriesArr) =>{this.setState({categoriesArr:categoriesArr})}
