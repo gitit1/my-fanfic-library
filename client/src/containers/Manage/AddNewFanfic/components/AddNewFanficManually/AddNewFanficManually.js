@@ -107,6 +107,18 @@ class AddNewFanficManually extends Component{
             this.setState({showData:0,msg})  
         }
     }
+    getCategories = (categoriesArr) =>{
+        this.setState(prevState =>({
+            fanficForm: {
+                ...prevState.fanficForm,
+                'Categories':{
+                    ...prevState.fanficForm['Categories'],
+                    value:categoriesArr          
+                }
+            }
+        }));
+    }
+    
     inputChangedHandler = (event,inputIdentifier) => {
 
         if(inputIdentifier==='PublishDate'||inputIdentifier==='UpdateDate'){
@@ -200,6 +212,7 @@ class AddNewFanficManually extends Component{
         })
     }
 
+
     render(){
         const {fanficForm,showData,formIsValid,showUserData,userData,showSaveButton,msg,loadingFlag,saved,showUploadButton} = this.state;
         const {loading,fanfic,size,similarFanfic} = this.props;
@@ -216,8 +229,8 @@ class AddNewFanficManually extends Component{
                 {   showData===0 ? 
                         <Card className='addNewFanficManually_card'>
                             <Grid container className='addNewFanficManually_content_form'>                           
-                                    <BuildForm  onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
-                                                changed={this.inputChangedHandler} disabled={!formIsValid} buttonSendLabel='UPLOAD'/>
+                                <BuildForm  onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
+                                            changed={this.inputChangedHandler} disabled={!formIsValid} getCategories={this.getCategories} buttonSendLabel='UPLOAD'/>
                             </Grid>
                         </Card>
                     : 

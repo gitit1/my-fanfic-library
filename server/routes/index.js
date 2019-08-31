@@ -17,6 +17,7 @@ try {
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
 
   router.post('/db/getFanfics',db.getFanficsFromDB);
+  router.post('/db/saveCategories',db.saveFanficCategoriesToDB);
   router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
   router.post('/db/addFanficToUserMarks',db.addFanficToUserMarksInDB);
   router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);

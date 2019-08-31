@@ -36,9 +36,13 @@ class Fanfic extends Component{
         drawerFilters: false,
         fanficsNumbers:fanficsNumbersList,
         inputChapterFlag:null,
+        inputCategoryFlag:null,
         readingListAncor:null,
         showTags: (this.props.size==='s') ? false : true,
-        showData: false
+        showData: false,
+        showSelectCategory:false,
+        categoriesArr:[],
+        categoriesShowTemp:[]
     }
 
     componentWillMount(){this.getFanfics()}
@@ -56,7 +60,6 @@ class Fanfic extends Component{
             const fanficsNumbers = fanficsNumbersFunc(fandom,ignoredCount);
 
             this.setState({userFanfics,fanfics,fanficsNumbers:fanficsNumbers,showData:true});
-            console.log(this.state.fanficsNumbers)
         })
 
         return null
@@ -69,7 +72,7 @@ class Fanfic extends Component{
         })       
         return null
     }
-    //UPDATE USERDATA:
+
     markAsHandler = async(fanficId,author,fanficTitle,source,markType,mark) =>{
         console.log('!mark,,,',!mark)
         await this.props.onMarkHandler(this.props.userEmail,this.props.match.params.FandomName,fanficId,author,fanficTitle,source,markType,!mark)
@@ -271,10 +274,38 @@ class Fanfic extends Component{
 
     showTagsToggle=()=> {this.setState({showTags:!this.state.showTags})}
 
+    showSelectCategoryHandler=(id)=>{
+        console.log('this.state.inputCategoryFlag:',this.state.inputCategoryFlag)
+        let showCat = (this.state.inputCategoryFlag===null) ? true : false;
+        this.setState({showSelectCategory:showCat,inputCategoryFlag:(this.state.inputCategoryFlag===null) ? Number(id) : null  })
+    }
+
+    getCategories = (categoriesArr) =>{this.setState({categoriesArr:categoriesArr})}
+
+    saveCategories = (fandomName,fanficId) =>{
+        this.props.onSaveCategories(fandomName,fanficId,this.state.categoriesArr).then(()=>{
+            const categoriesTemp = [...this.state.categoriesShowTemp];
+            let objIndex = categoriesTemp.findIndex((fanfic => fanfic.FanficID === fanficId));
+            if(objIndex!==-1){
+                categoriesTemp[objIndex].Categories = this.state.categoriesArr;
+            }else{
+                categoriesTemp.push({
+                    FanficID:fanficId,
+                    Categories:this.state.categoriesArr
+                })
+            }
+            this.setState({
+                categoriesShowTemp: categoriesTemp,
+                categoriesArr:[],
+                showSelectCategory:false,
+                inputCategoryFlag:null
+            })
+        })
+    }
+
     render(){
-        // TODO: FIX LOADING TO BE LIKE A03 
-        const {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,
-             inputChapterFlag,currentSort,readingListAncor,currentSource} = this.state;
+        const {fanfics,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,readingListAncor,
+               currentSource,showSelectCategory,inputCategoryFlag,categoriesShowTemp} = this.state;
         const {isManager} = this.props;
         
         return(
@@ -296,7 +327,7 @@ class Fanfic extends Component{
                                                 cancelFilters={this.cancelFiltersHandler}
                                                 filtersAction={this.activeFiltersHandler}
                                                 checked={filters}
-                                                />
+                                    />
                                 </div>
                             </Drawer>
                         </Grid>
@@ -322,6 +353,12 @@ class Fanfic extends Component{
                                                 showTags={this.state.showTags}
                                                 showTagsToggle={this.showTagsToggle}
                                                 isManager={isManager}
+                                                showSelectCategory={showSelectCategory}
+                                                showCategory={this.showSelectCategoryHandler}
+                                                getCategories={this.getCategories}
+                                                saveCategories={this.saveCategories}
+                                                inputCategoryFlag={inputCategoryFlag}
+                                                categoriesTemp={categoriesShowTemp}
                                 />
                             }
                     </Grid>
@@ -355,11 +392,10 @@ const mapDispatchedToProps = dispatch =>{
         onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail)                                         =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail)),
         onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)             =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
         onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)    =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
-        onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber))
+        onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber)),
+        onSaveCategories:       (fandomName,fanficId,categoriesArray)                                               =>  dispatch(actions.saveCategories(fandomName,fanficId,categoriesArray))
+    
     }
 }
   
   export default connect(mapStateToProps,mapDispatchedToProps)(Fanfic);
-
-
-  //TODO: only manager - edit fanfic - and if get update stay with the edit

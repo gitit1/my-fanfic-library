@@ -18,7 +18,9 @@ const BuildForm = (props) => (
                     visible={formElement.config.visible}
                     disabled={formElement.config.disabled}
                     checked={(event) => props.check(event,formElement.id)}
-                    changed={(event) => props.changed(event,formElement.id)}/>
+                    changed={(event) => props.changed(event,formElement.id)}
+                    getCategories={(array) => props.getCategories(array)}
+                    />
         ))}
         <br/>                               
         <Button  type="submit" variant="contained"  className='send_button' disabled={props.disabled} onClick={(e)=>props.onSubmit(e)}>{props.buttonSendLabel}</Button>

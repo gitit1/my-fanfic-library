@@ -4,6 +4,7 @@ const db = {
     ...require('./CRUD/deleteFandomFromDB'),
     ...require('./CRUD/getAllFandomsFromDB'),
     ...require('./CRUD/getFanficsFromDB'),
+    ...require('./CRUD/saveFanficCategoriesToDB'),
     ...require('./Filters/getFilteredFanficsListFromDB'),
     ...require('./UserData/addFanficToUserMarksInDB'),
     ...require('./UserData/addFanficToUserStatus'),

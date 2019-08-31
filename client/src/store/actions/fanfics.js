@@ -55,7 +55,8 @@ export const addFanficToUserMarks = (userEmail,fandomName,fanficId,author,fanfic
         .catch(error =>{
             return false
         })  
-    };      
+    };
+    
 }
 
 export const addFanficToUserStatus = (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data) =>{
@@ -70,8 +71,24 @@ export const addFanficToUserStatus = (userEmail,fandomName,fanficId,author,fanfi
         .catch(error =>{
             return false
             // dispatch(addFanficToUserFavoritesFail(error))
-        })  
-    };  
+        });
+    };
+
+}
+
+export const saveCategories = (fandomName,fanficId,categoriesArray) =>{
+    console.log('fandomName,fanficId,categoriesArray 1:',fandomName,fanficId,categoriesArray)
+    return dispatch =>{
+        return axios.post(`/db/saveCategories?fandomName=${fandomName}&fanficId=${fanficId}&categories=${categoriesArray}`)
+        .then(res =>{
+            // dispatch(addFanficToUserFavoritesSuccess(fetchedFanfics.data));
+            return true;
+        })
+        .catch(error =>{
+            return false
+            // dispatch(addFanficToUserFavoritesFail(error))
+        });   
+    };
 }
 
 export const getFilteredFanficsFromDBSuccess = (fetchedData) =>{
@@ -97,7 +114,6 @@ export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit,
 
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        //TODO: solution to limit
         return axios.post(`/db/getFilteredFanficsListFromDB?fandomName=${fandomName.replace("&","%26")}&userEmail=${userEmail}&pageLimit=${pageLimit}&pageNumber=${pageNumber}`,filters)
         .then(fetchedData =>{
             dispatch(getFilteredFanficsFromDBSuccess(fetchedData.data));

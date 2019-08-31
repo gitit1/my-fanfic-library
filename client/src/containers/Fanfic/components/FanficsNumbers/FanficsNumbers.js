@@ -24,7 +24,7 @@ const FanficsNumbers = (props) => (
             {props.fanficsNumbers.fanficsDeletedCount>0 &&
                 <React.Fragment>
                     &nbsp;,&nbsp;
-                    <b style={{color:'#968c8c'}}>Backup (Deleted from sites):&nbsp;</b>
+                    <b className='color_Backup'>Backup (Deleted from sites):&nbsp;</b>
                     <b>{props.fanficsNumbers.fanficsDeletedCount}</b>
                 </React.Fragment>
             }

@@ -8,7 +8,6 @@ const MyLatestActivity = (props) => {
     return(
         <React.Fragment>
             <div className='myLatestActivity'>
-                {/* TODO:FIX LINK TO ALL */}
                 {updates.map(activity=>{
                     const {Date,FandomName,ActivityType,Author,FanficTitle,FanficID,Source} = activity;
                     return(
@@ -28,9 +27,3 @@ const MyLatestActivity = (props) => {
 };
 
 export default MyLatestActivity;
-
-
-/*TODO: FULL PAGE OF THE LATEST ACTIVITIS: BY MONTH/YEAR
-SERVER: 
-            - EACH MONTH TO PUT IN ARCHIVE
-*/

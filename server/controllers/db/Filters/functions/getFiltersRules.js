@@ -75,6 +75,9 @@ exports.getFiltersRules = async (filters,userEmail) =>{
             case 'ff':
                 filtersFanficList.push({'Source':'FF'})
                 break;  
+            case 'backup':
+                filtersFanficList.push({'Source':'Backup'})
+                break; 
             //Search:
             case 'fanficId':
                 filtersFanficList.push({'FanficID':Number(filterValue)})

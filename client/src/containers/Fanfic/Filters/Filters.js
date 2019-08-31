@@ -155,30 +155,7 @@ const Filters = (props) => (
             </FormControl>
             <Button variant="outlined" type="submit" name="action" color="primary" className={classes.button}>Sort & Filter</Button>
             <Button variant="outlined" color="secondary" className={classes.button} onClick={()=>props.cancelFilters()} name="action">Cancel</Button>
-        </form>                                                                 
-                {/* TODO: */}
-                {/* <div className="input-field inline">
-                    <select name="language">
-                        <option value="English">English</option>
-                        <option value="Deutsch">Deutsch</option>
-                        <option value="Italiano">Italiano</option>
-                        <option value="Français">Français</option>
-                        <option value="Español">Español</option>
-                        <option value="Magyar">Magyar</option>
-                        <option value="Polski">Polski</option>
-                        <option value="Português brasileiro">Português brasileiro</option>
-                        <option value="Português europeu">Português europeu</option>
-                        <option value="Русский">Русский</option>
-                        <option value="Spanish">Spanish</option>
-                    </select>
-                </div> */}
-            {/* TODO: */}
-            {/* <p>
-            <label>
-                <input type="checkbox" name="Reading List" className="filled-in" onChange={()=>props.filter('Reading List')}/>
-                <span>Reading List</span>
-            </label>
-            </p> */}          
+        </form>                                                                       
     </div>
 );
 

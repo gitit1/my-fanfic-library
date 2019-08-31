@@ -21,6 +21,7 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                                         fanficData.Tags!=='' ? {tags:fanficData.Tags.split(',')} : undefined
                                     ].filter(x => x !== undefined),
                 FandomsTag:         fanficData.FandomsTags!=='' ? fanficData.FandomsTags.split(',') : null,
+                Categories:         fanficData.Categories!=='' ? fanficData.Categories.split(',') : null,
                 Description:        fanficData.Summary,
                 Language:           fanficData.Language,
                 Words:              Number(fanficData.Words),   

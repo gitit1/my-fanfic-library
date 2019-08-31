@@ -4,7 +4,7 @@
     .addNewFanficManually_card{
         width: 90%;
         margin: 0 auto;
-        height: 65.5vh;
+        height: 72vh;
         margin-top: 1%;
         text-align: center;
 
@@ -61,6 +61,16 @@
                 float: left;
                 width: 94%;   
                 height:100px;             
+            }
+            .Categories{
+                position: relative;
+                .SelectCategories{
+                    margin-top:1%;
+                    margin-left: 2%;
+                    float: left;
+                    width: 94%;
+                }
+                // position: absolute;
             }
             .Source,
             .PublishDate,

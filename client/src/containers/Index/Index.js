@@ -95,5 +95,3 @@ const mapDispatchedToProps = dispatch =>{
 }
   
   export default connect(mapStateToProps,mapDispatchedToProps)(Index);
-
-//TODO: NEED TO BE FROM SERVER
