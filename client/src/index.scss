@@ -19,6 +19,9 @@
 .color_Backup{color:$color_Backup}
 .mfl_text_bold{font-weight: bold}
 
+button{
+    color:$color_header;
+}
 button:disabled{
     opacity: 0.6;
 }

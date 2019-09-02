@@ -2,13 +2,14 @@
 const {getIgnoredList} = require('../../helpers/getIgnoredList');
 
 exports.getFiltersRules = async (filters,userEmail) =>{
-    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true;
+    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true,finishFlag=false,inProgressFlag=false;
 
     console.log('filters:::',filters)
     await filters.map(filter=>{
         let filterKey = filter.split('_')[0]
         let filterValue = filter.split('_').pop()
         console.log('filterKey:',filterKey)
+        // console.log('filterValue:',filterValue)
         switch (filterKey) {
             //User Data Filters:
             case 'follow':
@@ -18,10 +19,14 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 filtersUserList.push({'FanficList.Favorite':true})
                 break;
             case 'finished':
-                filtersUserList.push({'FanficList.Status':'Finished'})
+                finishFlag=true;
+                // filtersUserList.push({'FanficList.Status':'Finished'})
                 break;
             case 'inProgress':
-                filtersUserList.push({'FanficList.Status':'In Progress'})
+                inProgressFlag=true;
+                (finishFlag)
+                ? filtersUserList.push({$or: [{'FanficList.Status':'Finished'},{'FanficList.Status':'In Progress'}]})
+                : filtersUserList.push({'FanficList.Status':'In Progress'});
                 break;
             case 'ignore':
                 searchWithIgnoreFlag = false;
@@ -38,7 +43,7 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 filtersFanficList.push({'Oneshot':true})
                 break;
             case 'deleted':
-                filtersFanficList.push({'Deleted':true})
+                filtersFanficList.push({$or: [{'Deleted':true},{'Source':'Backup'}]})
                 break;             
             //Sort Filters:
             case 'dateLastUpdate':
@@ -88,6 +93,10 @@ exports.getFiltersRules = async (filters,userEmail) =>{
             case 'title':
                 filtersFanficList.push({'FanficTitle': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
                 break;
+            case 'categories':
+                console.log('filterValue:',filterValue)
+                filtersFanficList.push({'Categories': {$all: filterValue.split(',')}})
+                break;
             case 'wordsFrom':
                     if(wordsFlag){
                         index = filtersFanficList.findIndex(x => x.Words)
@@ -110,9 +119,12 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                     break;                              
         }
     })
-
+    
+    if(finishFlag && !inProgressFlag){
+        filtersUserList.push({'FanficList.Status':'Finished'});
+    }
     let ignoreList = await getIgnoredList(userEmail);
-  
+
     if (ignoreList.length>0 && searchWithIgnoreFlag && filtersUserList.length===0){
         filtersFanficList.push({ FanficID : { $nin: ignoreList }})
         ignoreList = [] 

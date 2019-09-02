@@ -211,7 +211,7 @@ class Fanfic extends Component{
         }
     }
 
-    //FILTERS:
+    //FILTERS:  
     activeFiltersHandler = async(event)=>{
         console.log('[Fanfic.js] activeFiltersHandler()');
         event && event.preventDefault();
@@ -223,7 +223,7 @@ class Fanfic extends Component{
         // if(filterArr.length===0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
         for(let key in filters){ 
             filters[key] === true && filterArr.push(key)
-            if(typeof filters[key] !== 'boolean' && filters[key] !==''){filterArr.push(`${key}_${filters[key]}`)}
+            if(typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0){filterArr.push(`${key}_${filters[key]}`)}
         }
         console.log('filterArr:',filterArr)
         // this.setState({filterArr: {...filterArr,[filter]: !filterArr[filter]}})    
@@ -282,6 +282,8 @@ class Fanfic extends Component{
 
     getCategories = (categoriesArr) =>{this.setState({categoriesArr:categoriesArr})}
 
+    getFiltersCategories = (categoriesArr) =>{this.setState({filters: {...this.state.filters,categories:categoriesArr}})}
+
     saveCategories = (fandomName,fanficId) =>{
         this.props.onSaveCategories(fandomName,fanficId,this.state.categoriesArr).then(()=>{
             const categoriesTemp = [...this.state.categoriesShowTemp];
@@ -327,6 +329,7 @@ class Fanfic extends Component{
                                                 cancelFilters={this.cancelFiltersHandler}
                                                 filtersAction={this.activeFiltersHandler}
                                                 checked={filters}
+                                                getCategories={this.getFiltersCategories}
                                     />
                                 </div>
                             </Drawer>

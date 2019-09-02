@@ -56,7 +56,9 @@ class AddNewFanficManually extends Component{
         }));
         this.props.showBtns(false);
     }
-    
+
+    componentWillUnmount(){this.props.onGetFandoms()}
+
     sendFandomToServerHandler = async (event) => {
         event.preventDefault();
         const {fandomName} = this.props,{fanficForm} = this.state;
@@ -273,10 +275,11 @@ const mapStateToProps = state =>{
   
   const mapDispatchedToProps = dispatch =>{
     return{
-        onGetFanficData:        (type,fandomName,url,fanficForm)        =>  dispatch(actions.getDataOfFanfic(type,fandomName,url,fanficForm)),
-        onSaveFanficDataToDB:   (fandomName,fanfic,download,url,image)  =>  dispatch(actions.saveDataOfFanficToDB(fandomName,fanfic,download,url,image)),
-        onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)           =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
-        onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)  =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
+        onGetFandoms:           ()                                                                                  =>  dispatch(actions.getFandomsFromDB()),
+        onGetFanficData:        (type,fandomName,url,fanficForm)                                                    =>  dispatch(actions.getDataOfFanfic(type,fandomName,url,fanficForm)),
+        onSaveFanficDataToDB:   (fandomName,fanfic,download,url,image)                                              =>  dispatch(actions.saveDataOfFanficToDB(fandomName,fanfic,download,url,image)),
+        onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)             =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
+        onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)    =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
   
     };
   }

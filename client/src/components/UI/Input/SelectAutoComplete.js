@@ -343,19 +343,19 @@ const IntegrationReactSelect = (props) => {
   };
 
   return (
-    <div className={`${classes.root} SelectCategories`}>
+    <div className={`${classes.root} ${props.class}`}>
       <NoSsr>
         <Select
           classes={classes}
           styles={selectStyles}
-          inputId="react-select-multiple"
-          // TextFieldProps={{
-          //   label: 'Countries',
-          //   InputLabelProps: {
-          //     htmlFor: 'react-select-multiple',
-          //     shrink: true,
-          //   },
-          // }}
+          inputId={props.id ? props.id : "react-select-multiple"}
+          TextFieldProps={{
+            label: props.label,
+            InputLabelProps: {
+              htmlFor: props.id,
+              shrink: true,
+            },
+          }}
           key={multi}
           placeholder={props.placeholder}
           options={props.suggestions}

@@ -2,6 +2,7 @@ import React from 'react';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Select from '@material-ui/core/Select';
@@ -10,12 +11,14 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import classes from './Filters.module.css';
+import classes from './Filters.module.scss';
 import {filtersArray} from './assets/FiltersArray';
+import {categories} from '../ShowFanficData/FanficData/Categories/assets/categoriesList';
+import SelectCategories from '../../../components/UI/Input/SelectAutoComplete'
 
 const Filters = (props) => (
-    <div>
-        <form className={classes.Root} onSubmit={(event)=>props.filtersAction(event)} autoComplete="off">
+    <div className={classes.Filters}>
+        <form className={classes.Form} onSubmit={(event)=>props.filtersAction(event)} autoComplete="off">
             <FormControl className={classes.FormControl}>
                 <InputLabel htmlFor="sort-filters">Sort</InputLabel>
                 <Select className={classes.SortSelect}
@@ -37,7 +40,7 @@ const Filters = (props) => (
                         }
                 </Select>
             </FormControl>
-            <FormControl className={classes.FormControl}>
+            <FormControl className={`${classes.FormControl} ${classes.Source}`}>
                 <InputLabel htmlFor="source-filters">Source</InputLabel>
                 <Select className={classes.SortSelect}
                         value={props.source}
@@ -57,8 +60,30 @@ const Filters = (props) => (
                             ))  
                         }
                 </Select>
+            </FormControl>    
+            <Divider variant='fullWidth' className={classes.Devider}/>              
+            <FormControl  className={classes.FormControl} component="fieldset">
+                <FormLabel focused={false} className={classes.FiltersFanficLabel}>Fanfic Filters</FormLabel>
+                {
+                    filtersArray.Fanfic.map(filter=>(
+                        <FormControlLabel   key={filter.name}
+                                            label={filter.display} 
+                                            className={classes.FiltersFanficCheckBox} 
+                                            control={<Checkbox  value={filter.name} 
+                                                                onChange={()=>props.filter(`${filter.name}`,null,'filter')}
+                                                                checked={props.checked[`${filter.name}`]}
+                                                                style={{color:'black'}}
+                                                        />} 
+                        />
+                    ))
+                }
+                <SelectCategories id="categories-filters" class={classes.SelectCategories} label='Categories'
+                                  getDataArray={props.getCategories} suggestions={categories}  placeholder={'Select Categories'}/>
+                <SelectCategories id="categories-filters" class={classes.SelectCategories} label='Tags'
+                                  getDataArray={props.getCategories} suggestions={categories}  placeholder={'Select Tags'}/>
             </FormControl>
-            <FormControl component="fieldset">
+            <Divider variant='fullWidth' className={classes.Devider}/>
+            <FormControl className={classes.FormControl}  component="fieldset">
                 <FormLabel focused={false} className={classes.FiltersFanficLabel}>General Filters:</FormLabel>
                 <TextField
                     id="id"
@@ -121,23 +146,10 @@ const Filters = (props) => (
                     onChange={(event)=>props.filter('author',event,'filter')}
                 />
             </FormControl>
-            <FormControl component="fieldset">
-                <FormLabel focused={false} className={classes.FiltersFanficLabel}>Fanfic Filters</FormLabel>
-                {
-                    filtersArray.Fanfic.map(filter=>(
-                        <FormControlLabel   key={filter.name}
-                                            label={filter.display} 
-                                            className={classes.FiltersFanficCheckBox} 
-                                            control={<Checkbox  value={filter.name} 
-                                                                onChange={()=>props.filter(`${filter.name}`,null,'filter')}
-                                                                checked={props.checked[`${filter.name}`]}
-                                                                style={{color:'black'}}
-                                                        />} 
-                        />
-                    ))
-                }
-            </FormControl>
-            <FormControl component="fieldset">
+            <Divider variant='fullWidth' className={classes.Devider}/>  
+
+            <FormControl  className={classes.FormControl} component="fieldset">
+                
                 <FormLabel focused={false} className={classes.FiltersFanficLabel}>User Data Filters</FormLabel>
                 {
                     filtersArray.UserData.map(filter=>(
@@ -153,8 +165,9 @@ const Filters = (props) => (
                     ))
                 }
             </FormControl>
-            <Button variant="outlined" type="submit" name="action" color="primary" className={classes.button}>Sort & Filter</Button>
-            <Button variant="outlined" color="secondary" className={classes.button} onClick={()=>props.cancelFilters()} name="action">Cancel</Button>
+            <Divider variant='fullWidth'  className={classes.Devider} />
+            <Button variant="outlined" type="submit" name="action" color="primary" className={classes.Button}>Sort & Filter</Button>
+            <Button variant="outlined" color="secondary" className={classes.Button} onClick={()=>props.cancelFilters()} name="action">Cancel</Button>
         </form>                                                                       
     </div>
 );

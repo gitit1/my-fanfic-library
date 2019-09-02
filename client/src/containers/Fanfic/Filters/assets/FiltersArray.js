@@ -125,6 +125,8 @@ export const filtersArrayInit = {
     wordsTo:"",
     title:"",
     fanficId:"",
+
+    categories:[]
 }
 
 
