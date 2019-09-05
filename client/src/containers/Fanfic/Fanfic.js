@@ -144,6 +144,27 @@ class Fanfic extends Component{
                     })
                 }
                 break;
+            case 'Delete':               
+                const {onDeleteFanfic} = this.props;
+                let fanficsDeletedCount = fanficsNumbers.fanficsDeletedCount-1; 
+                await onDeleteFanfic(fandomName,fanficId).then(()=>{
+                    onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
+                        const fanficsCount = this.props.counter
+                        let newPagesCounter = Math.ceil(fanficsCount/pageLimit);
+                        newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber
+                        this.setState({
+                        fanficsNumbers:{
+                            ...fanficsNumbers,
+                            fanficsCurrentCount:fanficsCount,
+                            fanficsDeletedCount
+                        },   
+                        pageNumber:newPagesCounter,
+                        filterArr      
+                    })
+                    this.paginationClickHandler(newPagesCounter)
+                    });               
+                })           
+                break;                
             default:
                 break;               
         }  

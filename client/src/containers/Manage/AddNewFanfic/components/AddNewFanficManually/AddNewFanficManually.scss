@@ -63,14 +63,17 @@
                 height:100px;             
             }
             .Categories{
-                position: relative;
+                margin-left: 2%;
+                float: left;
+                width: 94%;
+                margin-top:1%;
                 .SelectCategories{
-                    margin-top:1%;
+                    height: 20px!important;
+                    margin-top:4%;
                     margin-left: 2%;
                     float: left;
                     width: 94%;
                 }
-                // position: absolute;
             }
             .Source,
             .PublishDate,

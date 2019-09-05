@@ -10,6 +10,7 @@ import Ignore from './Ignore/Ignore';
 import SavedFile from './SavedFile/SavedFile'
 import AddCategories from './AddCategories/AddCategories'
 import ReadingList from './ReadingList/ReadingList'
+import Delete from './Delete/Delete'
 
 const UserData = (props) => {
   const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics,readingLists} = props;
@@ -20,6 +21,7 @@ const UserData = (props) => {
   const isFinished    =   functions.finishedFilter(userData)
   const isInProgress  =   functions.inProgressFilter(userData,isFinished[0])
   const isIgnored     =   functions.ignoreFilter(userData)
+  const isDeleted     =   (fanfic.Deleted===true) ? true : false
   // const inReadingList =   functions.readingListFilter(userData)
 
   return(
@@ -30,7 +32,8 @@ const UserData = (props) => {
       <Favorite         props={props.props} isFavorite={isFavorite} fanfic={fanfic}/>
       <Finished         props={props.props} isFinished={isFinished} isInProgress={isInProgress} fanfic={fanfic}/>
       <InProgress       props={props.props} userData={userData} isInProgress={isInProgress} fanfic={fanfic} />
-      <Ignore           props={props.props} isIgnored={isIgnored} fanfic={fanfic} />    
+      <Ignore           props={props.props} isIgnored={isIgnored} fanfic={fanfic} />  
+      {isDeleted      &&  <Delete props={props.props} fanfic={fanfic}/>}  
       {props.isManager && <SavedFile      fanfic={fanfic}/>}
     </section>
   )
