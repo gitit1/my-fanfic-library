@@ -30,7 +30,12 @@ const UserFanficsSchema = new Schema({
       SavedType:        []
     }
   ],
-  ReadingList:      [],  
+  ReadingList:      [{
+      Name:             {type: String}, 
+      Date:             {type: Number},
+      image:            {type: String},
+      Fanfics:          []
+  }],  
   FanficIgnoreList: []
 });
 

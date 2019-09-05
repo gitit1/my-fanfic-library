@@ -9,10 +9,10 @@ import InProgress from './InProgress/InProgress';
 import Ignore from './Ignore/Ignore';
 import SavedFile from './SavedFile/SavedFile'
 import AddCategories from './AddCategories/AddCategories'
-
+import ReadingList from './ReadingList/ReadingList'
 
 const UserData = (props) => {
-  const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics} = props;
+  const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics,readingLists} = props;
   let userData = userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
   userData = userData.length!==0 ? Object.values(userData)[0]: null;
   const isFollowed    =   functions.followFilter(userData)    
@@ -23,20 +23,16 @@ const UserData = (props) => {
   // const inReadingList =   functions.readingListFilter(userData)
 
   return(
-    <React.Fragment> 
-      {/* <ReadingList  props={props.props} inReadingList={props.inReadingList} fanfic={props.fanfic}/> */}
+    <section>
+      {props.isManager && <AddCategories  fanfic={fanfic} showCategory={showCategory} showSelectCategory={showSelectCategory} saveCategories={saveCategories}/>   }
+      <ReadingList      props={props.props} userData={userData} fanfic={props.fanfic} readingLists={readingLists}/>
       <Follow           props={props.props} isFollowed={isFollowed} fanfic={fanfic}/>
       <Favorite         props={props.props} isFavorite={isFavorite} fanfic={fanfic}/>
       <Finished         props={props.props} isFinished={isFinished} isInProgress={isInProgress} fanfic={fanfic}/>
       <InProgress       props={props.props} userData={userData} isInProgress={isInProgress} fanfic={fanfic} />
       <Ignore           props={props.props} isIgnored={isIgnored} fanfic={fanfic} />    
-      {props.isManager && 
-      <React.Fragment>
-        <AddCategories  fanfic={fanfic} showCategory={showCategory} showSelectCategory={showSelectCategory} saveCategories={saveCategories}/>    
-        <SavedFile      fanfic={fanfic}/>
-      </React.Fragment>
-      }
-    </React.Fragment>
+      {props.isManager && <SavedFile      fanfic={fanfic}/>}
+    </section>
   )
 };
 

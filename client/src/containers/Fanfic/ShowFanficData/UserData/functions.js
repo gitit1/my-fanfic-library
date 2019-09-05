@@ -46,8 +46,8 @@ export const ignoreFilter = (userData) => {
 
     return([ignoreClassDiv,ignoreClick,isIgnored])
 }
-export const readingListFilter = (userData)=>{
-    const   inReadingList     =   (userData && (userData.ReadingList!==''||userData.ReadingList.length>0)) ? true : false;
+// export const readingListFilter = (userData)=>{
+//     const   inReadingList     =   (userData && (userData.ReadingList!==''||userData.ReadingList.length>0)) ? true : false;
     
-    return([inReadingList])
-}
+//     return([inReadingList])
+// }

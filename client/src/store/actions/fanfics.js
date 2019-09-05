@@ -14,7 +14,8 @@ export const getFanficsFromDBSuccess = (fetchedData) =>{
         type: actionTypes.GET_FANFICS_SUCCESS,
         fanfics: fetchedData[0],
         userFanfics: fetchedData[1],
-        ignoredCount: fetchedData[2],
+        readingLists: fetchedData[2],
+        ignoredCount: fetchedData[3],
         counter: 0
     };
 };
@@ -77,7 +78,7 @@ export const addFanficToUserStatus = (userEmail,fandomName,fanficId,author,fanfi
 }
 
 export const saveCategories = (fandomName,fanficId,categoriesArray) =>{
-    console.log('fandomName,fanficId,categoriesArray 1:',fandomName,fanficId,categoriesArray)
+    console.log('[actions: fanfics.js] - saveCategories')
     return dispatch =>{
         return axios.post(`/db/saveCategories?fandomName=${fandomName}&fanficId=${fanficId}&categories=${categoriesArray}`)
         .then(res =>{
@@ -124,3 +125,16 @@ export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit,
         })  
     };
 };
+
+export const saveNewReadingList = (userEmail,fandomName,fanficId,author,fanficTitle,source,name) =>{
+    console.log('[actions: fanfics.js] - saveNewReadingList')
+    return dispatch =>{
+        return axios.post(`/db/saveNewReadingList?userEmail=${userEmail}&fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
+        .then(res =>{
+            return res.data;
+        })
+        .catch(error =>{
+            return error
+        });   
+    };    
+}

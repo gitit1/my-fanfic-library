@@ -9,6 +9,7 @@ const db = {
     ...require('./UserData/addFanficToUserMarksInDB'),
     ...require('./UserData/addFanficToUserStatus'),
     ...require('./UserData/getLastUpdateDate'),
+    ...require('./UserData/saveReadingListToDB'),
 }
 
 module.exports=db;

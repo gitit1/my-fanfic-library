@@ -9,6 +9,7 @@ const initialState ={
     message:'',
     loading: false,
     counter:0,
+    readingLists:[],
     ignoredCount:0
 }
 //Get Fanfics From Server
@@ -19,6 +20,7 @@ const getFanficsFromDBSuccess  = (state,action) => {
     return updateObject(state,{
         fanfics: action.fanfics,
         userFanfics: action.userFanfics,
+        readingLists:action.readingLists,
         ignoredCount: action.ignoredCount,
         counter: action.counter,
         loading: false

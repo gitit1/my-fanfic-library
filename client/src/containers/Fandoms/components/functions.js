@@ -1,5 +1,4 @@
 export const completeFanfics = (fandom) =>{
-    console.log('fandom:',fandom)
     let ao3 = fandom['AO3'] && fandom['AO3'].CompleteFanfics ? Number(fandom['AO3'].CompleteFanfics) : 0;
     let ff =  fandom['FF'] && fandom['FF'].CompleteFanfics ? Number(fandom['FF'].CompleteFanfics) : 0;
 

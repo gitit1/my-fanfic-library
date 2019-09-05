@@ -12,7 +12,8 @@ export {
     addFanficToUserMarks,
     addFanficToUserStatus,
     getFilteredFanficsFromDB,
-    saveCategories
+    saveCategories,
+    saveNewReadingList
 } from './fanfics';
 
 export {
