@@ -54,7 +54,7 @@ class NavMobile extends Component{
             </div>
         </Drawer>
    
-        <Link to="/" className="btn-flat waves-effect"><p className='title'>My Fanfic Lybrary</p></Link>
+        <Link to="/" className="btn-flat waves-effect"><p className='title'>My Fanfic Library</p></Link>
         <div className='clear'></div>
       </div>
     )

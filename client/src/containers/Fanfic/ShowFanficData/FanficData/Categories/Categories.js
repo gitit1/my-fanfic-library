@@ -28,7 +28,8 @@ const Categories = (props) => {
             <div className='card_content_select_categories_div'>
                 <Typography variant="subtitle2" gutterBottom  className='card_content_categories_caption'>Categories</Typography>
                 <div className='SelectCategories_container'>
-                    <SelectCategories getDataArray={getCategories} suggestions={categories} exist={isAlreadySaved ? fanficCategories.Categories : fanfic.Categories} placeholder={'Select Categories'}/>
+                    <SelectCategories id="categories-filters" class='SelectCategories' getDataArray={getCategories}  placeholder={'Select Categories'}
+                                      suggestions={categories} exist={isAlreadySaved ? fanficCategories.Categories : fanfic.Categories}/>
                 </div>
                 <Button color='primary' onClick={()=>saveCategories(fanfic.FandomName,fanfic.FanficID)}>Save</Button>   
             </div>

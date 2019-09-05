@@ -1,0 +1,117 @@
+.Filters{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    text-align: left;
+    .Form{
+        display: contents;
+        margin:0 auto;
+
+        .FormControl{
+            min-width: 220px;
+
+            .SortSelect{
+                width: 220px;
+                margin-top: 15px;
+            }
+
+            .SelectCategories,
+            .MuiInput-formControl{
+                width:220px!important;
+            }  
+            .FiltersFanficLabel{
+                width: 220px;
+                margin-top: 8px;
+                color:#56647a!important;
+                font-weight: 600!important;
+                font-size: 1.1em!important;
+                
+            }
+            .FiltersFanficCheckBox{
+                display: block;
+            }
+
+        }
+
+        .Source{
+            margin-top: 8px;
+        }
+
+        .Devider{
+            width:240px!important;
+            margin-top: 6px; 
+        }
+        .Button{
+            width: 80%;
+            margin-top: 8px;
+        }
+    }
+
+
+    // form{
+    //     flex: 0 0 90%;
+    //     -webkit-box-shadow: 1px 2px 3px 1px rgba(179, 176, 176, 0.699);
+    //     -moz-box-shadow: 1px 2px 3px 1px rgba(179, 176, 176, 0.699);
+    //     box-shadow: 1px 2px 3px 1px rgba(179, 176, 176, 0.699);
+    //     margin:1% 1%;
+    // }
+
+    // p{
+    //     display: inline-block;
+    //     cursor: pointer;
+    //     margin-top: 1%;
+    //     margin-right: 15px;
+    //     outline: none;
+    //     text-align: left;
+    //     float: left;
+    // }
+    // button{
+    //     width: 100%;
+    // }
+    // .CancelButton{
+    //     background-color: brown
+    // }
+    // .CancelButton:hover{
+    //     background-color: rgba(165, 42, 42, 0.692)    
+    // }
+}
+
+
+/* ---------------------------------------- */
+// .Root{
+//     display: flex;
+//     flex-wrap: wrap;
+//     width: 100%;
+//     margin: 0;
+//     padding: 0;
+//     justify-content: center;
+//     text-align: left
+// }
+// .FormControl{
+//     min-width: 120px;
+// }
+// .SortSelect{
+//     width: 220px;
+//     margin-top: 25px;
+// }
+
+// .FiltersFanficLabel{
+//     width: 220px;
+//     margin-top: 20px;
+//     color:#56647a!important;
+//     font-weight: 600!important;
+//     font-size: 1.1em!important;
+    
+// }
+
+/* .FiltersFanficCheckBox{
+    line-height: 0.8em;
+} */
+
+
+.FiltersFanficCheckBox > span{
+    font-size: 0.9em!important;
+}

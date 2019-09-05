@@ -15,24 +15,28 @@ const FandomSchema = new Schema({
                                     OnGoingFanfics:   {type: Number},
                                     CompleteFanfics:  {type: Number},
                                     SavedFanfics:     {type: Number},
+                                    DeletedFanfics:   {type: Number}     
     },
     FF:                     {
                                     FanficsInFandom:  {type: Number},
                                     OnGoingFanfics:   {type: Number},
                                     CompleteFanfics:  {type: Number},
                                     SavedFanfics:     {type: Number},
+                                    DeletedFanfics:   {type: Number}
     },
     Backup:                     {
                                     FanficsInFandom:  {type: Number},
                                     OnGoingFanfics:   {type: Number},
                                     CompleteFanfics:  {type: Number},
                                     SavedFanfics:     {type: Number},
+                                    DeletedFanfics:   {type: Number}
     },
     Patreon:                    {
                                     FanficsInFandom:  {type: Number},
                                     OnGoingFanfics:   {type: Number},
                                     CompleteFanfics:  {type: Number},
                                     SavedFanfics:     {type: Number},
+                                    DeletedFanfics:   {type: Number}
     },                                 
     LastUpdate:                 {type: Number},
     FanficsLastUpdate:          {type: Number},

@@ -3,6 +3,7 @@ const clc = require("cli-color");
 const {checkForUserDataInDBOnCurrentFanfics} = require('../helpers/checkForUserDataInDBOnCurrentFanfics')
 const {getFanfics} = require('../helpers/getFanfics')
 const {getIgnoredList} = require('../helpers/getIgnoredList');
+const {getReadingLists} = require('../helpers/getReadingLists');
 
 exports.getFanficsFromDB = async (req,res) =>{
     console.log(clc.blue('[db controller] getFanficsFromDB()'));
@@ -11,14 +12,15 @@ exports.getFanficsFromDB = async (req,res) =>{
     const sort=null;
 
     ignoreList = await getIgnoredList(userEmail);
+    readingLists = await getReadingLists(userEmail);
     const filters = (ignoreList.length>0) ? { FanficID : { $nin: ignoreList }} : null;
     // const filters = null;
     getFanfics(skip,limit,FandomName,filters,sort).then(async fanfics=>{
         if(userEmail!='null'){
             userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,fanfics)
-            res.send([fanfics,userData,ignoreList.length])
+            res.send([fanfics,userData,readingLists,ignoreList.length])
         }else{
-            res.send([fanfics,[],0])
+            res.send([fanfics,[],[],0])
         }
     })
 }

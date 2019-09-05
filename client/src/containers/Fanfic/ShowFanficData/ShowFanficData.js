@@ -11,8 +11,9 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const ShowFanficData = (props) => {
-    const {fanfics,userFanfics,isManager,showCategory,isAuthenticated,showSelectCategory,size,showTagsToggle,
-        showTags,getCategories,saveCategories,inputCategoryFlag,categoriesTemp} = props;
+    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists} = props;
+    const {isManager,isAuthenticated,size} = props.props
+    const {getCategories,saveCategories,showSelectCategory,inputCategoryFlag,categoriesTemp,showCategory} = props.categories
     return(
         <React.Fragment>
             <div className='root' style={{width:'100%'}}>
@@ -32,6 +33,7 @@ const ShowFanficData = (props) => {
                                                         isManager={isManager}
                                                         showCategory={showCategory}
                                                         showSelectCategory={showSelectCategory}
+                                                        readingLists={readingLists}
                                             />
                                         </section>
                                     }
