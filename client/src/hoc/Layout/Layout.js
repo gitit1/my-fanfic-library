@@ -20,7 +20,6 @@ class Layout extends Component{
 
     componentDidMount(){
         this.props.onGetFandoms().then(()=>{
-            console.log('done')
             this.props.onGetLastUpdateDate().then(lastUpdateDate=>{
                  this.setState({loading:false,lastUpdateDate:Number(lastUpdateDate)})
             })
@@ -47,7 +46,6 @@ class Layout extends Component{
     render(){
         const {loading} = this.state;
         const {auth,children,size} = this.props;
-        console.log('loading:',loading)
         let page = loading ? null :(
             <div className='layout'>
                 <header>

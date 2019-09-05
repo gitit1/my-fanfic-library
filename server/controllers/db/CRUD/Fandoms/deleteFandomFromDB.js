@@ -1,8 +1,8 @@
 const clc = require("cli-color");
 const fs = require('fs-extra');
 
-const mongoose = require('../../../config/mongoose');
-const FandomModal = require('../../../models/Fandom');
+const mongoose = require('../../../../config/mongoose');
+const FandomModal = require('../../../../models/Fandom');
 
 exports.deleteFandomFromDB = async (req,res)=>{
     console.log(clc.blue('[db controller] deleteFandomFromDB()'));

@@ -1,15 +1,16 @@
 
 const db = { 
-    ...require('./CRUD/addEditFandomToDB'),
-    ...require('./CRUD/deleteFandomFromDB'),
-    ...require('./CRUD/getAllFandomsFromDB'),
-    ...require('./CRUD/getFanficsFromDB'),
-    ...require('./CRUD/saveFanficCategoriesToDB'),
+    ...require('./CRUD/Fandoms/addEditFandomToDB'),
+    ...require('./CRUD/Fandoms/deleteFandomFromDB'),
+    ...require('./CRUD/Fandoms/getAllFandomsFromDB'),
+    ...require('./CRUD/Fanfics/getFanficsFromDB'),
+    ...require('./CRUD/Fanfics/Categories/saveFanficCategoriesToDB'),
     ...require('./Filters/getFilteredFanficsListFromDB'),
     ...require('./UserData/addFanficToUserMarksInDB'),
     ...require('./UserData/addFanficToUserStatus'),
     ...require('./UserData/getLastUpdateDate'),
     ...require('./UserData/saveReadingListToDB'),
+    ...require('./UserData/getReadingListsFromDB'),
 }
 
 module.exports=db;

@@ -12,7 +12,7 @@ exports.getReadingLists = (userEmail) =>{
             if (user) {
                 console.log('found user with reading lists fanfics')
                 const readingList = user.ReadingList.map(rl=>rl.Name);
-                resolve(readingList);
+                resolve([readingList,user.ReadingList]);
             }else{
                 console.log('didnt found user')
                 resolve([])

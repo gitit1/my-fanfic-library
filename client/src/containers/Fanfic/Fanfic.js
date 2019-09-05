@@ -304,7 +304,7 @@ class Fanfic extends Component{
         const {fandomName,newReadingLists} = this.state;
         const userFanficsCopy = [...this.state.userFanfics];
         const val = rlValue!==null ? rlValue : newReadingLists.value;
-        this.props.onSaveNewReadingList(userEmail,fandomName,FanficID,Author,FanficTitle,Source,val).then(res=>{
+        this.props.onSaveReadingList(userEmail,fandomName,FanficID,Author,FanficTitle,Source,val).then(res=>{
             console.log('here!!',res)
             let objIndex = userFanficsCopy.findIndex((fic => fic.FanficID === fanfic.FanficID));
             if(objIndex!==-1){
@@ -398,7 +398,7 @@ const mapStateToProps = state =>{
         message:            state.fanfics.message,
         loading:            state.fanfics.loading,
         ignoredCount:       state.fanfics.ignoredCount,
-        readingLists:       state.fanfics.readingLists,
+        readingLists:       state.fanfics.readingListsNames,
         userEmail:          state.auth.user.email,
         isAuthenticated:    state.auth.isAuthenticated,
         isManager:          state.auth.isManager,
@@ -414,7 +414,7 @@ const mapDispatchedToProps = dispatch =>{
         onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)    =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
         onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber)),
         onSaveCategories:       (fandomName,fanficId,categoriesArray)                                               =>  dispatch(actions.saveCategories(fandomName,fanficId,categoriesArray)),
-        onSaveNewReadingList:   (userEmail,fandomName,fanficId,author,fanficTitle,source,name)                      =>  dispatch(actions.saveNewReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name))
+        onSaveReadingList:      (userEmail,fandomName,fanficId,author,fanficTitle,source,name)                      =>  dispatch(actions.saveReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name))
     
     }
 }
