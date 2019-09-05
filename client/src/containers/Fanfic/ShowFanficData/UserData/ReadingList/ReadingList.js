@@ -48,7 +48,8 @@ const ReadingList = (props) => {
     
     function handleClose() {
         setAnchorEl(null);
-    }   
+    } 
+
     return(
         <div className='userData'>
             <Button color='primary' onClick={handleClick}>Add to Reading List</Button>    
@@ -63,9 +64,9 @@ const ReadingList = (props) => {
                       {readingListCombine!==null &&
                       <MenuList className='ReadingList_DropDown_rl'>
                         {readingListCombine.map(rl=>(
-                            <React.Fragment>
-                              <MenuItem key={rl} onClick={()=>readingLists.addToReadingList(fanfic,rl)}>
-                                  <span className={inReadingList && (userReadingList.includes(rl)) ? 'rl_green' : ''}>{rl}</span>                              
+                            <React.Fragment key={rl}>
+                              <MenuItem onClick={()=>readingLists.addToReadingList(fanfic,rl)}>
+                                  <span className={userReadingList && (userReadingList.includes(rl)) ? 'rl_green' : ''}>{rl}</span>                              
                               </MenuItem>
                               <Divider/>
                             </React.Fragment>
@@ -76,8 +77,8 @@ const ReadingList = (props) => {
                       <div  className='ReadingList_DropDown_new'>
                         <TextField  placeholder='Add new Reading List...'
                                     margin="dense"
-                                    value={readingLists.value} 
-                                    onKeyUp={(event)=>readingLists.setReadingList(event,fanfic)}  />
+                                    value={readingLists.newReadingLists.value} 
+                                    onKeyDown={(event)=>readingLists.setReadingList(event,fanfic)}  />
                         <Button     color='primary' 
                                     onClick={()=>readingLists.addToReadingList(fanfic,null)}>
                                     Add

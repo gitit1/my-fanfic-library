@@ -42,7 +42,7 @@ class Fanfic extends Component{
         fandomName:this.props.match.params.FandomName,
         newReadingLists:{
             newLists:[],
-            value:null
+            value:''
         }
     }
 
@@ -319,26 +319,25 @@ class Fanfic extends Component{
             }
             if(!rlValue){
                 let newLists = (newReadingLists.newLists===null) ? [val] :  [...newReadingLists.newLists,val];
-                this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:null,newLists}})
+                this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:'',newLists}})
             }else{
-                this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:null}})
+                this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:''}})
             }
         })
     }
 
     setReadingList = (event,fanfic) =>{
-        const value = event.target.value;
+        const oldValue = this.state.newReadingLists.value,{newReadingLists} = this.state;
+        let value='';
+        console.log('back:',event.key)
         if(event.key === 'Enter') {
-            this.setState({newReadingLists:{
-                ...this.state.newReadingLists,value
-            }},()=>{
-                this.addToReadingList(fanfic,null)
-            });
-        }else{
-            this.setState({newReadingLists:{
-                ...this.state.newReadingLists,
-                value
-            }})
+            this.addToReadingList(fanfic,null)
+        }else if(event.key === 'Backspace'){
+            value = oldValue.substring(0, oldValue.length - 1);
+            this.setState({newReadingLists:{...newReadingLists,value}})
+        }else if((event.which <= 90 && event.which >= 48) || (event.which <= 111 && event.which >= 107) || (event.which <= 222 && event.which >= 180) || event.which===32){
+            value= oldValue+event.key;
+            this.setState({newReadingLists:{...newReadingLists,value}})
         }
     }
 
