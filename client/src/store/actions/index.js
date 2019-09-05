@@ -13,7 +13,8 @@ export {
     addFanficToUserStatus,
     getFilteredFanficsFromDB,
     saveCategories,
-    saveNewReadingList
+    getReadingList,
+    saveReadingList
 } from './fanfics';
 
 export {

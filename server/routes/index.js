@@ -18,7 +18,8 @@ try {
 
   router.post('/db/getFanfics',db.getFanficsFromDB);
   router.post('/db/saveCategories',db.saveFanficCategoriesToDB);
-  router.post('/db/saveNewReadingList',db.saveReadingListToDB);
+  router.post('/db/getReadingList',db.getReadingListsFromDB);
+  router.post('/db/saveReadingList',db.saveReadingListToDB);
   router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
   router.post('/db/addFanficToUserMarks',db.addFanficToUserMarksInDB);
   router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);

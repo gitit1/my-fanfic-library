@@ -2,8 +2,8 @@ const clc = require("cli-color");
 const multer = require('multer');
 const fs = require('fs-extra');
 
-const mongoose = require('../../../config/mongoose');
-const FandomModal = require('../../../models/Fandom');
+const mongoose = require('../../../../config/mongoose');
+const FandomModal = require('../../../../models/Fandom');
 
 
 

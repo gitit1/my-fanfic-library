@@ -14,7 +14,7 @@ export const getFanficsFromDBSuccess = (fetchedData) =>{
         type: actionTypes.GET_FANFICS_SUCCESS,
         fanfics: fetchedData[0],
         userFanfics: fetchedData[1],
-        readingLists: fetchedData[2],
+        readingListsNames: fetchedData[2],
         ignoredCount: fetchedData[3],
         counter: 0
     };
@@ -126,14 +126,38 @@ export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit,
     };
 };
 
-export const saveNewReadingList = (userEmail,fandomName,fanficId,author,fanficTitle,source,name) =>{
-    console.log('[actions: fanfics.js] - saveNewReadingList')
+export const saveReadingList = (userEmail,fandomName,fanficId,author,fanficTitle,source,name) =>{
+    console.log('[actions: fanfics.js] - saveReadingList')
     return dispatch =>{
-        return axios.post(`/db/saveNewReadingList?userEmail=${userEmail}&fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
+        return axios.post(`/db/saveReadingList?userEmail=${userEmail}&fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
         .then(res =>{
             return res.data;
         })
         .catch(error =>{
+            return error
+        });   
+    };    
+}
+
+export const getReadingListsFromDBSuccess = (fetchedData) =>{
+    console.log('[actions: fanfics.js] - getFanficsFromDBSuccess')
+    return{
+        type: actionTypes.GET_READING_LISTS_SUCCESS,
+        readingListsFull: fetchedData,
+    };
+};
+
+export const getReadingList = (userEmail) =>{
+    console.log('[actions: fanfics.js] - getReadingList')
+    return dispatch =>{
+        dispatch(getFanficsFromDBStart())
+        return axios.post(`/db/getReadingList?userEmail=${userEmail}`)
+        .then(fetchedData =>{
+            dispatch(getReadingListsFromDBSuccess(fetchedData.data));
+            return true;
+        })
+        .catch(error =>{
+            dispatch(getFanficsFromDBFail(error))
             return error
         });   
     };    

@@ -1,6 +1,6 @@
 const clc = require("cli-color");
 
-const FandomModal = require('../../../models/Fandom');
+const FandomModal = require('../../../../models/Fandom');
 
 exports.getAllFandomsFromDB = (req,res) =>{
     console.log(clc.blue('[db controller] getAllFandomsFromDB()'));

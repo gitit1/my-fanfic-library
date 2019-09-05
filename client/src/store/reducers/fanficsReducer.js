@@ -9,7 +9,8 @@ const initialState ={
     message:'',
     loading: false,
     counter:0,
-    readingLists:[],
+    readingListsNames:[],
+    readingListsFull:[],
     ignoredCount:0
 }
 //Get Fanfics From Server
@@ -20,9 +21,15 @@ const getFanficsFromDBSuccess  = (state,action) => {
     return updateObject(state,{
         fanfics: action.fanfics,
         userFanfics: action.userFanfics,
-        readingLists:action.readingLists,
+        readingListsNames:action.readingListsNames,
         ignoredCount: action.ignoredCount,
         counter: action.counter,
+        loading: false
+    })
+}
+const getReadingListsFromDBSuccess  = (state,action) => {
+    return updateObject(state,{
+        readingListsFull:action.readingListsFull,
         loading: false
     })
 }
@@ -55,9 +62,11 @@ const reducer = (state = initialState,action) =>{
         case actionTypes.GET_FANFICS_START:                             return getFanficsFromDBStart(state,action)                                    
         case actionTypes.GET_FANFICS_SUCCESS:                           return getFanficsFromDBSuccess(state,action)                                    
         case actionTypes.GET_FANFICS_FAIL:                              return getFanficsFromDBFail(state,action)  
-
+        
         case actionTypes.GET_FILTERED_FANFICS_SUCCESS:                  return getFilteredFanficsFromDBSuccess(state,action)                                    
         case actionTypes.GET_FILTERED_FANFICS_FAIL:                     return getFilteredFanficsFromDBFail(state,action)  
+        
+        case actionTypes.GET_READING_LISTS_SUCCESS:                     return getReadingListsFromDBSuccess(state,action)                                    
         // case actionTypes.GET_USER_FANFICS_DATA_SUCCESS:                 return getUserDataFromDBSuccess(state,action)                                    
         // case actionTypes.GET_USER_FANFICS_DATA_FAIL:                    return getUserDataFromDBFail(state,action)                                    
 
