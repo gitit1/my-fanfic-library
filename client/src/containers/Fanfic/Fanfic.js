@@ -55,7 +55,7 @@ class Fanfic extends Component{
         
         (fandoms.length===0) &&  await onGetFandoms()
         await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(()=>{
-            const {userFanfics,ignoredCount}  = this.props
+            const {fandoms,userFanfics,ignoredCount}  = this.props
             let fandom = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0];
             const fanficsNumbers = fanficsNumbersFunc(fandom,ignoredCount);
 
@@ -155,6 +155,7 @@ class Fanfic extends Component{
                         const fanficsCount = (this.props.counter === 0) ? fanficsNumbers.fanficsTotalCount : this.props.counter;
                         let newPagesCounter = Math.ceil(fanficsCount-1/pageLimit);
                         newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber;
+                        // TODO: FIX IT 
                         // let sourceCounter = (source==='AO3') ? fanficsNumbers.ao3FanficsCount-1 : (source==='FF') ? fanficsNumbers.ffFanficsCount-1 : ;
                         // let sourceNumber = (source==='AO3') ? 'ao3FanficsCount' : 'ffFanficsCount'
                         this.setState({
