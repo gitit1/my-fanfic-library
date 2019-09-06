@@ -37,6 +37,7 @@ export const categories = [
   { label: 'Pirates' },
   { label: 'Royalty' },
   { label: 'Science Fiction' },
+  { label: 'Secret Relationship' },
   { label: 'Slow Burn' },
   { label: 'Smut' },
   { label: 'Soulmates' },
