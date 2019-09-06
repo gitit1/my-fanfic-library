@@ -14,7 +14,8 @@ export {
     getFilteredFanficsFromDB,
     saveCategories,
     getReadingList,
-    saveReadingList
+    saveReadingList,
+    deleteFanficFromDB
 } from './fanfics';
 
 export {

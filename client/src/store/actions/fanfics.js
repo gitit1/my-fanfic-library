@@ -139,6 +139,19 @@ export const saveReadingList = (userEmail,fandomName,fanficId,author,fanficTitle
     };    
 }
 
+export const deleteFanficFromDB = (fandomName,fanficId,source,complete)=>{
+    console.log('[actions: fanfics.js] - saveReadingList')
+    return dispatch =>{
+        return axios.post(`/db/deleteFanfic?fandomName=${fandomName}&fanficId=${fanficId}&source=${source}&complete=${complete}`)
+        .then(() =>{
+            return true;
+        })
+        .catch(error =>{
+            return error
+        });   
+    };      
+}
+
 export const getReadingListsFromDBSuccess = (fetchedData) =>{
     console.log('[actions: fanfics.js] - getFanficsFromDBSuccess')
     return{
