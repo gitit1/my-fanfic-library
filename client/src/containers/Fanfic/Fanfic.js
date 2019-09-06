@@ -18,6 +18,7 @@ import Pagination from './components/Pagination/Pagination';
 import FanficsNumbers from './components/FanficsNumbers/FanficsNumbers';
 import {fanficsNumbersList} from './components/FanficsNumbers/assets/fanficsNumbersList';
 import {fanficsNumbersFunc} from './components/FanficsNumbers/components/fanficsNumbersFunc';
+import { withRouter } from 'react-router-dom';
 
 import './Fanfic.scss'
 
@@ -46,7 +47,10 @@ class Fanfic extends Component{
         }
     }
 
-    componentWillMount(){this.getFanfics()}
+    componentWillMount(){
+        let isFiltered = this.props.location.search.includes('filters=true');
+        isFiltered ? this.activeFiltersHandler('filtered') : this.getFanfics()      
+    }
 
     getFanfics = async () =>{
         const {pageNumber,pageLimit,fandomName} = this.state
@@ -241,21 +245,25 @@ class Fanfic extends Component{
     //FILTERS:  
     activeFiltersHandler = async(event)=>{
         console.log('[Fanfic.js] activeFiltersHandler()');
-        event && event.preventDefault();
+        event && event!=='filtered' && event.preventDefault();
         const {onGetFilteredFanfics} = this.props, {filters,pageLimit,fandomName} = this.state;
         let {filterArr,pageNumber,fanficsNumbers} = this.state;
-        pageNumber= event ? 1 : pageNumber
+        pageNumber= event ? 1 : pageNumber;
+
         filterArr = [];
-        
-        // if(filterArr.length===0){ for(let key in filters){filters[key] === true && filterArr.push(key)} }
-        for(let key in filters){ 
-            filters[key] === true && filterArr.push(key)
-            if(typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0){filterArr.push(`${key}_${filters[key]}`)}
+        if(event==='filtered'){
+            filterArr = this.props.location.search.split('filters=true')[1].split('&')
+            console.log('filtered',filterArr)
+        }else{
+            for(let key in filters){ 
+                filters[key] === true && filterArr.push(key)
+                if(typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0){filterArr.push(`${key}_${filters[key]}`)}
+            }
+            this.props.history.push(`?filters=true&${filterArr.join('&')}`);
         }
-        console.log('filterArr:',filterArr)
-        // this.setState({filterArr: {...filterArr,[filter]: !filterArr[filter]}})    
         
         await onGetFilteredFanfics(fandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
+            
             const fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
 
             this.setState({userFanfics,filterArr,pageNumber,
@@ -447,4 +455,4 @@ const mapDispatchedToProps = dispatch =>{
     }
 }
   
-  export default connect(mapStateToProps,mapDispatchedToProps)(Fanfic);
+  export default connect(mapStateToProps,mapDispatchedToProps)(withRouter(Fanfic));
