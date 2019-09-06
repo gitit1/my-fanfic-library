@@ -75,11 +75,11 @@ class Fanfic extends Component{
 
     markAsHandler = async(fanficId,author,fanficTitle,source,markType,mark) =>{
         console.log('!mark,,,',!mark)
-        const {fandomName} = this.state;
-        await this.props.onMarkHandler(this.props.userEmail,fandomName,fanficId,author,fanficTitle,source,markType,!mark)
+        const {onMarkHandler,onGetFilteredFanfics,onDeleteFanfic,userEmail} = this.props, {pageLimit,fanficsNumbers,filterArr,pageNumber,fandomName} = this.state;
+        (markType!=='Delete') && await onMarkHandler(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,!mark);
         const userFanficsCopy = [...this.state.userFanfics];
 
-        let objIndex = userFanficsCopy.findIndex((fanfic => fanfic.FanficID === fanficId));      
+        let objIndex = (markType!=='Delete') && userFanficsCopy.findIndex((fanfic => fanfic.FanficID === fanficId));      
         switch (markType) {
             case 'Favorite':
                 if(objIndex!==-1){
@@ -119,7 +119,7 @@ class Fanfic extends Component{
                         [markType]:!mark
                     })
                 }
-                const {onGetFilteredFanfics,userEmail} = this.props, {pageLimit,fanficsNumbers,filterArr,pageNumber,fandomName} = this.state;
+                
                 let fanficsIgnoredCount = (!mark===true) ? fanficsNumbers.fanficsIgnoredCount+1 : fanficsNumbers.fanficsIgnoredCount-1;
                 if(markType==='Ignore'){                   
                      await onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
@@ -144,17 +144,23 @@ class Fanfic extends Component{
                     })
                 }
                 break;
-            case 'Delete':               
-                const {onDeleteFanfic} = this.props;
-                let fanficsDeletedCount = fanficsNumbers.fanficsDeletedCount-1; 
-                await onDeleteFanfic(fandomName,fanficId).then(()=>{
-                    onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
-                        const fanficsCount = this.props.counter
-                        let newPagesCounter = Math.ceil(fanficsCount/pageLimit);
-                        newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber
+            case 'Delete':     
+                console.log('DELETE!!!')          
+                const {} = this.props;
+                await onDeleteFanfic(fandomName,fanficId,source,mark).then(async ()=>{
+                    console.log('here...')
+                    // await onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
+                        let fanficsDeletedCount = (fanficsNumbers.fanficsDeletedCount-1<=0) ? 0 : fanficsNumbers.fanficsDeletedCount-1; 
+                        console.log('here... 1')
+                        const fanficsCount = (this.props.counter === 0) ? fanficsNumbers.fanficsTotalCount : this.props.counter;
+                        let newPagesCounter = Math.ceil(fanficsCount-1/pageLimit);
+                        newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber;
+                        // let sourceCounter = (source==='AO3') ? fanficsNumbers.ao3FanficsCount-1 : (source==='FF') ? fanficsNumbers.ffFanficsCount-1 : ;
+                        // let sourceNumber = (source==='AO3') ? 'ao3FanficsCount' : 'ffFanficsCount'
                         this.setState({
                         fanficsNumbers:{
                             ...fanficsNumbers,
+                            fanficsTotalCount:fanficsNumbers.fanficsTotalCount-1,
                             fanficsCurrentCount:fanficsCount,
                             fanficsDeletedCount
                         },   
@@ -162,7 +168,7 @@ class Fanfic extends Component{
                         filterArr      
                     })
                     this.paginationClickHandler(newPagesCounter)
-                    });               
+                    // });               
                 })           
                 break;                
             default:
@@ -433,6 +439,7 @@ const mapDispatchedToProps = dispatch =>{
         onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail)                                         =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail)),
         onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)             =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
         onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)    =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
+        onDeleteFanfic:         (fandomName,fanficId,source,complete)                                               =>  dispatch(actions.deleteFanficFromDB(fandomName,fanficId,source,complete)),
         onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber)),
         onSaveCategories:       (fandomName,fanficId,categoriesArray)                                               =>  dispatch(actions.saveCategories(fandomName,fanficId,categoriesArray)),
         onSaveReadingList:      (userEmail,fandomName,fanficId,author,fanficTitle,source,name)                      =>  dispatch(actions.saveReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name))
