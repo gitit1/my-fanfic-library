@@ -13,7 +13,7 @@ import BuildForm from '../../../ManageFandoms/components/AddNewFandom/components
 import {updateObject} from '../../../../../utils/sharedFunctions';
 import {checkValidity} from '../../../../../components/Forms/functions';
 import {buildFormData} from './components/buildFormData';
-import fileUploader from '../../../../../components/ImageUpload/ImageUpload'
+import FileUploader from '../../../../../components/ImageUpload/ImageUpload'
 import Button from '../../../../../components/UI/Button/Button';
 import './AddNewFanficManually.scss';
 
@@ -97,7 +97,7 @@ class AddNewFanficManually extends Component{
                 let fileUpload = `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type}`;
                 let fileUpload2 = anotherFiler &&  `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type2}`;
                 
-                type = anotherFiler &&  `${type},${type2[type2.length-1]}`;
+                type = anotherFiler &&  `${type},${type2}`;
 
                 formData.append('fileName',`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);
                 formData.append('savedAs',type);
@@ -249,8 +249,8 @@ class AddNewFanficManually extends Component{
                          />
                          {(showUploadButton || (showSaveButton && (similarFanfic===null))) && 
                             <React.Fragment>
-                                <fileUploader id='file1' ref={this.fileUploadRef}  edit={false} FandomName={fanfic.FandomName} type='doc'/>
-                                <fileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Another File' FandomName={fanfic.FandomName} type='doc'/>
+                                <FileUploader id='file1' ref={this.fileUploadRef}  edit={false} FandomName={fanfic.FandomName} type='doc'/>
+                                <FileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Another File' FandomName={fanfic.FandomName} type='doc'/>
                                 {showUploadButton && <Button color="primary" clicked={()=>this.saveFanficData(true)}>Save</Button>}
                             </React.Fragment>
                          }

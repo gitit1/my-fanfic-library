@@ -12,6 +12,7 @@ export const categories = [
   { label: 'Cheating' },
   { label: 'Coffee Shop' },
   { label: 'College' },
+  { label: 'Crossover' },
   { label: 'Dancer' },
   { label: 'Death' },
   { label: 'Doctor/Hospital' },

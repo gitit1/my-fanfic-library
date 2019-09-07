@@ -93,32 +93,13 @@ class Fanfic extends Component{
     }
 
     addUrlQueries = (type,value) =>{
-        console.log('--addUrlQueries--')
         const {urlQueries,pageNumber} = this.state;
         let str = '';
-        console.log('str 1',str)
         str = (pageNumber!==1) && `?page=${pageNumber}`;
-        console.log('str 2',str)
         str = (urlQueries.filterQuery==='') ? str : (pageNumber!==1) ? `${str}&filters=true&${urlQueries.filterQuery}` : `?filters=true&${urlQueries.filterQuery}`;
-        console.log('str 3',str)
+
         str!=='' ? this.props.history.push(str) : this.props.history.replace(this.props.location);
-        // switch (type) {
-        //     case 'page':
-        //         str =  urlQueries.isFiltered ? `?page=${value}&filters=true&${urlQueries.filterQuery}` : `?page=${value}`;
-        //         break;
-        //     case 'filters':
-        //         str = `?filters=true&${value}`;
-        //         this.setState({urlQueries:{...urlQueries,isFiltered:true,filterQuery:value}});
-        //         break;
-        //     case 'cancelFilters':
-        //         str = '';
-        //         break;
-        //     default:
-        //         break;
-        //}
-        //
-        //            this.props.history.push(`?filters=true&${filterArr.join('&')}`);
-        // urlQueries.isFiltered ? this.props.history.push(`?page=${page}&filters=true&${urlQueries.filterQuery}`) : this.props.history.push(`?page=${page}`);
+
     }
 
     paginationClickHandler = async (page) =>{
