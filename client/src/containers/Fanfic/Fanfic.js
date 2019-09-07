@@ -53,7 +53,7 @@ class Fanfic extends Component{
     }
 
     componentWillMount(){
-        const {location} = this.props;
+        const {location,fandoms} = this.props;
         let {urlQueries,filterArr} = this.state;
 
         let isFiltered = location.search.includes('filters=true') ? true : false;
@@ -64,11 +64,12 @@ class Fanfic extends Component{
             console.log('will mount page',page)
             let filterQuery = location.search.split('filters=true&')[1];
             filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
-            this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},()=>{
+            this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
+                await this.getFanfics()               
                 this.activeFiltersHandler('filtered')
             });
         }else{
-            this.getFanfics();
+            isInPage ? this.setState({pageNumber:page},()=>this.getFanfics()) : this.getFanfics();
         }
         isInPage && console.log('page:',location.search.split('page=')[1].split('&')[0])
         
@@ -92,25 +93,29 @@ class Fanfic extends Component{
     }
 
     addUrlQueries = (type,value) =>{
-        const {urlQueries} = this.state;
+        console.log('--addUrlQueries--')
+        const {urlQueries,pageNumber} = this.state;
         let str = '';
-        console.log('urlQueries:',urlQueries)
-        console.log('type,value:',type,value)
-        switch (type) {
-            case 'page':
-                str =  urlQueries.isFiltered ? `?page=${value}&filters=true&${urlQueries.filterQuery}` : `?page=${value}`;
-                break;
-            case 'filters':
-                str = `?filters=true&${value}`;
-                this.setState({urlQueries:{...urlQueries,isFiltered:true,filterQuery:value}});
-                break;
-            case 'cancelFilters':
-                str = '';
-                break;
-            default:
-                break;
-        }
+        console.log('str 1',str)
+        str = (pageNumber!==1) && `?page=${pageNumber}`;
+        console.log('str 2',str)
+        str = (urlQueries.filterQuery==='') ? str : (pageNumber!==1) ? `${str}&filters=true&${urlQueries.filterQuery}` : `?filters=true&${urlQueries.filterQuery}`;
+        console.log('str 3',str)
         str!=='' ? this.props.history.push(str) : this.props.history.replace(this.props.location);
+        // switch (type) {
+        //     case 'page':
+        //         str =  urlQueries.isFiltered ? `?page=${value}&filters=true&${urlQueries.filterQuery}` : `?page=${value}`;
+        //         break;
+        //     case 'filters':
+        //         str = `?filters=true&${value}`;
+        //         this.setState({urlQueries:{...urlQueries,isFiltered:true,filterQuery:value}});
+        //         break;
+        //     case 'cancelFilters':
+        //         str = '';
+        //         break;
+        //     default:
+        //         break;
+        //}
         //
         //            this.props.history.push(`?filters=true&${filterArr.join('&')}`);
         // urlQueries.isFiltered ? this.props.history.push(`?page=${page}&filters=true&${urlQueries.filterQuery}`) : this.props.history.push(`?page=${page}`);
@@ -120,7 +125,7 @@ class Fanfic extends Component{
         const {filterArr} = this.state;
         await this.setState({pageNumber: page}, async () => {
             (filterArr.length===0) ? await this.getFanfics() : await this.activeFiltersHandler();
-            this.addUrlQueries('page',page)
+            await this.addUrlQueries()
         })       
         return null
     }
@@ -308,9 +313,9 @@ class Fanfic extends Component{
                 filters[key] === true && filterArr.push(key)
                 if(typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0){filterArr.push(`${key}_${filters[key]}`)}
             }
-            this.addUrlQueries('filters',filterArr.join('&'))
+            this.setState({urlQueries:{...urlQueries,filterQuery:filterArr.join('&')}})
         }
-        console.log('pageNumber:',pageNumber)
+
         await onGetFilteredFanfics(fandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
             
             const fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
@@ -323,6 +328,7 @@ class Fanfic extends Component{
                            }
             
             })
+            this.addUrlQueries()
         });
         return null
     }
@@ -349,8 +355,9 @@ class Fanfic extends Component{
         }
     }
     cancelFiltersHandler = async() =>{
-        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'},await this.getFanfics)
-        this.addUrlQueries('cancelFilters')
+        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'
+                       ,urlQueries:{...this.state.urlQueries,filterQuery:''}},await this.getFanfics)
+        this.addUrlQueries()
     }
 
     toggleDrawer = (open) => event => {if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return}this.setState({drawerFilters: open})}
