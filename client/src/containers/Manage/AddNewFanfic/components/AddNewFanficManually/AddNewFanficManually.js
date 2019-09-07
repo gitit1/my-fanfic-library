@@ -13,12 +13,13 @@ import BuildForm from '../../../ManageFandoms/components/AddNewFandom/components
 import {updateObject} from '../../../../../utils/sharedFunctions';
 import {checkValidity} from '../../../../../components/Forms/functions';
 import {buildFormData} from './components/buildFormData';
-import ImageUpload from '../../../../../components/ImageUpload/ImageUpload'
+import fileUploader from '../../../../../components/ImageUpload/ImageUpload'
 import Button from '../../../../../components/UI/Button/Button';
 import './AddNewFanficManually.scss';
 
 class AddNewFanficManually extends Component{
     fileUploadRef= React.createRef();
+    fileUploadRef2= React.createRef();
 
     state ={
         fanficForm:fanficDataForm[0],
@@ -87,17 +88,21 @@ class AddNewFanficManually extends Component{
                 }
             }else{
                 this.setState({showSaveButton:false,msg:''})
-                console.log('1:',this.fileUploadRef.current!==null)
-                console.log('2:',this.fileUploadRef.current.state.file==='')
-                console.log('fileUploadRef:',this.fileUploadRef.current.state.file)
+                let anotherFiler = this.fileUploadRef2.current===null || (this.fileUploadRef2.current!==null && this.fileUploadRef2.current.state.file==='') ? false : true;
                 let type= this.fileUploadRef.current.state.file.name.split('.');
+                let type2= anotherFiler && this.fileUploadRef2.current.state.file.name.split('.');
                 type = type[type.length-1];
+                type2 = type2[type2.length-1];
                 
                 let fileUpload = `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type}`;
+                let fileUpload2 = anotherFiler &&  `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type2}`;
                 
+                type = anotherFiler &&  `${type},${type2[type2.length-1]}`;
+
                 formData.append('fileName',`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);
                 formData.append('savedAs',type);
                 formData.append(fileUpload,this.fileUploadRef.current.state.file)
+                anotherFiler &&  formData.append(fileUpload2,this.fileUploadRef2.current.state.file)
         
                 this.props.onSaveFanficDataToDB(fandomName,formData,null,null,null).then(()=>{
                     let msg = <p>Saved Fanfic to DB</p>
@@ -244,7 +249,8 @@ class AddNewFanficManually extends Component{
                          />
                          {(showUploadButton || (showSaveButton && (similarFanfic===null))) && 
                             <React.Fragment>
-                                <ImageUpload id='main' ref={this.fileUploadRef} edit={false} FandomName={fanfic.FandomName} type='doc'/>
+                                <fileUploader id='file1' ref={this.fileUploadRef}  edit={false} FandomName={fanfic.FandomName} type='doc'/>
+                                <fileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Another File' FandomName={fanfic.FandomName} type='doc'/>
                                 {showUploadButton && <Button color="primary" clicked={()=>this.saveFanficData(true)}>Save</Button>}
                             </React.Fragment>
                          }
