@@ -180,6 +180,7 @@
                     height: 20px !important;
                     margin-top:0.3%;
                     margin-left: 0.2%;
+                    
                 }
             }
             .card_content_desc{
@@ -190,6 +191,20 @@
                     margin: 1.286em auto;
                     padding: 0;
                     line-height: 1.4em;
+                }
+            }
+            .card_content_series{
+                text-align: left;
+                margin-left: 1%;
+                margin-top:1%;
+                // text-transform: capitalize;
+                font-weight: 500;
+                line-height: 1.4em;
+                span{
+                    font-weight: 600;
+                }
+                a{
+                    text-decoration: underline #383732;
                 }
             }
             .card_content_stat{

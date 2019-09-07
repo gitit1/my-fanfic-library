@@ -5,7 +5,7 @@ const SavedFile = (props) => {
     
     return(
         <div className='SavedFile'>
-        {fileName && 
+        {savedAs && fileName && 
             <React.Fragment>
                 <span>Saved on server:&nbsp;</span>
                 {savedAs && savedAs.split(',').map(method=>(
