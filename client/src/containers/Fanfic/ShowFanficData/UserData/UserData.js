@@ -34,7 +34,7 @@ const UserData = (props) => {
       <InProgress       props={props.props} userData={userData} isInProgress={isInProgress} fanfic={fanfic} />
       <Ignore           props={props.props} isIgnored={isIgnored} fanfic={fanfic} />  
       {isDeleted      &&  <Delete props={props.props} fanfic={fanfic}/>}  
-      {props.isManager && <SavedFile      fanfic={fanfic}/>}
+      <SavedFile      fanfic={fanfic}/>
     </section>
   )
 };
