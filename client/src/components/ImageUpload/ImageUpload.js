@@ -62,7 +62,7 @@ class ImageUpload extends Component {
       }
       if(type==='doc'){
         docPreview =  <span>
-                        <Button onClick={() => {document.getElementById(id).click()}} variant="contained">Upload File</Button>
+                        <Button onClick={() => {document.getElementById(id).click()}} variant="contained">{label ? label : 'Upload File'}</Button>
                         <input type="file" id={id}  style={{display:'none'}} onChange={(e)=>this._handleImageChange(e)}/>
                         <Typography gutterBottom variant="body2" component="span" className='doc_span_filename'>{file.name}</Typography>
                       </span>
