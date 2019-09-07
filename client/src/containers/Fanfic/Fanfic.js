@@ -428,6 +428,7 @@ class Fanfic extends Component{
         const filtersProps      =   {   drawer:drawerFilters,checked:filters,filterHandler:this.filterHandler,
                                         toggleDrawer:this.toggleDrawer,cancel:this.cancelFiltersHandler,activeFilter:this.activeFiltersHandler}
         const readingListProps  =   {   readingLists:(readingLists===null) ? [] : readingLists,newReadingLists,setReadingList:this.setReadingList,addToReadingList:this.addToReadingList}
+        
         return(
             <Container header={fandomName} className='fanfics'>
                 <Grid container className='containerGrid'>

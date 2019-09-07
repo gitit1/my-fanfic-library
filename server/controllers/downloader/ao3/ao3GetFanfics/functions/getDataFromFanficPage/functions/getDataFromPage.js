@@ -77,6 +77,11 @@ exports.getDataFromPage = (page,fandomName) =>{
         fanfic["Bookmarks"]             =       (page.find('dd.bookmarks').text()) ==="" ? 0 : Number(page.find('dd.bookmarks').text());
         fanfic["Words"]                 =       Number(page.find('dd.words').text().replace(/,/g,'')); 
      
+
+        fanfic["Series"]                =       page.find('ul.series li a').text() ==="" ? false : page.find('ul.series li a').text() ;
+        fanfic["SeriesPart"]            =       fanfic["Series"] && Number(page.find('ul.series li strong').text());
+        fanfic["SeriesURL"]             =       fanfic["Series"] && 'https://archiveofourown.org'+ page.find('ul.series li a').attr('href');
+        
         fanfic["NeedToSaveFlag"]        =       false;
 
         resolve(fanfic);
