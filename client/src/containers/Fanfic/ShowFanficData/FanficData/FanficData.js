@@ -3,6 +3,7 @@ import Header from './Header/Header'
 import Tags from './Tags/Tags'
 import Categories from './Categories/Categories'
 import Desc from './Desc/Desc'
+import Series from './Series/Series'
 import Stat from './Stat/Stat'
 
 const FanficData = (props) => {
@@ -22,6 +23,9 @@ const FanficData = (props) => {
             <section className='card_content_categories'>
                 <Categories fanfic={fanfic} getCategories={getCategories} saveCategories={saveCategories}
                             showSelectCategory={showSelectCategory} curFanfic={inputCategoryFlag} fanficCategories={fanficCategories}/> 
+            </section>
+            <section className='card_content_series'>
+                <Series fanfic={fanfic}/>                        
             </section>
             <section className='card_content_desc'>
                 <Desc fanfic={fanfic}/>                        
