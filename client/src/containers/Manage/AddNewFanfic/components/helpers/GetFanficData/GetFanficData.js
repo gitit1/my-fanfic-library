@@ -3,7 +3,7 @@ import Button from '../../../../../../components/UI/Button/Button';
 import Spinner from '../../../../../../components/UI/Spinner/Spinner';
 import ShowFanficData from './components/showFanficData/showFanficData'
 
-const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,userData,showSaveButton
+const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,userData,showSaveButton,savedData
                         ,similarFanfic,msg,saveFanficData,markStatus,toggleChapterB,markAs,inputCategoryFlag,
                         showSelectCategory,showCategory,getCategories,saveCategories,categoriesTemp}) => {
                             
@@ -30,7 +30,7 @@ const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,us
                     
             } 
             {
-                (similarFanfic!==null && showData) &&
+                (similarFanfic!==null && showData && !savedData) &&
                 <React.Fragment>
                     {
                     similarFanfic.FanficID===fanfic.FanficID
@@ -41,7 +41,7 @@ const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,us
                             <br/>
                             <br/>
                             <br/>
-                            <ShowFanficData fanfic={similarFanfic} size={size} showUserData={showUserData}/> 
+                            <ShowFanficData fanfic={similarFanfic} size={size} showUserData={showUserData}  userData={userData}/> 
                             <br/>
                             <br/>
                             <br/>

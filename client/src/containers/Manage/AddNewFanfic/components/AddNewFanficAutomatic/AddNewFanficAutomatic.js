@@ -64,7 +64,7 @@ class AddNewFanficAutomatic extends Component{
       const {url} = this.state
       const {fandomName,fanfic,switches} = this.props
       if(save){
-          this.setState({showData:true,showUserData:true})
+          this.setState({showData:true,showUserData:true,savedData:true})
           this.props.onSaveFanficDataToDB(fandomName,fanfic,switches.save,url,false).then((res=>{
               let msg = <p>Saved Fanfic to DB</p>
               this.setState({msg,showSaveButton:false})
@@ -192,7 +192,7 @@ class AddNewFanficAutomatic extends Component{
     }
 
     render(){
-      const {url,loadingFlag,showData,showUserData,userData,showSaveButton,msg} = this.state;
+      const {url,loadingFlag,showData,savedData,showUserData,userData,showSaveButton,msg} = this.state;
       const {inputCategoryFlag,showSelectCategory,categoriesShowTemp} = this.state.userData
       const {size,loading,fanfic,similarFanfic} = this.props;
       return(            
@@ -202,7 +202,7 @@ class AddNewFanficAutomatic extends Component{
               <Button clicked={this.getFanficData}>Show Data</Button>
               <br/>
               <GetFanficData loading={loading} loadingFlag={loadingFlag} showData={showData} similarFanfic={similarFanfic} showSaveButton={showSaveButton}
-                             fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler} 
+                             fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler} savedData={savedData}
                              markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler} saveFanficData={this.saveFanficData} msg={msg}
                              getCategories={this.getCategories} inputCategoryFlag={inputCategoryFlag} showSelectCategory={showSelectCategory}
                              showCategory={this.showSelectCategoryHandler} saveCategories={this.saveCategories} categoriesTemp={categoriesShowTemp}/>

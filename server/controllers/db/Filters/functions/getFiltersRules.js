@@ -88,14 +88,14 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 filtersFanficList.push({'FanficID':Number(filterValue)})
                 break;                 
             case 'author'://author with text
-                filtersFanficList.push({'Author': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
+                filtersFanficList.push({'Author': {$regex : `.*${filterValue.replace('%20','')}.*`, '$options' : 'i'}})
                 break;
             case 'title':
-                filtersFanficList.push({'FanficTitle': {$regex : `.*${filterValue}.*`, '$options' : 'i'}})
+                filtersFanficList.push({'FanficTitle': {$regex : `.*${filterValue.replace('%20','')}.*`, '$options' : 'i'}})
                 break;
             case 'categories':
                 console.log('filterValue:',filterValue)
-                filtersFanficList.push({'Categories': {$all: filterValue.split(',')}})
+                filtersFanficList.push({'Categories': {$all: filterValue.replace('%20','').split(',')}})
                 break;
             case 'wordsFrom':
                     if(wordsFlag){
