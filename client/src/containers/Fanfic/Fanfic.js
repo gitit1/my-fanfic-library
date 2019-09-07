@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions';
 
 import Container from '../../components/UI/Container/Container';
-// import Spinner from '../../components/UI/Spinner/Spinner';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 import Filters from './Filters/Filters';
 import {filtersArrayInit} from './Filters/assets/FiltersArray'
@@ -49,11 +49,14 @@ class Fanfic extends Component{
             isFiltered:false,
             page:1,
             filterQuery: ''
-        }
+        },
+        firstLoad:true,
+        dataLoad:false
     }
 
     componentWillMount(){
-        const {location,fandoms} = this.props;
+        console.log('componentWillMount')
+        const {location} = this.props;
         let {urlQueries,filterArr} = this.state;
 
         let isFiltered = location.search.includes('filters=true') ? true : false;
@@ -64,14 +67,19 @@ class Fanfic extends Component{
             console.log('will mount page',page)
             let filterQuery = location.search.split('filters=true&')[1];
             filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
+            isInPage && this.setState({pageNumber:page})
             this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
                 await this.getFanfics()               
-                this.activeFiltersHandler('filtered')
+                await this.activeFiltersHandler();
+                this.setState({firstLoad:false})
             });
         }else{
-            isInPage ? this.setState({pageNumber:page},()=>this.getFanfics()) : this.getFanfics();
+            isInPage && this.setState({pageNumber:page,urlQueries:{...urlQueries,page}})
+            this.getFanfics().then(()=>{
+                this.setState({firstLoad:false})
+            })
         }
-        isInPage && console.log('page:',location.search.split('page=')[1].split('&')[0])
+        
         
     }
 
@@ -92,22 +100,30 @@ class Fanfic extends Component{
         return null
     }
 
-    addUrlQueries = (type,value) =>{
+    addUrlQueries = () =>{
         const {urlQueries,pageNumber} = this.state;
         let str = '';
-        str = (pageNumber!==1) && `?page=${pageNumber}`;
-        str = (urlQueries.filterQuery==='') ? str : (pageNumber!==1) ? `${str}&filters=true&${urlQueries.filterQuery}` : `?filters=true&${urlQueries.filterQuery}`;
-
-        str!=='' ? this.props.history.push(str) : this.props.history.replace(this.props.location);
+        str = (!urlQueries.isFiltered) ? `?page=${pageNumber}` : `?page=${pageNumber}&filters=true&${urlQueries.filterQuery}`;
+        
+        console.log('!urlQueries.isFiltered:',!urlQueries.isFiltered)
+        console.log('pageNumber:',pageNumber)
+        if((urlQueries.isFiltered)||(urlQueries.page!==pageNumber||pageNumber===1)){
+            this.props.history.push(str);
+            this.setState({urlQueries:{...urlQueries,page:pageNumber}});
+        }else{
+            this.props.history.replace(this.props.location)
+        }
 
     }
 
     paginationClickHandler = async (page) =>{
         const {filterArr} = this.state;
-        await this.setState({pageNumber: page}, async () => {
+        await this.setState({pageNumber: page,dataLoad:true}, async () => {
             (filterArr.length===0) ? await this.getFanfics() : await this.activeFiltersHandler();
-            await this.addUrlQueries()
+            await this.addUrlQueries();
+            this.setState({dataLoad:false})
         })       
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return null
     }
 
@@ -279,24 +295,25 @@ class Fanfic extends Component{
     //FILTERS:  
     activeFiltersHandler = async(event)=>{
         console.log('[Fanfic.js] activeFiltersHandler()');
-        event && event!=='filtered' && event.preventDefault();
+        let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
+        event && !isFiltered && event.preventDefault();
         const {onGetFilteredFanfics} = this.props, {filters,pageLimit,fandomName,urlQueries} = this.state;
         let {filterArr,pageNumber,fanficsNumbers} = this.state;       
 
         filterArr = [];
-        if(event==='filtered'){
-            filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
-            console.log('queries page',urlQueries.page)
-            pageNumber = urlQueries.page;            
+        pageNumber = event ? 1 : pageNumber;
+        if(isFiltered){
+            filterArr = this.props.location.search.split('filters=true')[1].split('&');  
+            console.log('----filterArr:',filterArr)       
         }else{
-            pageNumber = event ? 1 : pageNumber;
             for(let key in filters){ 
                 filters[key] === true && filterArr.push(key)
                 if(typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0){filterArr.push(`${key}_${filters[key]}`)}
             }
-            this.setState({urlQueries:{...urlQueries,filterQuery:filterArr.join('&')}})
+            this.setState({urlQueries:{...urlQueries,filterQuery:filterArr.join('&'),isFiltered:true}})
         }
-
+        console.log('--pageNumber:',pageNumber)
+        console.log('--filterArr:',filterArr)
         await onGetFilteredFanfics(fandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
             
             const fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
@@ -337,7 +354,7 @@ class Fanfic extends Component{
     }
     cancelFiltersHandler = async() =>{
         this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'
-                       ,urlQueries:{...this.state.urlQueries,filterQuery:''}},await this.getFanfics)
+                       ,urlQueries:{...this.state.urlQueries,isFiltered:false,filterQuery:''}},await this.getFanfics)
         this.addUrlQueries()
     }
 
@@ -419,8 +436,8 @@ class Fanfic extends Component{
 
     render(){
         const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,drawerFilters,
-               currentSource,showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists} = this.state;
-        const {isManager,size,isAuthenticated,fanfics,readingLists} = this.props;
+               currentSource,showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad} = this.state;
+        const {isManager,size,isAuthenticated,fanfics,readingLists,loading} = this.props;
 
         const props             =   {   isManager,size,isAuthenticated};
         const categoriesProps   =   {   inputCategoryFlag,categoriesShowTemp,showSelectCategory,categoriesTemp:categoriesShowTemp,
@@ -431,35 +448,43 @@ class Fanfic extends Component{
         
         return(
             <Container header={fandomName} className='fanfics'>
-                <Grid container className='containerGrid'>
-                    <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
-                                total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
+                {firstLoad 
+                    ?<Spinner />
+                    :<React.Fragment>
+                        <Grid container className='containerGrid'>
+                            <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
+                                        total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
 
-                    <Grid container className='containerGrid'>
-                        <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
-                        <Filters sort={currentSort} source={currentSource} filters={filtersProps} getCategories={this.getFiltersCategories}/>                        
-                    </Grid>
-                    
-                    <Grid className={'main'}>
-                        <Divider/>
-                        {fanficsNumbers.fanficsCurrentCount===0 ? 
-                                <p><b>Didn't found any fanfics with this search filters</b></p>
-                            :
-                                <ShowFanficData fanfics={fanfics}
-                                                userFanfics={userFanfics}
-                                                markAs={this.markAsHandler}            
-                                                markStatus={this.statusHandler}
-                                                inputChapterToggle={this.inputChapterHandler}
-                                                inputChapter={inputChapterFlag}
-                                                props={props}                                
-                                                categories={categoriesProps}
-                                                readingLists={readingListProps}
-                                />
-                            }
-                    </Grid>
-                </Grid>
-                <Pagination gridClass='paginationGrid paginationGridButtom'  onChange={this.paginationClickHandler} showTotal={false} current={pageNumber} 
-                            total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
+                            <Grid container className='containerGrid'>
+                                <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
+                                <Filters sort={currentSort} source={currentSource} filters={filtersProps} getCategories={this.getFiltersCategories}/>                        
+                            </Grid>
+                            
+                            <Grid className={'main'}>
+                                <Divider/>
+                                {fanficsNumbers.fanficsCurrentCount===0 ? 
+                                    <p><b>Didn't found any fanfics with this search filters</b></p>
+                                    : dataLoad ? <Spinner /> : 
+                                        <ShowFanficData fanfics={fanfics}
+                                                            userFanfics={userFanfics}
+                                                            markAs={this.markAsHandler}            
+                                                            markStatus={this.statusHandler}
+                                                            inputChapterToggle={this.inputChapterHandler}
+                                                            inputChapter={inputChapterFlag}
+                                                            props={props}                                
+                                                            categories={categoriesProps}
+                                                            readingLists={readingListProps}
+                                        />
+                                        
+                                    }
+                            </Grid>
+                        </Grid>
+                        {!dataLoad && 
+                            <Pagination gridClass='paginationGrid paginationGridButtom'  onChange={this.paginationClickHandler} showTotal={false} current={pageNumber} 
+                                    total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
+                        }
+                    </React.Fragment>
+                }
             </Container>
         )
     }
