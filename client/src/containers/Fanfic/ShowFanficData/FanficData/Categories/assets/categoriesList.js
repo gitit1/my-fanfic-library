@@ -2,6 +2,7 @@ export const categories = [
   { label: 'Abandoned' },
   { label: 'Actress' },
   { label: 'Alpha/Omega/Beta Verse' },
+  { label: 'Amnesia/Memory Lost' },
   { label: 'Angst' },
   { label: 'Arrange Marriage' },
   { label: 'Artist' },
