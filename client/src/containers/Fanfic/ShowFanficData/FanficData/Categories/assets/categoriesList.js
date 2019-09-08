@@ -50,6 +50,7 @@ export const categories = [
   { label: 'Superheros' },
   { label: 'Teacher/Professor' },
   { label: 'Time Period AU' },
+  { label: 'Time Travel' },
   { label: 'Zombies' },
   ].map(suggestion => ({
     value: suggestion.label,

@@ -5,7 +5,14 @@ import { connect } from "react-redux";
 
 import {loginUser} from '../../store/actions';
 
+import classes from './Login.module.scss';
 import classnames from 'classnames';
+import Container from '../../components/UI/Container/Container';
+
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
 
 class Login extends Component {
   constructor() {
@@ -51,74 +58,53 @@ onSubmit = e => {
 render() {
     const { errors } = this.state;
 return (
-      <div className="container">
-        <div style={{ marginTop: "4rem" }} className="row">
-          <div className="col s8 offset-s2">
-            <Link to="/" className="btn-flat waves-effect">
-              <i className="material-icons left">keyboard_backspace</i> Back to
-              home
-            </Link>
-            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-              <h4>
-                <b>Login</b> below
-              </h4>
-              <p className="grey-text text-darken-1">
-                Don't have an account? <Link to="/register">Register</Link>
-              </p>
-            </div>
+    <Container header='Login'>
+      <Card className={classes.Login}>
+        <Grid container className={classes.ContainerGrid}>
+          <Grid item xs={8} className={classes.FormGrid}>
             <form noValidate onSubmit={this.onSubmit}>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.email}
-                  error={errors.email}
-                  id="email"
-                  type="email"
-                  className={classnames("", {
-                    invalid: errors.email || errors.emailnotfound
-                  })}
-                />
-                <label htmlFor="email">Email</label>
-                <span className="red-text">
-                  {errors.email}
-                  {errors.emailnotfound}
-                </span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.password}
-                  error={errors.password}
-                  id="password"
-                  type="password"
-                  className={classnames("", {
-                    invalid: errors.password || errors.passwordincorrect
-                  })}
-                />
-                <label htmlFor="password">Password</label>
-                <span className="red-text">
-                  {errors.password}
-                  {errors.passwordincorrect}
-                </span>
-              </div>
-              <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <button
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem"
-                  }}
-                  type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                >
-                  Login
-                </button>
-              </div>
+              <TextField 
+                className={classnames("", classes.Email , {
+                  invalid: errors.email || errors.emailnotfound
+                })}
+                error={errors.email}
+                label='Email'
+                id="email"
+                type="email"
+                margin="dense"
+                value={this.state.email}
+                onChange={this.onChange}/>
+              <span className="red-text">
+                {errors.email}
+                {errors.emailnotfound}
+              </span>
+              <br/>
+              <TextField 
+                className={classnames("", classes.Password, {
+                  invalid: errors.password || errors.passwordincorrect
+                })}
+                error={errors.password}
+                label='Password'
+                id="password"
+                type="password"
+                margin="dense"
+                value={this.state.password}
+                onChange={this.onChange}/>
+
+              <span className="red-text">
+                {errors.password}
+                {errors.passwordincorrect}
+              </span>
+              <br/>                               
+              <br/>                               
+              <Button  type="submit" variant="contained"  className='send_button'>Login</Button>
             </form>
-          </div>
-        </div>
-      </div>
+            <br/> 
+            <div className={classes.Registrer}>Don't have an account? <Link to="/register">Register</Link></div>
+          </Grid>
+        </Grid>
+      </Card>
+    </Container>
     );
   }
 }

@@ -15,6 +15,22 @@ export const fandomGeneralForm = [{
             visible: true,
             disabled:false
     },
+    FandomUniverse: {
+        label: 'Fandom Universe:',
+        elementType: 'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Fandom Universe'
+        },
+        value:'',
+        validation: {
+            required: true
+        },
+        valid:false,
+        touched:false,
+        visible: true,
+        disabled:false
+},
     SearchKeys: {
         label: 'Search Key:',
         elementType:'input', 

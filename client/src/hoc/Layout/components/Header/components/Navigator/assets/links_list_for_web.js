@@ -50,21 +50,25 @@ export const navLinks = [
     },{
         type: 'menu',
         label: 'About',
-        ancorName: 'anchorManage',
+        ancorName: 'anchorAbout',
         auth_manager: true,
         subLinks:[
             {
-                label:  'Fandoms',       
-                link:   '/manageFandoms',                
+                label:  'About',       
+                link:   '/about',                
             },
             {
-                label:  'Downloader',
-                link:   '/manageDownloader'
+                label:  'Contact Us',
+                link:   '/contact'
             },
             {
-                label:  'Add New Fanfic',
-                link:   '/AddNewFanfic'
-            } 
+                label:  'Disclaimers',
+                link:   '/disclaimers'
+            },
+            {
+                label:  'News & Updates',
+                link:   '/news'
+            }  
         ]
     }
 ]
