@@ -4,7 +4,7 @@ export const fandomGeneralForm = [{
             elementType: 'input', 
             elementConfig:{
                 type: 'text',
-                placeholder: 'Fandom Name'
+                placeholder: 'Fandom Name [For Example: Clexa]'
             },
             value:'',
             validation: {
@@ -20,7 +20,7 @@ export const fandomGeneralForm = [{
         elementType: 'input', 
         elementConfig:{
             type: 'text',
-            placeholder: 'Fandom Universe'
+            placeholder: 'Fandom Universe (Media) [For Example: The 100 (TV)]'
         },
         value:'',
         validation: {
@@ -36,7 +36,7 @@ export const fandomGeneralForm = [{
         elementType:'input', 
         elementConfig:{
             type: 'text',
-            placeholder: 'Search Key'
+            placeholder: 'Search Key - Seperate by Comma [For Example: Clexa, Clarke Griffin/Lexa]'
         },
         value:'',
         validation: {

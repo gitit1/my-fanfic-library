@@ -22,6 +22,10 @@ const BoxContent = (props) => (
                     <React.Fragment>
                         <Typography gutterBottom variant="h5" component="h2" className='fandoms_fandom_caption'>{props.fandom.FandomName}</Typography>
                         <Typography variant="body1" color="textSecondary" component="p">
+                            <b>{props.fandom.FandomUniverse}</b>
+                        </Typography>
+                        <br/>
+                        <Typography variant="body1" color="textSecondary" component="p">
                             <span>Fanfics in Fandoms: </span><b>{props.fandom.FanficsInFandom.toLocaleString(undefined, {maximumFractionDigits:2})}</b>
                         </Typography>       
                         <Typography variant="body1" color="textSecondary" component="p">
