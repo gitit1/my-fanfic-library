@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const FandomSchema = new Schema({
     FandomName:                 {type: String, unique: true},
+    FandomUniverse:                {type: String},
     SearchKeys:                 {type: String},
     AutoSave:                   {type: Boolean},
     SaveMethod:                 {type: String},

@@ -72,6 +72,11 @@ class AddNewFandom extends Component{
                     valid: true,
                     disabled: true
                 },
+                'FandomUniverse':{
+                    ...prevState.fandomForm['FandomUniverse'],
+                    value: this.props.fandom['FandomUniverse'],
+                    valid: true             
+                },
                 'SearchKeys':{
                     ...prevState.fandomForm['SearchKeys'],
                     value: this.props.fandom['SearchKeys'],
@@ -119,6 +124,7 @@ class AddNewFandom extends Component{
 
         let fandomFormData = new FormData();
         fandomFormData.append("FandomName", fandomName);
+        fandomFormData.append("FandomUniverse", fandomForm['FandomUniverse'].value);
         fandomFormData.append("SearchKeys", fandomForm['SearchKeys'].value);
         fandomFormData.append("AutoSave",   fandomForm['AutoSave'].value);
         fandomFormData.append("SaveMethod", saveType);

@@ -1,0 +1,16 @@
+.News{
+    margin: 0 auto;
+    width:60%;
+
+    line-height: 1.6em;
+    .Date{
+        text-align: center;
+        width: 50%;
+        float: left;
+    }
+    .Content{
+        text-align: left;
+        width: 50%;
+        float: left;
+    }
+}

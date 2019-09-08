@@ -124,3 +124,40 @@ export const getLastUpdateDate = () =>{
         })  
     };    
 }
+
+export const getUserFandomsFromDBSuccess = (userFandoms) =>{
+    console.log('[actions: fandom.js] - getUserFandomsFromDBSuccess')
+    return{
+        type: actionTypes.GET_USER_FANDOMS_SUCCESS,
+        userFandoms: userFandoms
+    };
+};
+
+export const getUserFandoms = (userEmail) =>{
+    console.log('[actions: fandoms.js] - getUserFandoms')
+    return dispatch =>{
+        dispatch(getFandomsFromDBStart())
+        return axios.post(`/db/getUserFandoms?userEmail=${userEmail}`)
+        .then(res =>{
+            dispatch(getUserFandomsFromDBSuccess(res.data));
+            return true;
+        })
+        .catch(error =>{
+            dispatch(getFandomsFromDBFail())
+            return error
+        });   
+    }; 
+}
+
+export const addFandomToUserFavorite = (userEmail,fandom,status) =>{
+    console.log('[actions: fandoms.js] - addFandomToUserFavorite')
+    return dispatch =>{
+        return axios.post(`/db/addFandomToUserFavorites?userEmail=${userEmail}&fandomName=${fandom}&status=${status}`)
+        .then(() =>{
+            return true;
+        })
+        .catch(error =>{
+            return error
+        });   
+    };   
+}

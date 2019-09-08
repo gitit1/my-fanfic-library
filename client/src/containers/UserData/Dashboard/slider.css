@@ -1,0 +1,21 @@
+.slick-slide {
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+
+.slick-arrow{
+    color: #B9B9B9;
+}
+
+.slick-prev {
+    left: 1% !important;
+    width: 25px !important;
+    height: 25px !important;
+    z-index: 1 !important;
+  }
+  .slick-next {
+    right: 1% !important;
+    width: 25px !important;
+    height: 25px !important;
+    z-index: 1 !important;
+  }

@@ -23,7 +23,8 @@ const ShowFanficData = ({userData,fanfic,categoriesTemp,size,getCategories,saveC
 
     let fanficCategories = categoriesTemp && categoriesTemp.filter( categories => {return categories.FanficID === fanfic.FanficID})
     fanficCategories = (categoriesTemp && fanficCategories.length!==0) ? Object.values(fanficCategories)[0]: null;
-
+    
+    console.log('userData:',userData)
     return(
         <div className="root">
         <Card className='card'  key={fanfic.FanficID}>

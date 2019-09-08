@@ -1,52 +1,125 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {logoutUser} from "../../../store/actions";
-import Container from '../../../components/UI/Container/Container';
+import * as actions from '../../../store/actions';
 
+import Container from '../../../components/UI/Container/Container';
+import Spinner from '../../../components/UI/Spinner/Spinner';
+import Grid from '@material-ui/core/Grid';
+import Slider from "react-slick";
+import classes from './Dashboard.module.scss';
+import './slider.css'
+
+import {Link} from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+
+const settings = {
+  dots: false,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 3
+};
 
 class Dashboard extends Component {
+    state = {
+      userFandomsArr:[]
+    }
+    componentWillMount(){
+      const {onGetUserFandoms,userFandoms,userEmail,fandoms} = this.props;
+
+      if(userFandoms===null){
+        onGetUserFandoms(userEmail).then(()=>{
+          const userFandoms = this.props.userFandoms;
+          const userFandomsArr = (userFandoms!==null&&userFandoms.length!==0) ? fandoms.filter(fandom=>{return userFandoms.includes(fandom.FandomName)}) : []
+          this.setState({userFandomsArr})
+        })
+      }else{
+        const userFandomsArr = fandoms.filter(fandom=>{return userFandoms.includes(fandom.FandomName)})
+        this.setState({userFandomsArr})
+      }
+  }
+
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
   };
-render() {
-    const { user } = this.props.auth;
-return (
-    <Container header='Dashboard Page'>
-      <img src="/images/work-in-progress.jpg" alt="wip"/>
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
-        <div className="row">
-          <div className="col s12 center-align">
-            <h4>
-              <b>Hey there,</b> {user.name.split(" ")[0]}
-            </h4>
-            <button
-              style={{
-                width: "150px",
-                borderRadius: "3px",
-                letterSpacing: "1.5px",
-                marginTop: "1rem"
-              }}
-              onClick={this.onLogoutClick}
-              className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-    </Container>
-    );
-  }
+
+  render() {
+      const {name,loading} = this.props;
+      const {userFandomsArr} = this.state
+      
+
+      return (
+          loading ? <Spinner/> :
+            <Container header={`${name} Dashboard`} className={classes.Dashboard}>
+              <Grid container className={classes.GridContainer}>
+                <Grid item xs={12} className={classes.MyFandoms}>
+                  <div className={classes.Slider}>
+                    <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">My Fandoms</Typography>
+                    <Slider {...settings}>
+                        {userFandomsArr.map(fandom=>(
+                            <Card className={classes.Card} key={fandom.FandomName} >
+                              <CardActionArea className={classes.CardActionArea}>
+                                <Link to={`/fanfics/${fandom.FandomName}`}>
+                                  <CardMedia className={classes.CardMedia}
+                                              image={fandom.Image_Name_Main !== '' 
+                                                      ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Image_Name_Main}`
+                                                      : `/fandoms/nophoto.png`
+                                              } 
+                                              title={fandom.FandomName}/>
+                                  <CardContent className={classes.CardContent}>
+                                  <div  className={classes.Overlay}>
+                                      <Typography className={classes.OverlayCaption} gutterBottom variant="h5" component="h2">
+                                          {fandom.FandomName}
+                                      </Typography>
+                                  </div>
+                                  </CardContent>
+                                </Link>
+                              </CardActionArea>
+                            </Card>
+                        ))}
+                    </Slider>
+                  </div>
+                </Grid>
+                <Grid item xs={12} className={classes.Other}>
+                  <div>TODO: my Statics</div>
+                </Grid>
+                <Grid item xs={12} className={classes.Other}>
+                    <div>TODO: reading list</div>
+                </Grid>
+                <Grid item xs={12} className={classes.Other}>
+                    <div>TODO: edit info of user</div>
+                </Grid>               
+                <Grid item xs={12} className={classes.Other}>
+                    <div>TODO: add images (?)</div>
+                </Grid>
+              </Grid>
+              <div></div>
+              
+              
+            </Container>
+          );
+        }
 }
 
-Dashboard.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
-};
+
 const mapStateToProps = state => ({
-    auth: state.auth
+  name:         state.auth.user.name,
+  userEmail:    state.auth.user.email,
+  fandoms:      state.fandoms.fandoms,
+  userFandoms:  state.fandoms.userFandoms,
+  loading:      state.fandoms.loading,
 });
 
-export default connect(mapStateToProps,{logoutUser})(Dashboard);
+const mapDispatchedToProps = dispatch =>{
+  return{
+      onGetUserFandoms:           (userEmail)                 =>  dispatch(actions.getUserFandoms(userEmail)),   
+      logoutUser:                 ()                          =>  dispatch(actions.logoutUser())
+  }
+}  
+
+export default connect(mapStateToProps,mapDispatchedToProps)(Dashboard);

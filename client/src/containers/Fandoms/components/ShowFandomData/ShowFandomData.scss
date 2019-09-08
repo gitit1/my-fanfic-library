@@ -22,8 +22,13 @@
         .fandoms_card{
             max-width: 400px;
             
+            .fandoms_star{
+                float: left;
+                z-index:999
+            }
             .fandoms_card_media{
-                height:300px;
+                z-index:800;
+                height:230px;
             }
             .fandoms_card_content{
                 text-align: center;
@@ -50,6 +55,17 @@
 } 
 
 @media(max-width: $screenSizeS){
+    .fandoms{
+       .fandoms_grid{
+        .fandoms_card{
+            height: 250px!important;
+            .fandoms_card_media{
+                height: 250px!important;
+            }
+        }
+                        
+       } 
+    }
     .fandoms_mobile{
         padding: 0!important;
     }

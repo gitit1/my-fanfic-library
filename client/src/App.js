@@ -33,6 +33,11 @@ import FullMyFanficsUpdates from './containers/Updates/FullMyFanficsUpdates/Full
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
+//About
+import About from './containers/About/About/About';
+import ContactUs from './containers/About/ContactUs/ContactUs';
+import Disclaimers from './containers/About/Disclaimers/Disclaimers';
+import News from './containers/About/News/News';
 
 ReactGA.initialize('UA-146053520-01');
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -83,6 +88,11 @@ function App() {
           <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}         level={1} />
           <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}          level={1} />
           <PrivateRoute exact path="/addNewFanfic"        component={AddNewFanfic}          level={1} />
+          {/* About */}
+          <Route              path="/about"               component={About}                           />
+          <Route              path="/contact"             component={ContactUs}                       />
+          <Route              path="/disclaimers"         component={Disclaimers}                     />
+          <Route              path="/news"                component={News}                            />
           {/* Auth */}  
           <Route              path="/register"            component={Registrer}                       />
           <Route              path="/login"               component={Login}                           />

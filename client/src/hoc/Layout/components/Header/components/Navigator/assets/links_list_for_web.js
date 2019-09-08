@@ -47,5 +47,28 @@ export const navLinks = [
                 link:   '/AddNewFanfic'
             } 
         ]
+    },{
+        type: 'menu',
+        label: 'About',
+        ancorName: 'anchorAbout',
+        auth_manager: true,
+        subLinks:[
+            {
+                label:  'About',       
+                link:   '/about',                
+            },
+            {
+                label:  'Contact Us',
+                link:   '/contact'
+            },
+            {
+                label:  'Disclaimers',
+                link:   '/disclaimers'
+            },
+            {
+                label:  'News & Updates',
+                link:   '/news'
+            }  
+        ]
     }
 ]
