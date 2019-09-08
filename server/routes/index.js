@@ -16,6 +16,7 @@ try {
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
 
+  router.get('/db/getLastUpdateDate',db.getLastUpdateDate);
   router.post('/db/getFanfics',db.getFanficsFromDB);
   router.post('/db/deleteFanfic',db.deleteFanficFromDB);
   router.post('/db/saveCategories',db.saveFanficCategoriesToDB);
@@ -24,7 +25,8 @@ try {
   router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
   router.post('/db/addFanficToUserMarks',db.addFanficToUserMarksInDB);
   router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);
-  router.get('/db/getLastUpdateDate',db.getLastUpdateDate);
+  router.post('/db/addFandomToUserFavorites',db.addFandomToUserFavorites);
+  router.post('/db/getUserFandoms',db.getUserFandomsFromDB);
   
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);

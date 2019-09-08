@@ -26,6 +26,11 @@ button:disabled{
     opacity: 0.6;
 }
 
+
+.material-icons.md-30 { font-size: 30px; }
+.material-icons.white { color: #fff; }
+.material-icons.yellow { color: #fffb22; fill:#fffb22; }
+
 @media only screen and (max-width: $screenSizeL) {
     .responsive_show{
         display: block

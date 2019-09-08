@@ -4,7 +4,9 @@ export {
     addFandomToDB,
     deleteFandomFromDB,
     getFandom,
-    getLastUpdateDate
+    getLastUpdateDate,
+    getUserFandoms,
+    addFandomToUserFavorite
 } from './fandoms';
 
 export {

@@ -23,7 +23,9 @@ exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fan
                 activity = typeFlag ? `In Progress - ${chapter}` : 'Need to Read'
                 break;  
             case 'Reading List':
-                activity = typeFlag ? `Added - ${chapter} ` : 'Removed'                
+                activity = typeFlag ? `Added - ${chapter}` : `Removed - ${chapter}` ;
+            case 'Fandom':
+                activity = typeFlag ? `Added - ${fandomName}` : `Removed - ${fandomName}` ;                
             default:
                 break;
         }
@@ -32,8 +34,12 @@ exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fan
             if (err) { return 'there is an error'; }
             if (user) {
                 console.log('found user!!, '+user.userEmail)
-                const userActivity = {Date:Number(new Date().getTime()),FanficID:Number(fanficId),
-                                      Author:author,FanficTitle:fanficTitle,FandomName:fandomName,Source:source,ActivityType:activity  }
+                console.log('type!!, '+type)
+               const userActivity = (type==='Fandom') 
+                                     ? {Date:Number(new Date().getTime()),FandomName:fandomName,ActivityType:activity }
+                                     : {Date:Number(new Date().getTime()),FanficID:Number(fanficId),Author:author,FanficTitle:fanficTitle,
+                                        FandomName:fandomName,Source:source,ActivityType:activity  }
+
                 UserActivitiesDB.updateOne({userEmail: userEmail},
                     { $push: { "LatestActivities": userActivity }},(err, result) => {
                         if (err) throw err;

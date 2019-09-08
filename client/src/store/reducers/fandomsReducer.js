@@ -3,6 +3,7 @@ import {updateObject} from '../../utils/sharedFunctions';
 
 const initialState ={
     fandom: null,
+    userFandoms: null,
     fandoms: [],
     error: null,
     message:'',
@@ -49,6 +50,12 @@ const editFandomDataFail  = (state,action) => {
                               });   
 }
 
+const getUserFandomsFromDBSuccess = (state,action) =>{
+    return updateObject(state,{
+        userFandoms: action.userFandoms,
+        loading: false
+    })
+}
 const reducer = (state = initialState,action) =>{
     switch(action.type){
         case actionTypes.GET_FANDOMS_START:                 return getFandomsFromDBStart(state,action)                                    
@@ -59,6 +66,7 @@ const reducer = (state = initialState,action) =>{
         case actionTypes.EDIT_FANDOM_FAIL:                  return editFandomDataFail(state,action)                                    
         
         case actionTypes.GET_FANDOM:                        return getFandom(state,action)                                    
+        case actionTypes.GET_USER_FANDOMS_SUCCESS:          return getUserFandomsFromDBSuccess(state,action)                                    
         
         default: return state;
     }

@@ -29,6 +29,7 @@ class Index extends Component{
              if(isAuthenticated){
                  await this.props.onGetMyLatestActivities(LIMIT_FOR_MY_LATEST_ACTIVITIES,userEmail)
                  await this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY_LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES)
+                 await this.props.onGetUserFandoms(userEmail)
                  this.setState({loading:false})
              }else{
                  this.setState({loading:false})
@@ -37,19 +38,15 @@ class Index extends Component{
     }
     render(){
         const {loading} = this.state;
-        const {fandoms,screenSize,smallSize,latestUpdates,myLatestActivities,isAuthenticated,myFanficsUpdates} = this.props;
-        //IndexFandoms
-        const shuffledFandoms = fandoms.sort(() => 0.5 - Math.random());
-        const selectedFandoms = (screenSize==='m'|screenSize==='xm') ? shuffledFandoms.slice(0, 6) : screenSize!=='l' ? shuffledFandoms.slice(0, 3) : shuffledFandoms.slice(0, 9);
-        const cols = (fandoms.length < 6||screenSize==='m'|screenSize==='xm') ? 3 : screenSize!=='l' ? 1 : 4
-        
+        const {fandoms,screenSize,smallSize,latestUpdates,myLatestActivities,isAuthenticated,myFanficsUpdates,userFandoms} = this.props;
+
         return(
             <Container>
                 { loading ? <Spinner/> :
                     <Grid container className='index_page'>
                         <IndexContainer header='Fandoms'>
-                            <IndexFandoms cols={cols} numOfFandoms={fandoms.length} smallSize={smallSize} 
-                                          fandoms={selectedFandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))}/>
+                            <IndexFandoms numOfFandoms={fandoms.length} smallSize={smallSize} userFandoms={userFandoms}
+                                          fandoms={fandoms} screenSize={screenSize}/>
                         </IndexContainer>
                         <IndexContainer header='Latest Updates'>
                             <LatestUpdates updates={latestUpdates}/>
@@ -75,6 +72,7 @@ const mapStateToProps = state =>{
     return{
         fandoms:                state.fandoms.fandoms,
         loading:                state.fandoms.loading,
+        userFandoms:            state.fandoms.userFandoms,
         screenSize:             state.screenSize.size,
         smallSize:              state.screenSize.smallSize,
         latestUpdates:          state.updates.latestUpdates,
@@ -90,7 +88,8 @@ const mapDispatchedToProps = dispatch =>{
     return{
         onGetLatestUpdates:         (limit)                         =>  dispatch(actions.getLatestUpdates(limit)),
         onGetMyLatestActivities:    (limit,userEmail)               =>  dispatch(actions.getMyLatestActivities(limit,userEmail)),
-        onGetMyFanficsUpdates:      (userEmail,limit,daysLimit)     =>  dispatch(actions.myFanficsUpdates(userEmail,limit,daysLimit))
+        onGetMyFanficsUpdates:      (userEmail,limit,daysLimit)     =>  dispatch(actions.myFanficsUpdates(userEmail,limit,daysLimit)),
+        onGetUserFandoms:           (userEmail)                     =>  dispatch(actions.getUserFandoms(userEmail))
     }
 }
   
