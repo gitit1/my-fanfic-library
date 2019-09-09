@@ -1,0 +1,59 @@
+@import '../../../style/_colors';
+@import '../../../style/_fonts';
+@import '../../../style/_varibles';
+
+.ContactUs{
+    width: 70%;
+    margin: 0 auto;
+    height: 70vh;
+    text-align: center;
+
+    .ContainerGrid{
+        margin-top: 2%;
+
+        .FormGrid{
+            margin: 0 auto;
+            width: 100%;
+
+            .Name,
+            .Email,
+            .Password,
+            .Message{
+                width: 600px;
+                height: auto;
+            }
+
+            .Message{
+                min-height: 100px;
+            }
+        }
+    }
+    .Login a{
+        text-decoration: underline
+    }
+}
+
+@media(max-width: $screenSizeS){
+    .Register{
+        width: 90%;
+        margin: 0 auto;
+        height: 70vh;
+        text-align: center;
+
+        .ContainerGrid{
+            .FormGrid{
+                .Name,
+                .Email,
+                .Password,
+                .Password2{
+                    width: 220px;
+                    height: auto;
+                }
+            }
+        }
+        .Login{
+            font-size: 0.8em;
+        }
+    }
+    
+}

@@ -6,11 +6,15 @@ const db = require('../controllers/db/db');
 const users = require('../controllers/users/users');
 const downloader = require('../controllers/downloader/downloader');
 const updates = require('../controllers/updates/updates');
+const Other = require('../controllers/Other/other');
 // const otherfanficssites = require('../controllers/downloader/ff/otherfanficssites');
 
 
 try {
   console.log('[Server] - in routes')
+
+  router.post('/contactUs',Other.contactUs);
+
 
   router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);

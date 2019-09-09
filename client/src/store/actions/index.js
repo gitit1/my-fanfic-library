@@ -30,7 +30,8 @@ export {
     registerUser,
     loginUser,
     setCurrentUser,
-    logoutUser
+    logoutUser,
+    contactUs
 } from './users';
 
 export{
