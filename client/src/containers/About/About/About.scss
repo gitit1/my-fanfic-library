@@ -1,0 +1,52 @@
+@import '../../../style/_colors';
+@import '../../../style/_fonts';
+@import '../../../style/_varibles';
+
+.About{
+    // height: 300px;
+    // flex-grow: 1;
+    display: 'flex';
+    width:100%;
+
+    .Tabs{
+        border-right: 2px solid $color_header;
+        float: left;
+        height: 91vh;
+        flex-grow: 1;
+        width:250px;
+        // padding-bottom: 44%;
+        overflow: hidden;
+    }
+    .MuiTab-root{
+        width:250px;
+        margin-top: 2%
+        
+    }
+    .MuiBox-root{
+        // width: calc(100% - 250px);
+        margin: 0 auto; 
+        margin-left: 250px;
+        
+    }
+    .MuiTabs-indicator{
+        visibility: hidden;
+    }
+    .Mui-selected span{
+        color: $color_text!important;
+        font-weight: 800!important;
+    }
+    .MuiTabs-flexContainer {
+        display: grid!important;
+        overflow: hidden;
+     }
+
+     .Tab0,.Tab1,.Tab2{
+         margin: 0 auto; 
+         line-height: 1.6em;
+         text-align: left
+     }
+     .Tab1{
+
+     }
+}
+
