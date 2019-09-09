@@ -62,3 +62,17 @@ export const logoutUser = () => dispatch => {
     // Set current user to empty object {} which will set isAuthenticated to false
     dispatch(setCurrentUser({}));
 };
+
+// Register User
+export const contactUs = (userData) => dispatch => {
+  console.log('[Users] actions  - contactUs')
+  return axios.post("/contactUs", userData).then(res => {
+            return(res.data)
+    }).catch(err =>
+        dispatch({
+          type: actionTypes.GET_ERRORS,
+          payload: err.response.data
+        })
+      );
+};
+

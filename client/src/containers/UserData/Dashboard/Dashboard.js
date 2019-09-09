@@ -60,6 +60,9 @@ class Dashboard extends Component {
                 <Grid item xs={12} className={classes.MyFandoms}>
                   <div className={classes.Slider}>
                     <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">My Fandoms</Typography>
+                    {userFandomsArr.length===0
+                      ? <h3>You currently don't have Favorite Fandoms , <Link to='/fandoms'>Add some</Link></h3>
+                      :
                     <Slider {...settings}>
                         {userFandomsArr.map(fandom=>(
                             <Card className={classes.Card} key={fandom.FandomName} >
@@ -83,6 +86,7 @@ class Dashboard extends Component {
                             </Card>
                         ))}
                     </Slider>
+                    }
                   </div>
                 </Grid>
                 <Grid item xs={12} className={classes.Other}>

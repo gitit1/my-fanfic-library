@@ -4,8 +4,8 @@ import Container from '../../../../components/UI/Container/Container';
 const Tab1 = () => (
     <Container header='Why did I built the site?'>
           <section className='Tab1'>
-            <p>I choose to built this site because I really love to read fanfics but I have a couple of problems with the sites Im reading my fanfics from:</p>
-            <h4>General</h4>
+            <p>I choose to built this site because I really love to read fanfics but I have a couple of issues with the sites I'm reading my fanfics from:</p>
+            <h4>General Issues</h4>
             <ul>
               <li>Create one plave that will contain all of the fanfics I read (fanfic data + fanfic file for backup) - will include AO3,FF,Wattpad,Tumblr,Patreon and even others</li>
               <li>Create user buttons (Follow,Finished,Ignore...) which are easy to understand and use (and see them during search)</li>
