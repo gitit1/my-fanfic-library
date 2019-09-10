@@ -17,7 +17,6 @@ import {categories} from '../../ShowFanficData/FanficData/Categories/assets/cate
 import SelectCategories from '../../../../components/UI/Input/SelectAutoComplete'
 
 const Filters = (props) => {
-    console.log('props.filteredCategories:',props.filteredCategories)
     return (
         <div className={classes.Filters}>
             <form className={classes.Form} onSubmit={(event)=>props.filtersAction(event)} autoComplete="off">
