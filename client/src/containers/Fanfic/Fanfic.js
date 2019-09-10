@@ -336,6 +336,7 @@ class Fanfic extends Component{
                 }
             }
             filterArr.filter(Boolean)
+            console.log('filterArr:',filterArr)
             this.setState({urlQueries:{...urlQueries,filterQuery:filterArr.join('&'),isFiltered:true}})
         }
         await onGetFilteredFanfics(fandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
