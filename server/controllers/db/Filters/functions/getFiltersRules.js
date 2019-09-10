@@ -2,7 +2,7 @@
 const {getIgnoredList} = require('../../helpers/getIgnoredList');
 
 exports.getFiltersRules = async (filters,userEmail) =>{
-    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true,finishFlag=false,inProgressFlag=false;
+    let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true,finishFlag=false,inProgressFlag=false,notFanficId=true;
     let tagsArr = ''; 
     console.log('filters:::',filters)
     await filters.map(filter=>{
@@ -89,6 +89,7 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 break;
             case 'fanficId':
                 filtersFanficList.push({'FanficID':Number(filterValue)})
+                notFanficId = false;
                 break;                 
             case 'author'://author with text
                 filtersFanficList.push({'Author': {$regex : `.*${filterValue.replace('%20','')}.*`, '$options' : 'i'}})
@@ -128,7 +129,7 @@ exports.getFiltersRules = async (filters,userEmail) =>{
     }
     let ignoreList = await getIgnoredList(userEmail);
 
-    if (ignoreList.length>0 && searchWithIgnoreFlag && filtersUserList.length===0){
+    if (ignoreList.length>0 && searchWithIgnoreFlag && filtersUserList.length===0 && notFanficId){
         filtersFanficList.push({ FanficID : { $nin: ignoreList }})
         ignoreList = [] 
     }else if(!searchWithIgnoreFlag){
