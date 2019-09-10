@@ -120,11 +120,11 @@ export const filtersArrayInit = {
     hits:false,
     kudos:false,
 
-    author:"",
-    wordsFrom:"",
-    wordsTo:"",
-    title:"",
-    fanficId:"",
+    author:null,
+    wordsFrom:null,
+    wordsTo:null,
+    title:null,
+    fanficId:null,
 
     categories:[],
     
