@@ -3,7 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 
-import FiltersForm from './components/FiltersForm';
+import FiltersForm from './components/FiltersForm/FiltersForm';
 
 
 const Filters = (props) => {

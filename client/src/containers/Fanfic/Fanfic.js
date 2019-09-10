@@ -368,10 +368,10 @@ class Fanfic extends Component{
         const {filters} = this.state;
         switch (type) {
             case 'source':
-                this.setState({currentSource:event.target.value,filters: {...filters,[event.target.value]: !filters[filter]}}) 
+                this.setState({filters: {...filters,[event.target.value]: !filters[filter],currentSource:event.target.value}}) 
                 break;
             case 'sort':
-                this.setState({currentSort:event.target.value,filters: {...filters,[event.target.value]: !filters[filter]}}) 
+                this.setState({filters: {...filters,[event.target.value]: !filters[filter],currentSort:event.target.value}}) 
                 break;
             case 'filter':
                 if(event){
