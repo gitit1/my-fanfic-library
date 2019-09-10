@@ -87,17 +87,17 @@ class AddNewFanficManually extends Component{
                     this.setState({showUploadButton:true,msg})
                 }
             }else{
-                this.setState({showSaveButton:false,msg:''})
+                this.setState({showSaveButton:false,msg:'',savedData:true})
                 let anotherFiler = this.fileUploadRef2.current===null || (this.fileUploadRef2.current!==null && this.fileUploadRef2.current.state.file==='') ? false : true;
                 let type= this.fileUploadRef.current.state.file.name.split('.');
                 let type2= anotherFiler && this.fileUploadRef2.current.state.file.name.split('.');
-                type = type[type.length-1];
-                type2 = type2[type2.length-1];
+                type =  type[1];
+                type2 = type2[1];
                 
                 let fileUpload = `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type}`;
                 let fileUpload2 = anotherFiler &&  `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type2}`;
                 
-                type = anotherFiler &&  `${type},${type2}`;
+                type = !anotherFiler ? type :  `${type},${type2}`;
 
                 formData.append('fileName',`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);
                 formData.append('savedAs',type);
@@ -221,7 +221,7 @@ class AddNewFanficManually extends Component{
 
 
     render(){
-        const {fanficForm,showData,formIsValid,showUserData,userData,showSaveButton,msg,loadingFlag,saved,showUploadButton} = this.state;
+        const {fanficForm,showData,savedData,formIsValid,showUserData,userData,showSaveButton,msg,loadingFlag,saved,showUploadButton} = this.state;
         const {loading,fanfic,size,similarFanfic} = this.props;
         const formElementsArray = [];
         for(let key in fanficForm){
@@ -244,7 +244,7 @@ class AddNewFanficManually extends Component{
                     <Grid container className='addNewFanficManually_content'> 
                         <GetFanficData 
                                 loading={loading} loadingFlag={loadingFlag} showData={showData} similarFanfic={similarFanfic} showSaveButton={showSaveButton}
-                                fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler}
+                                fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler} savedData={savedData}
                                 markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler} saveFanficData={this.saveFanficData} msg={msg}
                          />
                          {(showUploadButton || (showSaveButton && (similarFanfic===null))) && 

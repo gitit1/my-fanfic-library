@@ -295,8 +295,8 @@ class Fanfic extends Component{
         const source = ['all','ao3','ff','backup']
 
         for(let key in filterArr){ 
-            let value = filterArr[key];
-            console.log('Key:',filterArr[key])
+            let value = filterArr[key].replace(/%20/g,' ').replace(/%27/g,"'");
+            console.log('Key:',filterArr[key].replace(/%20/g,' ').replace(/%27/g,"'"))
               if(sort.includes(value)){
                 tempFilters['currentSort'] = value;
               }else if(source.includes(value)){
@@ -318,13 +318,13 @@ class Fanfic extends Component{
         
         let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
         const {onGetFilteredFanfics} = this.props, {pageLimit,fandomName,urlQueries} = this.state;
-        let {pageNumber,fanficsNumbers} = this.state;       
+        let {pageNumber,fanficsNumbers} = this.state,tempFilters =[];       
 
         let filterArr = [];
         let filters =  this.state.filters;
         pageNumber = event ? 1 : pageNumber;
         if(isFiltered && !event){
-            filterArr = this.props.location.search.split('filters=true')[1].split('&').filter(Boolean);
+            filterArr = this.props.location.search.split('filters=true')[1].replace(/%20/g,' ').replace(/%27/g,"'").split('&').filter(Boolean);
             let tempFilters = await this.getbackfilters(filters,filterArr)   
             this.setState({filters: tempFilters})  
         }else{
