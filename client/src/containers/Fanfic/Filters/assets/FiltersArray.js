@@ -120,12 +120,6 @@ export const filtersArrayInit = {
     hits:false,
     kudos:false,
 
-    author:null,
-    wordsFrom:null,
-    wordsTo:null,
-    title:null,
-    fanficId:null,
-
     categories:[],
     
     currentSort:'dateLastUpdate',
