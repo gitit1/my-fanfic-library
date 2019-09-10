@@ -3,7 +3,7 @@ const {getIgnoredList} = require('../../helpers/getIgnoredList');
 
 exports.getFiltersRules = async (filters,userEmail) =>{
     let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true,finishFlag=false,inProgressFlag=false;
-
+    let tagsArr = ''; 
     console.log('filters:::',filters)
     await filters.map(filter=>{
         let filterKey = filter.split('_')[0]
@@ -84,6 +84,13 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 filtersFanficList.push({'Source':'Backup'})
                 break; 
             //Search:
+            case 'tags':
+                console.log('filterValue:',filterValue)
+                console.log('typeof filterValue:',typeof filterValue)
+                console.log('filterValue 1:',filter.split('_')[0])
+                console.log('filterValue 2:',filter.split('_')[1])
+                filtersFanficList.push({'Tags': {$elemMatch: {[filter.split('_')[1]]:filterValue}}})
+                break;
             case 'fanficId':
                 filtersFanficList.push({'FanficID':Number(filterValue)})
                 break;                 

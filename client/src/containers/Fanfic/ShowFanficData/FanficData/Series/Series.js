@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 
 const Series = (props) => {
     const {Series,SeriesPart,SeriesURL} = props.fanfic;
-    console.log('Series:',Series)
     return(
         <React.Fragment>
             {(Series!=='false'&&Series!==undefined) &&  <p>Part <span>{SeriesPart}</span> of <a href={SeriesURL} target='_blank' rel="noopener noreferrer">{Series}</a></p> }

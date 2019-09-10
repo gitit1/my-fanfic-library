@@ -11,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const ShowFanficData = (props) => {
-    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists} = props;
+    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists,filter} = props;
     const {isManager,isAuthenticated,size} = props.props
     const {getCategories,saveCategories,showSelectCategory,inputCategoryFlag,categoriesTemp,showCategory} = props.categories
     return(
@@ -22,7 +22,7 @@ const ShowFanficData = (props) => {
                         return(
                             <Card className='card'  key={fanfic.FanficID}>
                                 <CardContent className='card_content'>
-                                    <FanficData fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags}
+                                    <FanficData fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags} filter={filter}
                                                 getCategories={getCategories} saveCategories={saveCategories} showSelectCategory={showSelectCategory} 
                                                 inputCategoryFlag={inputCategoryFlag} categoriesTemp={categoriesTemp}/>                           
                                     { isAuthenticated &&

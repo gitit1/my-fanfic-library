@@ -51,7 +51,7 @@ export const navLinks = [
         type: 'menu',
         label: 'About',
         ancorName: 'anchorAbout',
-        auth_manager: true,
+        auth_manager: false,
         subLinks:[
             {
                 label:  'About',       

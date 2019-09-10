@@ -331,7 +331,14 @@ class Fanfic extends Component{
         return null
     }
 
-    filterHandler = async(filter,event,type)=>{
+    filterTagsHandler = async (filter,event,type,tagType) =>{
+        const {filters} = this.state;
+        await this.cancelFiltersHandler()
+        this.setState({filters: {...filters,['tags']: `${tagType}_${filter}`}},()=>{
+            this.activeFiltersHandler(false)
+        })  
+    }
+    filterHandler = async(filter,event,type,tagType)=>{
         const {filters} = this.state;
         switch (type) {
             case 'source':
@@ -474,6 +481,7 @@ class Fanfic extends Component{
                                                             props={props}                                
                                                             categories={categoriesProps}
                                                             readingLists={readingListProps}
+                                                            filter={this.filterTagsHandler}
                                         />
                                         
                                     }

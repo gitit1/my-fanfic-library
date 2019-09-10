@@ -126,7 +126,8 @@ export const filtersArrayInit = {
     title:"",
     fanficId:"",
 
-    categories:[]
+    categories:[],
+    tags:[]
 }
 
 
