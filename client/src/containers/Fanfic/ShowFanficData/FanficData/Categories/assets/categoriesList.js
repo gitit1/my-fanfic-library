@@ -39,6 +39,7 @@ export const categories = [
   { label: 'Movie/TV Adaption' },
   { label: 'Music' },
   { label: 'Pirates' },
+  { label: 'Political' },
   { label: 'Royalty' },
   { label: 'RPF - Real person fiction' },
   { label: 'Science Fiction' },
