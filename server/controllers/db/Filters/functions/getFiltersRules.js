@@ -85,10 +85,6 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 break; 
             //Search:
             case 'tags':
-                console.log('filterValue:',filterValue)
-                console.log('typeof filterValue:',typeof filterValue)
-                console.log('filterValue 1:',filter.split('_')[0])
-                console.log('filterValue 2:',filter.split('_')[1])
                 filtersFanficList.push({'Tags': {$elemMatch: {[filter.split('_')[1]]:filterValue}}})
                 break;
             case 'fanficId':
