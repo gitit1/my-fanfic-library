@@ -314,7 +314,7 @@ class Fanfic extends Component{
     activeFiltersHandler = async(event)=>{
         console.log('[Fanfic.js] activeFiltersHandler()');
         event && event.preventDefault();       
-        console.log('event:',event)
+        // console.log('event:',event)
         
         let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
         const {onGetFilteredFanfics} = this.props, {pageLimit,fandomName,urlQueries} = this.state;
@@ -335,6 +335,7 @@ class Fanfic extends Component{
                     filterArr.push(`${key}_${filters[key]}`)
                 }
             }
+            filterArr.filter(Boolean)
             this.setState({urlQueries:{...urlQueries,filterQuery:filterArr.join('&'),isFiltered:true}})
         }
         await onGetFilteredFanfics(fandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{

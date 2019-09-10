@@ -247,7 +247,7 @@ class AddNewFanficManually extends Component{
                                 fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler} savedData={savedData}
                                 markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler} saveFanficData={this.saveFanficData} msg={msg}
                          />
-                         {(showUploadButton || (showSaveButton && (similarFanfic===null))) && 
+                         {((showUploadButton || (showSaveButton && (similarFanfic===null))) && !savedData) && 
                             <React.Fragment>
                                 <FileUploader id='file1' ref={this.fileUploadRef}  edit={false} FandomName={fanfic.FandomName} type='doc'/>
                                 <FileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Another File' FandomName={fanfic.FandomName} type='doc'/>
