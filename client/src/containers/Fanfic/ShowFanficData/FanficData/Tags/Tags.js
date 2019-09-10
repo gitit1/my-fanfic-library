@@ -11,7 +11,7 @@ const Tags = (props) => (
                     <div className='card_content_tags_div'>
                         {tags[Object.keys(tags)[0]].map(tag=>(                                           
                             // <span key={tag} >{tag}</span>
-                            <Chip size="small" key={tag} label={tag} className='tags_chip'/>
+                            <Chip size="small" key={tag} label={tag} className='tags_chip' onClick={()=>props.filter(tag,null,'tag',Object.keys(tags)[0])}/>
                         ))}
                     </div>                                                  
                 </div>

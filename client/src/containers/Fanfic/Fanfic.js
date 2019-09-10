@@ -7,7 +7,7 @@ import Container from '../../components/UI/Container/Container';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
 import Filters from './Filters/Filters';
-import {filtersArrayInit} from './Filters/assets/FiltersArray'
+import {filtersArrayInit,filtersArrayAttr} from './Filters/assets/FiltersArray'
 
 
 import { Grid } from '@material-ui/core';
@@ -26,12 +26,10 @@ import './Fanfic.scss'
 class Fanfic extends Component{    
     state={
         userFanfics:[],
-        filters: filtersArrayInit,
+        filters: filtersArrayAttr,
         filterArr: [],
         pageNumber:1,
-        pageLimit:10,
-        currentSort:'dateLastUpdate',
-        currentSource:'all',        
+        pageLimit:10,       
         fanficsNumbers:fanficsNumbersList,
         inputChapterFlag:null,
         inputCategoryFlag:null,
@@ -70,7 +68,7 @@ class Fanfic extends Component{
             isInPage && this.setState({pageNumber:page})
             this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
                 await this.getFanfics()               
-                await this.activeFiltersHandler();
+                await this.activeFiltersHandler(false);
                 this.setState({firstLoad:false})
             });
         }else{
@@ -105,8 +103,6 @@ class Fanfic extends Component{
         let str = '';
         str = (!urlQueries.isFiltered) ? `?page=${pageNumber}` : `?page=${pageNumber}&filters=true&${urlQueries.filterQuery}`;
         
-        console.log('!urlQueries.isFiltered:',!urlQueries.isFiltered)
-        console.log('pageNumber:',pageNumber)
         if((urlQueries.isFiltered)||(urlQueries.page!==pageNumber||pageNumber===1)){
             this.props.history.push(str);
             this.setState({urlQueries:{...urlQueries,page:pageNumber}});
@@ -293,27 +289,54 @@ class Fanfic extends Component{
     }
 
     //FILTERS:  
+    getbackfilters = (filters,filterArr) =>{
+        let tempFilters = filters;
+        const sort = ['dateLastUpdate','publishDate','authorSort','titleSort','hits','kudos','bookmarks','comments']
+        const source = ['all','ao3','ff','backup']
+
+        for(let key in filterArr){ 
+            let value = filterArr[key];
+            console.log('Key:',filterArr[key])
+              if(sort.includes(value)){
+                tempFilters['currentSort'] = value;
+              }else if(source.includes(value)){
+                tempFilters['currentSource'] = value;
+              }else if(value.includes('categories_')){
+                tempFilters['categories'] = value.split('categories_')[1].split(',');
+              }else if(value.includes('_')){
+                tempFilters[value.split('_')[0]] = value.split('_')[1];
+              }else{
+                tempFilters[value]=true
+              }
+        }
+        return tempFilters;
+    }
     activeFiltersHandler = async(event)=>{
         console.log('[Fanfic.js] activeFiltersHandler()');
-        event && event.preventDefault();
+        event && event.preventDefault();       
+        console.log('event:',event)
+        
         let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
-        const {onGetFilteredFanfics} = this.props, {filters,pageLimit,fandomName,urlQueries} = this.state;
-        let {filterArr,pageNumber,fanficsNumbers} = this.state;       
+        const {onGetFilteredFanfics} = this.props, {pageLimit,fandomName,urlQueries} = this.state;
+        let {pageNumber,fanficsNumbers} = this.state;       
 
-        filterArr = [];
+        let filterArr = [];
+        let filters =  this.state.filters;
         pageNumber = event ? 1 : pageNumber;
-        if(isFiltered){
-            filterArr = this.props.location.search.split('filters=true')[1].split('&');  
-            console.log('----filterArr:',filterArr)       
+        if(isFiltered && !event){
+            filterArr = this.props.location.search.split('filters=true')[1].split('&').filter(Boolean);
+            let tempFilters = await this.getbackfilters(filters,filterArr)   
+            this.setState({filters: tempFilters})  
         }else{
             for(let key in filters){ 
                 filters[key] === true && filterArr.push(key)
-                if(typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0){filterArr.push(`${key}_${filters[key]}`)}
+                if( typeof filters[key] !== 'boolean' && filters[key] !=='' && filters[key].length>0
+                     && key !=='currentSort'  && key !=='currentSource' ){
+                    filterArr.push(`${key}_${filters[key]}`)
+                }
             }
             this.setState({urlQueries:{...urlQueries,filterQuery:filterArr.join('&'),isFiltered:true}})
         }
-        console.log('--pageNumber:',pageNumber)
-        console.log('--filterArr:',filterArr)
         await onGetFilteredFanfics(fandomName,this.props.userEmail,filterArr,pageLimit,pageNumber).then(()=>{
             
             const fanficsCount = this.props.counter, userFanfics  = this.props.userFanfics;
@@ -329,6 +352,14 @@ class Fanfic extends Component{
             this.addUrlQueries()
         });
         return null
+    }
+
+    filterTagsHandler = async (filter,event,type,tagType) =>{
+        const {filters} = this.state;
+        await this.cancelFiltersHandler()
+        this.setState({filters: {...filters,['tags']: `${tagType}_${filter}`}},()=>{
+            this.activeFiltersHandler(false)
+        })  
     }
 
     filterHandler = async(filter,event,type)=>{
@@ -353,8 +384,8 @@ class Fanfic extends Component{
         }
     }
     cancelFiltersHandler = async() =>{
-        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,currentSort:'dateLastUpdate'
-                       ,urlQueries:{...this.state.urlQueries,isFiltered:false,filterQuery:''}},await this.getFanfics)
+        this.setState({filters:filtersArrayInit,filterArr:[],pageNumber:1,drawerFilters:false,
+                       urlQueries:{...this.state.urlQueries,isFiltered:false,filterQuery:''}},await this.getFanfics)
         this.addUrlQueries()
     }
 
@@ -435,8 +466,8 @@ class Fanfic extends Component{
     }
 
     render(){
-        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,currentSort,drawerFilters,
-               currentSource,showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad} = this.state;
+        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,
+               showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad} = this.state;
         const {isManager,size,isAuthenticated,fanfics,readingLists,loading} = this.props;
 
         const props             =   {   isManager,size,isAuthenticated};
@@ -457,7 +488,7 @@ class Fanfic extends Component{
 
                             <Grid container className='containerGrid'>
                                 <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
-                                <Filters sort={currentSort} source={currentSource} filters={filtersProps} getCategories={this.getFiltersCategories}/>                        
+                                <Filters filters={filtersProps} getCategories={this.getFiltersCategories}/>                        
                             </Grid>
                             
                             <Grid className={'main'}>
@@ -474,6 +505,7 @@ class Fanfic extends Component{
                                                             props={props}                                
                                                             categories={categoriesProps}
                                                             readingLists={readingListProps}
+                                                            filter={this.filterTagsHandler}
                                         />
                                         
                                     }

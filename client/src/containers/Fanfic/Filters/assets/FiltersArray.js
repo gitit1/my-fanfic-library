@@ -113,7 +113,6 @@ export const filtersArrayInit = {
     inProgress:false,
     ignore:false,
     
-    author:"",
     bookmarks:false,
     comments:false,
     dateLastUpdate:false,
@@ -121,12 +120,47 @@ export const filtersArrayInit = {
     hits:false,
     kudos:false,
 
+    author:"",
     wordsFrom:"",
     wordsTo:"",
     title:"",
     fanficId:"",
 
-    categories:[]
+    categories:[],
+    
+    currentSort:'dateLastUpdate',
+    currentSource:'all'
+}
+
+export const filtersArrayAttr = {
+    complete:false,
+    wip:false,
+    oneShot:false,
+    deleted:false,
+
+    follow:false,
+    favorite:false,
+    finished:false,
+    inProgress:false,
+    ignore:false,
+    
+    bookmarks:false,
+    comments:false,
+    dateLastUpdate:false,
+    publishDate:false,
+    hits:false,
+    kudos:false,
+
+    author:"",
+    wordsFrom:"",
+    wordsTo:"",
+    title:"",
+    fanficId:"",
+
+    categories:[],
+    
+    currentSort:'dateLastUpdate',
+    currentSource:'all'
 }
 
 
