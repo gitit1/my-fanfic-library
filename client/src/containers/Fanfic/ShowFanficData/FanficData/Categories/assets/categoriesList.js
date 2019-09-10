@@ -40,6 +40,7 @@ export const categories = [
   { label: 'Music' },
   { label: 'Pirates' },
   { label: 'Royalty' },
+  { label: 'RPF - Real person fiction' },
   { label: 'Science Fiction' },
   { label: 'Secret Relationship' },
   { label: 'Slow Burn' },
