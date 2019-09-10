@@ -19,6 +19,7 @@ class AddNewFanficAutomatic extends Component{
       msg:'',
       showUserData:false,
       showSaveButton:false,
+      savedData:false,
       userData:{
         Follow:false,
         Favorite:false,
@@ -60,7 +61,6 @@ class AddNewFanficAutomatic extends Component{
 
     saveFanficData = (save)=>{
       console.log('saveFanficData')
-      console.log('save',save)
       const {url} = this.state
       const {fandomName,fanfic,switches} = this.props
       if(save){

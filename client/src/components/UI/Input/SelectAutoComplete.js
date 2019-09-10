@@ -311,7 +311,7 @@ const IntegrationReactSelect = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   let initialCategories = [];
-  if(props.exist.length>0){
+  if(props.exist && props.exist.length>0){
     props.exist.map(category=>initialCategories.push({ label:category,value:category}))
   }else{
     initialCategories = null;
