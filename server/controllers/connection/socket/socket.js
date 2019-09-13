@@ -14,9 +14,11 @@ var io = require('socket.io')(server,{
 const key = require('../../../config/keys')
 const func = require('../connection');
 
-if(key.NODE_ENV === 'straight'){
+if(key.nodeEnv === 'straight'){
+  console.log('server is straight')
   server.listen(8081);
 }else{
+  console.log('server is gay')
   server.listen(8080);
 }
 

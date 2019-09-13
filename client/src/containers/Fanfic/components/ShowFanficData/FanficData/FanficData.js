@@ -8,7 +8,7 @@ import Stat from './Stat/Stat'
 
 const FanficData = (props) => {
     const { fanfic,showSelectCategory,size,showTagsToggle,showTags,categoriesTemp,
-            getCategories,saveCategories,inputCategoryFlag,filter} = props;
+            getCategories,saveCategories,inputCategoryFlag,filter,tagSwitch} = props;
 
     let fanficCategories = categoriesTemp.filter( categories => {return categories.FanficID === fanfic.FanficID})
         fanficCategories = fanficCategories.length!==0 ? Object.values(fanficCategories)[0]: null;
@@ -18,7 +18,7 @@ const FanficData = (props) => {
                 <Header fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags}/>
             </section>
             <section className='card_content_tags'>
-                <Tags fanfic={fanfic} size={size} showTags={showTags} filter={filter}/> 
+                {tagSwitch && <Tags fanfic={fanfic} size={size} showTags={showTags} filter={filter}/>}
             </section>
             <section className='card_content_categories'>
                 <Categories fanfic={fanfic} getCategories={getCategories} saveCategories={saveCategories}

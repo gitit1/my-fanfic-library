@@ -5,9 +5,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import {categories} from '../../../../ShowFanficData/FanficData/Categories/assets/categoriesList';
-import SelectCategories from '../../../../../../components/UI/Input/SelectAutoComplete'
-import Button from '@material-ui/core/Button';
+import {categories} from '../../../../../components/ShowFanficData/FanficData/Categories/assets/categoriesList';
+import SelectCategories from '../../../../../../../components/UI/Input/SelectAutoComplete'
+
 
 const FanficsFilters = ({classes,filtersArray,checked,filter,getCategories,filteredCategories}) => {
     const [flag, setAnchorEl] = React.useState(false,null);

@@ -1,17 +1,8 @@
 import React from 'react';
-
-
-import Divider from '@material-ui/core/Divider';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-
 import Button from '@material-ui/core/Button';
 
 import classes from '../../Filters.module.scss';
 import {filtersArray} from '../../assets/FiltersArray';
-
 
 import SortFilters from './components/SortFilters'
 import FanficsFilters from './components/FanficsFilters'

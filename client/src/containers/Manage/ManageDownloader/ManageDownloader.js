@@ -55,7 +55,8 @@ class ManageDownloader extends Component{
         serverData: null,
         logs: [],
         switches:{
-            save:false
+            id:'save',
+            checked:false
         },
         showData:0,
         showGridDataBox:false,
@@ -127,7 +128,7 @@ class ManageDownloader extends Component{
         this.setState(prevState =>({
             fandom,serverData,logs,showData,
             fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
-            switches:{...prevState.switches,save:fandom.AutoSave}
+            switches:{...prevState.switches,checked:fandom.AutoSave}
         }));  
     }
 
@@ -140,7 +141,7 @@ class ManageDownloader extends Component{
     }
     
     switchChangeHandler = (type) =>{
-        this.setState(prevState =>({switches:{...prevState.switches,save:!this.state.switches[type]}}));  
+        this.setState(prevState =>({switches:{...prevState.switches,checked:!this.state.switches[type]}}));  
     }
 
     addNewFanficHandler = () =>{

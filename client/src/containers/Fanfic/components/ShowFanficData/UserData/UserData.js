@@ -9,11 +9,12 @@ import InProgress from './InProgress/InProgress';
 import Ignore from './Ignore/Ignore';
 import SavedFile from './SavedFile/SavedFile'
 import AddCategories from './AddCategories/AddCategories'
+import AddImage from './AddImage/AddImage'
 import ReadingList from './ReadingList/ReadingList'
 import Delete from './Delete/Delete'
 
 const UserData = (props) => {
-  const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics,readingLists} = props;
+  const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics,readingLists,showMnagerButtonsSwitch} = props;
   let userData = userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
   userData = userData.length!==0 ? Object.values(userData)[0]: null;
   const isFollowed    =   functions.followFilter(userData)    
@@ -26,7 +27,12 @@ const UserData = (props) => {
 
   return(
     <section>
-      {props.isManager && <AddCategories  fanfic={fanfic} showCategory={showCategory} showSelectCategory={showSelectCategory} saveCategories={saveCategories}/>   }
+      {props.isManager && showMnagerButtonsSwitch && 
+        <AddCategories  fanfic={fanfic} showCategory={showCategory} showSelectCategory={showSelectCategory} saveCategories={saveCategories}/>   
+      }
+      {props.isManager && showMnagerButtonsSwitch && 
+        <AddImage />   
+      }
       <ReadingList      props={props.props} userData={userData} fanfic={props.fanfic} readingLists={readingLists}/>
       <Follow           props={props.props} isFollowed={isFollowed} fanfic={fanfic}/>
       <Favorite         props={props.props} isFavorite={isFavorite} fanfic={fanfic}/>
