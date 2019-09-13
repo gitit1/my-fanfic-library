@@ -11,9 +11,14 @@ var io = require('socket.io')(server,{
       cookie: false
 });
 
+const key = require('../../../config/keys')
 const func = require('../connection');
 
-server.listen(8080);
+if(key.NODE_ENV === 'straight'){
+  server.listen(8081);
+}else{
+  server.listen(8080);
+}
 
 io.on('connection', (socket) => {
       socket.on('getFandomFanfics', (fandomData,choice,method) => {
