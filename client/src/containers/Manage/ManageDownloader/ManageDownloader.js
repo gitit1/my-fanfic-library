@@ -21,7 +21,7 @@ const socket = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
 ? io(window.location.origin.replace(/^http/, 'ws') + ':8081', {transports: ['websocket']}, {secure:false}) 
 : io(window.location.origin.replace(/^http/, 'ws') + ':8080', {transports: ['websocket']}, {secure:false}) ;
 
-console.log('(window.location.origin.includes(mfl-s)):',(window.location.origin.includes('mfl-s')))
+
   
 
 class ManageDownloader extends Component{
@@ -63,6 +63,7 @@ class ManageDownloader extends Component{
     }
 
     componentDidMount(){
+        console.log('(window.location.origin.includes(mfl-s)):',(window.location.origin))
         this.createOptionsForFandomSelect(); 
         socket.removeAllListeners();
         !this.props.smallSize && this.setState({showGridDataBox:true})
