@@ -16,6 +16,7 @@ const News = () => (
         <p><span className={classes.Date}><strong>09-13-2019:</strong></span><span className={classes.Content}>[009-git] Added switches to toggle between difference part in the fanfic component</span></p>
         <p><span className={classes.Date}><strong>09-13-2019:</strong></span><span className={classes.Content}>[010-git] Added New Filter: "search for only new fanfics (no user data yet)"</span></p>
         <p><span className={classes.Date}><strong>09-14-2019:</strong></span><span className={classes.Content}>[011-git] Changed the way the DB saves the images</span></p>
+        <p><span className={classes.Date}><strong>09-14-2019:</strong></span><span className={classes.Content}>[012-git] Created randomize color for fanfics with general image</span></p>
     </div>
   </Container>
 );

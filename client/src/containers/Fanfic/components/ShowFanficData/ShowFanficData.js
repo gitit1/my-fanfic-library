@@ -8,7 +8,7 @@ import FanficImage from './FanficImage/FanficImage'
 import GridList from '@material-ui/core/GridList';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+
 
 
 const ShowFanficData = (props) => {
@@ -24,18 +24,10 @@ const ShowFanficData = (props) => {
                     { fanfics.map(fanfic=>{
                         return(
                             <Card className='card'  key={fanfic.FanficID}>
-                                {showImagesSwitch && <div className='details-image'>
-                                    <CardMedia className='card_image'
-                                        image={fanfic.image&&fanfic.image !== '' 
-                                        ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanfic.image}`
-                                        : `/fandoms/${fanfic.FandomName.toLowerCase()}/general.jpg`
-                                        } 
-                                        title={fanfic.FanficTitle}
-                                    />
-                                </div>}
+                                {showImagesSwitch && <FanficImage fanfic={fanfic}/>}
                                 <div className={showImagesSwitch?'detailsWithImage':'detailsWithoutImage'}>
                                     <CardContent className='card_content'>
-                                        <FanficImage        fanfic={fanfic}/>
+                                        
                                         <FanficData         fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags} filter={filter}
                                                             getCategories={getCategories} saveCategories={saveCategories} showSelectCategory={showSelectCategory} 
                                                             inputCategoryFlag={inputCategoryFlag} categoriesTemp={categoriesTemp} tagSwitch={tagSwitch}/>                           
