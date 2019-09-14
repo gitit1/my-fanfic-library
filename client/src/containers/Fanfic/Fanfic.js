@@ -28,13 +28,18 @@ class Fanfic extends Component{
     componentWillMount(){
         console.log('componentWillMount')
         const {location} = this.props;
-        let {urlQueries,filterArr} = this.state;
+        let {urlQueries,filterArr,switches} = this.state;
 
         let isFiltered = location.search.includes('filters=true') ? true : false;
         let isInPage = location.search.includes('page=') ? true : false;
 
         const page = isInPage ? Number(location.search.split('page=')[1].split('&')[0]) : 1;
         if(isFiltered){
+            if(location.search.includes('noUserData')){
+                switches = [...switches];
+                switches[2].checked = false;
+                this.setState({switches})
+            }
             console.log('will mount page',page)
             let filterQuery = location.search.split('filters=true&')[1];
             filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
@@ -251,7 +256,8 @@ class Fanfic extends Component{
                 inputChapterFlag:null
             })
         }
-
+        
+        setTimeout(this.activeFiltersHandler(), 4000);
     }
 
     inputChapterHandler = (id) =>{
@@ -292,15 +298,21 @@ class Fanfic extends Component{
         
         let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
         const {onGetFilteredFanfics} = this.props, {pageLimit,fandomName,urlQueries} = this.state;
-        let {pageNumber,fanficsNumbers} = this.state,tempFilters =[];       
+        let {pageNumber,fanficsNumbers} = this.state;       
 
         let filterArr = [];
         let filters =  this.state.filters;
+        console.log('filters:',this.state.filters)
+        console.log('filterArr:',this.state.filterArr)
         pageNumber = event ? 1 : pageNumber;
         if(isFiltered && !event){
+            console.log('this.props.location.search',this.props.location.search)
             filterArr = this.props.location.search.split('filters=true')[1].replace(/%20/g,' ').replace(/%27/g,"'").split('&').filter(Boolean);
             let tempFilters = await this.getbackfilters(filters,filterArr)   
-            this.setState({filters: tempFilters})  
+            this.setState({filters: tempFilters}) 
+            if(urlQueries.filterQuery.includes('noUserData') && !this.props.location.search.split('filters=true')[1].includes('noUserData')){
+                filterArr.push('noUserData')
+            }
         }else{
             for(let key in filters){ 
                 filters[key] === true && filterArr.push(key)
@@ -442,10 +454,28 @@ class Fanfic extends Component{
     }
 
     switchChangeHandler = (type) =>{
-        let objIndex = this.state.switches.findIndex((sw => sw.id === type));   
-        const switchesCopy = [...this.state.switches];
+        const {switches,urlQueries} = this.state;
+        let objIndex = switches.findIndex((sw => sw.id === type));   
+        const switchesCopy = [...switches];
         switchesCopy[objIndex].checked = !switchesCopy[objIndex].checked;
         this.setState({switches:switchesCopy});
+
+        if(type==='noUserData'){
+            if(!switches[2].checked){//Don't show userdata  
+                this.filterHandler('noUserData',null,'filter') 
+                let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
+                if(isFiltered){
+                    let filterArr = [...this.state.filterArr,'noUserData'];
+                    let filterQuery = urlQueries.filterQuery + '&noUserData'
+                    this.setState({filterArr,urlQueries:{...urlQueries,filterQuery}},()=>(this.activeFiltersHandler()))
+                }else{
+                    let filterQuery = '?filters=true&noUserData'
+                    this.setState({urlQueries:{...urlQueries,filterQuery}},()=>this.activeFiltersHandler())
+                }               
+           }else{
+                this.cancelFiltersHandler()
+           }
+        }       
     }
 
     render(){

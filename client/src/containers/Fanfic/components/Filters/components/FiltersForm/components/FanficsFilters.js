@@ -22,7 +22,7 @@ const FanficsFilters = ({classes,filtersArray,checked,filter,getCategories,filte
                 <FormControl className={classes.FormControl} component="fieldset">
                     <FormLabel focused={false} className={classes.FiltersFanficLabel} onClick={toggleFanficsFilters}>
                     <span style={{display: 'flex',alignItems: 'center'}}>
-                        <i class="material-icons">{flag ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}</i>
+                        <i className="material-icons">{flag ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}</i>
                         Fanfic Status Filters:
                     </span>
                     </FormLabel>

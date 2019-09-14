@@ -15,7 +15,7 @@ const ShowFanficData = (props) => {
     const {fanfics,userFanfics,showTagsToggle,showTags,readingLists,filter,switches} = props;
     const {isManager,isAuthenticated,size} = props.props
     const {getCategories,saveCategories,showSelectCategory,inputCategoryFlag,categoriesTemp,showCategory} = props.categories;
-    const tagSwitch=switches[0].checked,showImagesSwitch=switches[1].checked,showMnagerButtonsSwitch=switches[2].checked;
+    const tagSwitch=switches[0].checked,showImagesSwitch=switches[1].checked,showMnagerButtonsSwitch=switches[3].checked;
 
     return(
         <React.Fragment>

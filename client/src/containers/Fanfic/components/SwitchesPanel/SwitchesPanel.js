@@ -3,7 +3,6 @@ import Switch from '../../../../components/UI/Switches/switches'
 
 const SwitchesPanel = (props) => {
     const {fandomName,switchChange,switches,isManager} = props.switchesPanel;
-    console.log('isManager:',isManager)
     return(
         // <p>test</p>
         <div className='SwitchesPanel'>

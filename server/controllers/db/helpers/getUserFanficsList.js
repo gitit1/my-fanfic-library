@@ -12,7 +12,9 @@ exports.getUserFanficsList = (userEmail) =>{
             if (user) {
                 console.log('found user with ignore fanfics')
                 let newFilteredArray=[]
-                user.FanficList.map(fanfic=>newFilteredArray.push(fanfic.FanficID))
+                user.FanficList.map(fanfic=>{
+                    ((fanfic.Status!=="Need to Read") || fanfic.Favorite || (fanfic.Status===undefined && fanfic.Favorite)) && newFilteredArray.push(fanfic.FanficID)
+                })
                 console.log(';;;;newFilteredArray',newFilteredArray)
                 resolve(newFilteredArray);
             }else{

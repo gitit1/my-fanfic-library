@@ -42,6 +42,12 @@ export let state={
             manager:false
         },
         {
+            id:'noUserData',
+            checked:true,
+            label:'Show Marked Stories',
+            manager:false
+        },
+        {
             id:'manager-buttons',
             checked:true,
             label:'Show Manager Buttons',
