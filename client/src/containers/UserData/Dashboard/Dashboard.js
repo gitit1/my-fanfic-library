@@ -70,7 +70,7 @@ class Dashboard extends Component {
                                 <Link to={`/fanfics/${fandom.FandomName}`}>
                                   <CardMedia className={classes.CardMedia}
                                               image={fandom.Image_Name_Main !== '' 
-                                                      ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Image_Name_Main}`
+                                                      ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main}`
                                                       : `/fandoms/nophoto.png`
                                               } 
                                               title={fandom.FandomName}/>

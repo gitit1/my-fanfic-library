@@ -3,20 +3,20 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-import '../../../../../../../Fanfic/ShowFanficData/showFandomData.scss'
+import '../../../../../../../Fanfic/components/ShowFanficData/showFandomData.scss'
 
 // import classes from '../../../../../Fanfic/ShowFanficData/ShowFanficData.module.css'
-import Header from '../../../../../../../Fanfic/ShowFanficData/FanficData/Header/Header';
-import Tags from '../../../../../../../Fanfic/ShowFanficData/FanficData/Tags/Tags';
-import Desc from '../../../../../../../Fanfic/ShowFanficData/FanficData/Desc/Desc';
-import Stat from '../../../../../../../Fanfic/ShowFanficData/FanficData/Stat/Stat';
-import Categories from '../../../../../../../Fanfic/ShowFanficData/FanficData/Categories/Categories';
+import Header from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Header/Header';
+import Tags from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Tags/Tags';
+import Desc from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Desc/Desc';
+import Stat from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Stat/Stat';
+import Categories from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Categories/Categories';
 
 import Follow from './Follow.js'
 import Favorite from './Favorite.js'
 import Finished from './Finished.js'
 import InProgress from './InProgress.js'
-import AddCategories from '../../../../../../../Fanfic/ShowFanficData/UserData/AddCategories/AddCategories'
+import AddCategories from '../../../../../../../Fanfic/components/ShowFanficData/UserData/AddCategories/AddCategories'
 
 const ShowFanficData = ({userData,fanfic,categoriesTemp,size,getCategories,saveCategories,markAs,showCategory,
                          markStatus,inputCategoryFlag,showSelectCategory,showUserData,toggleChapterB}) => {

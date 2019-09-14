@@ -17,6 +17,8 @@ import './ManageDownloader.scss';
 
 const socket = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') 
 ? io('ws://localhost:8080', {transports: ['websocket']}, {secure:false}) 
+: (window.location.origin.includes('mfl'))
+? io(window.location.origin.replace(/^http/, 'ws') + ':8081', {transports: ['websocket']}, {secure:false}) 
 : io(window.location.origin.replace(/^http/, 'ws') + ':8080', {transports: ['websocket']}, {secure:false}) ;
 
 
@@ -53,7 +55,8 @@ class ManageDownloader extends Component{
         serverData: null,
         logs: [],
         switches:{
-            save:false
+            id:'save',
+            checked:false
         },
         showData:0,
         showGridDataBox:false,
@@ -61,6 +64,7 @@ class ManageDownloader extends Component{
     }
 
     componentDidMount(){
+        console.log('(window.location.origin.includes(mfl-s)):',(window.location.origin))
         this.createOptionsForFandomSelect(); 
         socket.removeAllListeners();
         !this.props.smallSize && this.setState({showGridDataBox:true})
@@ -124,7 +128,7 @@ class ManageDownloader extends Component{
         this.setState(prevState =>({
             fandom,serverData,logs,showData,
             fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
-            switches:{...prevState.switches,save:fandom.AutoSave}
+            switches:{...prevState.switches,checked:fandom.AutoSave}
         }));  
     }
 
@@ -137,7 +141,7 @@ class ManageDownloader extends Component{
     }
     
     switchChangeHandler = (type) =>{
-        this.setState(prevState =>({switches:{...prevState.switches,save:!this.state.switches[type]}}));  
+        this.setState(prevState =>({switches:{...prevState.switches,checked:!this.state.switches[type]}}));  
     }
 
     addNewFanficHandler = () =>{

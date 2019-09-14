@@ -22,11 +22,11 @@ const StyledSwitch = withStyles({
 const switched = (props) => (
     props.fandomSelect.value!=='' &&               
         <FormControlLabel control={<StyledSwitch                                             
-                                            checked={props.switches.save}
-                                            onChange={()=>props.changed('save')}
+                                            checked={props.checked}
+                                            onChange={()=>props.changed(props.id)}
                                         />
                                     }
-                            label="Save Fanfic to Server"
+                            label={props.label}
         />  
 );
 

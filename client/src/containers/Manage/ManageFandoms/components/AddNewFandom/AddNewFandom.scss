@@ -43,9 +43,13 @@
             margin-top: 5%;
             .add_new_fandom_images_card_content{
                 padding: 8px;
+                
                 h2{
                     color:$color_text_1;
                     font-family: $font_header;
+                }
+                .add_new_fandom_images_card_content_images_div{
+                    display: flex;
                 }
             }
         }

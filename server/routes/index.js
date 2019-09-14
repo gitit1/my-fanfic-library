@@ -22,6 +22,7 @@ try {
 
   router.get('/db/getLastUpdateDate',db.getLastUpdateDate);
   router.post('/db/getFanfics',db.getFanficsFromDB);
+  router.post('/db/saveImageOfFanfic',db.saveImageOfFanficToDB);
   router.post('/db/deleteFanfic',db.deleteFanficFromDB);
   router.post('/db/saveCategories',db.saveFanficCategoriesToDB);
   router.post('/db/getReadingList',db.getReadingListsFromDB);

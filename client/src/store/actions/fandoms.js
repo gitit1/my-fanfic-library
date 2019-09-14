@@ -64,11 +64,12 @@ export const editFandomDataFail = (error) =>{
     };
 };
 
-export const addFandomToDB = (fandomName,mode,fandom,mainImage,iconImage) =>{
+export const addFandomToDB = (fandomName,mode,fandom,mainImage,iconImage,fanficImage) =>{
     console.log('[actions: fandom.js] - addFandomToDB')
     let images = '';
-    images = (mainImage!==false) ? (images+`&mainImage=${mainImage}`) : '';
-    images = (iconImage!==false) ? (images+`&iconImage=${iconImage}`) : images;
+    images = (mainImage!==false)    ? (images+`&mainImage=${mainImage}`) : '';
+    images = (iconImage!==false)    ? (images+`&iconImage=${iconImage}`) : images;
+    images = (fanficImage!==false)  ? (images+`&fanficImage=${fanficImage}`) : images;
 
     return dispatch =>{
         dispatch(editFandomDataStart())

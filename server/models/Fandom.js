@@ -8,8 +8,6 @@ const FandomSchema = new Schema({
     SearchKeys:                 {type: String},
     AutoSave:                   {type: Boolean},
     SaveMethod:                 {type: String},
-    Image_Name_Main:            {type: String},
-    Image_Name_Icon:            {type: String},
     FanficsInFandom:            {type: Number},
     AO3:                     {
                                     FanficsInFandom:  {type: Number},
@@ -38,7 +36,13 @@ const FandomSchema = new Schema({
                                     CompleteFanfics:  {type: Number},
                                     SavedFanfics:     {type: Number},
                                     DeletedFanfics:   {type: Number}
-    },                                 
+    },
+    Images:                     {
+                                    Image_Name_Main:            {type: String},
+                                    Image_Name_Icon:            {type: String},                              
+                                    Image_Name_Fanfic:          {type: String},                              
+                                    Image_Name_Path:            {type: String},                              
+    },
     LastUpdate:                 {type: Number},
     FanficsLastUpdate:          {type: Number},
     SavedFanficsLastUpdate:     {type: Number}

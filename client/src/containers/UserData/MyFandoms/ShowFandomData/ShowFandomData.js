@@ -15,7 +15,7 @@ const ShowFandomData = (props) => {
                                 {
                                 fandom.Image_Name_Main !== '' 
                                 ? <Link to={`/fanfics/${fandom.FandomName}`}>
-                                    <img src={`/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Image_Name_Main}`} alt={fandom.FandomName}/>
+                                    <img src={`/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main}`} alt={fandom.FandomName}/>
                                     </Link> 
 
                                 : <Link to={`/fanfics/${fandom.FandomName}`}>

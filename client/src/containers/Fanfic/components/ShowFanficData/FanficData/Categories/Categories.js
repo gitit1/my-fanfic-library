@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectCategories from '../../../../../components/UI/Input/SelectAutoComplete';
+import SelectCategories from '../../../../../../components/UI/Input/SelectAutoComplete';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';

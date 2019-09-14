@@ -11,9 +11,16 @@ var io = require('socket.io')(server,{
       cookie: false
 });
 
+const key = require('../../../config/keys')
 const func = require('../connection');
 
-server.listen(8080);
+if(key.nodeEnv === 'straight'){
+  console.log('server is straight')
+  server.listen(8081);
+}else{
+  console.log('server is gay')
+  server.listen(8080);
+}
 
 io.on('connection', (socket) => {
       socket.on('getFandomFanfics', (fandomData,choice,method) => {

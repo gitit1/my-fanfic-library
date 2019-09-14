@@ -1,5 +1,5 @@
-@import '../../../style/_varibles';
-@import '../../../style/_colors';
+@import '../../../../style/_varibles';
+@import '../../../../style/_colors';
 
 .root{
     display: 'flex';
@@ -12,6 +12,7 @@
         margin:0.5% 0.5%;
         max-width: 100%;
         background-color: #fafafa;
+        display: 'flex';
         // z-index:888;
         
         // .border_AO3{border-top: 1px solid $color_AO3;}
@@ -21,8 +22,54 @@
             width: 150px;
             height: 100px;
         }
+
+        .details-image{
+            float: left;
+            width: 210px;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100%;
+            
+            .card_image{
+                width: 200px;
+                height: 300px; 
+                border-radius: 5%;
+                position: relative;       
+            }
+            .card_image_opacity{
+                opacity: 0.5;
+            }
+            .card_image_layer{
+                // background-color: rgba(75, 86, 160, 0.7);
+                border-radius: 5%;    
+            }
+            .card_image_overlay{
+                font-weight: 900;
+
+                position: absolute;
+                margin: 0 auto;
+                text-align: center;
+                left: 0px;
+                bottom: 10%;
+                width: 200px;
+                float: left;
+                background: rgba(25, 25, 25, .5);
+                z-index:888
+            }
+        }
+        .detailsWithImage{
+            float: left;
+            width: calc(100% - 220px);
+        }
+        .detailsWithoutImage{
+            float: left;
+            width: 100%;
+        }
         .card_content{
             padding: 0;
+
+            // flex: '1 0 auto';
 
             .card_content_header{
                 width: 100%;
@@ -32,7 +79,7 @@
                 .card_content_header_right{
                     text-align: left;
                     width: 80%;
-                    margin-top: 1%;
+                    // margin-top: 1%;
                     float: left;
                 }
                 .card_content_header_right .fanfic_source{

@@ -175,3 +175,19 @@ export const getReadingList = (userEmail) =>{
         });   
     };    
 }
+
+
+export const saveImageOfFanfic = (fandomName,fanficId,image) =>{
+    console.log('[actions: fandom.js] - addFandomToDB')
+
+    return dispatch =>{
+        dispatch(getFanficsFromDBStart())
+        return axios.post(`/db/saveImageOfFanfic?fandomName=${fandomName}&fanficId=${fanficId}`,image)
+        .then(res =>{
+            return res;
+        })
+        .catch(error =>{
+            dispatch(getFanficsFromDBFail(error))
+        })  
+    };
+}

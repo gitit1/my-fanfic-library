@@ -1,5 +1,4 @@
 const clc = require("cli-color");
-
 const FandomModal = require('../../../../models/Fandom');
 
 exports.getAllFandomsFromDB = (req,res) =>{
