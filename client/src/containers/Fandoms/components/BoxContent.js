@@ -22,7 +22,7 @@ const BoxContent = (props) => {
             <Link to={`/fanfics/${props.fandom.FandomName}`}>
                 <CardMedia  className='fandoms_card_media'
                             image={props.fandom.Image_Name_Main !== '' 
-                                    ? `/fandoms/${props.fandom.FandomName.toLowerCase()}/${props.fandom.Image_Name_Main}`
+                                    ? `/fandoms/${props.fandom.FandomName.toLowerCase()}/${props.fandom.Images.Image_Name_Main}`
                                     : `/fandoms/nophoto.png`
                             } 
                             title={props.fandom.FandomName}/>

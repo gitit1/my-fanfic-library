@@ -40,9 +40,13 @@ export const filtersArray = {
             display: 'In Progress'
         },
         {
-            type : 'checkbox',
-            name:   'ignore',
-            display: 'Ignore'
+            type :      'checkbox',
+            name:       'ignore',
+            display:    'Ignore'
+        },{
+            type :      'checkbox',
+            name:       'noUserData',
+            display:    "New (Didn't marked yet)"
         }
     ],
     Sort:[
@@ -112,6 +116,7 @@ export const filtersArrayInit = {
     finished:false,
     inProgress:false,
     ignore:false,
+    noUserData:false,
     
     bookmarks:false,
     comments:false,

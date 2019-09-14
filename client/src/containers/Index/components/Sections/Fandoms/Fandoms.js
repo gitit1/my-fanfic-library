@@ -42,17 +42,17 @@ const IndexFandoms = (props) => {
           fandomsArray.map(fandom=>
             <Box key={fandom.FandomName} className="index_section_fandom">
               <Link to={`/fanfics/${fandom.FandomName}`}>
-                <img  alt={'fandoms'} src={fandom.Image_Name_Icon !== '' 
-                                            ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Image_Name_Icon}`
-                                            : fandom.Image_Name_Main !== '' ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Image_Name_Main}` : `/fandoms/nophoto.png`} />
+                <img  alt={'fandoms'} src={fandom.Images.Image_Name_Icon !== '' 
+                                            ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Icon}`
+                                            : fandom.Image_Name_Main !== '' ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main}` : `/fandoms/nophoto.png`} />
                 <Typography gutterBottom variant="body2" component="p" className='index_section_overlay'>{fandom.FandomName}</Typography>
               
               </Link>
             </Box>
           )
         } 
-        {/* {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)<=1)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />} */}
-        {/* {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===1||props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===2)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}        */}
+        {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)<=1)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}
+        {( !props.smallSize && (props.fandoms.length>props.cols && (props.fandoms.length%props.cols!==0) && ((props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===1||props.fandoms.length-(Math.floor(props.fandoms.length/props.cols)*props.cols)===2)) ) ) && <Box className='index_section_fandom index_section_fandom_dummy' />}       
       </GridList>
       {seeMore>9 && <Grid item xs={12}><Link to={`/fandoms`}>See All</Link></Grid>}
     </Grid>

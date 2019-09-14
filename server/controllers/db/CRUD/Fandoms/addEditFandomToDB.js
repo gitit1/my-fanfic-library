@@ -10,13 +10,17 @@ const FandomModal = require('../../../../models/Fandom');
 exports.addEditFandomToDB =  async (req,res) =>{
     console.log(clc.blue('[db controller] addEditFandomToDB()'));
 
-    let {fandomName,mode,date,mainImage,iconImage} = req.query;
+    let {fandomName,mode,date,mainImage,iconImage,fanficImage} = req.query;
     fandomName = fandomName.replace("%26","&");
     const pathForImage = 'public/fandoms/',fandomNameLowerCase = fandomName.toLowerCase();
     let   images=[],resultMessage = '';
  
-    mainImage && images.push('Image_Name_Main')
-    iconImage && images.push('Image_Name_Icon')
+    mainImage &&    images.push('Image_Name_Main')
+    iconImage &&    images.push('Image_Name_Icon')
+    fanficImage &&  images.push('Image_Name_Fanfic')
+
+    console.log('mainImage:',mainImage)
+    console.log('fanficImage:',fanficImage)
 
     if (images.length>0 && !fs.existsSync(pathForImage+fandomNameLowerCase)){
         fs.mkdirSync(pathForImage+fandomNameLowerCase,{recursive: true});
@@ -45,11 +49,13 @@ exports.addEditFandomToDB =  async (req,res) =>{
         }
         //check if I have an updated image/prev image/no image
         if(mode === 'add'){ 
-            ImageMain = mainImage   ?   mainImage : '';
-            ImageIcon = iconImage   ?   iconImage : '';
+            ImageMain       =   mainImage         ?   mainImage : '';
+            ImageIcon       =   iconImage         ?   iconImage : '';
+            ImageFanfic     =   fanficImage       ?   fanficImage : '';
         }else{
-            ImageMain = mainImage   ?   mainImage : req.body.Image_Name_Main;
-            ImageIcon = iconImage   ?   iconImage : req.body.Image_Name_Icon;
+            ImageMain       =   mainImage     ?   mainImage : req.body.Image_Name_Main;
+            ImageIcon       =   iconImage     ?   iconImage : req.body.Image_Name_Icon;
+            ImageFanfic     =   fanficImage   ?   fanficImage : req.body.Image_Name_Fanfic;
             
             console.log('images:',images)
             images.forEach(image => {
@@ -72,9 +78,12 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "SaveMethod":               req.body.SaveMethod,
             "FanficsInFandom":          Number(req.body.FanficsInFandom),
             "LastUpdate":               Date.now(),
-            "Image_Name_Main":          ImageMain,
-            "Image_Name_Icon":          ImageIcon,
-            "Image_Name_Path":          req.body.FandomName
+            "Images":                   {
+                "Image_Name_Main":              ImageMain,
+                "Image_Name_Icon":              ImageIcon,
+                "Image_Name_Fanfic":            ImageFanfic,
+                "Image_Name_Path":              req.body.FandomName
+            }
         }
         if(req.body.AutoSave === 'true'){
             fs.mkdirSync(pathForImage+fandomNameLowerCase+'/fanfics',{recursive: true});
