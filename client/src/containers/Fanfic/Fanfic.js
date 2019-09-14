@@ -478,12 +478,21 @@ class Fanfic extends Component{
         }       
     }
 
+    addImageToggle = (id) =>{
+        if(id===this.state.addImageFlag){
+            this.setState({addImageFlag:null})
+        }else{
+            this.setState({addImageFlag:id})
+        }
+    }
+
     render(){
-        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,
+        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,
                showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad,switches} = this.state;
         const {isManager,size,isAuthenticated,fanfics,readingLists} = this.props;
 
         const props             =   {   isManager,size,isAuthenticated};
+        const imageProps        =   {   addImageFlag,addImageToggle:this.addImageToggle}
         const categoriesProps   =   {   inputCategoryFlag,categoriesShowTemp,showSelectCategory,categoriesTemp:categoriesShowTemp,
                                         getCategories:this.getCategories,saveCategories:this.saveCategories,showCategory:this.showSelectCategoryHandler}
         const filtersProps      =   {   drawer:drawerFilters,checked:filters,filterHandler:this.filterHandler,
@@ -523,6 +532,7 @@ class Fanfic extends Component{
                                                             readingLists={readingListProps}
                                                             filter={this.filterTagsHandler}
                                                             switches={switches}
+                                                            images={imageProps}
                                         />
                                         
                                     }

@@ -17,7 +17,8 @@ export {
     saveCategories,
     getReadingList,
     saveReadingList,
-    deleteFanficFromDB
+    deleteFanficFromDB,
+    saveImageOfFanfic
 } from './fanfics';
 
 export {

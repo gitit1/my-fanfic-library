@@ -89,10 +89,8 @@ class AddNewFanficManually extends Component{
             }else{
                 this.setState({showSaveButton:false,msg:'',savedData:true})
                 let anotherFiler = this.fileUploadRef2.current===null || (this.fileUploadRef2.current!==null && this.fileUploadRef2.current.state.file==='') ? false : true;
-                let type= this.fileUploadRef.current.state.file.name.split('.');
-                let type2= anotherFiler && this.fileUploadRef2.current.state.file.name.split('.');
-                type =  type[1];
-                type2 = type2[1];
+                let type= this.fileUploadRef.current.state.file.name.split('.')[1];
+                let type2= anotherFiler && this.fileUploadRef2.current.state.file.name.split('.')[1];
                 
                 let fileUpload = `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type}`;
                 let fileUpload2 = anotherFiler &&  `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type2}`;

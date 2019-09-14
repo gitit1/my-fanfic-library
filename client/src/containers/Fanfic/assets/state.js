@@ -6,6 +6,7 @@ export let state={
     userFanfics:[],
     filters: filtersArrayAttr,
     filterArr: [],
+    addImageFlag:null,
     pageNumber:1,
     pageLimit:10,       
     fanficsNumbers:fanficsNumbersList,

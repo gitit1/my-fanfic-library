@@ -31,7 +31,7 @@ const UserData = (props) => {
         <AddCategories  fanfic={fanfic} showCategory={showCategory} showSelectCategory={showSelectCategory} saveCategories={saveCategories}/>   
       }
       {props.isManager && showMnagerButtonsSwitch && 
-        <AddImage />   
+        <AddImage       fanfic={fanfic} images={props.images}/>   
       }
       <ReadingList      props={props.props} userData={userData} fanfic={props.fanfic} readingLists={readingLists}/>
       <Follow           props={props.props} isFollowed={isFollowed} fanfic={fanfic}/>

@@ -12,7 +12,7 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const ShowFanficData = (props) => {
-    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists,filter,switches} = props;
+    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists,filter,switches,images} = props;
     const {isManager,isAuthenticated,size} = props.props
     const {getCategories,saveCategories,showSelectCategory,inputCategoryFlag,categoriesTemp,showCategory} = props.categories;
     const tagSwitch=switches[0].checked,showImagesSwitch=switches[1].checked,showMnagerButtonsSwitch=switches[3].checked;
@@ -24,7 +24,7 @@ const ShowFanficData = (props) => {
                     { fanfics.map(fanfic=>{
                         return(
                             <Card className='card'  key={fanfic.FanficID}>
-                                {showImagesSwitch && <FanficImage fanfic={fanfic}/>}
+                                {showImagesSwitch && <FanficImage fanfic={fanfic} images={images}/>}
                                 <div className={showImagesSwitch?'detailsWithImage':'detailsWithoutImage'}>
                                     <CardContent className='card_content'>
                                         
@@ -41,6 +41,7 @@ const ShowFanficData = (props) => {
                                                             showSelectCategory={showSelectCategory}
                                                             readingLists={readingLists}
                                                             showMnagerButtonsSwitch={showMnagerButtonsSwitch}
+                                                            images={images}
                                                 />
                                             </section>
                                         }
