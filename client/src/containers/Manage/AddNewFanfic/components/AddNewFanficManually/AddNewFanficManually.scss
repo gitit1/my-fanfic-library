@@ -1,3 +1,7 @@
+@import '../../../../../style/_colors';
+@import '../../../../../style/_fonts';
+@import '../../../../../style/_varibles';
+
 .addNewFanficManually{
     margin-top: 16px;
     margin-bottom: 8px;
@@ -184,5 +188,76 @@
     }
     .card_content{
         height: auto;
+    }
+}
+
+@media only screen and (max-width: $screenSizeM) {
+    .addNewFanficManually{
+        .addNewFanficManually_card{
+            width:100%;
+            margin: 0 auto;
+            height: 100%;
+
+            .addNewFanficManually_content_form{
+                .FanficID,
+                .Rating,
+                .FanficTitle,
+                .Author,
+                .FandomsTags,
+                .Warnings,
+                .Relationships,
+                .Characters,
+                .Tags,
+                .Summary,
+                .Categories,
+                .Source,
+                .PublishDate,
+                .UpdateDate,
+                .Language,
+                .Words,
+                .NumberOfChapters,
+                .Complete,
+                .Oneshot,
+                .Comments,
+                .Kudos,
+                .Bookmarks,
+                .Hits{
+                    float: none;
+                    width: 80%;
+                    left:0;
+                    right:0;
+                    margin:0;
+                    margin-top: 10px;
+                }
+
+                .Summary{
+                    // left: 2%;
+                    margin: 0 auto;
+                    margin-top: 10px;
+                    width: 80%;   
+                    height:100px;             
+                }
+                .Categories{
+                    margin-left: 0;
+                    width: 80%;
+                    margin: 0 auto;
+                    margin-top: 10px;
+                    .SelectCategories{
+                        height: 20px!important;
+                        margin-top:0;
+                        margin-left: 0;
+                        float: none;
+                        width: 80%;
+                    }
+                }
+
+                .send_button{
+                    float: none;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    margin-left: 0;
+                }
+            }
+        }
     }
 }
