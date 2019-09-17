@@ -146,6 +146,10 @@ exports.getFiltersRules = async (filters,userEmail) =>{
     if(noUserDataFlag){
         let userFanficsList = await getUserFanficsList(userEmail);
         filtersFanficList.push({ FanficID : { $nin: userFanficsList }})
+        if(sortList.length===0){
+            sortList.push({'LastUpdateOfFic':-1})
+            sortList.push({'LastUpdateOfNote':1})
+        }
     }
 
     console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList,sortList])
