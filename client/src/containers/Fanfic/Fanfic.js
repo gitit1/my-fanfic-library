@@ -14,6 +14,7 @@ import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
 import ShowFanficData from './components/ShowFanficData/ShowFanficData';
+import GalleryView from './components/GalleryView/GalleryView';
 import Pagination from './components/Pagination/Pagination';
 import FanficsNumbers from './components/FanficsNumbers/FanficsNumbers';
 import {fanficsNumbersFunc} from './components/FanficsNumbers/components/fanficsNumbersFunc';
@@ -33,30 +34,35 @@ class Fanfic extends Component{
         let isFiltered = location.search.includes('filters=true') ? true : false;
         let isInPage = location.search.includes('page=') ? true : false;
 
-        const page = isInPage ? Number(location.search.split('page=')[1].split('&')[0]) : 1;
-        if(isFiltered){
-            if(location.search.includes('noUserData')){
-                switches = [...switches];
-                switches[2].checked = false;
-                this.setState({switches})
-            }
-            console.log('will mount page',page)
-            let filterQuery = location.search.split('filters=true&')[1];
-            filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
-            isInPage && this.setState({pageNumber:page})
-            this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
-                await this.getFanfics()               
-                await this.activeFiltersHandler(false);
-                this.setState({firstLoad:false})
-            });
-        }else{
-            isInPage && this.setState({pageNumber:page,urlQueries:{...urlQueries,page}})
-            this.getFanfics().then(()=>{
-                this.setState({firstLoad:false})
+        if(switches[0].checked){
+            this.setState({pageLimit:16},()=>{
+
+                const page = isInPage ? Number(location.search.split('page=')[1].split('&')[0]) : 1;
+                if(isFiltered){
+                    if(location.search.includes('noUserData')){
+                        switches = [...switches];
+                        switches[3].checked = false;
+                        this.setState({switches})
+                    }
+                    console.log('will mount page',page)
+                    let filterQuery = location.search.split('filters=true&')[1];
+                    filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
+                    isInPage && this.setState({pageNumber:page})
+                    this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
+                        await this.getFanfics()               
+                        await this.activeFiltersHandler(false);
+                        this.setState({firstLoad:false})
+                    });
+                }else{
+                    isInPage && this.setState({pageNumber:page,urlQueries:{...urlQueries,page}})
+                    this.getFanfics().then(()=>{
+                        this.setState({firstLoad:false})
+                    })
+                }
             })
         }
-        
-        
+
+      
     }
 
     getFanfics = async () =>{
@@ -460,22 +466,21 @@ class Fanfic extends Component{
         switchesCopy[objIndex].checked = !switchesCopy[objIndex].checked;
         this.setState({switches:switchesCopy});
 
-        if(type==='noUserData'){
-            if(!switches[2].checked){//Don't show userdata  
-                this.filterHandler('noUserData',null,'filter') 
-                let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
-                if(isFiltered){
-                    let filterArr = [...this.state.filterArr,'noUserData'];
-                    let filterQuery = urlQueries.filterQuery + '&noUserData'
-                    this.setState({filterArr,urlQueries:{...urlQueries,filterQuery}},()=>(this.activeFiltersHandler()))
-                }else{
-                    let filterQuery = '?filters=true&noUserData'
-                    this.setState({urlQueries:{...urlQueries,filterQuery}},()=>this.activeFiltersHandler())
-                }               
-           }else{
-                this.cancelFiltersHandler()
-           }
-        }       
+        if(!switches[3].checked){//Don't show userdata  
+            this.filterHandler('noUserData',null,'filter') 
+            let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
+            if(isFiltered){
+                let filterArr = [...this.state.filterArr,'noUserData'];
+                let filterQuery = urlQueries.filterQuery + '&noUserData'
+                this.setState({filterArr,urlQueries:{...urlQueries,filterQuery}},()=>(this.activeFiltersHandler()))
+            }else{
+                let filterQuery = '?filters=true&noUserData'
+                this.setState({urlQueries:{...urlQueries,filterQuery}},()=>this.activeFiltersHandler())
+            }               
+        }else{
+            this.cancelFiltersHandler()
+        }
+    
     }
 
     addImageToggle = (id) =>{
@@ -487,7 +492,7 @@ class Fanfic extends Component{
     }
 
     render(){
-        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,
+        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,view,
                showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad,switches} = this.state;
         const {isManager,size,isAuthenticated,fanfics,readingLists} = this.props;
 
@@ -521,19 +526,22 @@ class Fanfic extends Component{
                                 {fanficsNumbers.fanficsCurrentCount===0 ? 
                                     <p><b>Didn't found any fanfics with this search filters</b></p>
                                     : dataLoad ? <Spinner /> : 
-                                        <ShowFanficData     fanfics={fanfics}
-                                                            userFanfics={userFanfics}
-                                                            markAs={this.markAsHandler}            
-                                                            markStatus={this.statusHandler}
-                                                            inputChapterToggle={this.inputChapterHandler}
-                                                            inputChapter={inputChapterFlag}
-                                                            props={props}                                
-                                                            categories={categoriesProps}
-                                                            readingLists={readingListProps}
-                                                            filter={this.filterTagsHandler}
-                                                            switches={switches}
-                                                            images={imageProps}
-                                        />
+                                        !switches[0].checked ?
+                                            <ShowFanficData     fanfics={fanfics}
+                                                                userFanfics={userFanfics}
+                                                                markAs={this.markAsHandler}            
+                                                                markStatus={this.statusHandler}
+                                                                inputChapterToggle={this.inputChapterHandler}
+                                                                inputChapter={inputChapterFlag}
+                                                                props={props}                                
+                                                                categories={categoriesProps}
+                                                                readingLists={readingListProps}
+                                                                filter={this.filterTagsHandler}
+                                                                switches={switches}
+                                                                images={imageProps}
+                                            />
+                                            :
+                                            <GalleryView fanfics={fanfics} size={size}/>
                                         
                                     }
                             </Grid>

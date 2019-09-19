@@ -31,6 +31,12 @@ export let state={
     dataLoad:false,
     switches:[
         {
+            id:'gallery',
+            checked:false,
+            label:'Gallery View',
+            manager:false
+        },
+        {
             id:'tags',
             checked:true,
             label:'Show Tags',

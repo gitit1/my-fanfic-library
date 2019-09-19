@@ -24,6 +24,7 @@ exports.getDataFromPage = (jar,url,fandomName) =>{
         fanficUpdateDate                =       $('dd.status').text();
         fanficPublishedDate             =       $('dd.published').text();
 
+        fanfic["LastUpdateOfNote"]       =      new Date().getTime();
         fanfic["LastUpdateOfFic"]       =       fanficUpdateDate ==="" ? 0 : new Date(fanficUpdateDate).getTime();
         fanfic["PublishDate"]           =       fanficPublishedDate ==="" ? 0 : new Date(fanficPublishedDate).getTime();
         if(fanficUpdateDate ===""){

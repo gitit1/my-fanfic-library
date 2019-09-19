@@ -24,6 +24,8 @@ const News = () => (
         <p><span className={classes.Date}><strong>09-14-2019:</strong></span><span className={classes.Content}>[013-git] Added switch "Show Marked Stories" in fandom.js  instead of the filter</span></p>
         <p><span className={classes.Date}><strong>09-14-2019:</strong></span><span className={classes.Content}>[014-git] Added functionality for "Add Image" button in fanfic.js</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
+        <p><span className={classes.Date}><strong>09-17-2019:</strong></span><span className={classes.Content}>[015-git] Fixed "Show marked stories sort" on the switch in fanfic.js</span></p>
+        <p><span className={classes.Date}><strong>09-17-2019:</strong></span><span className={classes.Content}>[016-git] Added a responisive design to add new fanfic manually page</span></p>
     </div>
   </Container>
 );
