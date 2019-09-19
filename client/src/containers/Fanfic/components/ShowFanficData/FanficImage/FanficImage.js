@@ -7,18 +7,11 @@ import {getRandomColor} from '../../../../../utils/sharedFunctions';
 import ImageUpload from '../../../../../components/ImageUpload/ImageUpload';
 import Button from '@material-ui/core/Button';
 
-
 class FanficImage extends Component{  
   fileUploadRef= React.createRef();
 
   state = {
-    imagePath:'',
-    color: getRandomColor()
-  }
-
-  componentDidMount(){
-
-    this.setState({})
+    imagePath:''
   }
   saveImageOfFanfic = async () => {
     console.log('saveImageOfFanfic')
@@ -42,12 +35,13 @@ class FanficImage extends Component{
 
   render(){
     const {fanfic,images} = this.props
-    const {imagePath,color} = this.state
+    const {imagePath} = this.state
     let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
     isImage = imagePath!=='' ? true :  isImage;
     let fanficImage = fanfic.image ? fanfic.image : imagePath;
 
-    // const color = isImage && (images.addImageFlag===null) ? null : getRandomColor();
+    const color = isImage && (images.addImageFlag===null) ? null : getRandomColor();
+    console.log('isImage:',isImage)
     return(
       <div className='details-image'>
             { images.addImageFlag===fanfic.FanficID ?

@@ -54,9 +54,6 @@ exports.getFiltersRules = async (filters,userEmail) =>{
             case 'publishDate':
                 sortList.push({'PublishDate':-1})
                 break;
-            case 'uploadDate':
-                sortList.push({'LastUpdateOfNote':-1})
-                break;
             case 'authorSort':
                 sortList.push({'Author':1})
                 break;

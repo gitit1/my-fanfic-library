@@ -60,10 +60,6 @@ export const filtersArray = {
             name: 'publishDate',
             display: 'Publish Date'
         },{
-            type: 'checkbox',
-            name: 'uploadDate',
-            display: 'Upload Date'
-        },{
             type : 'checkbox',
             name:  'authorSort',
             display: 'Author'
@@ -127,7 +123,6 @@ export const filtersArrayInit = {
     comments:false,
     dateLastUpdate:false,
     publishDate:false,
-    uploadDate:false,
     hits:false,
     kudos:false,
 
