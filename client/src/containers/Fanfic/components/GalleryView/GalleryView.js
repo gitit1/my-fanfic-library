@@ -5,7 +5,7 @@ import { Grid, Card, CardContent, Typography } from '@material-ui/core'
 
 const GalleryView = (props) => {
 
-    const {Author,FanficTitle,fanfics,size} = props;
+    const {fanfics,size} = props;
     let xs = (size==='xm'||size==='m') ? 6 : (size==='xs'||size==='s') ? 10 : 3;
     return(
         <Grid container className={classes.root} spacing={1}>
@@ -18,14 +18,14 @@ const GalleryView = (props) => {
                 return (
                     <Card key={fanfic.FanficTitle} className={classes.card}>
                     {/* <Grid key={fanfic.FanficTitle} item xs={xs} className={classes.gridImage}> */}
-                        <div className={classes.header}>
+                        {/* <div className={classes.header}>
                             <Typography component="h5" variant="h5">
                                 {fanfic.FanficTitle}
                             </Typography>
                             <Typography component="h6" variant="h6">
                                 {fanfic.Author}
                             </Typography>
-                        </div>
+                        </div> */}
                         <ImageZoom
                             image={{
                                 src: imgLink,
@@ -33,12 +33,12 @@ const GalleryView = (props) => {
                                 className: classes.cardMedia,
                             }}
                         />
-                        <div className={classes.details}>
+                        {/* <div className={classes.details}>
                             <CardContent className={classes.content}>
                                 <h4>{fanfic.FanficTitle}</h4>
                                 <h5>{fanfic.Author}</h5>
                             </CardContent>
-                        </div>
+                        </div> */}
                     {/* </Grid> */}
                     </Card>
                 )

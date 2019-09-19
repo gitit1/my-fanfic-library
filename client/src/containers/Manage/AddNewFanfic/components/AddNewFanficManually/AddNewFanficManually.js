@@ -38,8 +38,7 @@ class AddNewFanficManually extends Component{
         msg:'',
         loadingFlag:false,
         saved:false,
-        showUploadButton:false,
-        resend:false
+        showUploadButton:false
     }
 
     componentWillMount(){
@@ -235,7 +234,7 @@ class AddNewFanficManually extends Component{
                 {   showData===0 ? 
                         <Card className='addNewFanficManually_card'>
                             <Grid container className='addNewFanficManually_content_form'>                           
-                                <BuildForm  onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler}
+                                <BuildForm  onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
                                             changed={this.inputChangedHandler} disabled={!formIsValid} getCategories={this.getCategories} buttonSendLabel='UPLOAD'/>
                             </Grid>
                         </Card>

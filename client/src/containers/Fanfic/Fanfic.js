@@ -35,30 +35,28 @@ class Fanfic extends Component{
         let isInPage = location.search.includes('page=') ? true : false;
 
         if(switches[0].checked){
-            this.setState({pageLimit:16},()=>{
-
-                const page = isInPage ? Number(location.search.split('page=')[1].split('&')[0]) : 1;
-                if(isFiltered){
-                    if(location.search.includes('noUserData')){
-                        switches = [...switches];
-                        switches[3].checked = false;
-                        this.setState({switches})
-                    }
-                    console.log('will mount page',page)
-                    let filterQuery = location.search.split('filters=true&')[1];
-                    filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
-                    isInPage && this.setState({pageNumber:page})
-                    this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
-                        await this.getFanfics()               
-                        await this.activeFiltersHandler(false);
-                        this.setState({firstLoad:false})
-                    });
-                }else{
-                    isInPage && this.setState({pageNumber:page,urlQueries:{...urlQueries,page}})
-                    this.getFanfics().then(()=>{
-                        this.setState({firstLoad:false})
-                    })
-                }
+            this.setState({pageLimit:16})
+        }
+        const page = isInPage ? Number(location.search.split('page=')[1].split('&')[0]) : 1;
+        if(isFiltered){
+            if(location.search.includes('noUserData')){
+                switches = [...switches];
+                switches[3].checked = false;
+                this.setState({switches})
+            }
+            console.log('will mount page',page)
+            let filterQuery = location.search.split('filters=true&')[1];
+            filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
+            isInPage && this.setState({pageNumber:page})
+            this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
+                await this.getFanfics()               
+                await this.activeFiltersHandler(false);
+                this.setState({firstLoad:false})
+            });
+        }else{
+            isInPage && this.setState({pageNumber:page,urlQueries:{...urlQueries,page}})
+            this.getFanfics().then(()=>{
+                this.setState({firstLoad:false})
             })
         }
 
@@ -492,7 +490,7 @@ class Fanfic extends Component{
     }
 
     render(){
-        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,view,
+        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,
                showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad,switches} = this.state;
         const {isManager,size,isAuthenticated,fanfics,readingLists} = this.props;
 
