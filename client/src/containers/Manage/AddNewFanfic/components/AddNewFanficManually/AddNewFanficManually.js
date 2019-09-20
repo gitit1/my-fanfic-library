@@ -254,7 +254,7 @@ class AddNewFanficManually extends Component{
                          }
                          {saved && ((similarFanfic===null) || (similarFanfic!==null && similarFanfic.FanficID!==fanfic.FanficID) ) && 
                             <React.Fragment>
-                                <Button color="primary" clicked={()=>this.setState({saved:false,showData:0})}>Add Another One</Button>
+                                <Button color="primary" clicked={()=>this.setState({saved:false,showData:0,showUploadButton:true})}>Add Another One</Button>
                             </React.Fragment>
                          }
                      </Grid>
