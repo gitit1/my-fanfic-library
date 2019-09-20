@@ -1,3 +1,13 @@
+@import '../../../../style/_colors';
+@import '../../../../style/_fonts';
+@import '../../../../style/_varibles';
+
+@mixin caption{
+    color: $color_header;
+    font-family: $font_header;
+    font-weight: bold;
+}
+
 .root{
     flex-grow: 1;
     margin:4px!important;
@@ -26,8 +36,46 @@
     .header{
         position: absolute;
         width: 100%;
-        margin: 0 auto;
+        height: 55px;
+        top: 0;
+        margin: 0;
+        background: rgba(25, 25, 25, .1);
+        padding:0px!important;
+        // background: rgba(25, 25, 25, .5);
+        h5,h6{
+            @include caption;
+            font-size: 1.2em;
+            
+            
+        }
+        h5{
+            font-size: 1.3em;
+        }h6{
+            color: $color_header_bold;
+            font-size: 1em;
+        }
     }
+
+
+    .stat{
+        position: absolute;
+        width:100%;
+        margin-top: 72px;
+        span{
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 200;
+            text-align: center;
+            border-radius: 4px 4px 4px 4px;
+            line-height: 1.2em;
+            margin-left: 2%;
+            padding: 0 6px 0 6px; 
+            background: rgba(25, 25, 25, .5);
+        }
+    }
+
     .details{
         // display: flex;
         // flex-direction: column;
@@ -42,7 +90,9 @@
 
     .content{
         flex: 1 0 auto;
+        padding:0!important;
     }
     
 
 }
+

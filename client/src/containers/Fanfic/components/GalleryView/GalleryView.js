@@ -13,19 +13,14 @@ const GalleryView = (props) => {
         <Grid container justify="center" spacing={1}>
             {fanfics.map(fanfic => {
                 let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
+                let complete = fanfic.Complete===true ? true : false;
+                let oneshot = fanfic.Oneshot===true ? true : false;
+                let source = ( (fanfic.Source==='AO3' && fanfic.Deleted===true) || fanfic.Source==='Backup') ? 'Backup' : fanfic.Source;
                 const imgLink = isImage   ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanfic.image}`
                 : `/fandoms/${fanfic.FandomName.toLowerCase()}/fanfic_general.jpg`;
                 return (
                     <Card key={fanfic.FanficTitle} className={classes.card}>
                     {/* <Grid key={fanfic.FanficTitle} item xs={xs} className={classes.gridImage}> */}
-                        {/* <div className={classes.header}>
-                            <Typography component="h5" variant="h5">
-                                {fanfic.FanficTitle}
-                            </Typography>
-                            <Typography component="h6" variant="h6">
-                                {fanfic.Author}
-                            </Typography>
-                        </div> */}
                         <ImageZoom
                             image={{
                                 src: imgLink,
@@ -33,12 +28,27 @@ const GalleryView = (props) => {
                                 className: classes.cardMedia,
                             }}
                         />
-                        {/* <div className={classes.details}>
+                        <div className={classes.header}>
+                            <CardContent className={classes.content}>
+                                <Typography component="h5" variant="h5">
+                                    {fanfic.FanficTitle}
+                                </Typography>
+                                <Typography component="h6" variant="h6">
+                                    {fanfic.Author}
+                                </Typography>
+                            </CardContent>
+                        </div>
+                        <div className={classes.stat}>
+                            <span className={classes.source}>{source}</span>
+                            <span className={complete ? classes.complete : classes.inprogress}>{complete ? 'Complete' : 'In progress'}</span>
+                            {oneshot && <span className={classes.oneshot}>Oneshot</span>}
+                        </div>
+                        <div className={classes.details}>
                             <CardContent className={classes.content}>
                                 <h4>{fanfic.FanficTitle}</h4>
                                 <h5>{fanfic.Author}</h5>
                             </CardContent>
-                        </div> */}
+                        </div>
                     {/* </Grid> */}
                     </Card>
                 )

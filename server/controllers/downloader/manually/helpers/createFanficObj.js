@@ -31,7 +31,10 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 Bookmarks:          Number(fanficData.Bookmarks),   
                 Hits:               Number(fanficData.Hits),
                 URL:                null,
-                AuthorURL:          null
+                AuthorURL:          null,
+                Series:             fanficData.SeriesName!=='' ? fanficData.SeriesName : undefined,
+                SeriesPart:         fanficData.SeriesNumber!=='' ? Number(fanficData.SeriesNumber) : undefined,
+                SeriesURL:         fanficData.SeriesNumber!=='' ? '' : undefined
             }
             resolve(fanfic)
     });
