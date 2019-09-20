@@ -6,10 +6,10 @@
     margin-top: 16px;
     margin-bottom: 8px;
     .addNewFanficManually_card{
-        width: 90%;
+        width: 95%;
         margin: 0 auto;
-        height: 72vh;
-        margin-top: 1%;
+        height: 76vh;
+        // margin-top: 1%;
         text-align: center;
 
         .addNewFanficManually_file{
@@ -57,6 +57,16 @@
                 left: 2%;
                 float: left;
                 width: 94%;
+            }
+            .SeriesName{
+                left: 2%;
+                float: left;
+                width: 60%;
+            }
+            .SeriesNumber{
+                left: 6%;
+                float: left;
+                width: 30%;
             }
             .Summary{
                 margin-left: 2%;
@@ -140,12 +150,12 @@
                 margin-left: -67%;
                 margin-top:calc(7% + 103px);
             }
-            .Bookmarks{
+            .Hits{
                 margin-left: -55%;
                 margin-top:calc(7% + 103px);
                 width:15%;
             }
-            .Hits{
+            .Bookmarks{
                 margin-left: -38%;
                 margin-top:calc(7% + 103px);
             }
@@ -221,6 +231,8 @@
                 .Comments,
                 .Kudos,
                 .Bookmarks,
+                .SeriesName,
+                .SeriesNumber,
                 .Hits{
                     float: none;
                     width: 80%;

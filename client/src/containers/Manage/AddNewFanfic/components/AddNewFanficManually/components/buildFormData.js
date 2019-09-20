@@ -21,6 +21,8 @@ export const buildFormData = (fandomName,fanficForm) =>{
         fanficFormData.append("Characters", fanficForm['Characters'].value);
         fanficFormData.append("Tags", fanficForm['Tags'].value);
         fanficFormData.append("Categories", fanficForm['Categories'].value);
+        fanficFormData.append("SeriesName", fanficForm['SeriesName'].value);
+        fanficFormData.append("SeriesNumber", fanficForm['SeriesNumber'].value);
         fanficFormData.append("Summary", fanficForm['Summary'].value);
         fanficFormData.append("Source", fanficForm['Source'].value);
         fanficFormData.append("PublishDate", PublishDate);

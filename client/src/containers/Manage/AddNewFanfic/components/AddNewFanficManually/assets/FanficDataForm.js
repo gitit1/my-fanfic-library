@@ -147,6 +147,36 @@ export const fanficDataForm = [{
         visible: true,
         disabled:false
     },
+    SeriesName: {
+        label: 'Series:',
+        classNameCustom:'SeriesName',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Series the fanfic part of'
+        },
+        value:'',
+        validation: { },
+        valid:true,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    SeriesNumber: {
+        label: 'SeriesNumber:',
+        classNameCustom:'SeriesNumber',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'The number of the fanfic in the series (part XXX)'
+        },
+        value:'',
+        validation: { },
+        valid:true,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
     Categories: {
         label: 'Categories:',
         classNameCustom:'Categories',
@@ -329,21 +359,6 @@ export const fanficDataForm = [{
         visible: true,
         disabled:false
     },
-    Bookmarks: {
-        label: 'Bookmarks (Follows):',
-        classNameCustom:'Bookmarks',
-        elementType:'input', 
-        elementConfig:{
-            type: 'number',
-            placeholder: 'Bookmarks (Follows)'
-        },
-        value:'',
-        validation: {},
-        valid:true,
-        touched:false,
-        visible: true,
-        disabled:false
-    },
     Hits: {
         label: 'Hits:',
         classNameCustom:'Hits',
@@ -359,4 +374,19 @@ export const fanficDataForm = [{
         visible: true,
         disabled:false
     },
+    Bookmarks: {
+        label: 'Bookmarks (Follows):',
+        classNameCustom:'Bookmarks',
+        elementType:'input', 
+        elementConfig:{
+            type: 'number',
+            placeholder: 'Bookmarks (Follows)'
+        },
+        value:'',
+        validation: {},
+        valid:true,
+        touched:false,
+        visible: true,
+        disabled:false
+    }
 }]

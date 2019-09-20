@@ -41,6 +41,42 @@ class AddNewFanficManually extends Component{
         showUploadButton:false
     }
 
+    initialState = () =>{
+        this.setState({
+            fanficForm:fanficDataForm[0],
+            formIsValid:false,
+            showData:0,
+            showUserData:false,
+            showSaveButton:false,
+            userData:{
+              Follow:false,
+              Favorite:false,
+              status: null,
+              chapter:0,
+              toggleChapter:false
+            },
+            formData:null,
+            msg:'',
+            loadingFlag:false,
+            saved:false,
+            showUploadButton:false
+        })
+        this.setState(prevState =>({
+            fanficForm: {
+                ...prevState.fanficForm,
+                'PublishDate': {
+                    ...prevState.fanficForm['PublishDate'],
+                    value: new Date()
+                },
+                'UpdateDate': {
+                    ...prevState.fanficForm['UpdateDate'],
+                    value: new Date()
+                }
+            }
+        }));
+        this.props.showBtns(false);
+    }
+
     componentWillMount(){
         this.setState(prevState =>({
             fanficForm: {
@@ -254,7 +290,7 @@ class AddNewFanficManually extends Component{
                          }
                          {saved && ((similarFanfic===null) || (similarFanfic!==null && similarFanfic.FanficID!==fanfic.FanficID) ) && 
                             <React.Fragment>
-                                <Button color="primary" clicked={()=>this.setState({saved:false,showData:0,showUploadButton:true})}>Add Another One</Button>
+                                <Button color="primary" clicked={()=>this.initialState()}>Add Another One</Button>
                             </React.Fragment>
                          }
                      </Grid>
