@@ -9,6 +9,7 @@ import '../../../../../../../Fanfic/components/ShowFanficData/showFandomData.scs
 import Header from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Header/Header';
 import Tags from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Tags/Tags';
 import Desc from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Desc/Desc';
+import Series from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Series/Series';
 import Stat from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Stat/Stat';
 import Categories from '../../../../../../../Fanfic/components/ShowFanficData/FanficData/Categories/Categories';
 
@@ -38,6 +39,9 @@ const ShowFanficData = ({userData,fanfic,categoriesTemp,size,getCategories,saveC
                 <section className='card_content_categories'>
                     <Categories fanfic={fanfic} getCategories={getCategories}  saveCategories={saveCategories}
                                 showSelectCategory={showSelectCategory} curFanfic={inputCategoryFlag} fanficCategories={fanficCategories}/> 
+                </section>
+                <section className='card_content_series'>
+                    <Series fanfic={fanfic}/>                        
                 </section>
                 <section className='card_content_desc'>
                     <Desc fanfic={fanfic}/>                        
