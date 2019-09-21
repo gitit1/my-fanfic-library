@@ -28,6 +28,8 @@ const News = () => (
         <p><span className={classes.Date}><strong>09-17-2019:</strong></span><span className={classes.Content}>[016-git] Added a responisive design to add new fanfic manually page</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
         <p><span className={classes.Date}><strong>09-20-2019:</strong></span><span className={classes.Content}>[017-git] Added series to addNewFanficManually + fix bug in button "add another one" || added first design to gallery view</span></p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+        <p><span className={classes.Date}><strong>09-20-2019:</strong></span><span className={classes.Content}>[018-git] fix another bug in button "add another one"</span></p>
     </div>
   </Container>
 );

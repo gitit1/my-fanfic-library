@@ -94,7 +94,7 @@ class AddNewFanfic extends Component{
                 }
 
                 {(show===1) ? 
-                <AddNewFanficManually fandomName={fandomSelect.value} fandoms={fandoms} showBtns={this.showBtns}/>
+                <AddNewFanficManually fandomName={fandomSelect.value} showBtns={this.showBtns}/>
                 : (show===2) &&
                 <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} switches={switches} showBtns={this.showBtns}/>
                 
