@@ -5,7 +5,7 @@ import Truncate from 'react-truncate';
 import { Grid, Card, CardContent, Typography } from '@material-ui/core'
 import {getRandomColor} from '../../../../utils/sharedFunctions';
 import ShowFullData from './ShowFullData/ShowFullData'
-
+import Chip from '@material-ui/core/Chip';
 class GalleryView extends Component{  
     state = {
         imageColor: [],
@@ -66,9 +66,11 @@ class GalleryView extends Component{
         
                                     <div className={classes.details}>
                                         <CardContent className={classes.content}>
-                                            {/* <div className={classes.categories}>
-
-                                            </div> */}
+                                            <div className={classes.categories}>
+                                                {fanfic.Categories.map(category=>
+                                                    <Chip size="medium" key={category} label={category} className={classes.category_chip}/>
+                                                )}
+                                            </div>
                                             <div className={classes.desc}>
                                                 <Truncate lines={3} ellipsis={<span>...</span>}>
                                                     <div  dangerouslySetInnerHTML={{ __html:fanfic.Description}}></div>

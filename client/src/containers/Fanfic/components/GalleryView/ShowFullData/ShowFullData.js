@@ -81,7 +81,7 @@ export default function ShowFullData(props) {
                         <FanficData         fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags} filter={filter}
                                             getCategories={getCategories} saveCategories={saveCategories} showSelectCategory={showSelectCategory} 
                                             inputCategoryFlag={inputCategoryFlag} categoriesTemp={categoriesTemp} tagSwitch={tagSwitch}/>                           
-                        { isAuthenticated &&
+                        {/* { isAuthenticated &&
                             <section className='card_content_userData'>
                                 <UserData   props={props} 
                                             userFanfics={userFanfics} 
@@ -94,7 +94,7 @@ export default function ShowFullData(props) {
                                             images={images}
                                 />
                             </section>
-                        }
+                        } */}
                     </CardContent>
                 </div>
             </Card>
