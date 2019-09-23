@@ -20,6 +20,8 @@ import FanficsNumbers from './components/FanficsNumbers/FanficsNumbers';
 import {fanficsNumbersFunc} from './components/FanficsNumbers/components/fanficsNumbersFunc';
 import { withRouter } from 'react-router-dom';
 
+import EditFanfic from './components/EditFanfic/EditFanfic'
+
 import './Fanfic.scss'
 import {state} from './assets/state'
 
@@ -44,7 +46,7 @@ class Fanfic extends Component{
                 switches[3].checked = false;
                 this.setState({switches})
             }
-            console.log('will mount page',page)
+
             let filterQuery = location.search.split('filters=true&')[1];
             filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
             isInPage && this.setState({pageNumber:page})
@@ -493,9 +495,16 @@ class Fanfic extends Component{
         }
     }
 
+    editFanficToggle = (fanfic,flag)=>{
+        this.setState({editFanfic:!this.state.editFanfic,editFanficData:fanfic})
+        if(flag){
+            this.activeFiltersHandler(false);
+        }
+    }
+
     render(){
         const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,
-               showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad,switches} = this.state;
+               showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad,switches,editFanfic,editFanficData} = this.state;
         const {isManager,size,isAuthenticated,fanfics,readingLists} = this.props;
 
         const props             =   {   isManager,size,isAuthenticated};
@@ -510,62 +519,65 @@ class Fanfic extends Component{
             <Container header={fandomName} className='fanfics'>
                 {firstLoad 
                     ?<Spinner />
-                    :<React.Fragment>
-                        <Grid container className='containerGrid'>
-                            <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
-                                        total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
-
+                    : editFanfic ? 
+                        <EditFanfic fanfic={editFanficData} fandomName={fandomName} back={this.editFanficToggle}/>
+                    :   <React.Fragment>
                             <Grid container className='containerGrid'>
-                                <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
-                                <Filters filters={filtersProps} getCategories={this.getFiltersCategories}/>                   
+                                <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
+                                            total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
+
+                                <Grid container className='containerGrid'>
+                                    <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
+                                    <Filters filters={filtersProps} getCategories={this.getFiltersCategories}/>                   
+                                </Grid>
+                                <Grid className={'main'}>
+                                    <Divider/>
+                                    <SwitchesPanel switchesPanel={switchesPanel}/> 
+                                </Grid>
+                                <Grid className={'main'}>
+                                    <Divider/>
+                                    {fanficsNumbers.fanficsCurrentCount===0 ? 
+                                        <p><b>Didn't found any fanfics with this search filters</b></p>
+                                        : dataLoad ? <Spinner /> : 
+                                            !switches[0].checked ?
+                                                <ShowFanficData     fanfics={fanfics}
+                                                                    userFanfics={userFanfics}
+                                                                    markAs={this.markAsHandler}            
+                                                                    markStatus={this.statusHandler}
+                                                                    editFanficToggle={this.editFanficToggle}
+                                                                    inputChapterToggle={this.inputChapterHandler}
+                                                                    inputChapter={inputChapterFlag}
+                                                                    props={props}                                
+                                                                    categories={categoriesProps}
+                                                                    readingLists={readingListProps}
+                                                                    filter={this.filterTagsHandler}
+                                                                    switches={switches}
+                                                                    images={imageProps}
+                                                />
+                                                :
+                                                <GalleryView        fanfics={fanfics} 
+                                                                    userFanfics={userFanfics}
+
+                                                                    markAs={this.markAsHandler}            
+                                                                    markStatus={this.statusHandler}
+                                                                    inputChapterToggle={this.inputChapterHandler}
+                                                                    inputChapter={inputChapterFlag}
+                                                                    props={props}                                
+                                                                    categories={categoriesProps}
+                                                                    readingLists={readingListProps}
+                                                                    filter={this.filterTagsHandler}
+                                                                    switches={switches}
+                                                                    images={imageProps}
+                                                />
+                                            
+                                        }
+                                </Grid>
                             </Grid>
-                            <Grid className={'main'}>
-                                <Divider/>
-                                <SwitchesPanel switchesPanel={switchesPanel}/> 
-                            </Grid>
-                            <Grid className={'main'}>
-                                <Divider/>
-                                {fanficsNumbers.fanficsCurrentCount===0 ? 
-                                    <p><b>Didn't found any fanfics with this search filters</b></p>
-                                    : dataLoad ? <Spinner /> : 
-                                        !switches[0].checked ?
-                                            <ShowFanficData     fanfics={fanfics}
-                                                                userFanfics={userFanfics}
-                                                                markAs={this.markAsHandler}            
-                                                                markStatus={this.statusHandler}
-                                                                inputChapterToggle={this.inputChapterHandler}
-                                                                inputChapter={inputChapterFlag}
-                                                                props={props}                                
-                                                                categories={categoriesProps}
-                                                                readingLists={readingListProps}
-                                                                filter={this.filterTagsHandler}
-                                                                switches={switches}
-                                                                images={imageProps}
-                                            />
-                                            :
-                                            <GalleryView        fanfics={fanfics} 
-                                                                userFanfics={userFanfics}
-                                                                
-                                                                markAs={this.markAsHandler}            
-                                                                markStatus={this.statusHandler}
-                                                                inputChapterToggle={this.inputChapterHandler}
-                                                                inputChapter={inputChapterFlag}
-                                                                props={props}                                
-                                                                categories={categoriesProps}
-                                                                readingLists={readingListProps}
-                                                                filter={this.filterTagsHandler}
-                                                                switches={switches}
-                                                                images={imageProps}
-                                            />
-                                        
-                                    }
-                            </Grid>
-                        </Grid>
-                        {!dataLoad && 
-                            <Pagination gridClass='paginationGrid paginationGridButtom'  onChange={this.paginationClickHandler} showTotal={false} current={pageNumber} 
-                                    total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
-                        }
-                    </React.Fragment>
+                            {!dataLoad && 
+                                <Pagination gridClass='paginationGrid paginationGridButtom'  onChange={this.paginationClickHandler} showTotal={false} current={pageNumber} 
+                                        total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
+                            }
+                        </React.Fragment>
                 }
             </Container>
         )

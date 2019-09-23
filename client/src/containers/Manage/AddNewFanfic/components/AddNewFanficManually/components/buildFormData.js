@@ -1,4 +1,5 @@
 export const buildFormData = (fandomName,fanficForm) =>{
+    console.log('fanficForm::',fanficForm)
         const Rating = (fanficForm['Rating'].value==='') ? 'None' : fanficForm['Rating'].value;
         const PublishDate = fanficForm['PublishDate'].value.getTime();
         const UpdateDate = fanficForm['UpdateDate'].value.getTime();

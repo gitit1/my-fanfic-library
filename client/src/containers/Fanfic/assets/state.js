@@ -29,6 +29,8 @@ export let state={
     },
     firstLoad:true,
     dataLoad:false,
+    editFanfic:false,
+    editFanficData:null,
     switches:[
         {
             id:'gallery',

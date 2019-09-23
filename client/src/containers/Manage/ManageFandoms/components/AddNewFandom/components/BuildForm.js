@@ -20,6 +20,7 @@ const BuildForm = (props) => (
                     checked={(event) => props.check(event,formElement.id)}
                     changed={(event) => props.changed(event,formElement.id)}
                     getCategories={(array) => props.getCategories(array)}
+                    exist={props.exist}
                     />
         ))}
         <br/>                               

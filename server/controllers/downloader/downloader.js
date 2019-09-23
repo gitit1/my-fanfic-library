@@ -57,7 +57,6 @@ exports.getNewFanfic = async (req,res) =>{
 }
 exports.saveNewFanfic = async (req,res) =>{
     const {fandomName,download,url,image} = req.query;
-    console.log('fandomName,download,url,image:',fandomName,download,url,image)
     const fanfic = req.body;
     if(url==='null'){
         await manually.saveNewFanfic(fandomName,req,res).then(()=>{
@@ -71,5 +70,10 @@ exports.saveNewFanfic = async (req,res) =>{
             res.send();
         })
     }
+}
 
+exports.updateExistFanfic = async (req,res)=>{
+    console.log('updateExistFanfic')
+    await manually.updateExistFanfic(req.query.fandomName,req,res);
+    res.send();
 }
