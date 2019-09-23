@@ -101,7 +101,6 @@ class AddNewFanficManually extends Component{
     componentWillUnmount(){this.props.onGetFandoms()}
 
     sendFandomToServerHandler = async (event) => {
-        console.log('manually...sendFandomToServerHandler()')
         event.preventDefault();
         const {fandomName} = this.props,{fanficForm} = this.state;
 

@@ -37,7 +37,8 @@ export {
 
 export{
     getDataOfFanfic,
-    saveDataOfFanficToDB
+    saveDataOfFanficToDB,
+    updateFanficData
 }from './downloader'
 
 export{

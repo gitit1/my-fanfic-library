@@ -81,7 +81,7 @@ const input = (props) => {
             break;  
         case ('auto-select'): 
             inputElement = <div className={props.classNameCustom}>
-                                <AutoSelect getDataArray={props.getCategories} suggestions={props.elementConfig.suggestions} placeholder={props.elementConfig.placeholder}/>
+                                <AutoSelect getDataArray={props.getCategories} exist={props.exist && props.exist} suggestions={props.elementConfig.suggestions} placeholder={props.elementConfig.placeholder}/>
                             </div>                                
             break;
         case ('checkbox'):

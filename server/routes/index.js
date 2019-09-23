@@ -39,6 +39,7 @@ try {
   router.get('/downloader/getFanficData',downloader.getNewFanfic)
   router.post('/downloader/getFanficData',downloader.getNewFanfic)
   router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
+  router.post('/downloader/updateExistFanfic',downloader.updateExistFanfic)
   
   router.get('/updates/latestUpdates',updates.latestUpdates)
   router.get('/updates/myLatestActivities',updates.myLatestActivities)
