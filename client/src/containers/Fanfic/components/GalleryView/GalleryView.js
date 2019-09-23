@@ -1,89 +1,90 @@
-import React from 'react';
-import classes from './GalleryView.module.scss'
-import ImageZoom from 'react-medium-image-zoom'
+import React,{Component} from 'react';
+import classes from './GalleryView.module.scss';
+import ImageZoom from 'react-medium-image-zoom';
+import Truncate from 'react-truncate';
 import { Grid, Card, CardContent, Typography } from '@material-ui/core'
+import {getRandomColor} from '../../../../utils/sharedFunctions';
+import ShowFullData from './ShowFullData/ShowFullData'
+import Chip from '@material-ui/core/Chip';
+class GalleryView extends Component{  
+    state = {
+        imageColor: [],
+        zoom:null
+    }
 
-const GalleryView = (props) => {
+    componentDidMount(){
+        const length = 16;
+        console.log('length is:',length)
+        let imageColor = [];
+        for (let index = 0; index<length; index++) {
+            const color = getRandomColor();
+            imageColor.push(color)
+        }
+        this.setState({imageColor})
+        
+    }
 
-    const {fanfics,size} = props;
-    let xs = (size==='xm'||size==='m') ? 6 : (size==='xs'||size==='s') ? 10 : 3;
-    return(
-        <Grid container className={classes.root} spacing={1}>
-      {/* <Grid item xs={12}> */}
-        <Grid container justify="center" spacing={1}>
-            {fanfics.map(fanfic => {
-                let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
-                let complete = fanfic.Complete===true ? true : false;
-                let oneshot = fanfic.Oneshot===true ? true : false;
-                let source = ( (fanfic.Source==='AO3' && fanfic.Deleted===true) || fanfic.Source==='Backup') ? 'Backup' : fanfic.Source;
-                const imgLink = isImage   ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanfic.image}`
-                : `/fandoms/${fanfic.FandomName.toLowerCase()}/fanfic_general.jpg`;
-                return (
-                    <Card key={fanfic.FanficTitle} className={classes.card}>
-                    {/* <Grid key={fanfic.FanficTitle} item xs={xs} className={classes.gridImage}> */}
-                        <ImageZoom
-                            image={{
-                                src: imgLink,
-                                alt: fanfic.FanficTitle,
-                                className: classes.cardMedia,
-                            }}
-                        />
-                        <div className={classes.header}>
-                            <CardContent className={classes.content}>
-                                <Typography component="h5" variant="h5">
-                                    {fanfic.FanficTitle}
-                                </Typography>
-                                <Typography component="h6" variant="h6">
-                                    {fanfic.Author}
-                                </Typography>
-                            </CardContent>
-                        </div>
-                        <div className={classes.stat}>
-                            <span className={classes.source}>{source}</span>
-                            <span className={complete ? classes.complete : classes.inprogress}>{complete ? 'Complete' : 'In progress'}</span>
-                            {oneshot && <span className={classes.oneshot}>Oneshot</span>}
-                        </div>
-                        <div className={classes.details}>
-                            <CardContent className={classes.content}>
-                                <h4>{fanfic.FanficTitle}</h4>
-                                <h5>{fanfic.Author}</h5>
-                            </CardContent>
-                        </div>
-                    {/* </Grid> */}
-                    </Card>
-                )
-            })}
-        </Grid>
-      {/* </Grid> */}
-    </Grid>
-    //     <div className={classes.root}>
-    //     <GridList cellHeight={300} className={classes.gridList}>
-    //       <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
-    //         <ListSubheader component="div">December</ListSubheader>
-    //       </GridListTile>
-    //         {fanfics.map(fanfic => {
-    //             let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
-    //             return (
-    //                 <GridListTile key={fanfic.FanficTitle}>
-    //                 <img src={isImage ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanfic.image}`
-    //                                   : `/fandoms/${fanfic.FandomName.toLowerCase()}/fanfic_general.jpg` } 
-    //                           alt={fanfic.FanficTitle} />
-                
-    //             {/* <GridListTileBar
-    //                 title={tile.title}
-    //                 subtitle={<span>by: {tile.author}</span>}
-    //                 actionIcon={
-    //                 <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-    //                     <InfoIcon />
-    //                 </IconButton>
-    //                 }
-    //             />*/}
-    //             </GridListTile> 
-    //             )
-    //         })}
-    //     </GridList>
-    //   </div>
-    )
+    render(){
+        const {fanfics} = this.props;
+        const {imageColor,zoom} = this.state;
+
+        return(
+            <Grid container className={classes.root} spacing={1}>
+
+                <Grid container justify="center" spacing={1}>
+                    {fanfics.map( (fanfic,index) => {
+                        let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
+                        let complete = fanfic.Complete===true ? true : false;
+                        let oneshot = fanfic.Oneshot===true ? true : false;
+                        let source = ( (fanfic.Source==='AO3' && fanfic.Deleted===true) || fanfic.Source==='Backup') ? 'Backup' : fanfic.Source;
+                        const imgLink = isImage   ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanfic.image}`
+                        : `/fandoms/${fanfic.FandomName.toLowerCase()}/fanfic_general.jpg`;
+                        return (
+                            <Card key={fanfic.FanficTitle} className={classes.card} onClick={()=>this.setState({zoom:fanfic.FanficID})}>
+                                <div  style={{backgroundColor:imageColor[index]}} className={isImage ? classes.card_image : classes.card_image_opacity}>
+                                    <img src={imgLink} alt={fanfic.FanficTitle} className={classes.cardMedia}/>
+                                    {zoom!==null && zoom===fanfic.FanficID &&
+                                        <ShowFullData   fanfic={fanfic}
+                                                        props={this.props}
+                                        />
+                                    }
+                                    <div className={classes.header}>
+                                        <CardContent className={classes.content}>
+                                            <Typography component="h5" variant="h5">
+                                                {fanfic.FanficTitle}
+                                            </Typography>
+                                            <Typography component="h6" variant="h6">
+                                                {fanfic.Author}
+                                            </Typography>
+                                        </CardContent>
+                                        <div className={classes.stat}>
+                                            <span className={`${classes.source} color_${source}`}>{source}</span>
+                                            <span className={complete ? classes.complete : classes.inprogress}>{complete ? 'Complete' : 'In progress'}</span>
+                                            {oneshot && <span className={classes.oneshot}>Oneshot</span>}
+                                        </div>
+                                    </div>
+        
+                                    <div className={classes.details}>
+                                        <CardContent className={classes.content}>
+                                            <div className={classes.categories}>
+                                                {fanfic.Categories.map(category=>
+                                                    <Chip size="medium" key={category} label={category} className={classes.category_chip}/>
+                                                )}
+                                            </div>
+                                            <div className={classes.desc}>
+                                                <Truncate lines={3} ellipsis={<span>...</span>}>
+                                                    <div  dangerouslySetInnerHTML={{ __html:fanfic.Description}}></div>
+                                                </Truncate>
+                                            </div>
+                                        </CardContent>
+                                    </div>
+                                </div>
+                            </Card>
+                        )
+                    })}
+                </Grid> 
+            </Grid>
+    )}
 };
 
 export default GalleryView;

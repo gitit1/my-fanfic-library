@@ -38,10 +38,12 @@ class AddNewFanficManually extends Component{
         msg:'',
         loadingFlag:false,
         saved:false,
+        savedData:false,
         showUploadButton:false
     }
 
     initialState = () =>{
+        console.log('manually...initialState()')
         this.setState({
             fanficForm:fanficDataForm[0],
             formIsValid:false,
@@ -59,6 +61,7 @@ class AddNewFanficManually extends Component{
             msg:'',
             loadingFlag:false,
             saved:false,
+            savedData:false,
             showUploadButton:false
         })
         this.setState(prevState =>({
@@ -78,6 +81,7 @@ class AddNewFanficManually extends Component{
     }
 
     componentWillMount(){
+        console.log('manually...componentWillMount()')
         this.setState(prevState =>({
             fanficForm: {
                 ...prevState.fanficForm,
@@ -97,6 +101,7 @@ class AddNewFanficManually extends Component{
     componentWillUnmount(){this.props.onGetFandoms()}
 
     sendFandomToServerHandler = async (event) => {
+        console.log('manually...sendFandomToServerHandler()')
         event.preventDefault();
         const {fandomName} = this.props,{fanficForm} = this.state;
 
@@ -107,6 +112,7 @@ class AddNewFanficManually extends Component{
         ))
     }
     saveFanficData = (save) =>{
+        console.log('manually...saveFanficData()')
         const {showUploadButton,formData} = this.state;
         const {similarFanfic,fandomName,fanfic} = this.props;
 
@@ -304,7 +310,6 @@ class AddNewFanficManually extends Component{
 
 const mapStateToProps = state =>{
     return{
-        fandoms:              state.fandoms.fandoms,
         fanfic:               state.downloader.fanfic,
         similarFanfic:        state.downloader.similarFanfic,
         loading:              state.downloader.loading,

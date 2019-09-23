@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "cross-env": "^5.0.5",
-    "increase-memory-limit": "^1.0.7"
+    "increase-memory-limit": "^1.0.7",
+    "react-truncate": "^2.4.0"
   }
 }

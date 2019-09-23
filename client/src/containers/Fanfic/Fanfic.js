@@ -464,6 +464,10 @@ class Fanfic extends Component{
         switchesCopy[objIndex].checked = !switchesCopy[objIndex].checked;
         this.setState({switches:switchesCopy});
 
+        if(switches[0].checked){
+            this.setState({pageLimit:16})
+        }
+
         if(!switches[3].checked){//Don't show userdata  
             this.filterHandler('noUserData',null,'filter') 
             let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
@@ -539,7 +543,20 @@ class Fanfic extends Component{
                                                                 images={imageProps}
                                             />
                                             :
-                                            <GalleryView fanfics={fanfics} size={size}/>
+                                            <GalleryView        fanfics={fanfics} 
+                                                                userFanfics={userFanfics}
+                                                                
+                                                                markAs={this.markAsHandler}            
+                                                                markStatus={this.statusHandler}
+                                                                inputChapterToggle={this.inputChapterHandler}
+                                                                inputChapter={inputChapterFlag}
+                                                                props={props}                                
+                                                                categories={categoriesProps}
+                                                                readingLists={readingListProps}
+                                                                filter={this.filterTagsHandler}
+                                                                switches={switches}
+                                                                images={imageProps}
+                                            />
                                         
                                     }
                             </Grid>
