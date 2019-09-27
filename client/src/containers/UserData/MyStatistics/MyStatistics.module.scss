@@ -50,11 +50,14 @@
         }
         // flex-direction: column;      
     }
+    .StatisticsGrid{
+        margin: 0 auto; 
+        display: flex;
+    }
     .StatisticsCard{
         margin: 0 auto; 
         width:44%;
-        margin: 1% 1%;
-        display: flex;
+        margin-top: 1%;
 
         .CardContent{
             width:100%;
