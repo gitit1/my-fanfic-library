@@ -13,6 +13,11 @@
 
 .navWeb{
 
+    a,
+    ul li  a{
+        text-decoration: none!important;
+    }
+
     button{   
         padding-left: 30px;
         padding-right: 30px;
@@ -25,14 +30,14 @@
     }
 
     a, button span{
-        @extend %nav_style_font
+        @extend %nav_style_font;
     }
 
 }
 
 .menu{
     ul{
-        @extend %nav_style_background;    
+        @extend %nav_style_background;   
     }
     ul li a{
         @extend %nav_style_font;

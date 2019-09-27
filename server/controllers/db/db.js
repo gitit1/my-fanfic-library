@@ -15,6 +15,7 @@ const db = {
     ...require('./UserData/getReadingListsFromDB'),
     ...require('./UserData/addFandomToUserFavorites'),
     ...require('./UserData/getUserFandomsFromDB'),
+    ...require('./UserData/getFullUserDataFromDB'),
 }
 
 module.exports=db;

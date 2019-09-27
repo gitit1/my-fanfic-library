@@ -6,6 +6,7 @@ const initialState = {
     isAuthenticated: false,
     isManager: false,
     user: {},
+    userData: {},
     loading: false
 };
 
@@ -15,6 +16,11 @@ const setCurrentUser = (state,action) =>{
         isAuthenticated: !isEmpty(action.payload),
         isManager: manager,
         user: action.payload
+    });
+}
+const setCurrentUserData = (state,action) =>{
+    return updateObject(state,{
+        userData: action.payload
     });
 
 }
@@ -28,9 +34,10 @@ const getError = (state,action) =>{
 }
 export default function(state = initialState, action) {
     switch (action.type) {
-        case actionTypes.SET_CURRENT_USER:      return setCurrentUser(state,action)
-        case actionTypes.USER_LOADING:          return userLoading(state,action)
-        case actionTypes.GET_ERRORS:            return getError(state,action)
+        case actionTypes.SET_CURRENT_USER:          return setCurrentUser(state,action)
+        case actionTypes.SET_CURRENT_USERDATA:      return setCurrentUserData(state,action)
+        case actionTypes.USER_LOADING:              return userLoading(state,action)
+        case actionTypes.GET_ERRORS:                return getError(state,action)
         default: return state;
     }
 }

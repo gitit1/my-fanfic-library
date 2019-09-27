@@ -32,6 +32,7 @@ try {
   router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);
   router.post('/db/addFandomToUserFavorites',db.addFandomToUserFavorites);
   router.post('/db/getUserFandoms',db.getUserFandomsFromDB);
+  router.post('/db/getFullUserData',db.getFullUserDataFromDB);
   
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);

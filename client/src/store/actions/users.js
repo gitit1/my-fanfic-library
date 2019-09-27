@@ -76,3 +76,22 @@ export const contactUs = (userData) => dispatch => {
       );
 };
 
+export const setCurrentUserData = decoded => {
+  return {
+      type: actionTypes.SET_CURRENT_USERDATA,
+      payload: decoded
+  };
+};
+
+export const getFullUserData = (userEmail) => dispatch => {
+  console.log('[Users] actions  - getFullUserData')
+  return axios.post(`/db/getFullUserData?userEmail=${userEmail}`).then(res => {
+      dispatch(setCurrentUserData(res.data));
+  }).catch(err =>
+      dispatch({
+        type: actionTypes.GET_ERRORS,
+        payload: err.response.data
+      })
+    ); 
+}
+

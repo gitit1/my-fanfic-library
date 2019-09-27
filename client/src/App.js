@@ -19,7 +19,7 @@ import Fanfic from './containers/Fanfic/Fanfic'
 import Search from './containers/Search/Search'
 //UserData
 import Dashboard from './containers/UserData/Dashboard/Dashboard';
-import MyFandoms from './containers/UserData/MyFandoms/MyFandoms';
+import MyStatistics from './containers/UserData/MyStatistics/MyStatistics';
 import ReadingList from './containers/UserData/ReadingList/ReadingList';
 //Manage
 import ManageFandoms from './containers/Manage/ManageFandoms';
@@ -81,7 +81,7 @@ function App() {
           <Route              path="/search"              component={Search}                          />
           {/* UserData */}  
           <PrivateRoute exact path="/dashboard"           component={Dashboard}             level={2} />
-          <PrivateRoute exact path="/myFandoms"           component={MyFandoms}             level={2} />
+          <PrivateRoute exact path="/myTracker"           component={MyStatistics}          level={2} />
           <PrivateRoute exact path="/readingList"         component={ReadingList}           level={2} />
           {/* Manage */}  
           <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}      level={1} />

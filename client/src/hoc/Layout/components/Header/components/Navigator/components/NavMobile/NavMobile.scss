@@ -12,11 +12,16 @@
 
 .navMobile{  
 
+  a{
+    text-decoration: none;
+    text-decoration: none!important; 
+  }
   button{
     float: left;  
     outline: none;
     margin: 1px 0 0 0;
     color: $color_header_bold; 
+    text-decoration: none!important; 
   }
 
   .title{
@@ -28,15 +33,18 @@
 
 .drawer{
   @extend %nav_style_background;
+  text-decoration: none!important;
   height: 100%;
 
   span{
-    @extend %nav_style_font
+    @extend %nav_style_font;
+    text-decoration: none!important;
   }
   h3{
     font-family: $font_header;
     color:$color_header_bold;
     font-weight: 800;
     margin: 5px 0 0 5px ;
+    text-decoration: none!important; 
   }
 }
