@@ -32,7 +32,8 @@ export {
     loginUser,
     setCurrentUser,
     logoutUser,
-    contactUs
+    contactUs,
+    getFullUserData
 } from './users';
 
 export{

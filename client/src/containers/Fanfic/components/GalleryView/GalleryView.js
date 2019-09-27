@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import classes from './GalleryView.module.scss';
-import ImageZoom from 'react-medium-image-zoom';
 import Truncate from 'react-truncate';
 import { Grid, Card, CardContent, Typography } from '@material-ui/core'
 import {getRandomColor} from '../../../../utils/sharedFunctions';

@@ -21,7 +21,7 @@ export const navLinks = [
             },
             {
                 label: 'Status Tracker',       
-                link: '/myFandoms',                
+                link: '/myTracker',                
             },
             {
                 label: 'Reading List',       
