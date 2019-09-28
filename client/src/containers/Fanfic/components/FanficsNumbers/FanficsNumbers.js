@@ -28,6 +28,13 @@ const FanficsNumbers = (props) => (
                     <b>{props.fanficsNumbers.fanficsDeletedCount}</b>
                 </React.Fragment>
             }
+            {props.fanficsNumbers.tumblrFanficsCount>0 &&
+                <React.Fragment>
+                    &nbsp;,&nbsp;
+                    <b className='color_Tumblr'>Tumblr:&nbsp;</b>
+                    <b>{props.fanficsNumbers.tumblrFanficsCount}</b>
+                </React.Fragment>
+            }
         </p>
         {props.fanficsNumbers.fanficsIgnoredCount>0 &&
             <p><b>{props.fanficsNumbers.fanficsIgnoredCount.toLocaleString(undefined, {maximumFractionDigits:2})}&nbsp;</b>  
