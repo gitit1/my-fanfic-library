@@ -48,6 +48,7 @@ export const categories = [
   { label: 'Secret Relationship' },
   { label: 'Slow Burn' },
   { label: 'Smut' },
+  { label: 'Social Media' },
   { label: 'Soulmates' },
   { label: 'Sports' },
   { label: 'Student/Teacher' },

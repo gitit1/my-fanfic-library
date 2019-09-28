@@ -115,13 +115,17 @@
                     }
                     .cardDataDetailsLink1{
                         color:#63696D;
-                        display: inline;
+                        display: block;
                         text-align: left;
-                        margin-left: 7px;
+                        // margin-left: 7px;
+                        width:85%;
                     }
                     .cardDataDetailsLink2{
                         color:#7B7F81;
                         display: block;
+                        float: right;
+                        margin-top: -5%;
+                        margin-right: 5%;
                     }
                 }
             }

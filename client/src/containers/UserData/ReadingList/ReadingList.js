@@ -6,6 +6,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
 import Button from '../../../components/UI/Button/Button';
 import ShowReadingLists from './components/ShowReadingLists';
+import classes from './ReadingList.module.scss';
 
 class ReadingList extends Component{
   
