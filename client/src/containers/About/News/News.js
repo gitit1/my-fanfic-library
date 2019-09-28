@@ -38,7 +38,7 @@ const News = () => (
         <p><span className={classes.Date}><strong>09-27-2019:</strong></span><span className={classes.Content}>[021-git] Added "My Tracker" page with funcionality</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
         <p><span className={classes.Date}><strong>09-28-2019:</strong></span><span className={classes.Content}>[022-git] Fixed ignore list count on fanfic pages.</span></p>
-        <p><span className={classes.Date}><strong>09-28-2019:</strong></span><span className={classes.Content}>[022-git] Added tumblr counter to Fanfics page</span></p>
+        <p><span className={classes.Date}><strong>09-28-2019:</strong></span><span className={classes.Content}>[023-git] Added tumblr counter to Fanfics page</span></p>
     </div>
   </Container>
 );
