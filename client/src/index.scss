@@ -14,6 +14,9 @@
     clear: both;
 }
 
+a{text-decoration: none!important;}
+a, a:visited {color: inherit;}
+
 .color_AO3{color:$color_AO3}
 .color_FF{color:$color_FF}
 .color_Backup{color:$color_Backup}

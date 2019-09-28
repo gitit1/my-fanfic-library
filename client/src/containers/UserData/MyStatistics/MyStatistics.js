@@ -28,11 +28,17 @@ class MyStatistics extends Component{
   }
 
   componentDidMount(){
-    this.props.OnGetFullUserData(this.props.userEmail).then(()=>
-         getFandomsNumbers(this.props.userData).then(fandomData=>{
-            this.setState({fandomData:fandomData,loading:false})
-         })
-    );
+    if(Object.entries(this.props.userData).length === 0){
+      this.props.onGetFullUserData(this.props.userEmail).then(()=>
+           getFandomsNumbers(this.props.userData).then(fandomData=>{
+              this.setState({fandomData:fandomData,loading:false})
+           })
+      );
+    }else{
+        getFandomsNumbers(this.props.userData).then(fandomData=>{
+          this.setState({fandomData:fandomData,loading:false})
+      })
+    }
   }
 
 
@@ -82,7 +88,7 @@ const mapStateToProps = state =>{
 
 const mapDispatchedToProps = dispatch =>{
   return{
-      OnGetFullUserData:    (userEmail) => dispatch(actions.getFullUserData(userEmail)),
+      onGetFullUserData:    (userEmail) => dispatch(actions.getFullUserData(userEmail)),
 
   };
 }
