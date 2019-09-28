@@ -37,6 +37,13 @@ const FandomSchema = new Schema({
                                     SavedFanfics:     {type: Number},
                                     DeletedFanfics:   {type: Number}
     },
+    Tumblr:                    {
+                                    FanficsInFandom:  {type: Number},
+                                    OnGoingFanfics:   {type: Number},
+                                    CompleteFanfics:  {type: Number},
+                                    SavedFanfics:     {type: Number},
+                                    DeletedFanfics:   {type: Number}
+    },
     Images:                     {
                                     Image_Name_Main:            {type: String},
                                     Image_Name_Icon:            {type: String},                              

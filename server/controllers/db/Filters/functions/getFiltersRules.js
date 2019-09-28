@@ -74,8 +74,8 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 break;
             //Source Filters: 
             case 'all':
-                    filtersFanficList.push({})
-                    break;
+                filtersFanficList.push({})
+                break;
             case 'ao3':
                 filtersFanficList.push({'Source':'AO3'})
                 break;
@@ -85,6 +85,9 @@ exports.getFiltersRules = async (filters,userEmail) =>{
             case 'backup':
                 filtersFanficList.push({'Source':'Backup'})
                 break; 
+            case 'tumblr':
+                filtersFanficList.push({'Source':'Tumblr'})
+                break;                 
             //Search:
             case 'tags':
                 filtersFanficList.push({'Tags': {$elemMatch: {[filter.split('_')[1]]:filterValue}}})

@@ -20,7 +20,7 @@ class ReadingList extends Component{
   }
   
   render(){
-    const {loading,readingLists} = this.props;
+    const {loading,readingLists,userEmail} = this.props;
     return(
         <Container header='Reading List'>
             { loading ?
@@ -28,7 +28,7 @@ class ReadingList extends Component{
                       :
                       <div className='ReadingList'>
                         <Button>Add New Reading List</Button>
-                        <ShowReadingLists readingLists={readingLists}/>   
+                        <ShowReadingLists readingLists={readingLists} userEmail={userEmail}/>   
                       </div>
             }
         </Container>

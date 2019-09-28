@@ -102,6 +102,10 @@ export const filtersArray = {
             type : 'checkbox',
             name: 'backup',
             display: 'Backup'
+        },{
+            type : 'checkbox',
+            name: 'tumblr',
+            display: 'Tumblr'
         }
     ]
 }

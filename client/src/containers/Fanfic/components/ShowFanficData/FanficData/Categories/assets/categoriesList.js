@@ -46,6 +46,7 @@ export const categories = [
   { label: 'RPF - Real person fiction' },
   { label: 'Science Fiction' },
   { label: 'Secret Relationship' },
+  { label: 'Self Harm/Violence' },
   { label: 'Slow Burn' },
   { label: 'Smut' },
   { label: 'Social Media' },

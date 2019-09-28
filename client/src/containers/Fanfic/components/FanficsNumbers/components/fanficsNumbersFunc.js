@@ -6,7 +6,8 @@ export const fanficsNumbersFunc = (fandom,ignoredCount) => {
 
     const ao3FanficsCount   = fandom['AO3'] ?  fandom['AO3'].FanficsInFandom-AO3DeletedFanfics : 0
     const ffFanficsCount   = fandom['FF']  ?  fandom['FF'].FanficsInFandom-FFDeletedFanfics : 0
-
+    
+    const tumblrFanficsCount = fandom['Tumblr'] ? fandom['Tumblr'].FanficsInFandom : 0;
     const backup = fandom['Backup'] ? fandom['Backup'].FanficsInFandom : 0;
     
     let fanficsNumbers = {
@@ -15,6 +16,7 @@ export const fanficsNumbersFunc = (fandom,ignoredCount) => {
             fanficsIgnoredCount:    ignoredCount ? ignoredCount : 0,
             ao3FanficsCount:        ao3FanficsCount,
             ffFanficsCount:         ffFanficsCount,
+            tumblrFanficsCount:     tumblrFanficsCount,
             fanficsDeletedCount:    Number(deletedFanfics(fandom)) + backup,
     };
 
