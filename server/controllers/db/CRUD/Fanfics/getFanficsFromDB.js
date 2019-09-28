@@ -11,7 +11,7 @@ exports.getFanficsFromDB = async (req,res) =>{
     skip = Number(skip); limit = Number(limit);
     const sort=null;
 
-    ignoreList = await getIgnoredList(userEmail);
+    ignoreList = await getIgnoredList(FandomName,userEmail);
     readingLists = await getReadingLists(userEmail);
     const filters = (ignoreList.length>0) ? { FanficID : { $nin: ignoreList }} : null;
     // const filters = null;

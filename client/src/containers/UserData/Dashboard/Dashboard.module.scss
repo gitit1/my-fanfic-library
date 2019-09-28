@@ -47,5 +47,14 @@
                 }
             }
         }
+
+        .MyTracker{
+            margin-top: 2%;
+            width:100%;
+            > div{
+                width:100%!important;
+                margin: 0 auto;
+            }
+        }
     }
 }

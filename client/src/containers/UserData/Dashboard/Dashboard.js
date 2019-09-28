@@ -16,6 +16,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
+import {getFandomsNumbers} from '../MyStatistics/functions/functions'
+import GeneralBarChart from '../MyStatistics/components/GeneralBarChart/GeneralBarChart'
+
 const settings = {
   dots: false,
   infinite: false,
@@ -26,10 +29,11 @@ const settings = {
 
 class Dashboard extends Component {
     state = {
-      userFandomsArr:[]
+      userFandomsArr:[],
+      fandomData:null
     }
-    componentWillMount(){
-      const {onGetUserFandoms,userFandoms,userEmail,fandoms} = this.props;
+    componentDidMount(){
+      const {onGetUserFandoms,onGetFullUserData,userFandoms,userEmail,userData,fandoms} = this.props;
 
       if(userFandoms===null){
         onGetUserFandoms(userEmail).then(()=>{
@@ -37,6 +41,17 @@ class Dashboard extends Component {
           const userFandomsArr = (userFandoms!==null&&userFandoms.length!==0) ? fandoms.filter(fandom=>{return userFandoms.includes(fandom.FandomName)}) : []
           this.setState({userFandomsArr})
         })
+        if(Object.entries(userData).length === 0){
+          onGetFullUserData(userEmail).then(()=>
+            getFandomsNumbers(this.props.userData).then(fandomData=>{
+              this.setState({fandomData:fandomData,loading:false})
+            })
+          );
+        }else{
+          getFandomsNumbers(userData).then(fandomData=>{
+            this.setState({fandomData:fandomData,loading:false})
+          })
+        }
       }else{
         const userFandomsArr = fandoms.filter(fandom=>{return userFandoms.includes(fandom.FandomName)})
         this.setState({userFandomsArr})
@@ -50,7 +65,7 @@ class Dashboard extends Component {
 
   render() {
       const {name,loading} = this.props;
-      const {userFandomsArr} = this.state
+      const {userFandomsArr,fandomData} = this.state
       
 
       return (
@@ -89,8 +104,9 @@ class Dashboard extends Component {
                     }
                   </div>
                 </Grid>
-                <Grid item xs={12} className={classes.Other}>
-                  <div>TODO: my Statics</div>
+                <Grid item xs={12} className={classes.MyTracker}>
+                <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">My Tracker</Typography>
+                  <GeneralBarChart data={fandomData}/>
                 </Grid>
                 <Grid item xs={12} className={classes.Other}>
                     <div>TODO: reading list</div>
@@ -115,14 +131,16 @@ const mapStateToProps = state => ({
   name:         state.auth.user.name,
   userEmail:    state.auth.user.email,
   fandoms:      state.fandoms.fandoms,
+  userData:     state.auth.userData,
   userFandoms:  state.fandoms.userFandoms,
   loading:      state.fandoms.loading,
 });
 
 const mapDispatchedToProps = dispatch =>{
   return{
-      onGetUserFandoms:           (userEmail)                 =>  dispatch(actions.getUserFandoms(userEmail)),   
-      logoutUser:                 ()                          =>  dispatch(actions.logoutUser())
+      onGetFullUserData:          (userEmail)         => dispatch(actions.getFullUserData(userEmail)),
+      onGetUserFandoms:           (userEmail)         =>  dispatch(actions.getUserFandoms(userEmail)),   
+      logoutUser:                 ()                  =>  dispatch(actions.logoutUser())
   }
 }  
 
