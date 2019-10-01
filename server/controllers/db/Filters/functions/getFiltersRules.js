@@ -54,6 +54,9 @@ exports.getFiltersRules = async (filters,userEmail) =>{
             case 'publishDate':
                 sortList.push({'PublishDate':-1})
                 break;
+            case 'uploadDate':
+                sortList.push({'LastUpdateOfNote':-1})
+                break;
             case 'authorSort':
                 sortList.push({'Author':1})
                 break;
@@ -79,15 +82,21 @@ exports.getFiltersRules = async (filters,userEmail) =>{
             case 'ao3':
                 filtersFanficList.push({'Source':'AO3'})
                 break;
+            case 'backup':
+                filtersFanficList.push({'Source':'Backup'})
+                break;                 
             case 'ff':
                 filtersFanficList.push({'Source':'FF'})
                 break;  
-            case 'backup':
-                filtersFanficList.push({'Source':'Backup'})
+            case 'patreon':
+                filtersFanficList.push({'Source':'Patreon'})
                 break; 
             case 'tumblr':
                 filtersFanficList.push({'Source':'Tumblr'})
-                break;                 
+                break; 
+            case 'wattpad':
+                filtersFanficList.push({'Source':'Wattpad'})
+                break;                                 
             //Search:
             case 'tags':
                 filtersFanficList.push({'Tags': {$elemMatch: {[filter.split('_')[1]]:filterValue}}})

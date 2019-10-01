@@ -1,6 +1,6 @@
 const clc = require("cli-color");
-const FandomUserData = require('../../../models/UserData');
-const {addActivityToUserActivities} = require('./addActivityToUserActivities');
+const FandomUserData = require('../../../../models/UserData');
+const {addActivityToUserActivities} = require('../addActivityToUserActivities');
 
 exports.saveReadingListToDB = async (req,res) =>{
     console.log(clc.blue('[db controller] saveNewReadingListToDB()'));
@@ -15,10 +15,13 @@ exports.saveReadingListToDB = async (req,res) =>{
             let isRLExist = await user.ReadingList.find(x => x.Name === name);
             let isFanficExist = await user.FanficList.find(x => x.FanficID === Number(fanficId));
             let isFanficInRL = isFanficExist && isFanficExist.ReadingList.includes(name);
-
+            console.log('isFanficInRL:',isFanficInRL)
+            let rlFanficsFandoms = isRLExist ? isRLExist.FanficsFandoms : [];
+            let newFanficsFandomsArray=[]
+            console.log('rlFanficsFandoms:',rlFanficsFandoms)
             isRLExist = (isRLExist===undefined) ? false : true; 
-            isFanficExist = (isFanficExist===undefined) ? false : true;
-            isFanficInRL = (isFanficInRL===undefined) ? false : true; 
+            isFanficExist = (isFanficExist===undefined||!isFanficExist) ? false : true;
+            isFanficInRL = (isFanficInRL===undefined||!isFanficInRL) ? false : true; 
 
             if(!isRLExist && !isFanficExist){
                 console.log('---RL - not exist, Fanfic not exsist , fanfic not in RL---')
@@ -35,7 +38,8 @@ exports.saveReadingListToDB = async (req,res) =>{
                     Name:             name,
                     Date:             new Date().getTime(),
                     image:            null,
-                    Fanfics:          fanficId 
+                    Fanfics:          fanficId,
+                    FanficsFandoms:   [fandomName]
                 });
                 user.save();
                 await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,'Reading List','true',name)
@@ -45,7 +49,7 @@ exports.saveReadingListToDB = async (req,res) =>{
                 FandomUserData.updateOne(
                     { userEmail: userEmail , "FanficList.FanficID": fanficId },
                     { $set:  {"FanficList.$.Date":new Date().getTime()},
-                      $push: {"ReadingList": {"Name":name,"Date":new Date().getTime(),"image": null,"Fanfics":fanficId },"FanficList.$.ReadingList": name}
+                      $push: {"ReadingList": {"Name":name,"Date":new Date().getTime(),"image": null,"Fanfics":fanficId,"FanficsFandoms":[fandomName]},"FanficList.$.ReadingList": name}
                     },
                     async (err, result) => {
                         if (err) throw err;
@@ -56,19 +60,24 @@ exports.saveReadingListToDB = async (req,res) =>{
                  )
             }else if(isRLExist && isFanficExist && !isFanficInRL){
                 console.log('---RL - exist, Fanfic exsist , fanfic not in RL---')
+                
+                if(rlFanficsFandoms.includes(fandomName)){newFanficsFandomsArray = rlFanficsFandoms}else{newFanficsFandomsArray = [...rlFanficsFandoms,fandomName]}
+
                 FandomUserData.updateOne(
                     { userEmail: userEmail , "FanficList.FanficID": fanficId },
-                    { $set:  {"FanficList.$.Date":new Date().getTime(),"FanficList.$.ReadingList": name, },
+                    { $set:  {"FanficList.$.Date":new Date().getTime() },
                       $push: {"FanficList.$.ReadingList":name}
                     }, async (err, result) => {if (err) throw err;} )
                 FandomUserData.updateOne({ userEmail: userEmail , "ReadingList.Name": name},
-                 { $push:  {"ReadingList.$.Fanfics":fanficId}},
+                 { $push:  {"ReadingList.$.Fanfics":fanficId , $set: {"ReadingList.$.FanficsFandoms": newFanficsFandomsArray}}},
                  async (err, result) => {if (err) throw err;}) 
 
                 await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,'Reading List','true',name)
                 res.send(true); 
             }else if(isRLExist && !isFanficExist){
-                console.log('---RL - exist, Fanfic not exist---')
+                // console.log('rlFanficsFandoms.push(fandomName)',rlFanficsFandoms.push(fandomName))
+                if(rlFanficsFandoms.includes(fandomName)){newFanficsFandomsArray = rlFanficsFandoms}else{newFanficsFandomsArray = [...rlFanficsFandoms,fandomName]}
+                console.log('newFanficsFandomsArray',newFanficsFandomsArray)
                 user.FanficList.push({
                     Date:           new Date().getTime(),
                     FanficID:       fanficId,
@@ -80,7 +89,8 @@ exports.saveReadingListToDB = async (req,res) =>{
                 });
                 user.save();
                 FandomUserData.updateOne({ userEmail: userEmail , "ReadingList.Name": name},
-                                         { $push:  {"ReadingList.$.Fanfics":fanficId}},
+                                         { $set:    {"ReadingList.$.FanficsFandoms": newFanficsFandomsArray} , 
+                                           $push:   {"ReadingList.$.Fanfics":fanficId}},
                                          async (err, result) => {if (err) throw err;})      
                 await addActivityToUserActivities(userEmail,fanficId,author,fanficTitle,fandomName,source,'Reading List','true',name)
                 res.send(true);          
@@ -105,7 +115,8 @@ exports.saveReadingListToDB = async (req,res) =>{
                     Name:             name,
                     Date:             new Date().getTime(),
                     image:            null,
-                    Fanfics:          fanficId 
+                    Fanfics:          fanficId,
+                    FanficsFandoms:   [fandomName]
                 }
             });
             await newUser.save();

@@ -1,4 +1,5 @@
 exports.createFanficObj = async (fandomName,fanficData) =>{
+    let todayDate = new Date();
     return await new Promise(async function(resolve, reject) {
             fanfic = {
                 FandomName:         fandomName,
@@ -14,6 +15,7 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 Rating:             fanficData.Rating,
                 PublishDate:        Number(fanficData.PublishDate),
                 LastUpdateOfFic:    Number(fanficData.UpdateDate),
+                LastUpdateOfNote:   todayDate.getTime(),
                 Tags:               [
                                         fanficData.Warnings!=='' ? {warnings:fanficData.Warnings.split(',')} : undefined,
                                         fanficData.Relationships!=='' ? {relationships:fanficData.Relationships.split(',')} : undefined,
@@ -34,7 +36,7 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 AuthorURL:          null,
                 Series:             fanficData.SeriesName!=='' ? fanficData.SeriesName : undefined,
                 SeriesPart:         fanficData.SeriesNumber!=='' ? Number(fanficData.SeriesNumber) : undefined,
-                SeriesURL:         fanficData.SeriesNumber!=='' ? '' : undefined
+                SeriesURL:          fanficData.SeriesNumber!=='' ? '' : undefined
             }
             resolve(fanfic)
     });

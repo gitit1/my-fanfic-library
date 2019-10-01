@@ -15,43 +15,46 @@ try {
 
   router.post('/contactUs',Other.contactUs);
 
-
+  //DB - CRUD -  Fandoms
   router.post('/db/addEditFandom',db.addEditFandomToDB);
   router.post('/db/deleteFandom',db.deleteFandomFromDB);
   router.get('/db/getAllFandoms',db.getAllFandomsFromDB); 
-
-  router.get('/db/getLastUpdateDate',db.getLastUpdateDate);
+  //DB - CRUD -  Fanfics
   router.post('/db/getFanfics',db.getFanficsFromDB);
-  router.post('/db/saveImageOfFanfic',db.saveImageOfFanficToDB);
   router.post('/db/deleteFanfic',db.deleteFanficFromDB);
+  router.post('/db/saveImageOfFanfic',db.saveImageOfFanficToDB);
   router.post('/db/saveCategories',db.saveFanficCategoriesToDB);
+  //DB - Filters
+  router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
+  //DB - ReadingList
   router.post('/db/getReadingList',db.getReadingListsFromDB);
   router.post('/db/saveReadingList',db.saveReadingListToDB);
-  router.post('/db/getFilteredFanficsListFromDB',db.getFilteredFanficsListFromDB)
+  router.post('/db/deleteFanficFromReadingList',db.deleteFanficFromReadingList);
+  router.post('/db/deleteReadingList',db.deleteReadingList);
+  router.post('/db/saveImageOfReadingList',db.saveImageOfReadingList);
+  //DB - Mark&Status
   router.post('/db/addFanficToUserMarks',db.addFanficToUserMarksInDB);
   router.post('/db/addFanficToUserStatus',db.addFanficToUserStatus);
+  //DB - Other
+  router.get('/db/getLastUpdateDate',db.getLastUpdateDate);
   router.post('/db/addFandomToUserFavorites',db.addFandomToUserFavorites);
   router.post('/db/getUserFandoms',db.getUserFandomsFromDB);
   router.post('/db/getFullUserData',db.getFullUserDataFromDB);
   
+  //User
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
   
+  //Downloader
   router.get('/downloader/getFanficData',downloader.getNewFanfic)
   router.post('/downloader/getFanficData',downloader.getNewFanfic)
   router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
   router.post('/downloader/updateExistFanfic',downloader.updateExistFanfic)
   
+  //Updates
   router.get('/updates/latestUpdates',updates.latestUpdates)
   router.get('/updates/myLatestActivities',updates.myLatestActivities)
   router.get('/updates/myFanficsUpdate',updates.myFanficsUpdate)
-  // checking:
-  // router.get('/ao3/checkIfFileExsistHandler',ao3.checkIfFileExsistHandler)
-  // router.get('/otherfanficssites/testpath',otherfanficssites.testpath)
-  // router.get('/otherfanficssites/downloadFanfic',otherfanficssites.downloadFanfic)
-  // router.post('/db/getUserDataFromDB',db.checkForUserDataInDBOnCurrentFanfics);
-
-  
 
 
 } catch(e) {
