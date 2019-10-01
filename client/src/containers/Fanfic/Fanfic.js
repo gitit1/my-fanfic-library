@@ -77,7 +77,7 @@ class Fanfic extends Component{
         const userEmail = this.props.userEmail ? this.props.userEmail : null;
         const fandomName = this.props.match.params.FandomName;
         
-        let list = (location.search && location.search.split('list=')[1].includes('true')) ? true : false;
+        let list = (location.search.split('list=')[1]!==undefined &&location.search.split('list=')[1].includes('true')) ? true : false;
 
         (fandoms.length===0 && !list) &&  await onGetFandoms()
         await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail,list).then(()=>{
@@ -95,7 +95,7 @@ class Fanfic extends Component{
         const {location} = this.props;
         const {urlQueries,pageNumber,fandomName} = this.state;
         console.log('location:',location)
-        let str = (location.search &&location.search.split('list=')[1].includes('true')) ? `${fandomName}?list=true` : '';
+        let str = (location.search.split('list=')[1]!==undefined &&location.search.split('list=')[1].includes('true')) ? `${fandomName}?list=true` : '';
         str = str==='' ? '?' : `${str}&`;
         str = (!urlQueries.isFiltered) ? str+`page=${pageNumber}` : str+`page=${pageNumber}&filters=true&${urlQueries.filterQuery}`;
         

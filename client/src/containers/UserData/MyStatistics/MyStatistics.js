@@ -12,13 +12,7 @@ import {getFandomsNumbers} from './functions/functions'
 import GeneralBarChart from './components/GeneralBarChart/GeneralBarChart';
 import GeneralAllFandomData from './components/GeneralAllFandomData/GeneralAllFandomData';
 import FandomCard from './components/FandomCard/FandomCard';
-
-
 import Grid from '@material-ui/core/Grid';
-
-
-
-const RADIAN = Math.PI / 180;
 
 class MyStatistics extends Component{
 

@@ -1,5 +1,5 @@
 
-import {filtersArrayInit,filtersArrayAttr} from '../components/Filters/assets/FiltersArray';
+import {filtersArrayAttr} from '../components/Filters/assets/FiltersArray';
 import {fanficsNumbersList} from '../components/FanficsNumbers/assets/fanficsNumbersList';
 
 export let state={
