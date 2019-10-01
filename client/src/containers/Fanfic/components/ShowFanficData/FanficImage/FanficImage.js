@@ -23,11 +23,7 @@ class FanficImage extends Component{
   saveImageOfFanfic = async () => {
     console.log('saveImageOfFanfic')
     const {fanfic,images,onSaveImageOfFanfic} = this.props;
-    //   if(  this.fileUploadRef.current===null || 
-    //     (this.fileUploadRef.current!==null && this.fileUploadRef.current.state.file==='') ){
-    //       let msg = <p>Please upload a file</p>
-    //       this.setState({msg})
-    // }
+
     let type= this.fileUploadRef.current.state.file.name.split('.')[1];
     let fileUpload = `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type}`;
     let formData = new FormData();

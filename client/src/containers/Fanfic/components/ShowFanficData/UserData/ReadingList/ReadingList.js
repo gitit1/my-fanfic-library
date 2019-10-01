@@ -52,7 +52,9 @@ const ReadingList = (props) => {
 
     return(
         <div className='userData'>
-            <Button color='primary' onClick={handleClick}>Add to Reading List</Button>    
+            <Button color='primary' onClick={handleClick} className={userReadingList&&userReadingList.length>0 ? 'userData_orange' : null}>
+              {props.rlMode ? 'Remove From' : userReadingList  ? 'Add to Another' : 'Add to'} Reading List
+            </Button>    
             <StyledMenu
                 anchorEl={anchorEl}
                 keepMounted

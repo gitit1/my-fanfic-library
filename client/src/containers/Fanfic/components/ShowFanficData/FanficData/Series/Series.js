@@ -1,6 +1,4 @@
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
 
 const Series = (props) => {
     const {Series,SeriesPart,SeriesURL} = props.fanfic;

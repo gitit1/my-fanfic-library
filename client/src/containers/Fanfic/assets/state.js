@@ -4,6 +4,7 @@ import {fanficsNumbersList} from '../components/FanficsNumbers/assets/fanficsNum
 
 export let state={
     userFanfics:[],
+    rlMode:false,
     filters: filtersArrayAttr,
     filterArr: [],
     addImageFlag:null,

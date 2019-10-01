@@ -7,7 +7,7 @@ import Series from './Series/Series'
 import Stat from './Stat/Stat'
 
 const FanficData = (props) => {
-    const { fanfic,showSelectCategory,size,showTagsToggle,showTags,categoriesTemp,
+    const { fanfic,showSelectCategory,size,showTagsToggle,showTags,categoriesTemp,rlMode,
             getCategories,saveCategories,inputCategoryFlag,filter,tagSwitch} = props;
 
     let fanficCategories = categoriesTemp.filter( categories => {return categories.FanficID === fanfic.FanficID})
@@ -15,7 +15,7 @@ const FanficData = (props) => {
     return(
         <React.Fragment>
             <section className='card_content_header'>
-                <Header fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags}/>
+                <Header fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags} rlMode={rlMode}/>
             </section>
             <section className='card_content_tags'>
                 {tagSwitch && <Tags fanfic={fanfic} size={size} showTags={showTags} filter={filter}/>}

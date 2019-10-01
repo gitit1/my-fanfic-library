@@ -31,6 +31,8 @@ const renderCustomizedLabel = (data) => (
 
 const FandomCard = (props) => {
     const {fandomData,fandoms,userData} = props;
+    console.log('fandomData:',fandomData)
+    console.log('fandoms:',fandoms)
     return(
         fandomData.map(f=>{
             const COLORS = ['#82ca9d', '#8884d8', '#ffc658', '#D62728','#1f77b4'];
@@ -85,7 +87,7 @@ const FandomCard = (props) => {
                                 {latestFics[0]!==null &&
                                     <div className={classes.cardDataDetailsTypes}>
                                         <p>Latest Finished Fanfic: 
-                                            <a href={buildFanficLink(latestFics[0])} target='_blank' className={classes.cardDataDetailsLink1}>
+                                            <a href={buildFanficLink(latestFics[0])} target='_blank' rel="noopener noreferrer" className={classes.cardDataDetailsLink1}>
                                                 {latestFics[0].Author} - {latestFics[0].FanficTitle}
                                             </a>
                                         </p>
@@ -95,17 +97,17 @@ const FandomCard = (props) => {
                                 {latestFics[1]!==null &&
                                     <div className={classes.cardDataDetailsTypes}>
                                         <p>Latest In progress Fanfic: 
-                                            <a href={buildFanficLink(latestFics[1])} target='_blank' className={classes.cardDataDetailsLink1}>
+                                            <a href={buildFanficLink(latestFics[1])} target='_blank' rel="noopener noreferrer" className={classes.cardDataDetailsLink1}>
                                                 {latestFics[1].Author} - {latestFics[1].FanficTitle}
                                             </a>
                                         </p>
-                                        <Link to={`/fanfics/${f.name}?page=1&filters=true&inProgress`} className={classes.cardDataDetailsLink2}>See All</Link>
+                                        <Link to={`/fanfics/${f.name}?page=1&filters=true&inProgress`} rel="noopener noreferrer" className={classes.cardDataDetailsLink2}>See All</Link>
                                     </div>
                                 }
                                 {latestFics[2]!==null &&
                                     <div className={classes.cardDataDetailsTypes}>
                                         <p>Latest Favotire Fanfic:
-                                            <a href={buildFanficLink(latestFics[2])} target='_blank' className={classes.cardDataDetailsLink1}>
+                                            <a href={buildFanficLink(latestFics[2])} target='_blank'  rel="noopener noreferrer" className={classes.cardDataDetailsLink1}>
                                                 {latestFics[2].Author} - {latestFics[2].FanficTitle}
                                             </a>
                                         </p>
@@ -115,7 +117,7 @@ const FandomCard = (props) => {
                                 {latestFics[3]!==null &&
                                     <div className={classes.cardDataDetailsTypes}>
                                         <p>Latest Ignored Fanfic:
-                                            <a href={buildFanficLink(latestFics[3])} target='_blank' className={classes.cardDataDetailsLink1}>
+                                            <a href={buildFanficLink(latestFics[3])} target='_blank' rel="noopener noreferrer" className={classes.cardDataDetailsLink1}>
                                                 {latestFics[3].Author} - {latestFics[3].FanficTitle}
                                             </a>
                                         </p>

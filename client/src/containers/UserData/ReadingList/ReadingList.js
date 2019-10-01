@@ -6,29 +6,57 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Container from '../../../components/UI/Container/Container';
 import Button from '../../../components/UI/Button/Button';
 import ShowReadingLists from './components/ShowReadingLists';
-import classes from './ReadingList.module.scss';
+// import classes from './ReadingList.module.scss';
 
 class ReadingList extends Component{
-  
+  state = {
+    loadingState:false,
+    imageFlag:false,
+    imageRlID:null
+  }
 
   componentWillMount(){this.getFanfics()}
 
   getFanfics = async () =>{
-      const {userEmail,onGetReadingList} = this.props
-      await onGetReadingList(userEmail)
+      const {userEmail,onGetReadingList,readingLists} = this.props;
+      readingLists.length===0 && await onGetReadingList(userEmail)
       return null
   }
   
+  goToFanfics = (name) => {
+    this.props.history.push(`/fanfics/${name}?list=true`);
+  }
+
+  deleteReadingList = (name) =>{
+    console.log('deleteReadingList')
+    const {onDeleteReadingList,onGetReadingList,userEmail} = this.props;
+    this.setState({loading:true})
+    onDeleteReadingList(userEmail,name).then(()=>{
+      onGetReadingList(userEmail).then(()=>this.setState({loading:false}))
+    })
+  }
+
+  toggleImage = (id) =>{
+    this.setState({imageFlag:!this.state.imageFlag,imageRlID:id})
+  }
   render(){
     const {loading,readingLists,userEmail} = this.props;
+    const {imageFlag,imageRlID} = this.state;
     return(
         <Container header='Reading List'>
-            { loading ?
+            { loading&&this.state.loadingState ?
                       <Spinner/>
                       :
                       <div className='ReadingList'>
-                        <Button>Add New Reading List</Button>
-                        <ShowReadingLists readingLists={readingLists} userEmail={userEmail}/>   
+                        {/* <Button>Add New Reading List</Button> */}
+                        <ShowReadingLists readingLists={readingLists} 
+                                          userEmail={userEmail} 
+                                          deleteReadingList={this.deleteReadingList}
+                                          goToFanfics={this.goToFanfics}
+                                          toggleImage={this.toggleImage}
+                                          imageFlag={imageFlag}
+                                          imageRlID={imageRlID}
+                        />   
                       </div>
             }
         </Container>
@@ -47,7 +75,7 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
   return{
     onGetReadingList:           (userEmail) =>  dispatch(actions.getReadingList(userEmail)),
-
+    onDeleteReadingList:        (userEamil,name) => dispatch(actions.deleteReadingList(userEamil,name))
   };
 }
 

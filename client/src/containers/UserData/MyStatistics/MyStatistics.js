@@ -24,16 +24,21 @@ class MyStatistics extends Component{
 
   state = {
     fandomData:null,
-    loading:true
+    loading:true,
+    noDataFlag:false
   }
 
   componentDidMount(){
     if(Object.entries(this.props.userData).length === 0){
-      this.props.onGetFullUserData(this.props.userEmail).then(()=>
-           getFandomsNumbers(this.props.userData).then(fandomData=>{
-              this.setState({fandomData:fandomData,loading:false})
-           })
-      );
+      this.props.onGetFullUserData(this.props.userEmail).then(()=>{
+            if(Object.entries(this.props.userData).length === 0){
+              this.setState({noDataFlag:true,loading:false})
+            }else{
+              getFandomsNumbers(this.props.userData).then(fandomData=>{
+                 this.setState({fandomData:fandomData,loading:false})
+              })
+            }
+          });
     }else{
         getFandomsNumbers(this.props.userData).then(fandomData=>{
           this.setState({fandomData:fandomData,loading:false})
@@ -43,7 +48,7 @@ class MyStatistics extends Component{
 
 
   render(){
-    const {fandomData,loading} = this.state;
+    const {fandomData,loading,noDataFlag} = this.state;
     const {fandoms,userData} = this.props;
 
     return(
@@ -52,6 +57,9 @@ class MyStatistics extends Component{
               { 
                   loading ?
                   <Spinner />
+                  :
+                  noDataFlag ? 
+                  <React.Fragment>There is no user data please add some before checking statistics.</React.Fragment>
                   :
                   <React.Fragment>
                         <div className={classes.GeneralBarChart}>
