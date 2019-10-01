@@ -6,7 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {getRandomColor} from '../../../../../utils/sharedFunctions';
 import ImageUpload from '../../../../../components/ImageUpload/ImageUpload';
 import Button from '@material-ui/core/Button';
-
+import ImageZoom from 'react-medium-image-zoom'
 
 class FanficImage extends Component{  
   fileUploadRef= React.createRef();

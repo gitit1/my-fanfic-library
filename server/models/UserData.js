@@ -32,10 +32,11 @@ const UserFanficsSchema = new Schema({
   ],
   Fandoms:          [],
   ReadingList:      [{
-      Name:             {type: String}, 
+      Name:             {type: String},
       Date:             {type: Number},
       image:            {type: String},
-      Fanfics:          []
+      Fanfics:          [],
+      FanficsFandoms:   []
   }],  
   FanficIgnoreList: []
 });

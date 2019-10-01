@@ -1,5 +1,5 @@
 
-const {getReadingLists} = require('../helpers/getReadingLists');
+const {getReadingLists} = require('../../helpers/getReadingLists');
 
 exports.getReadingListsFromDB = async (req,res) =>{
     console.log('getReadingListsFromDB()')

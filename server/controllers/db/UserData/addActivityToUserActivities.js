@@ -22,8 +22,8 @@ exports.addActivityToUserActivities = (userEmail,fanficId,author,fanficTitle,fan
             case 'In Progress':
                 activity = typeFlag ? `In Progress - ${chapter}` : 'Need to Read'
                 break;  
-            case 'Reading List':
-                activity = typeFlag ? `Added - ${chapter}` : `Removed - ${chapter}` ;
+            case 'Reading List'://TODO:
+                activity = (typeFlag==='remove') ?  `Added - ${chapter}` : `Removed - ${chapter}` ;
             case 'Fandom':
                 activity = typeFlag ? `Added - ${fandomName}` : `Removed - ${fandomName}` ;                
             default:

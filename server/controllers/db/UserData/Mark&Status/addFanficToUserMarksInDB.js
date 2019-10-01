@@ -1,6 +1,6 @@
 const clc = require("cli-color");
-const FandomUserData = require('../../../models/UserData');
-const {addActivityToUserActivities} = require('./addActivityToUserActivities');
+const FandomUserData = require('../../../../models/UserData');
+const {addActivityToUserActivities} = require('../addActivityToUserActivities');
 
 exports.addFanficToUserMarksInDB = async (req,res)=>{
     console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
