@@ -29,8 +29,7 @@ class Fanfic extends Component{
     state=state;
 
     componentWillMount(){
-        console.log('componentWillMount')
-        const {location} = this.props;
+        const {onGetReadingList,location,readingListsFull,userEmail} = this.props;
         let {urlQueries,filterArr,switches} = this.state;
 
         let isFiltered = location.search.includes('filters=true') ? true : false;
@@ -40,6 +39,8 @@ class Fanfic extends Component{
             this.setState({pageLimit:16})
         }
         const page = isInPage ? Number(location.search.split('page=')[1].split('&')[0]) : 1;
+        readingListsFull.length===0 && onGetReadingList(userEmail)
+
         if(isFiltered){
             if(location.search.includes('noUserData')){
                 switches = [...switches];
@@ -50,7 +51,8 @@ class Fanfic extends Component{
             let filterQuery = location.search.split('filters=true&')[1];
             filterArr = this.props.location.search.split('filters=true')[1].split('&'); 
             isInPage && this.setState({pageNumber:page})
-            this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{ 
+            
+            this.setState({filterArr,urlQueries:{...urlQueries,isFiltered,page,filterQuery}},async ()=>{                 
                 await this.getFanfics()               
                 await this.activeFiltersHandler(false);
                 this.setState({firstLoad:false})
@@ -65,28 +67,37 @@ class Fanfic extends Component{
       
     }
 
+    componentWillUnmount(){
+        this.props.onGetReadingList(this.props.userEmail)
+    }
+
     getFanfics = async () =>{
         const {pageNumber,pageLimit} = this.state;
-        const {fandoms,onGetFandoms,onGetFanfics} = this.props
+        const {fandoms,onGetFandoms,onGetFanfics,location} = this.props;
         const userEmail = this.props.userEmail ? this.props.userEmail : null;
         const fandomName = this.props.match.params.FandomName;
+        
+        let list = (location.search && location.search.split('list=')[1].includes('true')) ? true : false;
 
-        (fandoms.length===0) &&  await onGetFandoms()
-        await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail).then(()=>{
+        (fandoms.length===0 && !list) &&  await onGetFandoms()
+        await onGetFanfics(fandomName,pageNumber,pageLimit,userEmail,list).then(()=>{
             const {fandoms,userFanfics,ignoredCount}  = this.props
             let fandom = fandoms.filter(fandom=> (fandomName===fandom.FandomName))[0];
-            const fanficsNumbers = fanficsNumbersFunc(fandom,ignoredCount);
+            const fanficsNumbers = !list ? fanficsNumbersFunc(fandom,ignoredCount,list) : fanficsNumbersFunc(this.props.readingListsFull,null,list,fandomName);
 
             this.setState({fandomName,userFanfics,fanficsNumbers:fanficsNumbers,showData:true});
         })
-
+        list && this.setState({rlMode:true})
         return null
     }
 
     addUrlQueries = () =>{
-        const {urlQueries,pageNumber} = this.state;
-        let str = '';
-        str = (!urlQueries.isFiltered) ? `?page=${pageNumber}` : `?page=${pageNumber}&filters=true&${urlQueries.filterQuery}`;
+        const {location} = this.props;
+        const {urlQueries,pageNumber,fandomName} = this.state;
+        console.log('location:',location)
+        let str = (location.search &&location.search.split('list=')[1].includes('true')) ? `${fandomName}?list=true` : '';
+        str = str==='' ? '?' : `${str}&`;
+        str = (!urlQueries.isFiltered) ? str+`page=${pageNumber}` : str+`page=${pageNumber}&filters=true&${urlQueries.filterQuery}`;
         
         if((urlQueries.isFiltered)||(urlQueries.page!==pageNumber||pageNumber===1)){
             this.props.history.push(str);
@@ -419,29 +430,42 @@ class Fanfic extends Component{
     addToReadingList = (fanfic,rlValue) =>{
         const {FanficID,Author,FanficTitle,Source} = fanfic;
         const {userEmail} = this.props;
-        const {fandomName,newReadingLists} = this.state;
-        const userFanficsCopy = [...this.state.userFanfics];
+        const {fandomName,newReadingLists,rlMode} = this.state;
+        let userFanficsCopy = [...this.state.userFanfics];
         const val = rlValue!==null ? rlValue : newReadingLists.value;
-        this.props.onSaveReadingList(userEmail,fandomName,FanficID,Author,FanficTitle,Source,val).then(res=>{
-            console.log('here!!',res)
-            let objIndex = userFanficsCopy.findIndex((fic => fic.FanficID === fanfic.FanficID));
-            if(objIndex!==-1){
-                console.log('userFanficsCopy[objIndex]:',userFanficsCopy[objIndex].ReadingList)
-                if(userFanficsCopy[objIndex].ReadingList){
-                    userFanficsCopy[objIndex].ReadingList.push(val);
+
+        if(!rlMode){//add to reading list
+            this.props.onSaveReadingList(userEmail,fandomName,FanficID,Author,FanficTitle,Source,val).then(res=>{
+                console.log('here!!',res)
+                let objIndex = userFanficsCopy.findIndex((fic => fic.FanficID === fanfic.FanficID));
+                if(objIndex!==-1){
+                    console.log('userFanficsCopy[objIndex]:',userFanficsCopy[objIndex].ReadingList)
+                    if(userFanficsCopy[objIndex].ReadingList){
+                        userFanficsCopy[objIndex].ReadingList.push(val);
+                    }else{
+                        userFanficsCopy[objIndex] = {...userFanficsCopy[objIndex],ReadingList:[val]}
+                    }
                 }else{
-                    userFanficsCopy[objIndex] = {...userFanficsCopy[objIndex],ReadingList:[val]}
+                    userFanficsCopy.push({FanficID:FanficID,ReadingList:[val]})
                 }
-            }else{
-                userFanficsCopy.push({FanficID:FanficID,ReadingList:[val]})
-            }
-            if(!rlValue){
-                let newLists = (newReadingLists.newLists===null) ? [val] :  [...newReadingLists.newLists,val];
-                this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:'',newLists}})
-            }else{
-                this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:''}})
-            }
-        })
+                if(!rlValue){
+                    let newLists = (newReadingLists.newLists===null) ? [val] :  [...newReadingLists.newLists,val];
+                    this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:'',newLists}})
+                }else{
+                    this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:''}})
+                }
+            })
+        }else{//remove from reading list
+            console.log('val:',val)
+            this.props.onDeleteFanficFromReadingList(userEmail,fandomName,FanficID,Author,FanficTitle,Source,val).then(res=>{
+                let objIndex = userFanficsCopy.findIndex((fic => fic.FanficID === fanfic.FanficID));
+                if(objIndex!==-1){
+                    userFanficsCopy = userFanficsCopy[objIndex].ReadingList.filter(e => e !== val);
+                    this.setState({userFanfics: userFanficsCopy,newReadingLists:{...this.state.newReadingLists,value:''}})
+                }
+            })
+        }
+
     }
 
     setReadingList = (event,fanfic) =>{
@@ -503,7 +527,7 @@ class Fanfic extends Component{
     }
 
     render(){
-        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,
+        const {fandomName,userFanfics,pageNumber,fanficsNumbers,pageLimit,filters,inputChapterFlag,drawerFilters,addImageFlag,rlMode,
                showSelectCategory,inputCategoryFlag,categoriesShowTemp,newReadingLists,firstLoad,dataLoad,switches,editFanfic,editFanficData} = this.state;
         const {isManager,size,isAuthenticated,fanfics,readingLists} = this.props;
 
@@ -525,15 +549,19 @@ class Fanfic extends Component{
                             <Grid container className='containerGrid'>
                                 <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
                                             total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
-
-                                <Grid container className='containerGrid'>
-                                    <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
-                                    <Filters filters={filtersProps} getCategories={this.getFiltersCategories}/>                   
-                                </Grid>
-                                <Grid className={'main'}>
-                                    <Divider/>
-                                    <SwitchesPanel switchesPanel={switchesPanel}/> 
-                                </Grid>
+                                
+                                {!rlMode && 
+                                    <Grid container className='containerGrid'>
+                                        <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
+                                        <Filters filters={filtersProps} getCategories={this.getFiltersCategories}/>               
+                                    </Grid>
+                                }
+                                {!rlMode && 
+                                    <Grid className={'main'}>
+                                        <Divider/>
+                                        <SwitchesPanel switchesPanel={switchesPanel}/> 
+                                    </Grid>
+                                }
                                 <Grid className={'main'}>
                                     <Divider/>
                                     {fanficsNumbers.fanficsCurrentCount===0 ? 
@@ -553,6 +581,7 @@ class Fanfic extends Component{
                                                                     filter={this.filterTagsHandler}
                                                                     switches={switches}
                                                                     images={imageProps}
+                                                                    rlMode={rlMode}
                                                 />
                                                 :
                                                 <GalleryView        fanfics={fanfics} 
@@ -594,6 +623,7 @@ const mapStateToProps = state =>{
         loading:            state.fanfics.loading,
         ignoredCount:       state.fanfics.ignoredCount,
         readingLists:       state.fanfics.readingListsNames,
+        readingListsFull:   state.fanfics.readingListsFull,
         userEmail:          state.auth.user.email,
         isAuthenticated:    state.auth.isAuthenticated,
         isManager:          state.auth.isManager,
@@ -604,13 +634,15 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
     return{
         onGetFandoms:           ()                                                                                  =>  dispatch(actions.getFandomsFromDB()),
-        onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail)                                         =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail)),
+        onGetReadingList:       (userEmail)                                                                         =>  dispatch(actions.getReadingList(userEmail)),
+        onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail,list)                                    =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail,list)),
         onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)             =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
         onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)    =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
         onDeleteFanfic:         (fandomName,fanficId,source,complete)                                               =>  dispatch(actions.deleteFanficFromDB(fandomName,fanficId,source,complete)),
         onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber)),
         onSaveCategories:       (fandomName,fanficId,categoriesArray)                                               =>  dispatch(actions.saveCategories(fandomName,fanficId,categoriesArray)),
-        onSaveReadingList:      (userEmail,fandomName,fanficId,author,fanficTitle,source,name)                      =>  dispatch(actions.saveReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name))
+        onSaveReadingList:      (userEmail,fandomName,fanficId,author,fanficTitle,source,name)                      =>  dispatch(actions.saveReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name)),
+        onDeleteFanficFromReadingList:      (userEmail,fandomName,fanficId,author,fanficTitle,source,name)          =>  dispatch(actions.deleteFanficFromReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name))
     
     }
 }

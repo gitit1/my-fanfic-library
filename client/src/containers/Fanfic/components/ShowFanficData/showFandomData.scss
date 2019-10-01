@@ -12,7 +12,7 @@
         margin:0.5% 0.5%;
         max-width: 100%;
         background-color: #fafafa;
-        display: 'flex';
+        display: flex;
         // z-index:888;
         
         // .border_AO3{border-top: 1px solid $color_AO3;}
@@ -80,7 +80,7 @@
                 .card_content_header_right{
                     text-align: left;
                     width: 80%;
-                    // margin-top: 1%;
+                    margin-top: 1%;
                     float: left;
                 }
                 .card_content_header_right .fanfic_source{
@@ -310,6 +310,10 @@
                     color:  rgb(192, 43, 43)!important;
                 }
                 
+                .userData_orange span:hover, .userData_orange span{
+                    fill:  rgba(214, 130, 20, 0.726)!important;
+                    color:  rgba(214, 130, 20, 0.726)!important;
+                }
                 .userData_green span:hover, .userData_green span,.rl_green{
                     fill:  rgb(23, 167, 119)!important;
                     color:  rgb(23, 167, 119)!important;

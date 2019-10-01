@@ -29,6 +29,7 @@ export const getFandomsNumbers = (data) =>{
                     Follow:             fic.Follow ? 1 : 0
                 })
             }
+            return
         })
         console.log('fandomsArr:',fandomsArr)
         console.log('dataObj:',dataObj)
@@ -53,6 +54,7 @@ export const getLatestFanfic = (data,fandom) => {
                 lastIgnored     =   (!fic.Ignore)                 ? lastIgnored         : (lastIgnored.Date>fic.Date)       ? lastIgnored       :   fic;
                 lastFollowed    =   (!fic.Follow)                 ? lastFollowed        : (lastFollowed.Date>fic.Date)      ? lastFollowed      :   fic;
             }
+            return
         })
         lastFinished    = lastFinished.Date===0     ? null : lastFinished
         lastInProgress  = lastInProgress.Date===0   ? null : lastInProgress

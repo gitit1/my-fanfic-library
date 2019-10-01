@@ -15,7 +15,7 @@ import Delete from './Delete/Delete'
 import EditFanfic from './EditFanfic/EditFanfic'
 
 const UserData = (props) => {
-  const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics,readingLists,showMnagerButtonsSwitch} = props;
+  const {fanfic,showCategory,showSelectCategory,saveCategories,userFanfics,readingLists,showMnagerButtonsSwitch,rlMode} = props;
   let userData = userFanfics.filter( userFanfic => {return userFanfic.FanficID === fanfic.FanficID})
   userData = userData.length!==0 ? Object.values(userData)[0]: null;
   const isFollowed    =   functions.followFilter(userData)    
@@ -35,7 +35,7 @@ const UserData = (props) => {
       {props.isManager && showMnagerButtonsSwitch && 
         <AddImage       fanfic={fanfic} images={props.images}/>   
       }
-      <ReadingList      props={props.props} userData={userData} fanfic={props.fanfic} readingLists={readingLists}/>
+      <ReadingList      props={props.props} userData={userData} fanfic={props.fanfic} readingLists={readingLists} rlMode={rlMode}/>
       <Follow           props={props.props} isFollowed={isFollowed} fanfic={fanfic}/>
       <Favorite         props={props.props} isFavorite={isFavorite} fanfic={fanfic}/>
       <Finished         props={props.props} isFinished={isFinished} isInProgress={isInProgress} fanfic={fanfic}/>

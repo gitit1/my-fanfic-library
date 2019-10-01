@@ -28,13 +28,13 @@ export const getFanficsFromDBFail = (error) =>{
     };
 };
 
-export const getFanficsFromDB = (fandomName,pageNumber,pageLimit,userEmail) =>{
+export const getFanficsFromDB = (fandomName,pageNumber,pageLimit,userEmail,list) =>{
     console.log('[actions: fanfics.js] - getFanficsFromDB')
     let skip = (pageLimit*pageNumber)-pageLimit;
 
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        return axios.post(`/db/getFanfics?FandomName=${fandomName.replace("&","%26")}&skip=${skip}&limit=${pageLimit}&userEmail=${userEmail}`)
+        return axios.post(`/db/getFanfics?FandomName=${fandomName.replace("&","%26")}&skip=${skip}&limit=${pageLimit}&userEmail=${userEmail}&list=${list}`)
         .then(fetchedData =>{
             dispatch(getFanficsFromDBSuccess(fetchedData.data));
             return true;
@@ -138,6 +138,48 @@ export const saveReadingList = (userEmail,fandomName,fanficId,author,fanficTitle
         });   
     };    
 }
+
+export const deleteFanficFromReadingList = (userEmail,fandomName,fanficId,author,fanficTitle,source,name)=>{
+    console.log('[actions: fanfics.js] - deleteFanficFromReadingList')
+    return dispatch =>{
+        return axios.post(`/db/deleteFanficFromReadingList?userEmail=${userEmail}&fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
+        .then(res =>{
+            return res.data;
+        })
+        .catch(error =>{
+            return error
+        });   
+    }; 
+}
+
+export const deleteReadingList = (userEmail,name) =>{
+    console.log('[actions: fanfics.js] - deleteFanficFromReadingList')
+    return dispatch =>{
+        return axios.post(`/db/deleteReadingList?userEmail=${userEmail}&name=${name}`)
+        .then(res =>{
+            return res.data;
+        })
+        .catch(error =>{
+            return error
+        });   
+    }; 
+}
+
+export const saveImageOfReadingList = (userEmail,name,image) =>{
+    console.log('[actions: fandom.js] - saveImageOfReadingList')
+
+    return dispatch =>{
+        dispatch(getFanficsFromDBStart())
+        return axios.post(`/db/saveImageOfReadingList?userEmail=${userEmail}&name=${name}`,image)
+        .then(res =>{
+            return res;
+        })
+        .catch(error =>{
+            dispatch(getFanficsFromDBFail(error))
+        })  
+    };
+}
+
 
 export const deleteFanficFromDB = (fandomName,fanficId,source,complete)=>{
     console.log('[actions: fanfics.js] - saveReadingList')

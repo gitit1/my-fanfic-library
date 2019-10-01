@@ -12,7 +12,7 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const ShowFanficData = (props) => {
-    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists,filter,switches,images} = props;
+    const {fanfics,userFanfics,showTagsToggle,showTags,readingLists,filter,switches,images,rlMode} = props;
     const {isManager,isAuthenticated,size} = props.props
     const {getCategories,saveCategories,showSelectCategory,inputCategoryFlag,categoriesTemp,showCategory} = props.categories;
     const tagSwitch=switches[1].checked,showImagesSwitch=switches[2].checked,showMnagerButtonsSwitch=switches[4].checked;
@@ -28,7 +28,7 @@ const ShowFanficData = (props) => {
                                 <div className={showImagesSwitch?'detailsWithImage':'detailsWithoutImage'}>
                                     <CardContent className='card_content'>
                                         
-                                        <FanficData         fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags} filter={filter}
+                                        <FanficData         fanfic={fanfic} size={size} showTagsToggle={showTagsToggle} showTags={showTags} filter={filter} rlMode={rlMode}
                                                             getCategories={getCategories} saveCategories={saveCategories} showSelectCategory={showSelectCategory} 
                                                             inputCategoryFlag={inputCategoryFlag} categoriesTemp={categoriesTemp} tagSwitch={tagSwitch}/>                           
                                         { isAuthenticated &&
@@ -42,6 +42,7 @@ const ShowFanficData = (props) => {
                                                             readingLists={readingLists}
                                                             showMnagerButtonsSwitch={showMnagerButtonsSwitch}
                                                             images={images}
+                                                            rlMode={rlMode}
                                                 />
                                             </section>
                                         }

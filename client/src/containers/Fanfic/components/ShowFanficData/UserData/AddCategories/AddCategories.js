@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 const AddCategories = (props) => {
-    const {showCategory,showSelectCategory,fanfic} = props;
+    const {showCategory,fanfic} = props;
 
     return(
         <div className='userData'>
