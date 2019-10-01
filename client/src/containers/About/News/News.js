@@ -5,10 +5,10 @@ import LazyLoad from 'react-lazyload';
 
 const News = () => (
   <Container header='News & Updates'>
-    
     <div className={classes.News}>
         <LazyLoad height={100} >
-          <p><span className={classes.Date}><strong>10-01-2019:</strong></span><span className={classes.Content}>[025-git] Added Lazy Loading to News  Page</span></p>
+          <p><span className={classes.Date}><strong>10-01-2019:</strong></span><span className={classes.Content}>[026-git] Added Wattpad to manually downloader</span></p>
+          <p><span className={classes.Date}><strong>10-01-2019:</strong></span><span className={classes.Content}>[025-git] Added Lazy Loading to News Page</span></p>
           <p><span className={classes.Date}><strong>10-01-2019:</strong></span><span className={classes.Content}>[024-git] Added reading list page with delete and image</span></p>
           <p><span className={classes.Date}></span>&nbsp;</p>
         </LazyLoad> 

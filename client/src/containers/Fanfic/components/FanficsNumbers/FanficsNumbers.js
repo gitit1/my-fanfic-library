@@ -35,6 +35,13 @@ const FanficsNumbers = (props) => (
                     <b>{props.fanficsNumbers.tumblrFanficsCount}</b>
                 </React.Fragment>
             }
+            {props.fanficsNumbers.wattpadFanficsCount>0 &&
+                <React.Fragment>
+                    &nbsp;,&nbsp;
+                    <b className='color_Wattpad'>Wattpad:&nbsp;</b>
+                    <b>{props.fanficsNumbers.wattpadFanficsCount}</b>
+                </React.Fragment>
+            }
         </p>
         {props.fanficsNumbers.fanficsIgnoredCount>0 &&
             <p><b>{props.fanficsNumbers.fanficsIgnoredCount.toLocaleString(undefined, {maximumFractionDigits:2})}&nbsp;</b>  

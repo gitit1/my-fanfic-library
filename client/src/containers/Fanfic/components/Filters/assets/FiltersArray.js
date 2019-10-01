@@ -44,11 +44,6 @@ export const filtersArray = {
             name:       'ignore',
             display:    'Ignore'
         }
-        // ,{
-        //     type :      'checkbox',
-        //     name:       'noUserData',
-        //     display:    "New (Didn't marked yet)"
-        // }
     ],
     Sort:[
         {
@@ -59,6 +54,10 @@ export const filtersArray = {
             type : 'checkbox',
             name: 'publishDate',
             display: 'Publish Date'
+        },{
+            type : 'checkbox',
+            name: 'uploadDate',
+            display: 'Upload Date'
         },{
             type : 'checkbox',
             name:  'authorSort',
@@ -96,16 +95,24 @@ export const filtersArray = {
             display: 'AO3'
         },{
             type : 'checkbox',
-            name: 'ff',
-            display: 'FF'
-        },{
-            type : 'checkbox',
             name: 'backup',
             display: 'Backup'
         },{
             type : 'checkbox',
+            name: 'ff',
+            display: 'FF'
+        },{
+            type : 'checkbox',
+            name: 'patreon',
+            display: 'Patreon'
+        },{
+            type : 'checkbox',
             name: 'tumblr',
             display: 'Tumblr'
+        },{
+            type : 'checkbox',
+            name: 'wattpad',
+            display: 'Wattpad'
         }
     ]
 }
@@ -127,6 +134,7 @@ export const filtersArrayInit = {
     comments:false,
     dateLastUpdate:false,
     publishDate:false,
+    uploadDate:false,
     hits:false,
     kudos:false,
 
