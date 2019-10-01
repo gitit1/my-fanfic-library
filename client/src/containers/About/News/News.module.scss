@@ -1,8 +1,7 @@
 .News{
     margin: 0 auto;
     width:70%;
-
-    
+    max-height: 500px;
     .Date{
         text-align: center;
         width: 50%;
@@ -12,6 +11,6 @@
         text-align: left;
         width: 50%;
         float: left;
-        line-height: 1.5em;
+        line-height: 1.6em;
     }
 }
