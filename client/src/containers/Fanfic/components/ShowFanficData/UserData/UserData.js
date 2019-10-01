@@ -24,7 +24,7 @@ const UserData = (props) => {
   const isInProgress  =   functions.inProgressFilter(userData,isFinished[0])
   const isIgnored     =   functions.ignoreFilter(userData)
   const isDeleted     =   (fanfic.Deleted===true) ? true : false
-  const isBackup     =    (fanfic.Source==='Backup') ? true : false
+  const isBackup     =    (fanfic.Source==='Backup'||fanfic.Source==='Wattpad'||fanfic.Source==='Patreon'||fanfic.Source==='Tumblr') ? true : false
   // const inReadingList =   functions.readingListFilter(userData)
 
   return(

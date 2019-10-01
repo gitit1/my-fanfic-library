@@ -72,6 +72,36 @@ export const fanficDataForm = [{
         visible: true,
         disabled:false
     },
+    FanficURL: {
+        label: 'Fanfic URL:',
+        classNameCustom:'FanficURL',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Fanfic URL'
+        },
+        value:'',
+        validation: {},
+        valid:true,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
+    AuthorURL: {
+        label: 'Author URL:',
+        classNameCustom:'AuthorURL',
+        elementType:'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Author URL'
+        },
+        value:'',
+        validation: {},
+        valid:true,
+        touched:false,
+        visible: true,
+        disabled:false
+    },
     FandomsTags: {
         label: 'Fandoms Tags:',
         classNameCustom:'FandomsTags',
