@@ -4,11 +4,11 @@
 
 .addNewFanficManually{
     margin-top: 16px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     .addNewFanficManually_card{
         width: 95%;
         margin: 0 auto;
-        height: 76vh;
+        height: auto;
         // margin-top: 1%;
         text-align: center;
 
@@ -48,7 +48,23 @@
                 width: 25%;
                 right: 2%;               
             }
-
+            .FanficURL{
+                margin-left: 0;
+                left: 2%;
+                float: left;
+                width: 60%;
+                margin-top:1%;               
+            }
+            .AuthorURL{
+                margin-right: 0;
+                float: right;
+                margin-top:1%;
+                width: 25%;
+                right: 4%;                         
+            }
+            .FandomsTags{
+                margin-top:1%; 
+            }
             .FandomsTags,
             .Warnings,
             .Relationships,
@@ -214,6 +230,8 @@
                 .FanficTitle,
                 .Author,
                 .FandomsTags,
+                .AuthorURL,
+                .FanficURL,
                 .Warnings,
                 .Relationships,
                 .Characters,

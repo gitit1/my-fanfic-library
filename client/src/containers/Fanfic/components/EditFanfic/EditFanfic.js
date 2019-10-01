@@ -90,6 +90,36 @@ class EditFanfic extends Component{
                 visible: true,
                 disabled:false
             },
+            FanficURL: {
+                label: 'Fanfic URL:',
+                classNameCustom:'FanficURL',
+                elementType:'input', 
+                elementConfig:{
+                    type: 'text',
+                    placeholder: 'Fanfic URL'
+                },
+                value:this.props.fanfic.URL,
+                validation: {},
+                valid:true,
+                touched:false,
+                visible: true,
+                disabled:false
+            },
+            AuthorURL: {
+                label: 'Author URL:',
+                classNameCustom:'AuthorURL',
+                elementType:'input', 
+                elementConfig:{
+                    type: 'text',
+                    placeholder: 'Author URL'
+                },
+                value:this.props.fanfic.AuthorURL,
+                validation: {},
+                valid:true,
+                touched:false,
+                visible: true,
+                disabled:false
+            },
             FandomsTags: {
                 label: 'Fandoms Tags:',
                 classNameCustom:'FandomsTags',
@@ -98,7 +128,7 @@ class EditFanfic extends Component{
                     type: 'text',
                     placeholder: 'Fandoms Tags - Seperate by comma , Example: "tag 1,tag 2"'
                 },
-                value:this.props.fanfic.FandomsTag.join(','),
+                value:this.props.fanfic.FandomsTag!==null ? this.props.fanfic.FandomsTag.join(',') : '',
                 validation: {},
                 valid:true,
                 touched:false,

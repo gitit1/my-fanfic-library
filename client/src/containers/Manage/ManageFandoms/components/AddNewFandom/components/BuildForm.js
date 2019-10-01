@@ -25,6 +25,7 @@ const BuildForm = (props) => (
         ))}
         <br/>                               
         <Button  type="submit" variant="contained"  className='send_button' disabled={props.disabled} onClick={(e)=>props.onSubmit(e)}>{props.buttonSendLabel}</Button>
+        <br/> 
     </form>
 );
 
