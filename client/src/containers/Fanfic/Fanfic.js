@@ -505,7 +505,7 @@ class Fanfic extends Component{
                 let filterQuery = '?filters=true&noUserData'
                 this.setState({urlQueries:{...urlQueries,filterQuery}},()=>this.activeFiltersHandler())
             }               
-        }else{
+        }else if(switches[3].checked){
             this.cancelFiltersHandler()
         }
     
@@ -549,7 +549,6 @@ class Fanfic extends Component{
                             <Grid container className='containerGrid'>
                                 <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
                                             total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
-                                
                                 {!rlMode && 
                                     <Grid container className='containerGrid'>
                                         <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>

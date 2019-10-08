@@ -1,9 +1,12 @@
+@import '../../style/_colors';
+
 .fanfics{
     width: 95%;
 
     .containerGrid{
         width: 100%;
         text-align: center;
+        margin-top: 1%;
         // display: block!important;
     }
 
@@ -17,8 +20,23 @@
     .fanficNumbers{
         width: 100%;
         text-align: left;
+        .total{
+            color: $color_header_bold;
+            font-weight: 600;
+        }
         // margin-left: 0.5%;
         // margin-right: 0.5%;
+        .fanficNumbersDevider{
+            display: inline-block;
+            width: 2px;
+            background-color: $color_strong;
+            margin: 0 10px;
+            height: 1em;           
+        }
+        .small{
+            width: 1px!important;
+            background-color: $color_text_1!important;
+        }
     }
     .root{
         margin-top: 1%;

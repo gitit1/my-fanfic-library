@@ -14,7 +14,7 @@ exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList)=>{
         sort = (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
         console.log('sort 3:',sort)
         
-        console.log('filters:',filters)
+        // console.log('filters:',filters)
 
         if(list==='true'){
             console.log('readingList:',readingList.FanficsFandoms)

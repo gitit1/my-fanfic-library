@@ -1,4 +1,6 @@
 import React from 'react';
+import { CSSTransition } from 'react-transition-group';
+
 import './showFandomData.scss'
 
 import UserData from './UserData/UserData'
