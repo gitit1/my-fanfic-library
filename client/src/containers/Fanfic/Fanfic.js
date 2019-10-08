@@ -549,7 +549,6 @@ class Fanfic extends Component{
                             <Grid container className='containerGrid'>
                                 <Pagination gridClass='paginationGrid' onChange={this.paginationClickHandler} showTotal={true} current={pageNumber} 
                                             total={fanficsNumbers.fanficsCurrentCount} paginationClass={'pagination'} pageLimit={pageLimit} />
-                                
                                 {!rlMode && 
                                     <Grid container className='containerGrid'>
                                         <FanficsNumbers fanficsNumbers={fanficsNumbers} fandomName={fandomName}/>
