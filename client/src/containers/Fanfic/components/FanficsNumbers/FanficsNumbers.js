@@ -3,7 +3,8 @@ import { Grid } from '@material-ui/core';
 
 const FanficsNumbers = (props) => (
     <Grid  className={'fanficNumbers'} item xs={9}>
-        <p>There is a total of 
+        
+        {/* <p>There is a total of 
             <b>&nbsp;{props.fanficsNumbers.fanficsTotalCount.toLocaleString(undefined, {maximumFractionDigits:2})}&nbsp;</b>fanfics in 
             <b>&nbsp;{props.fandomName}&nbsp;</b>Fandom
         </p>
@@ -46,7 +47,7 @@ const FanficsNumbers = (props) => (
         {props.fanficsNumbers.fanficsIgnoredCount>0 &&
             <p><b>{props.fanficsNumbers.fanficsIgnoredCount.toLocaleString(undefined, {maximumFractionDigits:2})}&nbsp;</b>  
             of the fanfics are ignored (filter by ignore to see them and reactive them)</p> 
-        }
+        } */}
     </Grid>
 );
 

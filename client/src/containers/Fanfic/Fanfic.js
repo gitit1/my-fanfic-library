@@ -505,7 +505,7 @@ class Fanfic extends Component{
                 let filterQuery = '?filters=true&noUserData'
                 this.setState({urlQueries:{...urlQueries,filterQuery}},()=>this.activeFiltersHandler())
             }               
-        }else{
+        }else if(switches[3].checked){
             this.cancelFiltersHandler()
         }
     

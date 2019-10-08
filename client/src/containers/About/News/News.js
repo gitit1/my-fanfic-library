@@ -7,6 +7,7 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
         <LazyLoad height={100} >
+          <p><span className={classes.Date}><strong>10-08-2019:</strong></span><span className={classes.Content}>[028-git] Changed favicon</span></p>
           <p><span className={classes.Date}><strong>10-08-2019:</strong></span><span className={classes.Content}>[027-git] Fix sorting issue in fanfics filters</span></p>
           <p><span className={classes.Date}></span>&nbsp;</p>
         </LazyLoad>
