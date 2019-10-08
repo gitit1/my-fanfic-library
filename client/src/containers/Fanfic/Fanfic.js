@@ -484,6 +484,7 @@ class Fanfic extends Component{
     }
 
     switchChangeHandler = (type) =>{
+        console.log('type:',type)
         const {switches,urlQueries} = this.state;
         let objIndex = switches.findIndex((sw => sw.id === type));   
         const switchesCopy = [...switches];
@@ -494,7 +495,7 @@ class Fanfic extends Component{
             this.setState({pageLimit:16})
         }
 
-        if(!switches[3].checked){//Don't show userdata  
+        if(!switches[3].checked && type==='noUserData'){//Don't show userdata  
             this.filterHandler('noUserData',null,'filter') 
             let isFiltered = this.props.location.search.includes('filters=true') ? true : false;
             if(isFiltered){
@@ -505,7 +506,7 @@ class Fanfic extends Component{
                 let filterQuery = '?filters=true&noUserData'
                 this.setState({urlQueries:{...urlQueries,filterQuery}},()=>this.activeFiltersHandler())
             }               
-        }else if(switches[3].checked){
+        }else if(switches[3].checked && type==='noUserData'){
             this.cancelFiltersHandler()
         }
     
