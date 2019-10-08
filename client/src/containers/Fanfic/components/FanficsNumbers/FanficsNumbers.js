@@ -16,16 +16,16 @@ const FanficsNumbers = (props) => {
                         <span className='color_AO3'>AO3:&nbsp;</span>{fanficsNumbers.ao3FanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}
                     </React.Fragment>
                 }
-                {fanficsNumbers.ffFanficsCount>0 &&
-                    <React.Fragment>
-                        <span class="fanficNumbersDevider small"></span>
-                        <span className='color_FF'>FF:&nbsp;</span>{fanficsNumbers.ffFanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}
-                    </React.Fragment>
-                }
                 {fanficsNumbers.fanficsDeletedCount>0 &&
                     <React.Fragment>
                         <span class="fanficNumbersDevider small"></span>
                         <span className='color_Backup'>Backup (Deleted from sites):&nbsp;</span>{fanficsNumbers.fanficsDeletedCount.toLocaleString(undefined, {maximumFractionDigits:2})}
+                    </React.Fragment>
+                }
+                {fanficsNumbers.ffFanficsCount>0 &&
+                    <React.Fragment>
+                        <span class="fanficNumbersDevider small"></span>
+                        <span className='color_FF'>FF:&nbsp;</span>{fanficsNumbers.ffFanficsCount.toLocaleString(undefined, {maximumFractionDigits:2})}
                     </React.Fragment>
                 }
                 {fanficsNumbers.tumblrFanficsCount>0 &&
