@@ -21,7 +21,7 @@ exports.userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pag
                                         // let initSkip = (pageLimit*pageNumber)-pageLimit;
                                         
                                         const filterObj = Object.assign({FanficID: {$in: idsList}}, ...filtersArrays[1]);
-
+                                        console.log('filterObj 2:',filterObj)
                                         let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber)
                                         resolve(filteredData)
             })       
