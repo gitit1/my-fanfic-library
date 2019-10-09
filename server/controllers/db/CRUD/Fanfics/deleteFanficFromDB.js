@@ -4,8 +4,8 @@ const FandomModal = require('../../../../models/Fandom');
 
 exports.deleteFanficFromDB = async (req,res) =>{
     console.log(clc.blue('[db controller] deleteFanficFromDB()'));
-    let {fandomName,fanficId,source,complete} = req.query;
-    console.log('fandomName,fanficId,source:',fandomName,fanficId,source)
+    let {fandomName,fanficId,source,complete,deleted} = req.query;
+    console.log('fandomName,fanficId,source,deleted:',fandomName,fanficId,source,deleted)
 
     await mongoose.dbFanfics.collection(fandomName).deleteOne({FanficID:Number(fanficId)});
     const FanficsInFandom = `${source}.FanficsInFandom`,DeletedFanfics = `${source}.DeletedFanfics`;
@@ -15,7 +15,10 @@ exports.deleteFanficFromDB = async (req,res) =>{
     isCompleteCounter  = (isCompleteCounter-1)<=0 ? 0 : isCompleteCounter-1;
 
     let DeletedFanficsCounter = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':source,'Deleted':true});
-    DeletedFanficsCounter  = (DeletedFanficsCounter-1)<=0 ? 0 : DeletedFanficsCounter-1;
+    if(deleted==='true'){
+      DeletedFanficsCounter  = (DeletedFanficsCounter-1)<=0 ? 0 : DeletedFanficsCounter-1;
+    }
+
     console.log('DeletedFanficsCounter:',DeletedFanficsCounter)
     await FandomModal.updateOne({'FandomName': fandomName },
                                 { $inc: { 'FanficsInFandom':-1,

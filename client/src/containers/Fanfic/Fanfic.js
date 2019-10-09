@@ -119,7 +119,7 @@ class Fanfic extends Component{
         return null
     }
 
-    markAsHandler = async(fanficId,author,fanficTitle,source,markType,mark) =>{
+    markAsHandler = async(fanficId,author,fanficTitle,source,markType,mark,deleted) =>{
         console.log('!mark,,,',!mark)
         const {onMarkHandler,onGetFilteredFanfics,onDeleteFanfic,userEmail} = this.props, {pageLimit,fanficsNumbers,filterArr,pageNumber,fandomName} = this.state;
         (markType!=='Delete') && await onMarkHandler(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,!mark);
@@ -193,7 +193,7 @@ class Fanfic extends Component{
             case 'Delete':     
                 console.log('DELETE!!!')          
                 const {} = this.props;
-                await onDeleteFanfic(fandomName,fanficId,source,mark).then(async ()=>{
+                await onDeleteFanfic(fandomName,fanficId,source,mark,deleted).then(async ()=>{
                     console.log('here...')
                     // await onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
                         let fanficsDeletedCount = (fanficsNumbers.fanficsDeletedCount-1<=0) ? 0 : fanficsNumbers.fanficsDeletedCount-1; 
@@ -491,9 +491,11 @@ class Fanfic extends Component{
         switchesCopy[objIndex].checked = !switchesCopy[objIndex].checked;
         this.setState({switches:switchesCopy});
 
-        if(switches[0].checked){
-            this.setState({pageLimit:16})
-        }
+        // if(switches[0].checked && type==='gallery'){
+        //     this.setState({pageLimit:16},()=>this.activeFiltersHandler())
+        // }else if(!switches[0].checked && type==='gallery'){
+        //     this.setState({pageLimit:10},()=>this.activeFiltersHandler())
+        // }
 
         if(!switches[3].checked && type==='noUserData'){//Don't show userdata  
             this.filterHandler('noUserData',null,'filter') 
@@ -638,7 +640,7 @@ const mapDispatchedToProps = dispatch =>{
         onGetFanfics:           (fandomName,pageNumber,pageLimit,userEmail,list)                                    =>  dispatch(actions.getFanficsFromDB(fandomName,pageNumber,pageLimit,userEmail,list)),
         onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)             =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
         onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)    =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),
-        onDeleteFanfic:         (fandomName,fanficId,source,complete)                                               =>  dispatch(actions.deleteFanficFromDB(fandomName,fanficId,source,complete)),
+        onDeleteFanfic:         (fandomName,fanficId,source,complete,deleted)                                       =>  dispatch(actions.deleteFanficFromDB(fandomName,fanficId,source,complete,deleted)),
         onGetFilteredFanfics:   (fandomName,userEmail,filters,pageLimit,pageNumber)                                 =>  dispatch(actions.getFilteredFanficsFromDB(fandomName,userEmail,filters,pageLimit,pageNumber)),
         onSaveCategories:       (fandomName,fanficId,categoriesArray)                                               =>  dispatch(actions.saveCategories(fandomName,fanficId,categoriesArray)),
         onSaveReadingList:      (userEmail,fandomName,fanficId,author,fanficTitle,source,name)                      =>  dispatch(actions.saveReadingList(userEmail,fandomName,fanficId,author,fanficTitle,source,name)),
