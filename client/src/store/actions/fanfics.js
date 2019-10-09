@@ -181,10 +181,10 @@ export const saveImageOfReadingList = (userEmail,name,image) =>{
 }
 
 
-export const deleteFanficFromDB = (fandomName,fanficId,source,complete)=>{
+export const deleteFanficFromDB = (fandomName,fanficId,source,complete,deleted)=>{
     console.log('[actions: fanfics.js] - saveReadingList')
     return dispatch =>{
-        return axios.post(`/db/deleteFanfic?fandomName=${fandomName}&fanficId=${fanficId}&source=${source}&complete=${complete}`)
+        return axios.post(`/db/deleteFanfic?fandomName=${fandomName}&fanficId=${fanficId}&source=${source}&complete=${complete}&deleted=${deleted}`)
         .then(() =>{
             return true;
         })
