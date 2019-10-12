@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import {isHiatus} from './functions/isHiatus';
 
 const Header = (props) => {
-    const {LastUpdateOfFic,Rating,Complete,Deleted,FandomsTags,FandomName} = props.fanfic;
+    const {LastUpdateOfFic,Rating,Complete,Deleted,FandomsTags,FandomName,Oneshot} = props.fanfic;
     const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false
     return(
         <React.Fragment>
@@ -25,9 +25,12 @@ const Header = (props) => {
                                 <div className='fandom_tags_container'>{FandomsTags && FandomsTags.map(tag=>(<Chip key={tag} className='fandom_tags' size="small" label={tag} />))}</div>
                                 {Complete && <span className='badge complete'>Complete</span>}
                                 {Deleted && <span  className='badge deleted'>Deleted from AO3</span>}
+                                {Oneshot && <span  className='badge oneshot'>Oneshot</span>}
+                                {Hiatus && <span  className='badge hiatus'>Hiatus</span>}
                            </React.Fragment> :
                            <React.Fragment>
                                 {Complete && <span className='badge complete'>Complete</span>}
+                                {Oneshot && <span  className='badge oneshot'>Oneshot</span>}
                                 {Deleted && <span  className='badge deleted'>Deleted from AO3</span>}
                                 {Hiatus && <span  className='badge hiatus'>Hiatus</span>}
                                 <div className='fandom_tags_container'>{FandomsTags && FandomsTags.map(tag=>(<Chip key={tag} className='fandom_tags' size="small" label={tag} />))}</div>
