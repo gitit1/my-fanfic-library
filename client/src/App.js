@@ -39,26 +39,26 @@ import ContactUs from './containers/About/ContactUs/ContactUs';
 import Disclaimers from './containers/About/Disclaimers/Disclaimers';
 import News from './containers/About/News/News';
 
-ReactGA.initialize('UA-146053520-01');
-ReactGA.pageview(window.location.pathname + window.location.search);
+// ReactGA.initialize('UA-146053520-01');
+// ReactGA.pageview(window.location.pathname + window.location.search);
 
-if (localStorage.jwtToken) {
-  // Set auth token header auth
-  const token = localStorage.jwtToken;
-  setAuthToken(token);
-  // Decode token and get user info and exp
-  const decoded = jwt_decode(token);
-  // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
-// Check for expired token
-  const currentTime = Date.now() / 1000; // to get in milliseconds
-  if (decoded.exp < currentTime) {
-    // Logout user
-    store.dispatch(logoutUser());
-    // Redirect to login
-    window.location.href = "./login";
-  }
-}
+// if (localStorage.jwtToken) {
+//   // Set auth token header auth
+//   const token = localStorage.jwtToken;
+//   setAuthToken(token);
+//   // Decode token and get user info and exp
+//   const decoded = jwt_decode(token);
+//   // Set user and isAuthenticated
+//   store.dispatch(setCurrentUser(decoded));
+// // Check for expired token
+//   const currentTime = Date.now() / 1000; // to get in milliseconds
+//   if (decoded.exp < currentTime) {
+//     // Logout user
+//     store.dispatch(logoutUser());
+//     // Redirect to login
+//     window.location.href = "./login";
+//   }
+// }
 
 
 
