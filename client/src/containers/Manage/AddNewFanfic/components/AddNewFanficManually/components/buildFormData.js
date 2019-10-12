@@ -4,11 +4,11 @@ export const buildFormData = (fandomName,fanficForm) =>{
         const PublishDate = fanficForm['PublishDate'].value.getTime();
         const UpdateDate = fanficForm['UpdateDate'].value.getTime();
         const Language = (fanficForm['Language'].value==='') ? 'English' : fanficForm['Language'].value;
-        const Oneshot = (!fanficForm['Oneshot'].value==='') ? fanficForm['Oneshot'].value : (fanficForm['Complete'].value) ? true : false;
-        const Comments = (fanficForm['Comments'].value==='') ? 100 : fanficForm['Comments'].value;
-        const Kudos = (fanficForm['Kudos'].value==='') ? 100 : fanficForm['Kudos'].value;
-        const Bookmarks = (fanficForm['Bookmarks'].value==='') ? 100 : fanficForm['Bookmarks'].value;
-        const Hits = (fanficForm['Hits'].value==='') ? 100 : fanficForm['Hits'].value;
+        const Oneshot = (!fanficForm['Oneshot'].value==='') ? fanficForm['Oneshot'].value : (fanficForm['Complete'].value==='true') ? true : false;
+        const Comments = (fanficForm['Comments'].value==='') ? 0 : fanficForm['Comments'].value;
+        const Kudos = (fanficForm['Kudos'].value==='') ? 0 : fanficForm['Kudos'].value;
+        const Bookmarks = (fanficForm['Bookmarks'].value==='') ? 0 : fanficForm['Bookmarks'].value;
+        const Hits = (fanficForm['Hits'].value==='') ? 0 : fanficForm['Hits'].value;
 
         let fanficFormData = new FormData();
         fanficFormData.append("FandomName", fandomName);
