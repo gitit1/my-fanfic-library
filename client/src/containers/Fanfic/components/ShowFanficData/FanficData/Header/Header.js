@@ -5,8 +5,9 @@ import Chip from '@material-ui/core/Chip';
 import {isHiatus} from './functions/isHiatus';
 
 const Header = (props) => {
-    const {LastUpdateOfFic,Rating,Complete,Deleted,FandomsTags,FandomName,Oneshot} = props.fanfic;
-    const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false
+    const {LastUpdateOfFic,Rating,Complete,Deleted,FandomsTags,FandomName,Oneshot,Source} = props.fanfic;
+    const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false;
+    const Abandoned =  (Source==='Backup') ? true :false
     return(
         <React.Fragment>
             <div className='card_content_header_left'>
@@ -24,15 +25,15 @@ const Header = (props) => {
                            <React.Fragment>
                                 <div className='fandom_tags_container'>{FandomsTags && FandomsTags.map(tag=>(<Chip key={tag} className='fandom_tags' size="small" label={tag} />))}</div>
                                 {Complete && <span className='badge complete'>Complete</span>}
-                                {Deleted && <span  className='badge deleted'>Deleted from AO3</span>}
                                 {Oneshot && <span  className='badge oneshot'>Oneshot</span>}
                                 {Hiatus && <span  className='badge hiatus'>Hiatus</span>}
+                                {Deleted||Abandoned && <span  className='badge deleted'>Deleted from AO3</span>}
                            </React.Fragment> :
                            <React.Fragment>
                                 {Complete && <span className='badge complete'>Complete</span>}
                                 {Oneshot && <span  className='badge oneshot'>Oneshot</span>}
-                                {Deleted && <span  className='badge deleted'>Deleted from AO3</span>}
                                 {Hiatus && <span  className='badge hiatus'>Hiatus</span>}
+                                {Deleted||Abandoned && <span  className='badge deleted'>Deleted from AO3</span>}
                                 <div className='fandom_tags_container'>{FandomsTags && FandomsTags.map(tag=>(<Chip key={tag} className='fandom_tags' size="small" label={tag} />))}</div>
 
                            </React.Fragment>
