@@ -1,3 +1,4 @@
+require('datejs');
 const clc = require("cli-color");
 const cheerio = require('cheerio');
 let request = require('request')
@@ -18,7 +19,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     const savedNotAuto = (method||!method===null) ? method : null;   
     const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
     
-    let today = (new Date()).toString("yyyy-MM-dd")
+    let today = Date.today().toString("yyyy-MM-dd")
     log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${FandomName}`); 
     
     let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');

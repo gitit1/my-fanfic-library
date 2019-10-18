@@ -16,6 +16,7 @@
     "cheerio": "^1.0.0-rc.3",
     "cli-color": "^1.4.0",
     "cors": "^2.8.5",
+    "datejs": "^1.0.0-rc3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
