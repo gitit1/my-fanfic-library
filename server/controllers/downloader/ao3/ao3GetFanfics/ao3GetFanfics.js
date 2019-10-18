@@ -11,6 +11,7 @@ const ao3Funcs = require('./functions')
 exports.ao3GetFanfics =  async (jar,fandom,method) => {
     // TODO: ADD CHOSE FANFDOM FOR THE DOWNLOADER
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
+    let today = (new Date()).toString("yyyy-MM-dd")
     log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
     console.log(clc.blue('[ao3 controller] ao3GetFanfics()'));
     request = request.defaults({jar: jar,followAllRedirects: true});
