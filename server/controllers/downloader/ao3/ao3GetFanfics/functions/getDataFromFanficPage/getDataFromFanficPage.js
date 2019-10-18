@@ -5,12 +5,15 @@ const {getPublishDate} = require('./functions/getPublishDate');
 const {checkIfFanficIsNewOrUpdated} = require('./functions/checkIfFanficIsNewOrUpdated');
 const {saveFanficToServerHandler} = require('../../../helpers/saveFanficsToServer');
 const {saveFanficToDB} = require('../../../../helpers/saveFanficToDB');
+const log = require('log-to-file');
 
 exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
-    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));  
+    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
+    let today = (new Date()).toString("yyyy-MM-dd")
     let counter = -1;
         
     let fanfic = await getDataFromPage(page,fandomName);
+    log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
 
     let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(fandomName,fanfic,autoSave) : [false,false,fanfic];
     let newFic=check[0],updated=check[1];
