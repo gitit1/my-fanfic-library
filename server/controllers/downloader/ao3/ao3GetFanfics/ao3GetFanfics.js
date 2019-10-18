@@ -2,6 +2,7 @@ const clc = require("cli-color");
 const cheerio = require('cheerio');
 let request = require('request')
 const pLimit = require('p-limit');
+const log = require('log-to-file');
 
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
@@ -10,6 +11,7 @@ const ao3Funcs = require('./functions')
 exports.ao3GetFanfics =  async (jar,fandom,method) => {
     // TODO: ADD CHOSE FANFDOM FOR THE DOWNLOADER
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
+    log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
     console.log(clc.blue('[ao3 controller] ao3GetFanfics()'));
     request = request.defaults({jar: jar,followAllRedirects: true});
 
