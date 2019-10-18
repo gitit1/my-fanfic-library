@@ -19,7 +19,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
     
     let today = (new Date()).toString("yyyy-MM-dd")
-    log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
+    log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${FandomName}`); 
     
     let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
     const ao3URL = `https://archiveofourown.org/tags/${fandomUrlName}/works`;
