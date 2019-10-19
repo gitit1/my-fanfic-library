@@ -75,6 +75,10 @@ exports.getDataFromPage = (jar,url,fandomName) =>{
         fanfic["Comments"]              =       ($('dd.comments').text()) ==="" ? 0 : Number($('dd.comments').text()); 
         fanfic["Bookmarks"]             =       ($('dd.bookmarks a').text()) ==="" ? 0 : Number($('dd.bookmarks').text());
         fanfic["Words"]                 =       Number($('dd.words').text().replace(/,/g,'')); 
+
+        fanfic["Series"]                =       $('dd.series .position a').text() ==="" ? false : $('dd.series .position a').text() ;
+        fanfic["SeriesPart"]            =       fanfic["Series"] && $('dd.series .position').text().replace(/.*Part ([1-9]).*/g,'$1');
+        fanfic["SeriesURL"]             =       fanfic["Series"] && 'https://archiveofourown.org'+ $('dd.series .position a').attr('href');
      
         fanfic["NeedToSaveFlag"]        =       false;
 
