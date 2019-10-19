@@ -63,7 +63,7 @@ exports.saveNewFanfic = async (req,res) =>{
             res.send();
         });
     }else{
-        url.includes('archiveofourown.org') && await ao3.ao3SaveFanfic(fandomName,download,url,fanfic).then(()=>{
+        url.includes('archiveofourown.org') && await ao3.ao3SaveFanfic(jar,fandomName,download,url,fanfic).then(()=>{
             res.send();
         })
         url.includes('fanfiction.net') && await ff.ffSaveFanfic(fandomName,download,url,fanfic).then(()=>{

@@ -7,6 +7,7 @@ const {saveFanficToDB} = require('../../helpers/saveFanficToDB');
 
 
 exports.ao3SaveFanfic = async (jar,fandomName,download,url,fanfic) =>{ 
+    console.log('fandomName,download,url,fanfic:',fandomName,download,url,fanfic)
     return await new Promise(async function(resolve, reject) {  
         if(download=='true'){
             await saveFanficToServerHandler(jar,url,fandomName,'epub','epub').then(async fanficInfo=>{
