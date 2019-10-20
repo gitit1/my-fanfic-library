@@ -24,7 +24,7 @@ exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdat
         fanfic["PublishDate"] =  await getPublishDate(jar,fanfic["URL"])
     }
 
-    if((newFic || updated || savedFanficsLastUpdate===undefined) && autoSave){
+    if((newFic || updated || savedFanficsLastUpdate===undefined || savedNotAuto) && autoSave){
     
         return await saveFanficToServerHandler(jar,fanfic["URL"],fandomName,saveMethod,savedNotAuto).then(async fanficInfo=>{
 
