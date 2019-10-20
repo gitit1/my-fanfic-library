@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const mongoose = require('../../../../config/mongoose');
 let request = require('request')
 const pLimit = require('p-limit');
+const log = require('log-to-file');
 
 const FandomModal = require('../../../../models/Fandom');
 const FanficSchema = require('../../../../models/Fanfic');
@@ -11,6 +12,10 @@ const {loginToAO3} = require('../helpers/loginToAO3');
 
 exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{   
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
+
+    let today = Date.today().toString("yyyy-MM-dd")
+    log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
+
     request = request.defaults({jar: jar,followAllRedirects: true});
     await loginToAO3(jar)
     
@@ -25,6 +30,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                 const limit = pLimit(50)
                 for (let i = 0; i < fanfics.length; i++) {
                     await promises2.push(limit(() => checkIfDeleted(jar,fanfics[i])));
+                    log(`${fandomName} - ${fanfics[i].FanficID}`, `public/logs/${today} - ${fandomName}`); 
                 }
                 resolve();
             });
