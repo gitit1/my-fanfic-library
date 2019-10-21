@@ -39,6 +39,7 @@ export const categories = [
   { label: 'Modern AU' },
   { label: 'Movie/TV Adaption' },
   { label: 'Music' },
+  { label: 'Neighbors' },
   { label: 'Pirates' },
   { label: 'Police' },
   { label: 'Political' },
@@ -61,6 +62,7 @@ export const categories = [
   { label: 'Teacher/Professor' },
   { label: 'Time Period AU' },
   { label: 'Time Travel' },
+  { label: 'Vampire/Werewolf' },
   { label: 'Writer' },
   { label: 'Zombies' },
   ].map(suggestion => ({
