@@ -266,6 +266,7 @@ class EditFanfic extends Component{
                                 {value: 'Backup',displayValue: 'Backup'},
                                 {value: 'Patreon',displayValue: 'Patreon'},
                                 {value: 'Tumblr',displayValue: 'Tumblr'}
+                                {value: 'Wattpad',displayValue: 'Wattpad'}
                               ]
                 },
                 value:this.props.fanfic.Source,

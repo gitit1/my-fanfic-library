@@ -104,7 +104,7 @@ class ManageDownloader extends Component{
             }
         });
 
-        
+
         switch (choice) {
             case 'saveFanfics':
                 socket.emit('getFandomFanfics', this.state.fandom,choice,method);
@@ -129,7 +129,6 @@ class ManageDownloader extends Component{
         this.setState(prevState =>({
             fandom,serverData,logs,showData,
             fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
-            switches:{...prevState.switches,checked:fandom.AutoSave}
         }));  
     }
 
