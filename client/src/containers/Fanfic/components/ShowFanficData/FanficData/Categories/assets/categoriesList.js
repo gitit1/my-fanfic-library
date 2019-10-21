@@ -7,6 +7,7 @@ export const categories = [
   { label: 'Arrange Marriage' },
   { label: 'Artist' },
   { label: 'AU' },
+  { label: 'AU - Canon Divergence' },
   { label: 'Blind' },
   { label: 'Bodyguard' },
   { label: 'Business Women' },
