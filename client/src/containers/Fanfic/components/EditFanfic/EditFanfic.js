@@ -265,7 +265,7 @@ class EditFanfic extends Component{
                     options: [
                                 {value: 'Backup',displayValue: 'Backup'},
                                 {value: 'Patreon',displayValue: 'Patreon'},
-                                {value: 'Tumblr',displayValue: 'Tumblr'}
+                                {value: 'Tumblr',displayValue: 'Tumblr'},
                                 {value: 'Wattpad',displayValue: 'Wattpad'}
                               ]
                 },
