@@ -121,7 +121,7 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                     filtersFanficList[index].Words = Object.assign(filtersFanficList[index].Words,{$gte: Number(filterValue)})
                 }else{
                     filtersFanficList.push({'Words':{$gte: Number(filterValue)}})
-                    sortList.push({'Words':-1})
+                    // sortList.push({'Words':-1})
                     wordsFlag = true;
                 }
                 break;                                            
@@ -131,7 +131,7 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                     filtersFanficList[index].Words = Object.assign(filtersFanficList[index].Words,{$lte: Number(filter.split('_').pop())})
                 }else{
                     filtersFanficList.push({'Words':{$lte: Number(filter.split('_').pop())}})
-                    sortList.push({'Words':-1})
+                    // sortList.push({'Words':-1})
                     wordsFlag = true;
                 }
                 break;
