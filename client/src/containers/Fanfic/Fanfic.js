@@ -24,6 +24,7 @@ import EditFanfic from './components/EditFanfic/EditFanfic'
 
 import './Fanfic.scss'
 import {state} from './assets/state'
+import {Helmet} from "react-helmet";
 
 class Fanfic extends Component{    
     state=state;
@@ -544,6 +545,11 @@ class Fanfic extends Component{
         const switchesPanel     =   {   fandomName,switchChange:this.switchChangeHandler,switches,isManager}
         return(
             <Container header={fandomName} className='fanfics'>
+                <Helmet>
+                <meta charSet="utf-8" />
+                <title>My Title</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+                </Helmet>
                 {firstLoad 
                     ?<Spinner />
                     : editFanfic ? 

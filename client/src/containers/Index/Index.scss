@@ -16,6 +16,30 @@
         visibility: hidden;
     } 
     
+    .welcome{
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        h1{
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            color:$color_header;
+        }
+        color:$color_text; 
+    }
+    .disclaimer_site{
+        width: 100%;
+        margin: 0 auto;
+        padding: 5px;
+        bottom:0;
+        color:$color_text; 
+
+        span{
+            color:$color_header;
+            text-decoration: underline;
+        }
+    }
     .index_container{
         width: 100%;
         margin: 0 auto;
