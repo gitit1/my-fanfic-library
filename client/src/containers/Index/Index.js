@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import { Link } from "react-router-dom";
 
 import * as actions from '../../store/actions';
 
@@ -44,6 +45,15 @@ class Index extends Component{
             <Container>
                 { loading ? <Spinner/> :
                     <Grid container className='index_page'>
+                        {!isAuthenticated &&
+                            <div className='welcome'>
+                                <h1>Welcome to my fanfics library - the home of gay women couples’ fanfics</h1><br/>
+                                <h4>Please register to the site in order to manage your data.</h4><br/>
+                                <p>You can create reading lists , mark fanfics by finished/in progress, find fanfics from diffrent sites, find deleted fanfics and much more...</p>
+                            </div> 
+                        }
+                        <p className='disclaimer_site'>The site is still not fully ready <b>but</b> the fanfic page functionality is working! you can add/track your favorite fanfics without the fear of it getting deleted while we continue working on the site to add more deleted fics, and much more fandoms info</p>
+                        <p className='disclaimer_site'>For any suggestions please <span><Link to={'/contact'}>reach out</Link></span></p>
                         <IndexContainer header='Fandoms'>
                             <IndexFandoms numOfFandoms={fandoms.length} smallSize={smallSize} userFandoms={userFandoms}
                                           fandoms={fandoms} screenSize={screenSize}/>
@@ -52,15 +62,16 @@ class Index extends Component{
                             <LatestUpdates updates={latestUpdates}/>
                         </IndexContainer>
                         {isAuthenticated && 
-                            <React.Fragment>
+                            <>
                                 <IndexContainer header='My Fanfics Updates'>
                                     <MyFanficsUpdates updates={myFanficsUpdates}/>
                                 </IndexContainer>
                                 <IndexContainer header='My Latest Activities'>
                                     <MyLatestActivity updates={myLatestActivities} />
                                 </IndexContainer>
-                            </React.Fragment>
+                            </>
                         }
+
                     </Grid>
                 }
             </Container>
