@@ -1,0 +1,45 @@
+@import "../../../../style/_colors";
+@import "../../../../style/_fonts";
+@import "../../../../style/_varibles";
+
+h1 {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  color: $color_header;
+}
+
+.welcome_container {
+  width: 100%;
+  margin: 0 auto;
+
+  .welcome_container_box {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 2%;
+    max-height: 250px;
+    .MuiCardContent-root {
+      padding: 0;
+    }
+  }
+}
+
+.welcome {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+
+  color: $color_text;
+}
+.disclaimer_site {
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px;
+  bottom: 0;
+  color: $color_text;
+
+  span {
+    color: $color_header;
+    text-decoration: underline;
+  }
+}

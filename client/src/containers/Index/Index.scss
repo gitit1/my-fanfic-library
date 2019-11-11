@@ -1,112 +1,86 @@
-@import '../../style/_colors';
-@import '../../style/_fonts';
-@import '../../style/_varibles';
+@import "../../style/_colors";
+@import "../../style/_fonts";
+@import "../../style/_varibles";
 
-@mixin caption{
-    color: $color_header;
-    font-family: $font_header;
-    font-weight: bold;
+@mixin caption {
+  color: $color_header;
+  font-family: $font_header;
+  font-weight: bold;
 }
-.index_page{
-    // margin: 0 auto;
-    // height: 80vh;
+.index_page {
+  // margin: 0 auto;
+  // height: 80vh;
+  width: 100%;
+
+  .fandoms_dummy {
+    visibility: hidden;
+  }
+  .index_container {
     width: 100%;
+    margin: 0 auto;
 
-    .fandoms_dummy{
-        visibility: hidden;
-    } 
-    
-    .welcome{
-        width: 100%;
-        margin: 0 auto;
-        padding: 20px;
-        h1{
-            width: 100%;
-            margin: 0 auto;
-            text-align: center;
-            color:$color_header;
-        }
-        color:$color_text; 
+    .index_container_box {
+      width: 80%;
+      margin: 0 auto;
+      margin-top: 2%;
+      min-height: 440px;
+      .MuiCardContent-root {
+        padding: 0;
+      }
     }
-    .disclaimer_site{
-        width: 100%;
-        margin: 0 auto;
-        padding: 5px;
-        bottom:0;
-        color:$color_text; 
-
-        span{
-            color:$color_header;
-            text-decoration: underline;
-        }
-    }
-    .index_container{
-        width: 100%;
-        margin: 0 auto;
-
-        .index_container_box{
-            width: 80%;
-            margin: 0 auto;
-            margin-top: 2%;
-            min-height: 440px;
-            .MuiCardContent-root{
-                padding:0
-            }
-        }
-        .index_container_box h3{
-            // border-bottom: 1px solid #c8c8c8;
-            color: $color_header_bold;
-            font-size: 1.5em;
-            font-family: $font_header;
-            font-weight: 700;
-            // line-height: 1;
-            margin-top: 1%;
-            // margin: .5375em 0;
-            text-align: center;
-        }
-    
-        .index_section_fandoms{
-            // margin: 0 auto;
-            display: contents;
-            
-            .index_section_fandom{
-                margin: 0 auto;
-                margin-top: 1%;
-                // justify-content: center;
-                a{
-                    // display: flex;
-                    // align-items:center;
-                    // margin: 0 auto;
-                    width:100%;
-                    // display: flex;
-                    
-                    // margin-left: 40%;
-                }
-                img{
-                    // margin: 0 auto;
-                    // vertical-align:middle;
-                    width: 100px;
-                    height: 70px;
-                    border-radius: 3%;
-                    border: 1px solid #B9B9B9;
-                    // margin-right: 10px;
-                }
-                p {
-                    @include overlay;
-                    margin: 0 auto;
-                    width: 100px;
-                    bottom: 30px;
-                    // margin: 0;
-                    // border-radius: 2%;
-                    // margin-left: 2%;
-                    @include caption;
-                    // font-size: 1.2em;
-                    // margin: 0 auto;
-                }
-            }
-        }
+    .index_container_box h3 {
+      // border-bottom: 1px solid #c8c8c8;
+      color: $color_header_bold;
+      font-size: 1.5em;
+      font-family: $font_header;
+      font-weight: 700;
+      // line-height: 1;
+      margin-top: 1%;
+      // margin: .5375em 0;
+      text-align: center;
     }
 
+    .index_section_fandoms {
+      // margin: 0 auto;
+      display: contents;
+
+      .index_section_fandom {
+        margin: 0 auto;
+        margin-top: 1%;
+        // justify-content: center;
+        a {
+          // display: flex;
+          // align-items:center;
+          // margin: 0 auto;
+          width: 100%;
+          // display: flex;
+
+          // margin-left: 40%;
+        }
+        img {
+          // margin: 0 auto;
+          // vertical-align:middle;
+          width: 100px;
+          height: 70px;
+          border-radius: 3%;
+          border: 1px solid #b9b9b9;
+          // margin-right: 10px;
+        }
+        p {
+          @include overlay;
+          margin: 0 auto;
+          width: 100px;
+          bottom: 30px;
+          // margin: 0;
+          // border-radius: 2%;
+          // margin-left: 2%;
+          @include caption;
+          // font-size: 1.2em;
+          // margin: 0 auto;
+        }
+      }
+    }
+  }
 }
 
 // @media only screen and (max-width: $screenSizeS) {
@@ -114,7 +88,7 @@
 //         .index_container{
 //             width: 100%;
 //             margin: 0 auto;
-    
+
 //             .index_container_box{
 //                 width: 80%;
 //                 margin: 0 auto;
@@ -133,7 +107,7 @@
 //                 // margin: .5375em 0;
 //                 text-align: center;
 //             }
-        
+
 //             .index_section_fandoms{
 //                 // margin: 0 auto;
 //                 .index_section_fandom{
@@ -146,7 +120,7 @@
 //                         margin: 0 auto;
 //                         width:90%;
 //                         display: flex;
-                        
+
 //                         // margin-left: 40%;
 //                     }
 //                     img{
@@ -163,8 +137,8 @@
 //                         font-size: 1.2em;
 //                         // margin: 0 auto;
 //                     }
-//                 } 
-//             }         
+//                 }
+//             }
 //         }
 //     }
 

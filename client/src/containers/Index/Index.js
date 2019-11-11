@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import { Link } from "react-router-dom";
 
 import * as actions from '../../store/actions';
 
@@ -8,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container';
+import Welcome from './components/Welcome/Welcome';
 import IndexContainer from './components/IndexContainer/IndexContainer';
 import IndexFandoms from './components/Sections/Fandoms/Fandoms'
 import LatestUpdates from './components/Sections/LatestUpdates/LatestUpdates'
@@ -45,18 +45,10 @@ class Index extends Component{
             <Container>
                 { loading ? <Spinner/> :
                     <Grid container className='index_page'>
-                        {!isAuthenticated &&
-                            <div className='welcome'>
-                                <h1>Welcome to my fanfics library - the home of gay women couples’ fanfics</h1><br/>
-                                <h4>Please register to the site in order to manage your data.</h4><br/>
-                                <p>You can create reading lists , mark fanfics by finished/in progress, find fanfics from diffrent sites, find deleted fanfics and much more...</p>
-                            </div> 
-                        }
-                        <p className='disclaimer_site'>The site is still not fully ready <b>but</b> the fanfic page functionality is working! you can add/track your favorite fanfics without the fear of it getting deleted while we continue working on the site to add more deleted fics, and much more fandoms info</p>
-                        <p className='disclaimer_site'>For any suggestions please <span><Link to={'/contact'}>reach out</Link></span></p>
+                        <Welcome isAuthenticated={isAuthenticated}/>
                         <IndexContainer header='Fandoms'>
                             <IndexFandoms numOfFandoms={fandoms.length} smallSize={smallSize} userFandoms={userFandoms}
-                                          fandoms={fandoms} screenSize={screenSize}/>
+                                            fandoms={fandoms} screenSize={screenSize}/>
                         </IndexContainer>
                         <IndexContainer header='Latest Updates'>
                             <LatestUpdates updates={latestUpdates}/>
