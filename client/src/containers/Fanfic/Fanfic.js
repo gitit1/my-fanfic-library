@@ -363,7 +363,7 @@ class Fanfic extends Component{
     filterTagsHandler = async (filter,event,type,tagType) =>{
         const {filters} = this.state;
         await this.cancelFiltersHandler()
-        this.setState({filters: {...filters,['tags']: `${tagType}_${filter}`}},()=>{
+        this.setState({filters: {...filters,'tags': `${tagType}_${filter}`}},()=>{
             this.activeFiltersHandler(false)
         })  
     }
@@ -547,8 +547,10 @@ class Fanfic extends Component{
             <Container header={fandomName} className='fanfics'>
                 <Helmet>
                 <meta charSet="utf-8" />
-                <title>My Title</title>
-                <link rel="canonical" href="http://mysite.com/example" />
+                <title>{fandomName}</title>
+                <description></description>
+                <meta name={`This page contains fanfics of ${fandomName}`} content={`${fandomName},fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
                 </Helmet>
                 {firstLoad 
                     ?<Spinner />
