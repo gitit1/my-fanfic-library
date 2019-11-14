@@ -3,7 +3,8 @@ const mongoose = require('../../../../../../../config/mongoose');
 
 exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
     let oldFanficData = false,fandom = null;
-    let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'week')
+    let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'month')
+    // let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'week')
     
     if(isThisWeek){
         
