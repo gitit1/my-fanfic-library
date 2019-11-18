@@ -6,8 +6,10 @@ const downloader =  require('../../downloader/downloader')
 // const ao3 =  require('../../downloader/ao3/ao3')
 const now  = require('performance-now')
 
-const getFandomFanfics = async (socket,fandom,method) => {
-    const {FandomName,SearchKeys} = fandom
+// const getFandomFanfics = async (socket,fandom,method) => {
+//     const {FandomName,SearchKeys} = fandom
+const getFandomFanfics = async (socket,fandom) => {
+    const {FandomName,SearchKeys,AutoSave,SaveMethod} = fandom
     console.log('....metgod is: ',method)
     console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
     socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${FandomName}`);
@@ -23,7 +25,8 @@ const getFandomFanfics = async (socket,fandom,method) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now(); 
-    let fanficsLengths = await downloader.getFanfics(fandom,method);
+    // let fanficsLengths = await downloader.getFanfics(fandom,method);
+    let fanficsLengths = await downloader.getFanfics(fandom,null);
     console.log('fanficsLengths:',fanficsLengths)
     let endTime = now();
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));
