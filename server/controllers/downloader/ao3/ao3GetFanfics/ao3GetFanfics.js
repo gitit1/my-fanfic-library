@@ -16,7 +16,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     request = request.defaults({jar: jar,followAllRedirects: true});
     
     await ao3Funcs.loginToAO3(jar);
-    console.log('method is:',method)
+    // console.log('method is:',method)
     const savedNotAuto = (method||!method===null) ? method : null;   
     const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
     
