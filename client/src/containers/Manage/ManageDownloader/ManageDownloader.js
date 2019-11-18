@@ -162,7 +162,6 @@ class ManageDownloader extends Component{
                 <Grid container className='downloader' spacing={2}>
                     <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
                     {/* <GridChooseFandom fandomSelect={fandomSelect} showSwitches={showSwitches} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/> */}
-                    <GridChooseFandom fandomSelect={fandomSelect} showSwitches={showSwitches} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
                     {this.props.smallSize && showGridDataBox &&  <Button variant="contained" className='backButton' onClick={()=>this.toggleBottons()}>Back to Bottons</Button>}
                     {
                      fandomSelect.value!=='' &&
