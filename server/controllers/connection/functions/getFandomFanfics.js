@@ -10,7 +10,7 @@ const now  = require('performance-now')
 //     const {FandomName,SearchKeys} = fandom
 const getFandomFanfics = async (socket,fandom) => {
     const {FandomName,SearchKeys,AutoSave,SaveMethod} = fandom
-    console.log('....metgod is: ',method)
+    // console.log('....metgod is: ',method)
     console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
     socket && socket.emit('getFanficsData', `<b>Server got fandom:</b> ${FandomName}`);
 
