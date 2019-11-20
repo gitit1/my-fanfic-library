@@ -6,8 +6,7 @@ const downloader =  require('../../downloader/downloader')
 // const ao3 =  require('../../downloader/ao3/ao3')
 const now  = require('performance-now')
 
-// const getFandomFanfics = async (socket,fandom,method) => {
-//     const {FandomName,SearchKeys} = fandom
+
 const getFandomFanfics = async (socket,fandom) => {
     const {FandomName,SearchKeys,AutoSave,SaveMethod} = fandom
     // console.log('....metgod is: ',method)
@@ -25,7 +24,6 @@ const getFandomFanfics = async (socket,fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now(); 
-    // let fanficsLengths = await downloader.getFanfics(fandom,method);
     let fanficsLengths = await downloader.getFanfics(fandom,null);
     console.log('fanficsLengths:',fanficsLengths)
     let endTime = now();

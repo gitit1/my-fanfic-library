@@ -61,7 +61,6 @@ class ManageDownloader extends Component{
         showData:0,
         showGridDataBox:false,
         showGridButtons:true
-        // showSwitches:true,
     }
 
     componentDidMount(){
@@ -106,14 +105,12 @@ class ManageDownloader extends Component{
 
         switch (choice) {
             case 'saveFanfics':
-                    let method = this.state.typeSelect.value;
+                let method = this.state.typeSelect.value;
                 socket.emit('getFandomFanfics', this.state.fandom,choice,method);
                 break;
         
             default:
                 socket.emit('getFandomFanfics', this.state.fandom,choice);
-                // let method = this.state.switches.checked;
-                // socket.emit('getFandomFanfics', this.state.fandom,choice,method);
                 break;
         }
             
@@ -130,6 +127,7 @@ class ManageDownloader extends Component{
         this.setState(prevState =>({
             fandom,serverData,logs,showData,
             fandomSelect: {...prevState.fandomSelect,value: selectedFandom},
+            switches:{...prevState.switches,checked:fandom.AutoSave}
         }));  
     }
 
@@ -154,14 +152,12 @@ class ManageDownloader extends Component{
     }
 
     render(){
-        // const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox,showSwitches} = this.state
-        const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox,showSwitches} = this.state
+        const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox} = this.state
         const {smallSize} = this.props
         return(
             <Container header='Downloader' className='managedownloader'>
                 <Grid container className='downloader' spacing={2}>
                     <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
-                    {/* <GridChooseFandom fandomSelect={fandomSelect} showSwitches={showSwitches} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/> */}
                     {this.props.smallSize && showGridDataBox &&  <Button variant="contained" className='backButton' onClick={()=>this.toggleBottons()}>Back to Bottons</Button>}
                     {
                      fandomSelect.value!=='' &&
