@@ -21,8 +21,7 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                 switch (choice) {
                     case 'getFandomFanfics':
                         await fetchedFandoms.map(fandom => promises.push(
-                            // p = p.then(() => funcs.getFandomFanfics(socket,fandom,method) )                               
-                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) )                               
+                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) )                             
                         ))
                         break;                
                     case 'getDeletedFanfics':
@@ -32,19 +31,16 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                         break;
                     case 'saveFanfics':
                         await fetchedFandoms.map(fandom => promises.push(
-                            // p = p.then(() => funcs.downloadFanficsToServerHandler(socket,fandom,method) )                                                          
-                            p = p.then(() => funcs.downloadFanficsToServerHandler(socket,fandom) )                                                          
+                            p = p.then(() => funcs.downloadFanficsToServerHandler(socket,fandom,method) )                                                                                                                   
                         ))
                         break;
                     case 'checkIfFileExsists':
                             await fetchedFandoms.map(fandom => promises.push(
-                                // p = p.then(() => funcs.saveMissingFanfics(socket,fandom,method) )                                                          
-                                p = p.then(() => funcs.saveMissingFanfics(socket,fandom) )                                                          
+                                p = p.then(() => funcs.saveMissingFanfics(socket,fandom,method) )                                                                                                                 
                             ))
                             break;                        
                     case 'All':
                         await fetchedFandoms.map(fandom => promises.push(
-                            // p = p.then(() => funcs.getFandomFanfics(socket,fandom,method) ),  
                             p = p.then(() => funcs.getFandomFanfics(socket,fandom) ),  
                             p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
                         ))
@@ -63,7 +59,6 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
         }else{
             switch (choice) {
                 case 'getFandomFanfics':
-                    // await funcs.getFandomFanfics(socket,fandom,method)
                     await funcs.getFandomFanfics(socket,fandom)
                     break;                
                 case 'getDeletedFanfics':
@@ -76,7 +71,6 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                     await funcs.saveMissingFanfics(socket,fandom)
                     break;
                 case 'All':
-                    // await funcs.getFandomFanfics(socket,fandom,method)
                     await funcs.getFandomFanfics(socket,fandom)
                     break;
             }
