@@ -1,4 +1,3 @@
-require('datejs');
 const clc = require("cli-color");
 
 const {getDataFromPage} = require('./functions/getDataFromPage');
@@ -10,7 +9,7 @@ const log = require('log-to-file');
 
 exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
-    let today = Date.today().toString("yyyy-MM-dd")
+    let today = (new Date()).toString("yyyy-MM-dd")
     let counter = -1;
         
     let fanfic = await getDataFromPage(page,fandomName);
