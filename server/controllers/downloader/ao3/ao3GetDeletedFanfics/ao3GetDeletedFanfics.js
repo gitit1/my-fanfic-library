@@ -13,7 +13,7 @@ const {loginToAO3} = require('../helpers/loginToAO3');
 exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{   
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
 
-     let today = Date.today().toString("yyyy-MM-dd")
+     let today = (new Date()).toString("yyyy-MM-dd")
      log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
 
     request = request.defaults({jar: jar,followAllRedirects: true});
