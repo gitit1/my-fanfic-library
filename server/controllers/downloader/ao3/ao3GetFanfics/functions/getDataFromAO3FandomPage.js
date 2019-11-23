@@ -14,7 +14,7 @@ exports.getDataFromAO3FandomPage =  async (jar,page,fandom,savedNotAuto) => {
         let counter;
         for(let count = 0; count < n; count++){
             console.log('sleeping...');
-            await sleep(8000);
+            await sleep(3000);
             console.log('done sleeping...');
             let page = $('ol.work').children('li').eq(count);
             // await promises.push(limit(() =>{
