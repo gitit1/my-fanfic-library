@@ -48,7 +48,12 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     let promises2 = [];
                                
     for (let i = 0; i < pagesArray.length; i++) {
-        promises2.push(limit(() => ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)));
+        promises2.push(limit(() =>{
+            setTimeout(() => {
+                ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)
+            }, 3000);
+        } 
+        ));
     }
   
     await Promise.all(promises2).then(async results=> {
