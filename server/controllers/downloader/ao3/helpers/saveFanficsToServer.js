@@ -69,7 +69,7 @@ exports.saveFanficToServerHandler = async (jar,url,fandomName,saveMethod,savedNo
 }
 
 const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
-    // console.log('saveFanficToServer:',url,fandomName,saveMethod,savedNotAuto)
+    //console.log('saveFanficToServer:',url,fandomName,saveMethod,savedNotAuto)
     try {
         let links = [],methods=[];
         let fanficId = 0
@@ -77,9 +77,9 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
         url = url + '?view_adult=true';
         saveMethods = (saveMethod!== ''||saveMethod||null||saveMethod.length>0) ? saveMethod : savedNotAuto;
         (!saveMethods.includes(",")) ? methods.push(saveMethods) : methods = saveMethods.split(',');
+
         return await new Promise(async function(resolve, reject) {
             let urlBody = await getUrlBodyFromAo3(jar,url);
-
             let $ = cheerio.load(urlBody);
 
             await Promise.all(
@@ -94,6 +94,7 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
                     fanficId = await link.replace(/\/downloads\/(.*)\/.*/, "$1");
                     let fanficNewName= `${authorName}_${fanficName} (${fanficId}).${method}` 
                     filename = `${authorName}_${fanficName} (${fanficId})`
+
                     await links.push([`https://archiveofourown.org${link}`,fanficNewName])                 
                 })
             ).then(()=>{
@@ -105,7 +106,7 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
                         resolve([-1,null,null])
                     }
                 })
-            }).catch(error=>{reject(console.log(clc.red('Error in saveFanficToServerHandler(): URL: '+url+'filename: '+filename)))})
+            }).catch(error=>{reject(console.log(clc.red('Error in saveFanficToServerHandler(): URL: '+url+'filename: '+filename,error)))})
         })
     } catch (error) {
         console.log('there is an error in: saveFanficToServerHandler()',error)
