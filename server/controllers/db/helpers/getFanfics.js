@@ -20,11 +20,7 @@ exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList)=>{
             console.log('readingList:',readingList.FanficsFandoms)
             readingList.FanficsFandoms.map(fandom => {
                 const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandom);
-                promises.push(limitPromise(() => {
-                    setTimeout(() => {
-                        getFanficsofFandoms(FanficDB,filters,0,0) 
-                    }, 1500);
-                }));
+                promises.push(limitPromise(() => {getFanficsofFandoms(FanficDB,filters,0,0) }));
             });
 
             await Promise.all(promises).then(async fanfics=> {
