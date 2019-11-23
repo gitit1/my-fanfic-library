@@ -10,7 +10,7 @@ const log = require('log-to-file');
 exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto,pagesCount) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()')); 
     const timer = pagesCount > 50 ? 3000 : 1500;
-    return setTimeout(() => {
+    return setTimeout(async () => {
         let today = (new Date()).toString("yyyy-MM-dd")
         let counter = -1;
             
