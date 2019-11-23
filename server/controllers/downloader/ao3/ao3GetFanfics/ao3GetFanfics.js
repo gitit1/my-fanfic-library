@@ -21,7 +21,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     
     let today = (new Date()).toString("yyyy-MM-dd")
     log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${FandomName}`); 
-    
+       
     let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
     const ao3URL = `https://archiveofourown.org/tags/${fandomUrlName}/works`;
     
@@ -41,7 +41,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
 
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar,ao3URL,numberOfPages);
 
-    const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 50;
+    const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 1;
 
     const limit = pLimit(limitConn)
 
