@@ -24,7 +24,7 @@ exports.getDataFromAO3FandomPage =  async (jar,page,fandom,savedNotAuto) => {
             await getDataFromFanficPage(jar,page,fandom.FandomName,fandom.SavedFanficsLastUpdate,fandom.AutoSave,fandom.SaveMethod,savedNotAuto).then(res=>{
                 donePromise++;
                 res===0 && counter++;   
-            }).then(()=>{new Promise(resolve => setTimeout(() => resolve(), 7000))})
+            })
             if (donePromise == n) {return counter}                
         }
         // await Promise.all(promises).then(async results=> {
