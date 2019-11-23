@@ -41,17 +41,18 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
 
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar,ao3URL,numberOfPages);
 
-    const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 1;
+    // const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 1;
 
-    const limit = pLimit(limitConn)
+    const limit = pLimit(1)
 
-    let promises2 = [];
+    let promises = [];
                                
     for (let i = 0; i < pagesArray.length; i++) {
-        promises2.push(limit(() =>{ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)} ));
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        promises.push(limit(() =>{ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)} ));
     }
   
-    await Promise.all(promises2).then(async results=> {
+    await Promise.all(promises).then(async results=> {
         let counterArray = results.filter(function(num) {return (!isNaN(num)); });
         savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
     });
