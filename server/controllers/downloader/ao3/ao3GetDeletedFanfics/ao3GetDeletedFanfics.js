@@ -29,7 +29,12 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
             FanficDB.find({Source:'AO3'}).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).exec(async function(err, fanfics) { 
                 const limit = pLimit(1)
                 for (let i = 0; i < fanfics.length; i++) {
-                    await promises2.push(limit(() => checkIfDeleted(jar,fanfics[i])));
+                    await promises2.push(limit(async () => {
+                        console.log('get new list page - sleeping...');
+                        await new Promise(resolve => setTimeout(resolve, 3000));
+                        console.log('get new list page - done sleeping...'); 
+                        checkIfDeleted(jar,fanfics[i])
+                    }));
                     log(`${fandomName} - ${fanfics[i].FanficID}`, `public/logs/${today} - ${fandomName}`); 
                 }
                 resolve();
