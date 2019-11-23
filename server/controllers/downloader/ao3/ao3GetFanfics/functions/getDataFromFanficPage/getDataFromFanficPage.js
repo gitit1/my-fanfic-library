@@ -7,52 +7,55 @@ const {saveFanficToServerHandler} = require('../../../helpers/saveFanficsToServe
 const {saveFanficToDB} = require('../../../../helpers/saveFanficToDB');
 const log = require('log-to-file');
 
-exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
-    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
-    let today = (new Date()).toString("yyyy-MM-dd")
-    let counter = -1;
-        
-    let fanfic = await getDataFromPage(page,fandomName);
-     log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
-
-    let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(fandomName,fanfic,autoSave) : [false,false,fanfic];
-    let newFic=check[0],updated=check[1];
-    fanfic = check[2];
-
-    if(savedFanficsLastUpdate===undefined || newFic){
-        fanfic["PublishDate"] =  await getPublishDate(jar,fanfic["URL"])
-    }
-
-    if((newFic || updated || savedFanficsLastUpdate===undefined) && autoSave){
+exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto,pagesCount) =>{
+    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()')); 
+    const timer = pagesCount > 50 ? 3000 : 1500;
+    return setTimeout(() => {
+        let today = (new Date()).toString("yyyy-MM-dd")
+        let counter = -1;
+            
+        let fanfic = await getDataFromPage(page,fandomName);
+         log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
     
-        return await saveFanficToServerHandler(jar,fanfic["URL"],fandomName,saveMethod,savedNotAuto).then(async fanficInfo=>{
-
-            if(Number(fanficInfo[0])>0){
-                fanfic["SavedFic"]   =   true
-                fanfic["NeedToSaveFlag"] = false
-                fanfic["fileName"] = fanficInfo[1];
-                fanfic["savedAs"] =  fanficInfo[2];
-                counter = 0
-            }else{
-                fanfic["SavedFic"]   =   false
-                fanfic["NeedToSaveFlag"] = true               
-            }
-
+        let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(fandomName,fanfic,autoSave) : [false,false,fanfic];
+        let newFic=check[0],updated=check[1];
+        fanfic = check[2];
+    
+        if(savedFanficsLastUpdate===undefined || newFic){
+            fanfic["PublishDate"] =  await getPublishDate(jar,fanfic["URL"])
+        }
+    
+        if((newFic || updated || savedFanficsLastUpdate===undefined) && autoSave){
+        
+            return await saveFanficToServerHandler(jar,fanfic["URL"],fandomName,saveMethod,savedNotAuto).then(async fanficInfo=>{
+    
+                if(Number(fanficInfo[0])>0){
+                    fanfic["SavedFic"]   =   true
+                    fanfic["NeedToSaveFlag"] = false
+                    fanfic["fileName"] = fanficInfo[1];
+                    fanfic["savedAs"] =  fanficInfo[2];
+                    counter = 0
+                }else{
+                    fanfic["SavedFic"]   =   false
+                    fanfic["NeedToSaveFlag"] = true               
+                }
+    
+                return saveFanficToDB(fandomName,fanfic).then(async () =>{
+                    return counter  
+                }).catch(error=>{
+                    console.log('error:::',error)
+                    return counter
+                })
+            })
+        }else{
+            fanfic["NeedToSaveFlag"] = false;
+            fanfic["SavedFic"]   =   false;
             return saveFanficToDB(fandomName,fanfic).then(async () =>{
                 return counter  
             }).catch(error=>{
                 console.log('error:::',error)
-                return counter
-            })
-        })
-    }else{
-        fanfic["NeedToSaveFlag"] = false;
-        fanfic["SavedFic"]   =   false;
-        return saveFanficToDB(fandomName,fanfic).then(async () =>{
-            return counter  
-        }).catch(error=>{
-            console.log('error:::',error)
-            return error
-        }) 
-    } 
+                return error
+            }) 
+        } 
+    }, timer);
 }
