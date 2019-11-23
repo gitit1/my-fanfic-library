@@ -48,12 +48,10 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     let promises2 = [];
                                
     for (let i = 0; i < pagesArray.length; i++) {
-        promises2.push(limit(() =>{ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto,pagesArray.length)} 
-        ));
+        promises2.push(limit(() =>{ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)} ));
     }
   
     await Promise.all(promises2).then(async results=> {
-
         let counterArray = results.filter(function(num) {return (!isNaN(num)); });
         savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
     });

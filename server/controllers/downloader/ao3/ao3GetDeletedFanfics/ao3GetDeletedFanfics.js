@@ -30,7 +30,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                 const limit = pLimit(1)
                 for (let i = 0; i < fanfics.length; i++) {
                     await promises2.push(limit(() => checkIfDeleted(jar,fanfics[i])));
-                     log(`${fandomName} - ${fanfics[i].FanficID}`, `public/logs/${today} - ${fandomName}`); 
+                    log(`${fandomName} - ${fanfics[i].FanficID}`, `public/logs/${today} - ${fandomName}`); 
                 }
                 resolve();
             });
