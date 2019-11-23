@@ -546,11 +546,10 @@ class Fanfic extends Component{
         return(
             <Container header={fandomName} className='fanfics'>
                 <Helmet>
-                <meta charSet="utf-8" />
-                <title>{fandomName}</title>
-                <description></description>
-                <meta name={`This page contains fanfics of ${fandomName}`} content={`${fandomName},fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
-                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+                    <meta charSet="utf-8" />
+                    <title>{fandomName} Fanfics</title>
+                    <description></description>
+                    <meta name={`This page contains fanfics of ${fandomName}`} content={`${fandomName},fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
                 </Helmet>
                 {firstLoad 
                     ?<Spinner />

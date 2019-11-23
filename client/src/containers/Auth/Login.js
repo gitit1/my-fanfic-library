@@ -59,6 +59,7 @@ render() {
     const { errors } = this.state;
 return (
     <Container header='Login'>
+      <h3>The site is currently open only with invitation</h3>
       <Card className={classes.Login}>
         <Grid container className={classes.ContainerGrid}>
           <Grid item xs={8} className={classes.FormGrid}>
@@ -100,7 +101,7 @@ return (
               <Button  type="submit" variant="contained"  className='send_button'>Login</Button>
             </form>
             <br/> 
-            <div className={classes.Registrer}>Don't have an account? <Link to="/register">Register</Link></div>
+            {/* <div className={classes.Registrer}>Don't have an account? <Link to="/register">Register</Link></div> */}
           </Grid>
         </Grid>
       </Card>

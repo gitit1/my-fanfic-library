@@ -9,6 +9,14 @@ const FandomSchema = new Schema({
     AutoSave:                   {type: Boolean},
     SaveMethod:                 {type: String},
     FanficsInFandom:            {type: Number},
+    Info:                       {
+                                    Year:                       {type: Number},
+                                    Canon:                      {type: Boolean},                              
+                                    Main:                       {type: Boolean},                              
+                                    Type:                       {type: String},
+                                    Categories:                 {type: String},
+                                    Summary:                    {type: String},                                
+    },
     AO3:                     {
                                     FanficsInFandom:  {type: Number},
                                     OnGoingFanfics:   {type: Number},

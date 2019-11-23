@@ -33,6 +33,7 @@ import FullMyFanficsUpdates from './containers/Updates/FullMyFanficsUpdates/Full
 //Auth
 import Registrer from './containers/Auth/Register'
 import Login from './containers/Auth/Login'
+import RedirectPage from './containers/Auth/404/404'
 //About
 import About from './containers/About/About/About';
 import ContactUs from './containers/About/ContactUs/ContactUs';
@@ -75,10 +76,13 @@ function App() {
           <Route              path="/myFanficsUpdates"    component={FullMyFanficsUpdates}  level={2} />
           
           {/* Fandoms */}
-          <Route              path="/fandoms"             component={Fandoms}                         />
-          <Route              path="/fanfics/:FandomName" component={Fanfic}                          />
+          <PrivateRoute       path="/fandoms"             component={Fandoms}                         />
+          {/* <Route              path="/fandoms"             component={Fandoms}               level={1} /> */}
+          <PrivateRoute       path="/fanfics/:FandomName" component={Fanfic}                          />
+          {/* <Route              path="/fanfics/:FandomName" component={Fanfic}                level={1} /> */}
           {/* Search */}
-          <Route              path="/search"              component={Search}                          />
+          {/* <Route              path="/search"              component={Search}                          /> */}
+          <PrivateRoute       path="/search"              component={Search}                level={1} />
           {/* UserData */}  
           <PrivateRoute exact path="/dashboard"           component={Dashboard}             level={2} />
           <PrivateRoute exact path="/myTracker"           component={MyStatistics}          level={2} />
@@ -94,10 +98,12 @@ function App() {
           <Route              path="/disclaimers"         component={Disclaimers}                     />
           <Route              path="/news"                component={News}                            />
           {/* Auth */}  
-          <Route              path="/register"            component={Registrer}                       />
+          {/* <Route              path="/register"            component={Registrer}                       /> */}
+          <PrivateRoute       path="/register"            component={Registrer}             level={2} />
           <Route              path="/login"               component={Login}                           />
+          <Route              path="/404"                 component={RedirectPage}                    />
 
-          <Redirect to="/" />
+          <Redirect to="/404" />
         </Switch>
       </Layout>
   );

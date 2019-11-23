@@ -15,7 +15,10 @@ import BoxContent from './components/BoxContent';
 import './ManageFandoms.scss'
 
 class ManageFandoms extends Component{
-
+  
+  state = {
+    changeImageFlag:''
+  }
 
   routeChange = () => {
     this.props.history.push({
@@ -51,9 +54,15 @@ class ManageFandoms extends Component{
     });
   }
 
+  changeImage = (id,fandom) => {
+    const changeImageFlag = id===0 ? null : fandom;
+    this.setState({changeImageFlag});
+  }
+
   render(){
     let page =  null;
     const {fandoms,loading,size,smallSize} = this.props;
+    const {changeImageFlag} = this.state;
 
     if(!loading){
       if(fandoms.length === 0||fandoms ===null){
@@ -70,7 +79,9 @@ class ManageFandoms extends Component{
                               smallSize={smallSize}
                               editFandom={this.editFandomHandler} 
                               deleteFandom={this.deleteFandomHandler} 
-                              boxContent={<BoxContent />} />)
+                              boxContent={<BoxContent />} 
+                              changeImage={this.changeImage}
+                              changeImageFlag={changeImageFlag}/>)
           // page = (<ShowFandomData fandoms={sortedFandomList} editFandom={this.editFandomHandler} deleteFandom={this.deleteFandomHandler} screenSize={this.props.size}/>)
                   
       }

@@ -1,17 +1,22 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import {Helmet} from "react-helmet";
 import * as actions from '../../store/actions';
 
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container';
 
 import ShowFandomData from './components/ShowFandomData/ShowFandomData';
+import FilterSection from './components/FilterSection/FilterSection';
 import BoxContent from './components/BoxContent'
-
+import classes from './Fandoms.module.scss';
 class AllFandoms extends Component{
 
   state = {
-    userFandoms:[]
+    userFandoms:[],
+    listFandoms:[],
+    changeImageFlag:'',
+
   }
 
   componentWillMount(){
@@ -22,6 +27,8 @@ class AllFandoms extends Component{
       }else{
         this.setState({userFandoms:this.props.userFandoms})
       }
+      const sortedFandomList = this.props.fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName));
+      this.setState({listFandoms:sortedFandomList})
   }
 
   componentWillUnmount(){
@@ -29,34 +36,42 @@ class AllFandoms extends Component{
   }
 
   markFavoriteFandom = (fandom,userEmail) =>{
-    console.log('markFavoriteFandom')
-    console.log('fandom,userEmail',fandom,userEmail)
-    console.log('fandom,userEmail',fandom,userEmail)
-    console.log('this.props.userFandoms',this.props.userFandoms)
-    console.log('this.state.userFandoms',this.state.userFandoms)
     let isExsist = this.state.userFandoms.includes(fandom) ? true : false;
     let userFandoms = [...this.state.userFandoms];
 
     
     this.props.onAddFandomToUserFavorite(userEmail,fandom,!isExsist).then(()=>{
-      console.log('here 111')
       if(isExsist){
         userFandoms = userFandoms.filter(f => {return f !== fandom});
-        console.log('isAdd:',isExsist)
-        console.log('userFandoms:',userFandoms)
       }else{
         userFandoms.push(fandom)
-        console.log('isAdd:',isExsist)
-        console.log('userFandoms:',userFandoms)
       }    
       this.setState({userFandoms})
     })
   }
 
+  changeImage = (id,fandom) => {
+    const changeImageFlag = id===0 ? null : fandom;
+    this.setState({changeImageFlag});
+  }
+
+  getNewFandomList = (listFandoms) => {
+    this.setState({listFandoms})
+  }
+
+  handleChange = selectedOption => {
+    this.setState(
+      { selectedOption },
+      () => console.log(`Option selected:`, this.state.selectedOption)
+    );
+  };
+  
   render(){
       const {fandoms,isAuthenticated,userEmail,size,smallSize,loading} = this.props;
-      const {userFandoms} = this.state;
+      const {userFandoms,changeImageFlag,listFandoms} = this.state;
       let page =  null;
+
+
       if(!loading){
         if(fandoms.length === 0||fandoms ===null){
             page = (
@@ -65,10 +80,29 @@ class AllFandoms extends Component{
               </div>
             )
         }else{
-            const sortedFandomList = fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName))
-            page = (<ShowFandomData fandoms={sortedFandomList} screenSize={size} smallSize={smallSize} hadButtons={false} userFandoms={userFandoms}
-                                    userEmail={userEmail} isAuthenticated={isAuthenticated} markFavFandom={this.markFavoriteFandom} 
-                                    boxContent={<BoxContent />}/>)
+            // const sortedFandomList = fandoms.sort((a, b) => a.FandomName.localeCompare(b.FandomName));
+            let fandomsList =[];
+            listFandoms.map(fandom=>{
+                fandomsList.push({value: fandom.FandomName, label: fandom.FandomName})
+                return null;
+            });
+            page = (
+              <>
+                <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>Fandoms</title>
+                    <description></description>
+                    <meta name={`This page contains wlw fandoms`} content={`fandoms,fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
+                </Helmet>
+                {/* <div className={classes.FilterSection}>
+                  <FilterSection fandomsList={fandomsList} getNewList={this.getNewFandomList} onChange={this.handleChange}/>
+                </div> */}
+                <ShowFandomData fandoms={listFandoms} screenSize={size} smallSize={smallSize} hadButtons={false} userFandoms={userFandoms}
+                                      userEmail={userEmail} isAuthenticated={isAuthenticated} markFavFandom={this.markFavoriteFandom} changeImage={this.changeImage}
+                                      changeImageFlag={changeImageFlag}
+                                      boxContent={<BoxContent />}/>
+              </>
+            )
                     
         }
       }
