@@ -7,6 +7,13 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
         <LazyLoad height={100} >
+          <p><span className={classes.Date}><strong>11-23-2019:</strong></span><span className={classes.Content}>[030-git] Blocked the site only for registrer users for now</span></p>
+          <p><span className={classes.Date}><strong>11-23-2019:</strong></span><span className={classes.Content}>[030-git] Fanfic Page - made the image still and animated only if you standing on it</span></p>
+          <p><span className={classes.Date}><strong>11-23-2019:</strong></span><span className={classes.Content}>[030-git] Added Category to categiries list</span></p>
+          <p><span className={classes.Date}><strong>11-23-2019:</strong></span><span className={classes.Content}>[030-git] edited the disclaimer</span></p>
+          <p><span className={classes.Date}></span>&nbsp;</p>
+        </LazyLoad>
+        <LazyLoad height={100} >
           <p><span className={classes.Date}><strong>10-08-2019:</strong></span><span className={classes.Content}>[029-git] Redesign fanfics numbers in fanfic page</span></p>
           <p><span className={classes.Date}><strong>10-08-2019:</strong></span><span className={classes.Content}>[028-git] Changed favicon</span></p>
           <p><span className={classes.Date}><strong>10-08-2019:</strong></span><span className={classes.Content}>[027-git] Fix sorting issue in fanfics filters</span></p>
