@@ -29,6 +29,7 @@ export const categories = [
   { label: 'First Time' },
   { label: 'Fluff' },
   { label: 'Foster Care' },
+  { label: 'Friends to Lovers' },
   { label: 'G!p' },
   { label: 'Gang' },
   { label: 'Geek/Shy/Nerd/Popular' },

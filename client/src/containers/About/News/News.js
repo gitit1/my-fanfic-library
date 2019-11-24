@@ -6,6 +6,11 @@ import LazyLoad from 'react-lazyload';
 const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
+      <LazyLoad height={100} >
+          <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[031-git] Fix deleted fanfic function</span></p>
+          <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[031-git] Added category "friends to lovers" in categories list </span></p>
+          <p><span className={classes.Date}></span>&nbsp;</p>
+        </LazyLoad>
         <LazyLoad height={100} >
           <p><span className={classes.Date}><strong>11-23-2019:</strong></span><span className={classes.Content}>[030-git] Blocked the site only for registrer users for now</span></p>
           <p><span className={classes.Date}><strong>11-23-2019:</strong></span><span className={classes.Content}>[030-git] Fanfic Page - made the image still and animated only if you standing on it</span></p>

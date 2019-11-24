@@ -195,10 +195,8 @@ class Fanfic extends Component{
                 console.log('DELETE!!!')          
                 const {} = this.props;
                 await onDeleteFanfic(fandomName,fanficId,source,mark,deleted).then(async ()=>{
-                    console.log('here...')
                     // await onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
                         let fanficsDeletedCount = (fanficsNumbers.fanficsDeletedCount-1<=0) ? 0 : fanficsNumbers.fanficsDeletedCount-1; 
-                        console.log('here... 1')
                         const fanficsCount = (this.props.counter === 0) ? fanficsNumbers.fanficsTotalCount : this.props.counter;
                         let newPagesCounter = Math.ceil(fanficsCount-1/pageLimit);
                         newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber;
