@@ -28,7 +28,8 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                 const limit = pLimit(1)
                 for (let i = 0; i < fanfics.length; i++) {
                     await promises.push(limit(async () => {
-                        await new Promise(resolve => setTimeout(resolve, 3000));
+                        // await new Promise(resolve => setTimeout(resolve, 3000));
+                        console.log('fanfic number:', i)
                         checkIfDeleted(jar,fanfics[i])
                     }));
                     log(`${fandomName} - ${fanfics[i].FanficID}`, `public/logs/${today} - ${fandomName}`); 
@@ -37,14 +38,13 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
             });
         });
     }
+
     const checkIfDeleted = (jar,fanfic) =>{
-
         let url = fanfic.URL;
-
         return new Promise(function(resolve, reject) {
             request.get({url,jar: jar,credentials: 'include'}, async function (err, httpResponse, body) {
                 try {
-                    func.delay(2000).then(async () => {
+                    func.delay(4000).then(async () => {
                         if(httpResponse===undefined || httpResponse.body===undefined){
                             reject(console.log(clc.red('Error in checkIfDeleted: body undefined: ',fanfic.FanficID,' url: ',fanfic.URL)))
                         }else{                       
@@ -62,9 +62,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                     })         
                 }catch (error) {
                     console.log('error in checkIfDeleted:',error)// handle error
-                  } 
-               
-       
+                  }  
             });
         });
     }    
@@ -72,7 +70,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
 
     await getFanficList();
 
-    return await Promise.all(promises2).then(async () => {
+    return await Promise.all(promises).then(async () => {
         await gotDeletedArray.forEach(async function(fanfic, index) {
             fanfic.LastUpdateOfNote=new Date().getTime();
             // console.log(`${fanfic.FanficTitle} got deleted`)
@@ -94,7 +92,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
         console.log('promise all')
         console.log('fandomName:',fandomName)
         console.log('gotDeletedArray.length:',gotDeletedArray.length)
-        const deletedFanfics = await mongoose.dbFanfics.collection(FandomName).countDocuments({'Source':'AO3','Deleted':true});
+        const deletedFanfics = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'AO3','Deleted':true});
         await FandomModal.updateOne({ 'FandomName': fandomName },{ $set: { 'AO3.DeletedFanfics':deletedFanfics}},(err, result) => {(err) ? console.log('error:',err) : console.log('update deleted!')});
         DeletedCounter.push(gotDeletedArray.length)
         DeletedCounter.push(deletedFanfics)

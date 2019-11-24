@@ -40,8 +40,10 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                             ))
                             break;                        
                     case 'All':
-                        await fetchedFandoms.map(fandom => promises.push(
-                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) ),  
+                        await fetchedFandoms.map(async fandom => promises.push(
+                            await new Promise(resolve => setTimeout(resolve, 20000)),
+                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) ), 
+                            await new Promise(resolve => setTimeout(resolve, 20000)), 
                             p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
                         ))
                         break;
