@@ -9,5 +9,10 @@ cron.schedule('0 2 * * *', () => {
     getFanfics.manageDownloader(null,'All','All',false)
 });
 
+//At 12:00 on Monday.
+cron.schedule('0 12 * * mon',()=>{
+    console.log(clc.bgRed('CronJob Awoke: [Get Fanfics of all fandoms]'));
+    getFanfics.manageDownloader(null,'All','All-Deleted',false)   
+})
 
 //TODO: ARCHIVE LATESTUPDATE - IF COUNT > LIMIT - TAKE THE EXTRA TO ARCHIVE BY MONTH;
