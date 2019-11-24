@@ -313,7 +313,11 @@ const useStyles = makeStyles(theme => ({
     const theme = useTheme();
     const [single, setSingle] = React.useState(null);
     // const [multi, setMulti] = React.useState(null);
-  
+    
+    const handleChange = e =>{
+      e.persist();
+      console.log('handleChange:',e.key)
+    }
     const handleChangeSingle = value => { 
       setSingle(value);
     };
@@ -350,6 +354,7 @@ const useStyles = makeStyles(theme => ({
               options={fandomsList}
               components={components}
               value={single}
+              onKeyDown={handleChange}
               onChange={handleChangeSingle}
             />
             {/* <div className={classes.divider} /> */}

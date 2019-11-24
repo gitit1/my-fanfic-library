@@ -195,10 +195,8 @@ class Fanfic extends Component{
                 console.log('DELETE!!!')          
                 const {} = this.props;
                 await onDeleteFanfic(fandomName,fanficId,source,mark,deleted).then(async ()=>{
-                    console.log('here...')
                     // await onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
                         let fanficsDeletedCount = (fanficsNumbers.fanficsDeletedCount-1<=0) ? 0 : fanficsNumbers.fanficsDeletedCount-1; 
-                        console.log('here... 1')
                         const fanficsCount = (this.props.counter === 0) ? fanficsNumbers.fanficsTotalCount : this.props.counter;
                         let newPagesCounter = Math.ceil(fanficsCount-1/pageLimit);
                         newPagesCounter = (pageNumber>newPagesCounter) ? newPagesCounter : pageNumber;
@@ -546,11 +544,10 @@ class Fanfic extends Component{
         return(
             <Container header={fandomName} className='fanfics'>
                 <Helmet>
-                <meta charSet="utf-8" />
-                <title>{fandomName}</title>
-                <description></description>
-                <meta name={`This page contains fanfics of ${fandomName}`} content={`${fandomName},fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
-                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+                    <meta charSet="utf-8" />
+                    <title>{fandomName} Fanfics</title>
+                    <description></description>
+                    <meta name={`This page contains fanfics of ${fandomName}`} content={`${fandomName},fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
                 </Helmet>
                 {firstLoad 
                     ?<Spinner />

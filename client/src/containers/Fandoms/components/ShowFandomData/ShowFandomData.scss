@@ -1,87 +1,94 @@
-@import '../../../../style/_colors';
-@import '../../../../style/_fonts';
-@import '../../../../style/_varibles';
+@import "../../../../style/_colors";
+@import "../../../../style/_fonts";
+@import "../../../../style/_varibles";
 
-@mixin caption{
-    color: $color_header;
-    font-family: $font_header;
-    font-weight: bold;
+@mixin caption {
+  color: $color_header;
+  font-family: $font_header;
+  font-weight: bold;
 }
 
-.fandoms{
-    display: flex;
-    flex-wrap: wrap;
-    overflow: hidden;
-    margin: 0 auto;
+.fandoms {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  margin: 0 auto;
 
-    .fandoms_grid{
-        width: 100%;
-        height: auto;
-        justify-content: center;
-        
-        .fandoms_card{
-            max-width: 400px;
-            
-            .fandoms_star{
-                float: left;
-                z-index:999
-            }
-            .fandoms_card_media{
-                z-index:800;
-                height:230px;
-            }
-            .fandoms_card_content{
-                text-align: center;
-            }
-        }
+  .fandoms_grid {
+    width: 100%;
+    height: auto;
+    justify-content: center;
 
-        .fandoms_fandom{
-            margin:1% 1%;
-        }
+    .fandoms_card {
+      max-width: 400px;
 
-        .fandoms_fandom_caption{
-            @include caption         
-        }
+      .fandoms_star {
+        float: left;
+        z-index: 999;
+      }
+      .hidden {
+        visibility: hidden;
+        display: none;
+      }
+      .vissible {
+        visibility: visible;
+        // display: inline-block;
+      }
+      .fandoms_card_media,
+      .fandoms_card_media_static {
+        z-index: 800;
+        height: 230px;
+      }
 
-        .fandoms_fandom_buttons{
-            padding: 30px!important;
-            justify-content: center;
-            display: flex;
-        }
+      .fandoms_card_content {
+        text-align: center;
+      }
     }
+
+    .fandoms_fandom {
+      margin: 1% 1%;
+    }
+
+    .fandoms_fandom_caption {
+      @include caption;
+    }
+
+    .fandoms_fandom_buttons {
+      padding: 30px !important;
+      justify-content: center;
+      display: flex;
+    }
+  }
 }
 
-.fandoms_dummy{
-    visibility: hidden;
-} 
-
-@media(max-width: $screenSizeS){
-    .fandoms{
-       .fandoms_grid{
-        .fandoms_card{
-            height: 250px!important;
-            .fandoms_card_media{
-                height: 250px!important;
-            }
-        }
-                        
-       } 
-    }
-    .fandoms_mobile{
-        padding: 0!important;
-    }
-    .fandoms_mobile_overlay{
-        position: relative;
-        width: 100%;
-        bottom: 40px;
-        margin: 0;
-        background: rgba(25, 25, 25, .5);
-        border-radius: 2%;
-        
-        .fandoms_mobile_overlay_caption{
-           @include caption
-        }
-     }
-    
+.fandoms_dummy {
+  visibility: hidden;
 }
 
+@media (max-width: $screenSizeS) {
+  .fandoms {
+    .fandoms_grid {
+      .fandoms_card {
+        height: 250px !important;
+        .fandoms_card_media {
+          height: 250px !important;
+        }
+      }
+    }
+  }
+  .fandoms_mobile {
+    padding: 0 !important;
+  }
+  .fandoms_mobile_overlay {
+    position: relative;
+    width: 100%;
+    bottom: 40px;
+    margin: 0;
+    background: rgba(25, 25, 25, 0.5);
+    border-radius: 2%;
+
+    .fandoms_mobile_overlay_caption {
+      @include caption;
+    }
+  }
+}

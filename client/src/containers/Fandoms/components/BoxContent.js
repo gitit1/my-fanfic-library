@@ -9,7 +9,13 @@ import {completeFanfics,onGoingFanfics} from './functions';
 
 const BoxContent = (props) => {
     // console.log('props.userFandoms:',props.userFandoms)
-    const isFav = props.userFandoms && props.userFandoms.includes(props.fandom.FandomName) ? true : false;
+    const { userFandoms, fandom, changeImageFlag } = props;
+    const isFav = userFandoms&&userFandoms.includes(fandom.FandomName) ? true : false;
+    const noImage = (fandom.Images.Image_Name_Main&&fandom.Images.Image_Name_Main!=='')&&
+                    (fandom.Images.Image_Name_Main_Still&&fandom.Images.Image_Name_Main_Still!=='') ? '' : `/fandoms/nophoto.png`;
+    const imageStill = noImage!=='' ? noImage : `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main_Still}`;
+    const imageGif = noImage!=='' ? noImage : `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main}`;
+
     return (
         <CardActionArea>
             {props.isAuthenticated && 
@@ -20,12 +26,12 @@ const BoxContent = (props) => {
                 </span>
             }
             <Link to={`/fanfics/${props.fandom.FandomName}`}>
-                <CardMedia  className='fandoms_card_media'
-                            image={props.fandom.Image_Name_Main !== '' 
-                                    ? `/fandoms/${props.fandom.FandomName.toLowerCase()}/${props.fandom.Images.Image_Name_Main}`
-                                    : `/fandoms/nophoto.png`
-                            } 
-                            title={props.fandom.FandomName}/>
+                <CardMedia  className={`${changeImageFlag===fandom.FandomName ? 'hidden' : 'vissible'} fandoms_card_media`}
+                    image={imageStill}
+                    title={props.fandom.FandomName}/>     
+                <CardMedia  className={`${changeImageFlag===fandom.FandomName ? 'vissible' : 'hidden'} fandoms_card_media`}
+                    image={imageGif}
+                    title={props.fandom.FandomName}/>       
                 <CardContent className={`fandoms_card_content ${props.smallSize && 'fandoms_mobile'}`}>
                     {!props.smallSize
                     ?                                                  
