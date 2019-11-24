@@ -545,7 +545,7 @@ class Fanfic extends Component{
             <Container header={fandomName} className='fanfics'>
                 <Helmet>
                     <meta charSet="utf-8" />
-                    <title>{fandomName} Fanfics</title>
+                    <title>{`${fandomName} Fanfics`}</title>
                     <description></description>
                     <meta name={`This page contains fanfics of ${fandomName}`} content={`${fandomName},fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
                 </Helmet>

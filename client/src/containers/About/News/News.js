@@ -7,6 +7,8 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
+          <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[032-git] Added category - "small town"</span></p>
+          <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[032-git] Changed cron job - updeted deleted fanfics will happen once a week</span></p>
           <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[031-git] Fix deleted fanfic function</span></p>
           <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[031-git] Added category "friends to lovers" in categories list </span></p>
           <p><span className={classes.Date}></span>&nbsp;</p>
