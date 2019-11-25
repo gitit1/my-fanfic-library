@@ -18,19 +18,21 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
     // console.log('method is:',method)
     const savedNotAuto = (method||!method===null) ? method : null;   
     const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
-    
-    let today = (new Date()).toLocaleDateString("en-US")
-    log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${FandomName}`); 
+
+
+    //let today = (new Date()).toLocaleDateString("en-US")
+    //log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${FandomName}`); 
        
-    let fandomUrlName = SearchKeys.replace(/ /g,'%20').replace(/\//g,'*s*');
-    const ao3URL = `https://archiveofourown.org/tags/${fandomUrlName}/works`;
     
+
+    const ao3URL = await ao3Funcs.createAO3Url(SearchKeys);
+
     let numberOfPages = 0,fanficsInFandom,savedFanficsCurrent=0;
 
     let body = await ao3Funcs.getUrlBodyFromAo3(jar,ao3URL)
             
     let $ = cheerio.load(body);
-            
+     
     if(Number($('#main').find('ol.pagination li').eq(-2).text())===0){
         numberOfPages = 1
     }else if(Number($('#main').find('ol.pagination li').eq(-2).text())>=10){
@@ -39,6 +41,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
         numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
     }
 
+    console.log('numberOfPages:',numberOfPages)
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar,ao3URL,numberOfPages);
 
     // const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 1;

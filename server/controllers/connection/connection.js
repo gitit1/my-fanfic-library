@@ -20,12 +20,14 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                 let p = Promise.resolve();
                 switch (choice) {
                     case 'getFandomFanfics':
-                        await fetchedFandoms.map(fandom => promises.push(
+                        await fetchedFandoms.map(async fandom => promises.push(
+                            await new Promise(resolve => setTimeout(resolve, 40000)),
                             p = p.then(() => funcs.getFandomFanfics(socket,fandom) )                             
                         ))
                         break;                
                     case 'getDeletedFanfics':
-                        await fetchedFandoms.map(fandom => promises.push(
+                        await fetchedFandoms.map(async fandom => promises.push(
+                            await new Promise(resolve => setTimeout(resolve, 40000)),
                             p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                          
                         ))
                         break;
@@ -41,7 +43,7 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                             break;                        
                     case 'All':
                         await fetchedFandoms.map(async fandom => promises.push(
-                            await new Promise(resolve => setTimeout(resolve, 20000)),
+                            await new Promise(resolve => setTimeout(resolve, 40000)),
                             p = p.then(() => funcs.getFandomFanfics(socket,fandom) ), 
                             // await new Promise(resolve => setTimeout(resolve, 20000)), 
                             // p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
@@ -49,7 +51,7 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                         break;
                     case 'All-Deleted':
                         await fetchedFandoms.map(async fandom => promises.push(
-                            await new Promise(resolve => setTimeout(resolve, 20000)), 
+                            await new Promise(resolve => setTimeout(resolve, 40000)), 
                             p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
                         ))
                         break;
