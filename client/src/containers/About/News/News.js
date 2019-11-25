@@ -7,6 +7,12 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
+          <p><span className={classes.Date}><strong>11-25-2019:</strong></span><span className={classes.Content}>[033-git] Added categories - "Mental Health"/"Prison"</span></p>
+          <p><span className={classes.Date}><strong>11-25-2019:</strong></span><span className={classes.Content}>[033-git] Fix a bug in downloader (couldn't deal with spanish letters)</span></p>
+          <p><span className={classes.Date}><strong>11-25-2019:</strong></span><span className={classes.Content}>[033-git] Added timeout for connection to easy on the scrapping</span></p>
+          <p><span className={classes.Date}></span>&nbsp;</p>
+        </LazyLoad>
+      <LazyLoad height={100} >
           <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[032-git] Added category - "small town"</span></p>
           <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[032-git] Changed cron job - updeted deleted fanfics will happen once a week</span></p>
           <p><span className={classes.Date}><strong>11-24-2019:</strong></span><span className={classes.Content}>[031-git] Fix deleted fanfic function</span></p>
