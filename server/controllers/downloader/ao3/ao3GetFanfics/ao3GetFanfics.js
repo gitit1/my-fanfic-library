@@ -55,7 +55,7 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
             console.log('get new list page - sleeping...');
             await new Promise(resolve => setTimeout(resolve, 3000));
             console.log('get new list page - done sleeping...');
-            ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)
+            await ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)
         } ));
     }
   
