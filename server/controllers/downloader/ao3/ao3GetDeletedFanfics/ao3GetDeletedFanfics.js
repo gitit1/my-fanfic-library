@@ -14,7 +14,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
 
      let today = (new Date()).toString("yyyy-MM-dd")
-     log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
+    // log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
 
     request = request.defaults({jar: jar,followAllRedirects: true});
     await loginToAO3(jar)
@@ -45,7 +45,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                 try {
                     func.delay(1000).then(async () => {
                         console.log('fanfic number: ', index,' , id: ',fanfic.FanficID);
-                        log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
+                       // log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
                         if(httpResponse===undefined || httpResponse.body===undefined){
                             reject(console.log(clc.red('Error in checkIfDeleted: body undefined: ',fanfic.FanficID,' url: ',fanfic.URL)))
                         }else{                       
