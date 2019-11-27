@@ -52,9 +52,9 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
                                
     for (let i = 0; i < pagesArray.length; i++) {
         promises.push(limit(async () =>{
-            console.log('get new list page - sleeping...');
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            console.log('get new list page - done sleeping...');
+            console.log('pagesArray: ',i,' - sleeping...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.log('pagesArray: ',i,' - done sleeping...');
             await ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)
         } ));
     }
