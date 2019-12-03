@@ -1,6 +1,7 @@
 {
   "name": "my-fanfic-lybrary",
   "version": "1.0.0",
+  "homepage": "http://www.myfanficslibrary.com/",
   "description": "",
   "main": "index.js",
   "scripts": {
