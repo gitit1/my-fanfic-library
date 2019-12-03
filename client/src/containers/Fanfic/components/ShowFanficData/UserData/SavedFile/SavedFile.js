@@ -10,7 +10,7 @@ const SavedFile = (props) => {
                 <span>Saved on server:&nbsp;</span>
                 {savedAs && savedAs.split(',').map(method=>(
                     <a  target='_blank' rel="noopener noreferrer" key={`${fileName}.${method}`}
-                        href={`http://www.myfanficslibrary.tk/fandoms/${FandomName.toLowerCase()}/fanfics/${fileName}.${method}`}>{method} </a>
+                        href={`http://www.myfanficslibrary.com/fandoms/${FandomName.toLowerCase()}/fanfics/${fileName}.${method}`}>{method} </a>
                 ))}
             </React.Fragment>
             
