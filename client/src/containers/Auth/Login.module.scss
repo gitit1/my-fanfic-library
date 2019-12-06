@@ -1,40 +1,45 @@
-@import '../../style/_colors';
-@import '../../style/_fonts';
-@import '../../style/_varibles';
+@import "../../style/_colors";
+@import "../../style/_fonts";
+@import "../../style/_varibles";
 
-.Login{
-    width: 50%;
-    margin: 0 auto;
-    height: 30vh;
-    text-align: center;
-
-    .ContainerGrid{
-        margin-top: 2%;
-
-        .FormGrid{
-            margin: 0 auto;
-            width: 100%;
-
-            .Email{
-                width: 220px;
-                height: auto;
-            }
-            .Password{
-                width: 220px;
-                height: auto;
-            }
-        }
-    }
-    .Registrer a{
-        text-decoration: underline
-    }
+.ClosedToinvitation {
+  h5 a {
+    text-decoration: underline !important;
+  }
 }
 
-@media(max-width: $screenSizeS){
-    .Login{
-        width: 90%;
-        margin: 0 auto;
-        height: 70vh;
-        text-align: center;
+.Login {
+  width: 50%;
+  margin: 0 auto;
+  height: 30vh;
+  text-align: center;
+  .ContainerGrid {
+    margin-top: 2%;
+
+    .FormGrid {
+      margin: 0 auto;
+      width: 100%;
+
+      .Email {
+        width: 220px;
+        height: auto;
+      }
+      .Password {
+        width: 220px;
+        height: auto;
+      }
     }
+  }
+  .Registrer a {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: $screenSizeS) {
+  .Login {
+    width: 90%;
+    margin: 0 auto;
+    height: 70vh;
+    text-align: center;
+  }
 }
