@@ -59,7 +59,10 @@ render() {
     const { errors } = this.state;
 return (
     <Container header='Login'>
-      <h3>The site is currently open only with invitation</h3>
+      <div className={classes.ClosedToinvitation}>
+        <h3>The site is currently open with invitation only.</h3>
+        <h5>Want to join the pilot? <Link to="/contact">Contact Us</Link></h5>
+      </div>
       <Card className={classes.Login}>
         <Grid container className={classes.ContainerGrid}>
           <Grid item xs={8} className={classes.FormGrid}>
