@@ -31,20 +31,22 @@ app.use('/',routes);
 
 //app.listen(port, () => console.log(`Listening on port ${port}`));
 
-// if (keys.nodeEnv==='development'){  
-//     app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
-// }else if(keys.nodeEnv==='straight'){
+if (keys.nodeEnv==='development'){  
+    app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
+}
+// else if(keys.nodeEnv==='straight'){
 // 	require('./cronJobs/cron');
 // 	app.get('/*', function(req, res) {
 // 		res.sendFile(require('path').join(buildDir,'/index.html'));
 // 	});
 // 	app.listen(5010, () => console.log(`Listening on port 5010 - production mode`));
-// }else{
-// 	//Gay!!!
+// }
+else{
+	//Gay!!!
 	port = 5000;
 	 require('./cronJobs/cron');
 	 app.get('/*', function(req, res) {
 		 res.sendFile(require('path').join(buildDir,'/index.html'));
 	 });
 	 app.listen(5000, () => console.log(`Listening on port 5000 - production mode`));
- //}
+ }

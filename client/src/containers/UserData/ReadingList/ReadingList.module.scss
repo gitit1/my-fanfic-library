@@ -1,47 +1,74 @@
-@import '../../../style/_varibles';
-@import '../../../style/_colors';
+@import "../../../style/_varibles";
+@import "../../../style/_colors";
 
-.ReadingList{
-    display: flex;
-    width:100%;
+.ReadingList {
+  display: contents;
+  width: 100%;
+  margin: 0 auto;
+  // padding-bottom:0;
+  .Buttons {
+    margin-top: 1%;
+    margin-left: 5px;
+  }
+  .ReadingListCard {
+    width: 80%;
     margin: 0 auto;
-    // padding-bottom:0;
-    .Buttons{
-        margin-top: 1%;
-        margin-left: 5px;
-    }
-    .ReadingListCard{
-        width:40%;
-        margin: 0 auto;
-        margin-top: 1%;
-        display: flex;
-        align-items:center;
-        min-height: 100px;
+    margin-top: 1%;
+    display: flex;
+    align-items: center;
+    min-height: 100px;
 
-        .ReadingListLink{
-            margin: 0 auto;
-        }
-        .CardContent{
-            margin: 0 auto;
-        }
-        .ReadingListCardImage{
-            margin: 0 auto;
-            width: 300px;
-            height: 200px;
-        }
+    .ReadingListLink {
+      margin: 0 auto;
     }
-    .DetailsImage{
-        margin: 0 auto;
+    .CardContent {
+      margin: 0 auto;
     }
-    .ReadingListImage{
-
+    .ReadingListCardImage {
+      margin: 0 auto;
+      width: 300px;
+      height: 200px;
     }
+  }
+  .DetailsImage {
+    margin: 0 auto;
+  }
+  .ReadingListImage {
+  }
 }
 
 @media only screen and (max-width: $screenSizeM) {
-
+  .ReadingListCard {
+    .ReadingListLink {
+      margin: 0 auto;
+    }
+    .CardContent {
+      margin: 0 auto;
+    }
+    .ReadingListCardImage {
+      width: 300px;
+      height: 200px;
+    }
+  }
 }
 
-@media only screen and (max-width: $screenSizeS) {
-
+@media (max-width: $screenSizeS) {
+  .ReadingListCard {
+    width: 90% !important;
+    margin: 0 auto;
+    margin-top: 1%;
+    display: flex !important;
+    align-items: center;
+    min-height: 300px !important;
+    .ReadingListLink {
+      margin: 0 auto;
+    }
+    .CardContent {
+      margin: 0 auto;
+    }
+    .ReadingListCardImage {
+      //   margin: 0 auto;
+      display: none;
+    }
+  }
 }
