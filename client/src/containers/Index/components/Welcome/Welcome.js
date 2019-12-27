@@ -16,7 +16,7 @@ const Welcome = (props) => {
                 <CardContent>
             {!isAuthenticated &&
                 <div className='welcome'>
-                    <p>Manage your wlw fanfics reading in one place - we show fanfics from ao3,ff,wattpad,tumblr... and put them in one place!</p><br/>
+                    <p>Manage your wlw fanfics reading in one place - we take fanfics from ao3,ff,wattpad,tumblr... and put them in one place!</p><br/>
                     <p>You can create reading lists , mark fanfics by finished/in progress (!!!), sort and filter them, find deleted fanfics and much more...</p><br/>
                     <h5>Please register to the site in order to manage your data.</h5><br/>
                 </div> 

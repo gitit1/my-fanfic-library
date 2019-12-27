@@ -16,8 +16,8 @@ const manually = require('./manually/manually');
 let request = require('request')
 let jar = request.jar();
 
-exports.getFanfics = async (fandom,method) =>{
-    let getFanficsAO3 = await ao3.ao3GetFanfics(jar,fandom,method);
+exports.getFanfics = async (fandom,type) =>{
+    let getFanficsAO3 = await ao3.ao3GetFanfics(jar,fandom,type);
     console.log('getFanficsAO3:',getFanficsAO3)
     let getFanficsFF = await ff.ffGetFanfics(fandom);
     console.log('getFanficsFF:',getFanficsFF)

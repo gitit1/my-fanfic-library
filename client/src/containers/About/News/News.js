@@ -7,6 +7,11 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
        <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[035-git] split download fanfic method to 2 - partial and full</span></p>
+        <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[035-git] Added category - "Army/Solider"</span></p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
+       <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>12-03-2019:</strong></span><span className={classes.Content}>[034-git] Change Domain - www.myfanficslibrary.com</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>

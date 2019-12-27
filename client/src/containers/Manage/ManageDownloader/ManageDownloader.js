@@ -64,7 +64,7 @@ class ManageDownloader extends Component{
     }
 
     componentDidMount(){
-        console.log('(window.location.origin.includes(mfl-s)):',(window.location.origin))
+        console.log('window.location.origin:',(window.location.origin))
         this.createOptionsForFandomSelect(); 
         socket.removeAllListeners();
         !this.props.smallSize && this.setState({showGridDataBox:true})

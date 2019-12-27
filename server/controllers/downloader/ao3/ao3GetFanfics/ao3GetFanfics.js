@@ -8,22 +8,14 @@ const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 const ao3Funcs = require('./functions')
 
-exports.ao3GetFanfics =  async (jar,fandom,method) => {
-    // TODO: ADD CHOSE FANFDOM FOR THE DOWNLOADER
+exports.ao3GetFanfics =  async (jar,fandom,type) => {
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
-    console.log(clc.blue('[ao3 controller] ao3GetFanfics()'));
+    console.log(clc.blue(`[ao3 controller] ao3GetFanfics() - ${type} run`));
     request = request.defaults({jar: jar,followAllRedirects: true});
     
     await ao3Funcs.loginToAO3(jar);
-    // console.log('method is:',method)
-    const savedNotAuto = (method||!method===null) ? method : null;   
-    const {FandomName,SearchKeys,SavedFanficsLastUpdate} = fandom;
-
-
-    //let today = (new Date()).toLocaleDateString("en-US")
-    //log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${FandomName}`); 
-       
-    
+ 
+    const {FandomName,SearchKeys} = fandom;
 
     const ao3URL = await ao3Funcs.createAO3Url(SearchKeys);
 
@@ -41,12 +33,12 @@ exports.ao3GetFanfics =  async (jar,fandom,method) => {
         numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
     }
 
+    numberOfPages = (type==='partial') ? (numberOfPages>10) ? 10 : numberOfPages : numberOfPages;
     console.log('numberOfPages:',numberOfPages)
+
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar,ao3URL,numberOfPages);
 
-    // const limitConn = (SavedFanficsLastUpdate===undefined) ? 1 : 1;
-
-    const limit = pLimit(1)
+    const limit = pLimit(1);
 
     let promises = [];
                                
