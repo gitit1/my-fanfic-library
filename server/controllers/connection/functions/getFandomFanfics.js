@@ -7,7 +7,7 @@ const downloader =  require('../../downloader/downloader')
 const now  = require('performance-now')
 
 
-const getFandomFanfics = async (socket,fandom) => {
+const getFandomFanfics = async (socket,fandom,type) => {
     const {FandomName,SearchKeys,AutoSave,SaveMethod} = fandom
     // console.log('....metgod is: ',method)
     console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
@@ -24,7 +24,7 @@ const getFandomFanfics = async (socket,fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now(); 
-    let fanficsLengths = await downloader.getFanfics(fandom,null);
+    let fanficsLengths = await downloader.getFanfics(fandom,type);
     console.log('fanficsLengths:',fanficsLengths)
     let endTime = now();
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));

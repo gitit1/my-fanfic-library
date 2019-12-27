@@ -16,18 +16,25 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
             })
             let promises = [];
             if(fetchedFandoms){
-                // fetchedAllFandomsHandler
                 let p = Promise.resolve();
                 switch (choice) {
-                    case 'getFandomFanfics':
+                    case 'getFandomFanficsPartial':
+                        console.log('---  not stand by part')
                         await fetchedFandoms.map(async fandom => promises.push(
-                            await new Promise(resolve => setTimeout(resolve, 40000)),
-                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) )                             
+                            await new Promise(resolve => setTimeout(resolve, 30000)),
+                            p = p.then(() => funcs.getFandomFanfics(socket,fandom,'partial') )                             
                         ))
-                        break;                
+                        break;  
+                    case 'getFandomFanficsFull':
+                            console.log('---  not stand by full')
+                            await fetchedFandoms.map(async fandom => promises.push(
+                                await new Promise(resolve => setTimeout(resolve, 30000)),
+                                p = p.then(() => funcs.getFandomFanfics(socket,fandom,'full') )                             
+                            ))
+                            break;                                        
                     case 'getDeletedFanfics':
                         await fetchedFandoms.map(async fandom => promises.push(
-                            await new Promise(resolve => setTimeout(resolve, 40000)),
+                            await new Promise(resolve => setTimeout(resolve, 30000)),
                             p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                          
                         ))
                         break;
@@ -41,20 +48,6 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                                 p = p.then(() => funcs.saveMissingFanfics(socket,fandom,method) )                                                                                                                 
                             ))
                             break;                        
-                    case 'All':
-                        await fetchedFandoms.map(async fandom => promises.push(
-                            await new Promise(resolve => setTimeout(resolve, 40000)),
-                            p = p.then(() => funcs.getFandomFanfics(socket,fandom) ), 
-                            // await new Promise(resolve => setTimeout(resolve, 20000)), 
-                            // p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
-                        ))
-                        break;
-                    case 'All-Deleted':
-                        await fetchedFandoms.map(async fandom => promises.push(
-                            await new Promise(resolve => setTimeout(resolve, 40000)), 
-                            p = p.then(() => funcs.getDeletedFanfics(socket,fandom) )                                                     
-                        ))
-                        break;
                 }
    
                 return null;
@@ -68,8 +61,13 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
 
         }else{
             switch (choice) {
-                case 'getFandomFanfics':
-                    await funcs.getFandomFanfics(socket,fandom)
+                case 'getFandomFanficsPartial':
+                    console.log('--- stand by part')
+                    await funcs.getFandomFanfics(socket,fandom,'partial')
+                    break; 
+                case 'getFandomFanficsFull':
+                        console.log('--- stand by full')
+                    await funcs.getFandomFanfics(socket,fandom,'full')
                     break;                
                 case 'getDeletedFanfics':
                     await funcs.getDeletedFanfics(socket,fandom)
@@ -79,9 +77,6 @@ exports.manageDownloader = async (socket,fandom,choice,method) =>{
                     break;
                 case 'checkIfFileExsists':
                     await funcs.saveMissingFanfics(socket,fandom)
-                    break;
-                case 'All':
-                    await funcs.getFandomFanfics(socket,fandom)
                     break;
             }
             
