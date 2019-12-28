@@ -1,7 +1,7 @@
 const moment = require('moment');
 const mongoose = require('../../../../../../../config/mongoose');
 
-exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
+exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
     let oldFanficData = false,fandom = null;
     let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'month')
     // let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'week')
@@ -11,10 +11,6 @@ exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
         fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
         fandom!==null && (oldFanficData = fandom)
         console.log(`-----${fanfic["FanficTitle"]}------`)
-
-        // let isThisWeekOldData =  moment(new Date(oldFanficData.LastUpdateOfFic)).isSame(new Date(), 'week')
-        // console.log(new Date(oldFanficData.LastUpdateOfFic))
-        // console.log('isThisWeekOldData',isThisWeekOldData)
 
         console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
         console.log('fanfic["LastUpdateOfFic"]',fanfic["LastUpdateOfFic"])
@@ -32,12 +28,12 @@ exports.checkIfFanficIsNewOrUpdated = async (fandomName,fanfic) =>{
                     (fanfic["Author"] !== oldFanficData.Author) ))  ? true : false;
 
         newFic      &&    console.log(`New Fanfic: ${fanfic["FanficTitle"]} - Saving into the DB`);
+        newFic      &&    log.info(`New Fanfic: ${fanfic["FanficID"]} - ${fanfic["FanficTitle"]}`);
         updated     &&    console.log(`Updated Fanfic - ${fanfic["FanficTitle"]} - Saving into the DB`);
+        updated      &&   log.info(`Updated Fanfic: ${fanfic["FanficID"]} - ${fanfic["FanficTitle"]}`);
         console.log('updated',updated)
         console.log('newFic',newFic)
-        // updated = (!isThisWeekOldData && !newFic) ? updated : false;
 
-        
         fanfic["Status"] = newFic ? 'new' : updated ? 'updated' : 'old';
         
         console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)

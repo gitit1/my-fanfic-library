@@ -5,17 +5,14 @@ const {getPublishDate} = require('./functions/getPublishDate');
 const {checkIfFanficIsNewOrUpdated} = require('./functions/checkIfFanficIsNewOrUpdated');
 const {saveFanficToServerHandler} = require('../../../helpers/saveFanficsToServer');
 const {saveFanficToDB} = require('../../../../helpers/saveFanficToDB');
-const log = require('log-to-file');
 
-exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdate,autoSave,saveMethod,savedNotAuto) =>{
+exports.getDataFromFanficPage = async (jar, log, page, fandomName, savedFanficsLastUpdate, autoSave, saveMethod, savedNotAuto) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
-    let today = (new Date()).toLocaleDateString("en-US")
     let counter = -1;
         
     let fanfic = await getDataFromPage(page,fandomName);
-   // log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
-
-    let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(fandomName,fanfic,autoSave) : [false,false,fanfic];
+    log.info(`-----FanficID: ${fanfic.FanficID}`);
+    let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(log, fandomName,fanfic,autoSave) : [false,false,fanfic];
     let newFic=check[0],updated=check[1];
     fanfic = check[2];
 
@@ -26,7 +23,7 @@ exports.getDataFromFanficPage = async (jar,page,fandomName,savedFanficsLastUpdat
     if((newFic || updated || savedFanficsLastUpdate===undefined || savedNotAuto) && autoSave){
     // if((newFic || updated || savedFanficsLastUpdate===undefined) && autoSave){
     
-        return await saveFanficToServerHandler(jar,fanfic["URL"],fandomName,saveMethod,savedNotAuto).then(async fanficInfo=>{
+        return await saveFanficToServerHandler(jar, fanfic["URL"], fandomName, saveMethod, savedNotAuto).then(async fanficInfo=>{
 
             if(Number(fanficInfo[0])>0){
                 fanfic["SavedFic"]   =   true

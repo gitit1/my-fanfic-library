@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
       socket.on('getFandomFanfics', (fandomData,choice,method) => {
         console.log('[socket.js] getFandomFanfics()');
         //console.log('socket,fandomData,choice,method',socket,fandomData,choice,method)
-        func.manageDownloader(socket,fandomData,choice,method)
+        func.manageDownloader(socket,fandomData,choice,'site',method)
         
       });
 });

@@ -16,17 +16,17 @@ const manually = require('./manually/manually');
 let request = require('request')
 let jar = request.jar();
 
-exports.getFanfics = async (fandom,type) =>{
-    let getFanficsAO3 = await ao3.ao3GetFanfics(jar,fandom,type);
-    console.log('getFanficsAO3:',getFanficsAO3)
+exports.getFanfics = async (fandom, log, type) =>{
+    let getFanficsAO3 = await ao3.ao3GetFanfics(jar, log, fandom, type);
+    console.log('getFanficsAO3:',getFanficsAO3);
     let getFanficsFF = await ff.ffGetFanfics(fandom);
-    console.log('getFanficsFF:',getFanficsFF)
-    let fanficsInFandom = getFanficsAO3[0]+getFanficsFF[0]
-    let SavedFanfics = getFanficsAO3[1]+getFanficsFF[1]
+    console.log('getFanficsFF:',getFanficsFF);
+    let fanficsInFandom = getFanficsAO3[0]+getFanficsFF[0];
+    let SavedFanfics = getFanficsAO3[1]+getFanficsFF[1];
     return [fanficsInFandom,SavedFanfics];
 }
-exports.getDeletedFanfics = async (fandomName,numOfAO3Fanfics) =>{
-    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar,fandomName,numOfAO3Fanfics);
+exports.getDeletedFanfics = async (log, fandomName) =>{
+    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandomName);
     return getDeletedFanfics;
 }
 exports.saveMissingFanfics = async (fandom) =>{
