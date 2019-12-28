@@ -52,7 +52,8 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
                                 reject(console.log(clc.red('Error in checkIfDeleted: ',err)))
                             }else{
                                 if($('#main h2').text().includes("Error 404") || $('#main div.error').text().includes("you don't have permission")){
-                                    console.log(clc.redBright(`Deleted fanfic:: ${fanfic.FanficTitle}`))    
+                                    console.log(clc.redBright(`Deleted fanfic:: ${fanfic.FanficTitle}`));
+                                    log.info(`-----Deleted fanfic: ${fanfic.FanficID}`);     
                                     gotDeletedArray.push(fanfic);
                                 }
                                 resolve();         

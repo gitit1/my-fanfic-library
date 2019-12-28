@@ -12,7 +12,6 @@ exports.getIgnoredList = (fandomName,userEmail) =>{
             if (user) {
                 console.log('found user with ignore fanfics')
                 ignoreList = await getIgnored(fandomName,user);
-                console.log('ignoreList:',ignoreList)
                 resolve(ignoreList);
             }else{
                 console.log('didnt found user')
