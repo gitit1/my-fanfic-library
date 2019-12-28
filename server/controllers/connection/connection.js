@@ -7,7 +7,7 @@ const logger = require('simple-node-logger');
 exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
     console.log(clc.blue('[connection] manageDownloader'));
     const opts = {
-        logDirectory:`public/logs/downloader/getfanfics`,
+        logDirectory:`public/logs/downloader`,
         fileNamePattern: callType==='site' ? `<DATE>-manually-${choice}.log` : `<DATE>-cron-${choice}.log`,
         dateFormat:'YYYY.MM.DD'
     };
