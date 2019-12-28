@@ -35,7 +35,8 @@ const FanficSchema = new Schema({
     Oneshot:                {type: Boolean},
     Image:                  {type: String},      
     Status:                 {type: String},      
-    StatusDetails:          {type: String},      
+    StatusDetails:          {type: String},
+    Deleted:                {type: Boolean},      
  });
  
  
