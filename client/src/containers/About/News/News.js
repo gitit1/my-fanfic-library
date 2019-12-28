@@ -6,6 +6,10 @@ import LazyLoad from 'react-lazyload';
 const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
+      <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[036-git] Added logs for downloader methods</span></p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
        <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[035-git] split download fanfic method to 2 - partial and full</span></p>
         <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[035-git] Added category - "Army/Solider"</span></p>
