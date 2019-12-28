@@ -42,11 +42,15 @@ class Dashboard extends Component {
           this.setState({userFandomsArr})
         })
         if(Object.entries(userData).length === 0){
-          onGetFullUserData(userEmail).then(()=>
-            getFandomsNumbers(this.props.userData).then(fandomData=>{
-              this.setState({fandomData:fandomData,loading:false})
-            })
-          );
+          onGetFullUserData(userEmail).then(()=>{
+            if(Object.entries(this.props.userData).length === 0){
+              this.setState({noDataFlag:true,loading:false})
+            }else{
+              getFandomsNumbers(this.props.userData).then(fandomData=>{
+                 this.setState({fandomData:fandomData,loading:false})
+              })
+            }
+          });
         }else{
           getFandomsNumbers(userData).then(fandomData=>{
             this.setState({fandomData:fandomData,loading:false})
@@ -78,45 +82,52 @@ class Dashboard extends Component {
                     {userFandomsArr.length===0
                       ? <h3>You currently don't have Favorite Fandoms , <Link to='/fandoms'>Add some</Link></h3>
                       :
-                    <Slider {...settings}>
-                        {userFandomsArr.map(fandom=>(
-                            <Card className={classes.Card} key={fandom.FandomName} >
-                              <CardActionArea className={classes.CardActionArea}>
-                                <Link to={`/fanfics/${fandom.FandomName}`}>
-                                  <CardMedia className={classes.CardMedia}
-                                              image={fandom.Image_Name_Main !== '' 
-                                                      ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main}`
-                                                      : `/fandoms/nophoto.png`
-                                              } 
-                                              title={fandom.FandomName}/>
-                                  <CardContent className={classes.CardContent}>
-                                  <div  className={classes.Overlay}>
-                                      <Typography className={classes.OverlayCaption} gutterBottom variant="h5" component="h2">
-                                          {fandom.FandomName}
-                                      </Typography>
-                                  </div>
-                                  </CardContent>
-                                </Link>
-                              </CardActionArea>
-                            </Card>
-                        ))}
-                    </Slider>
+                      <Slider {...settings}>
+                          {userFandomsArr.map(fandom=>(
+                              <Card className={classes.Card} key={fandom.FandomName} >
+                                <CardActionArea className={classes.CardActionArea}>
+                                  <Link to={`/fanfics/${fandom.FandomName}`}>
+                                    <CardMedia className={classes.CardMedia}
+                                                image={fandom.Image_Name_Main !== '' 
+                                                        ? `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main}`
+                                                        : `/fandoms/nophoto.png`
+                                                } 
+                                                title={fandom.FandomName}/>
+                                    <CardContent className={classes.CardContent}>
+                                    <div  className={classes.Overlay}>
+                                        <Typography className={classes.OverlayCaption} gutterBottom variant="h5" component="h2">
+                                            {fandom.FandomName}
+                                        </Typography>
+                                    </div>
+                                    </CardContent>
+                                  </Link>
+                                </CardActionArea>
+                              </Card>
+                          ))}
+                      </Slider>
                     }
                   </div>
                 </Grid>
                 <Grid item xs={12} className={classes.MyTracker}>
-                <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">My Tracker</Typography>
-                  <GeneralBarChart data={fandomData}/>
+                  <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">My Tracker</Typography>
+                  {userFandomsArr.length===0
+                      ? <h3>You currently don't have user data to view</h3>
+                      : <><GeneralBarChart data={fandomData}/><br/></>
+                  }
                 </Grid>
                 <Grid item xs={12} className={classes.Other}>
-                    <div>TODO: reading list</div>
+                  <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">Reading List</Typography>
+                  <div>TODO: reading list</div>
+                  <br/>
                 </Grid>
                 <Grid item xs={12} className={classes.Other}>
-                    <div>TODO: edit info of user</div>
+                  <Typography className={classes.Headers} gutterBottom variant="h5" component="h2">User Info/Settings</Typography>
+                  <div>TODO: edit info of user</div>
+                  <br/>
                 </Grid>               
-                <Grid item xs={12} className={classes.Other}>
+                {/* <Grid item xs={12} className={classes.Other}>
                     <div>TODO: add images (?)</div>
-                </Grid>
+                </Grid> */}
               </Grid>
               <div></div>
               

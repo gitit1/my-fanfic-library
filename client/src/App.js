@@ -39,7 +39,7 @@ import About from './containers/About/About/About';
 import ContactUs from './containers/About/ContactUs/ContactUs';
 import Disclaimers from './containers/About/Disclaimers/Disclaimers';
 import News from './containers/About/News/News';
-
+import RedirectToLink from './components/RedirectToLink/RedirectToLink'
 // ReactGA.initialize('UA-146053520-01');
 // ReactGA.pageview(window.location.pathname + window.location.search);
 
@@ -74,11 +74,11 @@ function App() {
           <Route              path="/latestUpdates"       component={FullLatestUpdates}     level={2} />
           <Route              path="/myLatestActivity"    component={FullMyLatestActivity}  level={2} />
           <Route              path="/myFanficsUpdates"    component={FullMyFanficsUpdates}  level={2} />
-          
+          <Route              path='/redirect'            component={RedirectToLink}        level={2} />
           {/* Fandoms */}
-          <PrivateRoute       path="/fandoms"             component={Fandoms}                         />
+          <PrivateRoute       path="/fandoms"             component={Fandoms}               level={2} />
           {/* <Route              path="/fandoms"             component={Fandoms}               level={1} /> */}
-          <PrivateRoute       path="/fanfics/:FandomName" component={Fanfic}                          />
+          <PrivateRoute       path="/fanfics/:FandomName" component={Fanfic}                level={2} />
           {/* <Route              path="/fanfics/:FandomName" component={Fanfic}                level={1} /> */}
           {/* Search */}
           {/* <Route              path="/search"              component={Search}                          /> */}

@@ -7,7 +7,8 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
-        <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[036-git] Added logs for downloader methods</span></p>
+        <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>[037-git] fix little bug in dashboard for new users</span></p>
+        <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>[036-git] Added logs for downloader methods</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
        <LazyLoad height={100} >
