@@ -2,20 +2,19 @@ const clc = require("cli-color");
 const cheerio = require('cheerio');
 let request = require('request')
 const pLimit = require('p-limit');
-const log = require('log-to-file');
 
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 const ao3Funcs = require('./functions')
 
-exports.ao3GetFanfics =  async (jar,fandom,type) => {
+exports.ao3GetFanfics =  async (jar, log, fandom, type) => {
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
     console.log(clc.blue(`[ao3 controller] ao3GetFanfics() - ${type} run`));
+    const {FandomName,SearchKeys} = fandom;
     request = request.defaults({jar: jar,followAllRedirects: true});
-    
+
     await ao3Funcs.loginToAO3(jar);
  
-    const {FandomName,SearchKeys} = fandom;
     const savedNotAuto = null;
 
     const ao3URL = await ao3Funcs.createAO3Url(SearchKeys);
@@ -48,7 +47,7 @@ exports.ao3GetFanfics =  async (jar,fandom,type) => {
             console.log('pagesArray: ',i,' - sleeping...');
             await new Promise(resolve => setTimeout(resolve, 2000));
             console.log('pagesArray: ',i,' - done sleeping...');
-            await ao3Funcs.getDataFromAO3FandomPage(jar,pagesArray[i],fandom,savedNotAuto)
+            await ao3Funcs.getDataFromAO3FandomPage(jar,log,pagesArray[i],fandom,savedNotAuto)
         } ));
     }
   

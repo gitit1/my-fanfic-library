@@ -10,11 +10,8 @@ const FanficSchema = require('../../../../models/Fanfic');
 const func = require('../../helpers/generalFunctions');
 const {loginToAO3} = require('../helpers/loginToAO3');
 
-exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{   
+exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{   
     console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
-
-     let today = (new Date()).toString("yyyy-MM-dd")
-    // log(`-----------------------------New Session--------------------------`, `public/logs/${today} - ${fandomName}`); 
 
     request = request.defaults({jar: jar,followAllRedirects: true});
     await loginToAO3(jar)
@@ -30,7 +27,7 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                 for (let i = 0; i < fanfics.length; i++) {
                     promises.push(limit(async () =>{
                         await new Promise(resolve => setTimeout(resolve, 1000));
-                        checkIfDeleted(jar,fanfics[i],i)
+                        await checkIfDeleted(jar,fanfics[i],i)
                     } ));
                 }
                 resolve()
@@ -45,7 +42,8 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                 try {
                     func.delay(1000).then(async () => {
                         console.log('fanfic number: ', index,' , id: ',fanfic.FanficID);
-                       // log(`${fandomName} - ${fanfic.FanficID}`, `public/logs/${today} - ${fandomName}`); 
+                        log.info(`-----Fanfic number: ${index} , id: ${fanfic.FanficID}`);  
+
                         if(httpResponse===undefined || httpResponse.body===undefined){
                             reject(console.log(clc.red('Error in checkIfDeleted: body undefined: ',fanfic.FanficID,' url: ',fanfic.URL)))
                         }else{                       
@@ -74,7 +72,6 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
     return await Promise.all(promises).then(async () => {
         await gotDeletedArray.forEach(async function(fanfic, index) {
             fanfic.LastUpdateOfNote=new Date().getTime();
-            // console.log(`${fanfic.FanficTitle} got deleted`)
             mongoose.dbFanfics.collection('deletedFanfics').findOne({FanficID: fanfic.FanficID }, async function(err, dbFanfic) {
                 err && console.log(clc.red('error in findNextBunchOfFanfics(): ',err))
                 let isExist = (dbFanfic===null) ? false : true;
@@ -82,7 +79,8 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
                     console.log(clc.redBright(`inserting: ${fanfic.FanficTitle}`))                        
                     await mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic.FanficID},{$set: {Deleted:true}})
                     await mongoose.dbFanfics.collection('deletedFanfics').insertOne(fanfic)
-                    console.log(clc.redBright(`Found new deleted fanfic:: ${fanfic.FanficTitle}`))    
+                    console.log(clc.redBright(`Found new deleted fanfic:: ${fanfic.FanficTitle}`))
+                    log.info(`Found new deleted fanfic:: ${fanfic.FanficID} - ${fanfic.FanficTitle}`);    
                 }else{
                     console.log('Duplicate fanfic, ignored and moving on')
                 }
@@ -94,8 +92,10 @@ exports.ao3GetDeletedFanfics = async (jar,fandomName,fanficsSum) =>{
         console.log('gotDeletedArray.length:',gotDeletedArray.length)
         const deletedFanfics = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'AO3','Deleted':true});
         await FandomModal.updateOne({ 'FandomName': fandomName },{ $set: { 'AO3.DeletedFanfics':deletedFanfics}},(err, result) => {(err) ? console.log('error:',err) : console.log('update deleted!')});
-        DeletedCounter.push(gotDeletedArray.length)
-        DeletedCounter.push(deletedFanfics)
+        
+        DeletedCounter.push(gotDeletedArray.length);
+        DeletedCounter.push(deletedFanfics);
+
         return DeletedCounter
     }).catch(error => console.log(clc.red('Error in checkIfDeletedFromAO3()',error))); 
 }
