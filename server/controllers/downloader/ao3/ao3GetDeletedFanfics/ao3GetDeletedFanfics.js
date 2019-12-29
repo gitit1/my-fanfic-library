@@ -22,7 +22,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
     const getFanficList = ()=>{
         return new Promise(function(resolve, reject) {
             FanficDB.find({Source:'AO3'}).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).exec(async function(err, fanfics) { 
-                const limit = pLimit(2);
+                const limit = pLimit(1);
                                            
                 for (let i = 0; i < fanfics.length; i++) {
                     promises.push(limit(async () =>{
