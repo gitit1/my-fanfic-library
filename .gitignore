@@ -64,8 +64,9 @@ typings/
 .next
 
 #server
-config/
+config
 backup/
 public/
 
+config/keys.js
 client/package.json
