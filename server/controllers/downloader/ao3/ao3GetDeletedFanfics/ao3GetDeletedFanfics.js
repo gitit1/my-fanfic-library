@@ -64,7 +64,6 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
                                 }else if (httpResponse.body.includes("Retry later")){
                                     console.log('site is down, move on');
                                     log.info(`-----Retry later: ${fanfic.FanficID}`);
-                                    resolve();
                                 }else if (fanfic.Deleted){
                                     console.log(clc.redBright(`Restored fanfic:: ${fanfic.FanficTitle}`));
                                     log.info(`-----Found fanfic who restored: ${fanfic.FanficID}`);
@@ -91,6 +90,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
         console.log('fandomName:',fandomName)
         console.log('gotDeletedArray.length:',gotDeletedArray.length)
         const deletedFanfics = await mongoose.dbFanfics.collection(fandomName).countDocuments({'Source':'AO3','Deleted':true});
+        log.info(`-----deletedFanfics: ${deletedFanfics}`); 
         await FandomModal.updateOne({ 'FandomName': fandomName },{ $set: { 'AO3.DeletedFanfics':deletedFanfics}},(err, result) => {(err) ? console.log('error:',err) : console.log('update deleted!')});
         
         DeletedCounter.push(gotDeletedArray.length);
