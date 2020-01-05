@@ -5,11 +5,14 @@ const FandomModal = require('../../../../models/Fandom');
 const {saveFanficToDB} = require('../../helpers/saveFanficToDB')
 const {downloadFanfic} = require('../../helpers/downloadFanfic')
 
+
 exports.ffSaveFanfic = async (fandomName,download,url,fanfic) =>{ 
     return await new Promise(async function(resolve, reject) {  
+        const {Source, Author, FanficTitle, FanficID} = fanfic;
         const status = await saveFanficToDB(fandomName,fanfic);
-        status && await updateFandomData(fanfic)
-        download=='true' && await downloadFanfic(url,fanfic.Source,`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`,'epub',fanfic.FandomName,fanfic.FanficID)     
+        status && await updateFandomData(fanfic);
+        download=='true' && await downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'epub', fandomName, FanficID)     
+        download=='true' && await downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'pdf', fandomName, FanficID)     
         resolve();
     });
 }

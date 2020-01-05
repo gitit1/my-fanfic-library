@@ -5,6 +5,7 @@ const multer = require('multer');
 const fs = require('fs-extra');
 const {createFanficObj} = require('../helpers/createFanficObj');
 const {saveFanficToDB} = require('../../helpers/saveFanficToDB')
+const {fixStringForPath} = require('../../../helpers/fixStringForPath.js');
 
 exports.saveNewFanfic = async (fandomName,req, res) =>{ 
     return await new Promise(async function(resolve, reject) {  
@@ -20,7 +21,7 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
             cb(null, pathForDocs)
             },
             filename: function (req, file, cb) {
-            cb(null,   file.fieldname)
+            cb(null,   fixStringForPath(file.fieldname))
             }
         });
 
@@ -40,8 +41,11 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
             let fanfic = await createFanficObj(fandomName,req.body);
             
 
-            fanfic['status'] = 'old',fanfic['fileName']=req.body.fileName,fanfic['savedAs']=req.body.savedAs,
-            fanfic['SavedFic']=true,fanfic['NeedToSaveFlag']=false;
+            fanfic['status']            =   'old';
+            fanfic['fileName']          =   fixStringForPath(req.body.fileName);
+            fanfic['savedAs']           =   req.body.savedAs;
+            fanfic['SavedFic']          =   true;
+            fanfic['NeedToSaveFlag']    =   false;
         
             console.log('fanfic.Status:',fanfic.Status);
             console.log('fanfic.FanficID:',fanfic.FanficID);

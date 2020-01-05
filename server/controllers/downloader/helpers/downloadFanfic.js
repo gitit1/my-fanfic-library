@@ -8,9 +8,11 @@ const FandomModal = require('../../../models/Fandom');
 let jar = request.jar();
 request = request.defaults({jar: jar,followAllRedirects: true});
 
+const {fixStringForPath} = require('../../helpers/fixStringForPath.js');
 const fanficsPath = "public/fandoms";
 
 exports.downloadFanfic = async (url,source,fileName,savedAs,fandomName,fanficId) =>{
+    fileName = fixStringForPath(fileName);
     let fullFilename = `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${fileName}.${savedAs}`
     let sourceCode = (source==='FF') ? 'ffnet' : null
 

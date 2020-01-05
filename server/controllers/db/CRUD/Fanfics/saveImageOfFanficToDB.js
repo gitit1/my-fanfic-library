@@ -3,7 +3,7 @@ const multer = require('multer');
 const fs = require('fs-extra');
 
 const mongoose = require('../../../../config/mongoose.js');
-
+const {fixStringForPath} = require('../../../helpers/fixStringForPath.js');
 
 exports.saveImageOfFanficToDB =  async (req,res) =>{
     console.log(clc.blue('[db controller] saveImageOfFanficToDB()'));
@@ -12,7 +12,6 @@ exports.saveImageOfFanficToDB =  async (req,res) =>{
     console.log('fandomName,fanficId',fandomName,fanficId)
     fandomName = fandomName.replace("%26","&").toLowerCase();
     const pathForImage = `public/fandoms/${fandomName}/fanficsImages/`
-    console.log('pathForImage',pathForImage)
     let resultMessage = '';
  
 
@@ -26,7 +25,7 @@ exports.saveImageOfFanficToDB =  async (req,res) =>{
         cb(null, pathForImage)
         },
         filename: function (req, file, cb) {
-        cb(null,   file.fieldname)
+        cb(null,  fixStringForPath(file.fieldname))
         }
     });
     
@@ -43,7 +42,7 @@ exports.saveImageOfFanficToDB =  async (req,res) =>{
             return res.send(resultMessage);
         }
  
-        mongoose.dbFanfics.collection(req.query.fandomName).updateOne({FanficID: Number(fanficId)},{$set: {image:req.body['fileName']}}, async function (error, response) {
+        mongoose.dbFanfics.collection(req.query.fandomName).updateOne({FanficID: Number(fanficId)},{$set: {image:fixStringForPath(req.body['fileName'])}}, async function (error, response) {
             res.send(true)
         })
     

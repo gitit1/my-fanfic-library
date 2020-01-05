@@ -7,6 +7,11 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>01-04-2020:</strong></span><span className={classes.Content}>[038-git] fix bug in saving resources (path string fix)</span></p>
+        <p><span className={classes.Date}><strong>01-04-2020:</strong></span><span className={classes.Content}>[038-git] fix bug in reading list button</span></p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
+      <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>[037-git] fix little bug in dashboard for new users</span></p>
         <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>[036-git] Added logs for downloader methods</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>

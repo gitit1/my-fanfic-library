@@ -2,6 +2,7 @@ const {getDataFromPage} = require('../../helpers/getDataFromPage');
 const {saveFanficToDB} = require('../../../helpers/saveFanficToDB');
 const {downloadFanfic} = require('../../../helpers/downloadFanfic');
 const func = require('../../../helpers/generalFunctions');
+const {fixStringForPath} = require('../../../../helpers/fixStringForPath.js');
 
 exports.checkIfGotUpdated = (autoSave,fanfic) =>{ 
     return func.delay(7000).then(()=>{
@@ -23,16 +24,17 @@ exports.checkIfGotUpdated = (autoSave,fanfic) =>{
                         (newData.Author !== oldData.Author) ? 'author' :
                         (newData.FanficTitle !== oldData.FanficTitle) ? 'title' : 'old';
                 }else{
-                    newData.NeedToSaveFlag=false;
-                    newData.Status = 'old';
-                    newData.StatusDetails='old';
+                    newData.NeedToSaveFlag  =   false;
+                    newData.Status          =   'old';
+                    newData.StatusDetails   =   'old';
                 }  
-                newData.SavedFic=oldData.SavedFic;
-                newData.fileName=oldData.fileName;
-                newData.savedAs=oldData.savedAs;
+                newData.SavedFic    =   oldData.SavedFic;
+                newData.fileName    =   fixStringForPath(oldData.fileName);
+                newData.savedAs     =   oldData.savedAs;
         
-                await saveFanficToDB(fanfic.FandomName,newData).then(async res=>{         
-                    updated && autoSave && await downloadFanfic(newData.URL,newData.Source,newData.fileName,newData.savedAs,newData.FandomName,newData.FanficID);
+                await saveFanficToDB(fanfic.FandomName,newData).then(async res=>{ 
+                    const {URL, Source, fileName, savedAs, FandomName, FanficID} = newData;        
+                    updated && autoSave && await downloadFanfic(URL, Source, fileName, savedAs, FandomName, FanficID);
                     !res ? reject() : (updated && autoSave) ? resolve(true) : resolve(false)               
                 });
             })

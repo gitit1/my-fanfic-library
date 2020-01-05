@@ -39,8 +39,8 @@ const ReadingList = (props) => {
                                (readingLists.readingLists.length===0 && readingLists.newReadingLists.newLists.length>0) ?
                                readingLists.newReadingLists.newLists :
                                null;
-    const   inReadingList     =   (userData && (userData.ReadingList!==''||userData.ReadingList.length>0)) ? true : false;
-    const   userReadingList     = inReadingList && userData.ReadingList;
+    const   inReadingList     =   (userData && (userData.ReadingList!==''&&userData.ReadingList.length>0)) ? true : false;
+    const   userReadingList   =   inReadingList && userData.ReadingList;
 
     function handleClick(event) {
         setAnchorEl(event.currentTarget);
