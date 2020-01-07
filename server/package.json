@@ -38,6 +38,7 @@
     "pm2": "^3.5.1",
     "puppeteer": "^1.19.0",
     "request": "^2.88.0",
+    "simple-node-logger": "^18.12.23",
     "socket.io": "^2.2.0",
     "validator": "^11.0.0"
   },

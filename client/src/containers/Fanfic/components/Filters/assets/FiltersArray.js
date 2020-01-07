@@ -60,6 +60,10 @@ export const filtersArray = {
             display: 'Upload Date'
         },{
             type : 'checkbox',
+            name: 'readingDate',
+            display: 'Reading Date'
+        },{
+            type : 'checkbox',
             name:  'authorSort',
             display: 'Author'
         },{

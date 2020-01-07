@@ -4,7 +4,7 @@ const {getUserFanficsList} = require('../../helpers/getUserFanficsList');
 
 exports.getFiltersRules = async (filters,userEmail) =>{
     let filtersUserList=[],filtersFanficList=[],sortList=[],wordsFlag=false,searchWithIgnoreFlag=true,finishFlag=false,
-        inProgressFlag=false,notFanficId=true,noUserDataFlag=false;
+        inProgressFlag=false,notFanficId=true,noUserDataFlag=false,userSortFlag=false;
     let tagsArr = ''; 
     console.log('filters:::',filters)
     await filters.map(filter=>{
@@ -48,6 +48,9 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 filtersFanficList.push({$or: [{'Deleted':true},{'Source':'Backup'}]})
                 break;                  
             //Sort Filters:
+            case 'readingDate':
+                userSortFlag=true;
+                break;
             case 'dateLastUpdate':
                 sortList.push({'LastUpdateOfFic':-1})
                 break;
@@ -70,8 +73,8 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 sortList.push({'Kudos':-1})
                 break;
             case 'bookmarks':
-                    sortList.push({'Bookmarks':-1})
-                    break; 
+                sortList.push({'Bookmarks':-1})
+                break; 
             case 'comments':
                 sortList.push({'Comments':-1})
                 break;
@@ -159,13 +162,13 @@ exports.getFiltersRules = async (filters,userEmail) =>{
         let userFanficsList = await getUserFanficsList(userEmail);
         filtersFanficList.push({ FanficID : { $nin: userFanficsList }})
     }
-    if(sortList.length===0){
+    if(sortList.length===0 && !userSortFlag){
         sortList.push({'LastUpdateOfFic':-1})
         sortList.push({'LastUpdateOfNote':1})
     }
 
     console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList,sortList])
-    return [filtersUserList,filtersFanficList,sortList,ignoreList]
+    return [filtersUserList,filtersFanficList,sortList,ignoreList,userSortFlag]
     
 
 }

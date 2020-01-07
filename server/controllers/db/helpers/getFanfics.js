@@ -3,18 +3,15 @@ const mongoose = require('../../../config/mongoose');
 const FanficSchema = require('../../../models/Fanfic');
 const pLimit = require('p-limit');
 
-exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList)=>{
+exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList,userSorted)=>{
     return new Promise(async function(resolve, reject) {
         skip = (Number(skip)<0) ? 0 : Number(skip)
         limit = (Number(limit)<0) ? 0 : Number(limit) 
         let promises = [];
-        const limitPromise = pLimit(1)
+        //const limitPromise = pLimit(1)
         console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
-        console.log('sort 2:',sortObj)
-        sort = (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
+        sort = userSorted ? {} : (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
         console.log('sort 3:',sort)
-        
-        console.log('filters:',filters)
 
         if(list==='true'){
             // console.log('readingList:',readingList.FanficsFandoms.readingList.Fanfics)
@@ -38,7 +35,6 @@ exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList)=>{
             });
                 
         }else{
-
             const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
             fanfics = await getFanficsofFandoms(FanficDB,filters,skip,limit)
             resolve(fanfics)
