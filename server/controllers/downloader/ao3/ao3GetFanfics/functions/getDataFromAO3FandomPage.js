@@ -13,7 +13,7 @@ exports.getDataFromAO3FandomPage =  async (jar,log,page,fandom,savedNotAuto) => 
         const {FandomName, SavedFanficsLastUpdate, AutoSave, SaveMethod} = fandom;
         for(let count = 0; count < n; count++){
             console.log('sleeping...');
-            fandom.SavedFanficsLastUpdate!==undefined ? await sleep(2000) : await sleep(5000);
+            fandom.SavedFanficsLastUpdate!==undefined ? await sleep(2000) : await sleep(6000);
             console.log('done sleeping...');
             let page = $('ol.work').children('li').eq(count);
 
