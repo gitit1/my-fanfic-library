@@ -41,14 +41,10 @@ exports.ao3GetFanfics =  async (jar, log, fandom, type) => {
     const limit = pLimit(1);
 
     let promises = [];
-    let timeout = SavedFanficsLastUpdate!==undefined ? 2000 : 9000;
                                
     for (let i = 0; i < pagesArray.length; i++) {
         promises.push(limit(async () =>{
-            console.log('pagesArray: ',i,' - sleeping...');
-            await new Promise(resolve => setTimeout(resolve, timeout));
-            console.log('pagesArray: ',i,' - done sleeping...');
-            await ao3Funcs.getDataFromAO3FandomPage(jar,log,pagesArray[i],fandom,savedNotAuto)
+            await ao3Funcs.getDataFromAO3FandomPage(jar,i,log,pagesArray[i],fandom,savedNotAuto)
         } ));
     }
   
