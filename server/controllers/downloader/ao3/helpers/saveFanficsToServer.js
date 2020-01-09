@@ -77,7 +77,6 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
         url = url + '?view_adult=true';
         saveMethods = (saveMethod!== ''||saveMethod||null||saveMethod.length>0) ? saveMethod : savedNotAuto;
         (!saveMethods.includes(",")) ? methods.push(saveMethods) : methods = saveMethods.split(',');
-
         return await new Promise(async function(resolve, reject) {
             let urlBody = await getUrlBodyFromAo3(jar,url);
             let $ = cheerio.load(urlBody);
@@ -96,6 +95,7 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
                     filename = `${authorName}_${fanficName} (${fanficId})`
 
                     await links.push([`https://archiveofourown.org${link}`,fanficNewName])                 
+                    // console.log(`saveFanficToServer: url-${url}, filename-${filename}`)
                 })
             ).then(()=>{
                 Promise.all(links.map(x => downloader(jar,x[0], `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${x[1]}`))).then(res => {
@@ -106,7 +106,10 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
                         resolve([-1,null,null])
                     }
                 })
-            }).catch(error=>{reject(console.log(clc.red(`Error in saveFanficToServerHandler(): ${URL} ,  filename: ${filename}, error: ${error}`)))})
+            }).catch(error=>{
+                console.log(clc.red(`Error in saveFanficToServerHandler(): ${url} ,  filename: ${filename}, error: ${error}`))
+                reject([-1,null,null])
+            })
         })
     } catch (error) {
         console.log('there is an error in: saveFanficToServerHandler()',error)

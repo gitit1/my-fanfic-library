@@ -34,6 +34,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, savedFanficsL
                 fanfic["savedAs"] =  fanficInfo[2];
                 counter = 0
             }else{
+                console.log("--didn't managed to save file will try next full run")
                 fanfic["SavedFic"]   =   false
                 fanfic["NeedToSaveFlag"] = true               
             }
