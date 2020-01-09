@@ -10,7 +10,7 @@ exports.getDataFromAO3FandomPage =  async (jar,pageNumber,log,page,fandom,savedN
         let $ = cheerio.load(page),donePromise = 0;
         let n = $('ol.work').children('li').length;
         let counter;
-        const {FandomName, SavedFanficsLastUpdate, AutoSave, SaveMethod} = fandom;
+        const {FandomName, AutoSave, SaveMethod} = fandom;
         console.log('pagesArray: ',pageNumber,' - sleeping...');
         await sleep(8000);
         console.log('pagesArray: ',pageNumber,' - done sleeping...');
@@ -20,7 +20,7 @@ exports.getDataFromAO3FandomPage =  async (jar,pageNumber,log,page,fandom,savedN
             console.log('done sleeping...');
             let page = $('ol.work').children('li').eq(count);
 
-            await getDataFromFanficPage(jar, log, page, FandomName, SavedFanficsLastUpdate, AutoSave, SaveMethod,savedNotAuto).then(res=>{
+            await getDataFromFanficPage(jar, log, page, FandomName, AutoSave, SaveMethod,savedNotAuto).then(res=>{
                 donePromise++;
                 res===0 && counter++;   
             })

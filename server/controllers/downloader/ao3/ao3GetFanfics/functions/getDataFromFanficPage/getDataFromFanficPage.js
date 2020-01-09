@@ -6,7 +6,7 @@ const {checkIfFanficIsNewOrUpdated} = require('./functions/checkIfFanficIsNewOrU
 const {saveFanficToServerHandler} = require('../../../helpers/saveFanficsToServer');
 const {saveFanficToDB} = require('../../../../helpers/saveFanficToDB');
 
-exports.getDataFromFanficPage = async (jar, log, page, fandomName, savedFanficsLastUpdate, autoSave, saveMethod, savedNotAuto) =>{
+exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, saveMethod, savedNotAuto) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
     let counter = -1;
         
