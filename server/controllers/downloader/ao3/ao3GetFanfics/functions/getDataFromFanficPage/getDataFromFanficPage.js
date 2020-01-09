@@ -18,7 +18,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, savedFanficsL
     let newFic=check[0],updated=check[1];
     fanfic = check[2];
 
-    if(newFic){
+    if(newFic || fanfic["PublishDate"]===0){
         fanfic["PublishDate"] =  await getPublishDate(jar,fanfic["URL"])
     }
 
