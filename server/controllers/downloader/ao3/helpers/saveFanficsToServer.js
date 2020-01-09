@@ -106,7 +106,7 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
                         resolve([-1,null,null])
                     }
                 })
-            }).catch(error=>{reject(console.log(clc.red('Error in saveFanficToServerHandler(): URL: '+url+'filename: '+filename,error)))})
+            }).catch(error=>{reject(console.log(clc.red(`Error in saveFanficToServerHandler(): ${URL} ,  filename: ${filename}, error: ${error}`)))})
         })
     } catch (error) {
         console.log('there is an error in: saveFanficToServerHandler()',error)

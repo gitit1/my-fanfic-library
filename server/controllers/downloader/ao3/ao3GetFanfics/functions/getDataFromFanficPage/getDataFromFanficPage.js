@@ -12,7 +12,8 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, savedFanficsL
         
     let fanfic = await getDataFromPage(page,fandomName);
     log.info(`-----FanficID: ${fanfic.FanficID}`);
-    let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(log, fandomName,fanfic,autoSave) : [false,false,fanfic];
+    // let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(log, fandomName,fanfic,autoSave) : [false,false,fanfic];
+    let check = await checkIfFanficIsNewOrUpdated(log, fandomName,fanfic,autoSave);
     let newFic=check[0],updated=check[1];
     fanfic = check[2];
 

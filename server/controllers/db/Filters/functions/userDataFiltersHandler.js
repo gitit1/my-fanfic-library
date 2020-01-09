@@ -9,20 +9,22 @@ exports.userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pag
         try {
             //USER DATA FILTERS:
             let idsList=[]
+            const sort = filtersArrays[4] ? {'Date':-1} : {};
+            console.log('sort::',sort)
             const filterObj = Object.assign({'userEmail': userEmail},{'FanficList.FandomName':fandomName},{'FanficList.FanficID': { $nin: filtersArrays[3] }}, ...filtersArrays[0]);
             console.log('----filterObj:',filterObj)
             // FandomUserData.find({'userEmail': userEmail}, async function(err, data) {
-            FandomUserData.aggregate([{$unwind:"$FanficList"},{$match:filterObj},
+            FandomUserData.aggregate([{$unwind:"$FanficList"},{$match:filterObj},{$sort: sort},
                                     {$group :  {_id : {FandomName: "$FanficList.FandomName", FanficID: "$FanficList.FanficID"}} },
-                                    {$project: { _id: 0,FandomName:'$_id.FandomName',FanficID:'$_id.FanficID'}}
+                                    {$project: { _id: 0,FandomName:'$_id.FandomName',FanficID:'$_id.FanficID'}},
                                     ], async function(err, filtered) {
                                         pageLimit = Number(pageLimit), pageNumber = Number(pageNumber)
                                         filtered.map(fanfic => idsList.push(fanfic.FanficID));
                                         // let initSkip = (pageLimit*pageNumber)-pageLimit;
                                         
                                         const filterObj = Object.assign({FanficID: {$in: idsList}}, ...filtersArrays[1]);
-                                        console.log('filterObj 2:',filterObj)
-                                        let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber)
+                                        // console.log('filterObj 2:',filterObj)
+                                        let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber,filtersArrays[4])
                                         resolve(filteredData)
             })       
         } catch (error) {
