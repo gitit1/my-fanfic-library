@@ -112,7 +112,8 @@ const saveFanficToServer = async (jar,url,fandomName,saveMethod,savedNotAuto)=>{
             })
         })
     } catch (error) {
-        console.log('there is an error in: saveFanficToServerHandler()',error)
+        // console.log('there is an error in: saveFanficToServerHandler()',error)
+        return [-1,null,null]
     }
 }
 
