@@ -5,6 +5,7 @@ let request = require('request');
 exports.getUrlBodyFromAo3 = (jar,url) =>{
     return new Promise(function(resolve, reject) {
         // request = request.defaults({jar: jar,followAllRedirects: true});
+        console.log('getUrlBodyFromAo3:',url)
         request.get({url,jar, credentials: 'include'}, function (err, httpResponse, body) {
             if(err){  
                 console.log(clc.red('Error in getUrlBodyFromAo3()',err))          
