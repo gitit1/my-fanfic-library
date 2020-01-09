@@ -29,6 +29,7 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
                 })
             }
         });
+        console.log('Saved to DB!');
     });
 }
 
