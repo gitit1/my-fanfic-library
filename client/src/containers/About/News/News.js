@@ -7,6 +7,10 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>01-11-2020:</strong></span><span className={classes.Content}>[0001] fix downloder - get a03 fanfics</span></p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
+      <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>01-04-2020:</strong></span><span className={classes.Content}>[038-git] fix bug in saving resources (path string fix)</span></p>
         <p><span className={classes.Date}><strong>01-04-2020:</strong></span><span className={classes.Content}>[038-git] fix bug in reading list button</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
