@@ -54,7 +54,7 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
         console.log('Status',fanfic["Status"]);
         console.log('Status Details',fanfic["StatusDetails"]);
         console.log(`------------------`)
-        if(!fanfic['SavedFic']){
+        if(fandom!==null && !fanfic['SavedFic']){
             return ([true,false,fanfic])
         }
         return ([newFic,updated,fanfic])
