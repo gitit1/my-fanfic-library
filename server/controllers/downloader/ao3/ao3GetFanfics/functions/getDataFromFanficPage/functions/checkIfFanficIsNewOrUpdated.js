@@ -2,14 +2,14 @@ const moment = require('moment');
 const mongoose = require('../../../../../../../config/mongoose');
 
 exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
-    let oldFanficData = false,fandom = null;
+    let oldFanficData;
     //let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'month')
     // let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'week')
     
     // if(isThisWeek){
         
-        fandom = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
-        fandom!==null && (oldFanficData = fandom)
+        oldFanficData = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
+
         console.log(`-----${fanfic["FanficTitle"]}------`)
 
         console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
@@ -17,7 +17,7 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
         console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
         console.log('fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic',fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfNote)
 
-        newFic = (fandom===null) ? true : false;
+        newFic = (oldFanficData===null) ? true : false;
 
 
         
@@ -54,7 +54,7 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
         console.log('Status',fanfic["Status"]);
         console.log('Status Details',fanfic["StatusDetails"]);
         console.log(`------------------`)
-        if(fandom!==null && !fanfic['SavedFic']){
+        if(oldFanficData!==null && !oldFanficData['SavedFic']){
             return ([true,false,fanfic])
         }
         return ([newFic,updated,fanfic])
