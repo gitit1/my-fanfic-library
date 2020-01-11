@@ -3,9 +3,8 @@ exports.fixStringForPath = (fileName) =>{
         return fileName;
     }
     let newFileName = fileName;
-    console.log('[db controller] fixStringForPath',fileName);
     newFileName = newFileName.replace(/\?|\!/g, "");
     newFileName = newFileName.replace(/é/g, "e");
-    console.log('new fileName:',newFileName);
+    console.log('[db controller] fixStringForPath: newFileName',newFileName);
     return newFileName;
 }

@@ -28,7 +28,7 @@ exports.downloadFanfic = async (url,source,fileName,savedAs,fandomName,fanficId)
     setTimeout(() => {
         url = `http://ff2ebook.com/download.php?source=${sourceCode}&id=${fanficId}&filetype=${savedAs}`
         new Promise((resolve, reject) => {
-            console.log('fileName:',fullFilename)
+            console.log('downloadFanfic - fileName:',fullFilename)
             console.log('url:',url)
             const file = fs.createWriteStream(fullFilename);
             request({url,jar, credentials: 'include'}).pipe(file);
