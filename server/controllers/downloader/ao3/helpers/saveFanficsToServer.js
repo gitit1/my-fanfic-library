@@ -60,21 +60,20 @@ const {getUrlBodyFromAo3} = require('./getUrlBodyFromAo3')
 //     });
 // }
 
-exports.saveFanficToServerHandler = async (urlBody,fandomName,saveMethod,savedNotAuto) =>{
+exports.saveFanficToServerHandler = async (jar, url, urlBody,fandomName,saveMethod,savedNotAuto) =>{
     // console.log('saveFanficToServerHandler:',url,fandomName,saveMethod,savedNotAuto)
     // return await new Promise(async function(resolve, reject) { 
     //     resolve(saveFanficToServer(url,fandomName,saveMethod,savedNotAuto))
     //  })
-    return saveFanficToServer(urlBody,fandomName,saveMethod,savedNotAuto)
+    return saveFanficToServer(jar, url, urlBody,fandomName,saveMethod,savedNotAuto)
 }
 
-const saveFanficToServer = async (urlBody,fandomName,saveMethod,savedNotAuto)=>{
+const saveFanficToServer = async (jar, url, urlBody,fandomName,saveMethod,savedNotAuto)=>{
     //console.log('saveFanficToServer:',url,fandomName,saveMethod,savedNotAuto)
     try {
         let links = [],methods=[];
         let fanficId = 0
         let filename = '';
-        url = url + '?view_adult=true';
         saveMethods = (saveMethod!== ''||saveMethod||null||saveMethod.length>0) ? saveMethod : savedNotAuto;
         (!saveMethods.includes(",")) ? methods.push(saveMethods) : methods = saveMethods.split(',');
         return await new Promise(async function(resolve, reject) {

@@ -1,18 +1,20 @@
 const clc = require("cli-color");
-let request = require('request')
+
+const {getUrlBodyFromAo3} = require('../../helpers/getUrlBodyFromAo3')
+const pLimit = require('p-limit');
+const limit = pLimit(1);
 
 exports.getPagesOfFandomData = async (jar,url,numberOfPages) => {
     let pages = [], promises = [];
-    request = request.defaults({jar: jar,followAllRedirects: true});
-    await [...Array(Number(numberOfPages))].forEach(async (num,index) => {promises.push(
-        new Promise(async(resolve, reject) => {
-            request.get({url: `${url}?page=${index+1}`,jar: jar, credentials: 'include'}, async function (err, httpResponse, body) {
-                err && reject(console.log(clc.red('error in getPagesOfFandomData(): ',err)))
-                pages.push(body)
-                resolve()
-            })
-        })
-    )});
+
+    await [...Array(Number(numberOfPages))].forEach(async (num,index) => {promises.push(limit(async () =>{
+        let body = await getUrlBodyFromAo3(jar,`${url}?page=${index+1}`)
+        if(!body){
+            console.log(clc.red('error in getPagesOfFandomData(): ',err))
+        }else{
+            pages.push(body)
+        }
+    }))});
 
     const reflect = p => p.then(v => ({v, status: "fulfilled" }),
     e => ({e, status: "rejected" }));

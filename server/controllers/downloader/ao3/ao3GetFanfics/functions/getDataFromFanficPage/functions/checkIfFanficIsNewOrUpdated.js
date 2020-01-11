@@ -3,7 +3,7 @@ const mongoose = require('../../../../../../../config/mongoose');
 
 exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
     let oldFanficData = false,fandom = null;
-    let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'month')
+    //let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'month')
     // let isThisWeek =  moment(new Date(fanfic.LastUpdateOfFic)).isSame(new Date(), 'week')
     
     // if(isThisWeek){
@@ -54,6 +54,9 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
         console.log('Status',fanfic["Status"]);
         console.log('Status Details',fanfic["StatusDetails"]);
         console.log(`------------------`)
+        if(!fanfic['SavedFic']){
+            return ([true,false,fanfic])
+        }
         return ([newFic,updated,fanfic])
     // }else{
 	// 	console.log('---- new fanfic');

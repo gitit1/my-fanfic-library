@@ -1,14 +1,16 @@
 const clc = require("cli-color");
 const cheerio = require('cheerio');
 
+const {sleep} = require('../../../../helpers/sleep.js')
 const {getDataFromFanficPage} = require('./getDataFromFanficPage/getDataFromFanficPage');
-const pLimit = require('p-limit');
 
 exports.getDataFromAO3FandomPage =  async (jar,pageNumber,log,page,fandom,savedNotAuto) => {  
     // console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));
     try {
         let $ = cheerio.load(page),donePromise = 0;
         let n = $('ol.work').children('li').length;
+        log.info(`----- fanfics in page:`,$);
+        console.log('num fanfics in page: ',n)
         let counter;
         const {FandomName, AutoSave, SaveMethod} = fandom;
         console.log('pagesArray: ',pageNumber,' - sleeping...');
@@ -29,6 +31,3 @@ exports.getDataFromAO3FandomPage =  async (jar,pageNumber,log,page,fandom,savedN
     } catch(e) {console.log(e);}
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
