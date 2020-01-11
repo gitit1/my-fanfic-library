@@ -10,7 +10,7 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
         
         oldFanficData = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
 
-        console.log(`-----${fanfic["FanficTitle"]}------`)
+
 
         console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
         console.log('fanfic["LastUpdateOfFic"]',fanfic["LastUpdateOfFic"])
@@ -53,7 +53,7 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
        
         console.log('Status',fanfic["Status"]);
         console.log('Status Details',fanfic["StatusDetails"]);
-        console.log(`------------------`)
+
         if(oldFanficData!==null && !oldFanficData['SavedFic']){
             return ([true,false,fanfic])
         }

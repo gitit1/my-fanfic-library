@@ -10,9 +10,9 @@ const {getUrlBodyFromAo3} = require('../../../helpers/getUrlBodyFromAo3');
 exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, saveMethod, savedNotAuto) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
     pageUrl = 'https://archiveofourown.org'+ page.find('div.header h4 a').first().attr('href') + '?view_adult=true';
-    await getUrlBodyFromAo3(jar,pageUrl).then(async urlBody => {
+    await getUrlBodyFromAo3(jar,pageUrl,log).then(async urlBody => {
         let fanfic = await getDataFromPage(page,fandomName);
-
+        console.log(`-----${fanfic["FanficTitle"]}------`)
         log.info(`-----FanficID: ${fanfic.FanficID}`);
         // let check = (savedFanficsLastUpdate!==undefined) ? await checkIfFanficIsNewOrUpdated(log, fandomName,fanfic,autoSave) : [false,false,fanfic];
         let check = await checkIfFanficIsNewOrUpdated(log, fandomName,fanfic,autoSave);
@@ -47,7 +47,8 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, sav
                         return saveFanficToDB(fandomName,fanfic).then(async () =>{
                             return counter  
                         }).catch(error=>{
-                            console.log('error:::',error)
+                            console.log('error:::',error);
+                            console.log(`------------------`)
                             return counter
                         })
                     })
@@ -55,6 +56,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, sav
                     fanfic["NeedToSaveFlag"] = false;
                     fanfic["SavedFic"]   =   false;
                     return saveFanficToDB(fandomName,fanfic).then(async () =>{
+                        console.log(`------------------`)
                         return counter  
                     }).catch(error=>{
                         console.log('error:::',error)
