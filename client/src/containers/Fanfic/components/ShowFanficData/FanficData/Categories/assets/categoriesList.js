@@ -25,6 +25,7 @@ export const categories = [
   { label: 'Death' },
   { label: 'Doctor/Hospital' },
   { label: 'Enemies to Lovers' },
+  { label: 'Escort' },
   { label: 'Fake Relationship' },
   { label: 'Family (Kids)/Pregnant' },
   { label: 'Farm/Ranch' },

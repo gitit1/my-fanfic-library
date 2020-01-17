@@ -1,8 +1,8 @@
 
 const clc = require("cli-color");
-const db  =  require('../db/db')
 const funcs = require('./functions/index')
 const logger = require('simple-node-logger');
+const {fetchFandoms}  =  require("../helpers/fetchFandoms.js");
 
 exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
     console.log(clc.blue('[connection] manageDownloader'));
@@ -15,45 +15,38 @@ exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
 
     try {
         if(fandom=='All'){
-            let fetchedFandoms = await db.getAllFandoms().then(fetchedFandoms=>{
-                if(!fetchedFandoms){
-                    return false
-                }else{
-                    return fetchedFandoms
-                }
-            })
-            let promises = [];
-            if(fetchedFandoms){
+            let allFandoms = fetchFandoms(), promises = [];
+            if(allFandoms){
                 let p = Promise.resolve();
                 switch (choice) {
                     case 'getFandomFanficsPartial':
-                        await fetchedFandoms.map(async fandom => promises.push(
+                        await allFandoms.map(async fandom => promises.push(
                             await new Promise(resolve => setTimeout(resolve, 30000)),
                             p = p.then(() => funcs.getFandomFanfics(socket,log,fandom,'partial') )                             
                         ))
                         break;  
                     case 'getFandomFanficsFull':
                             console.log('---  not stand by full')
-                            await fetchedFandoms.map(async fandom => promises.push(
+                            await allFandoms.map(async fandom => promises.push(
                                 await new Promise(resolve => setTimeout(resolve, 30000)),
                                 p = p.then(() => funcs.getFandomFanfics(socket,log,fandom,'full') )                             
                             ))
                             break;                                        
                     case 'getDeletedFanfics':
-                        await fetchedFandoms.map(async fandom => promises.push(
+                        await allFandoms.map(async fandom => promises.push(
                             await new Promise(resolve => setTimeout(resolve, 30000)),
                             p = p.then(() => funcs.getDeletedFanfics(socket, log, fandom) )                                                          
                         ))
                         break;
                     case 'saveFanfics':
                         // TODO: CHECK THIS FUNC - WHAT SHE IS USES FOR 
-                        await fetchedFandoms.map(fandom => promises.push(
+                        await allFandoms.map(fandom => promises.push(
                             p = p.then(() => funcs.downloadFanficsToServerHandler(socket,fandom,method) )                                                                                                                   
                         ))
                         break;
                     case 'checkIfFileExsists':
                         // TODO: CHECK THIS FUNC - WHAT SHE IS USES FOR 
-                        await fetchedFandoms.map(fandom => promises.push(
+                        await allFandoms.map(fandom => promises.push(
                             p = p.then(() => funcs.saveMissingFanfics(socket,fandom,method) )                                                                                                                 
                         ))
                         break;                        
