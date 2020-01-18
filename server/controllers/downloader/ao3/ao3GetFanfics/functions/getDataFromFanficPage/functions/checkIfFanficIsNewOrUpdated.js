@@ -11,17 +11,17 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
         oldFanficData = await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]})
 
 
-
-        console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
-        console.log('fanfic["LastUpdateOfFic"]',fanfic["LastUpdateOfFic"])
-        console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
-        console.log('fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic',fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfNote)
+        if(oldFanficData!==null){
+            console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
+            console.log('fanfic["LastUpdateOfFic"]',fanfic["LastUpdateOfFic"])
+            console.log('oldFanficData.LastUpdateOfFic',oldFanficData.LastUpdateOfFic)
+            console.log('fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic',fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfNote)
+        }
 
         newFic = (oldFanficData===null) ? true : false;
 
-
         
-        updated =   (!newFic && (
+        updated =   (!newFic && oldFanficData!==null && (
                     (fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters) ||
                     (fanfic["FanficTitle"] !== oldFanficData.FanficTitle) || 
                     (fanfic["LastUpdateOfFic"] > oldFanficData.LastUpdateOfFic) ||
@@ -36,9 +36,11 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
 
         fanfic["Status"] = newFic ? 'new' : updated ? 'updated' : 'old';
         
-        console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
-        console.log('NumberOfChapters',fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters)
-        console.log('FanficTitle',fanfic["FanficTitle"] !== oldFanficData.FanficTitle)
+        if(oldFanficData!==null){
+            console.log('Completed',fanfic["Complete"] !== oldFanficData.Complete)
+            console.log('NumberOfChapters',fanfic["NumberOfChapters"] > oldFanficData.NumberOfChapters)
+            console.log('FanficTitle',fanfic["FanficTitle"] !== oldFanficData.FanficTitle)
+        }
         
         if(!updated && !newFic){
             fanfic["StatusDetails"] = 'old';

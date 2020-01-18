@@ -28,6 +28,7 @@ const UserFanficsSchema = new Schema({
       ReadingList:      [],
       SavedFic:         {type: Boolean},       
       SavedType:        [],
+      Note:             {type: String}
     }
   ],
   Fandoms:          [],

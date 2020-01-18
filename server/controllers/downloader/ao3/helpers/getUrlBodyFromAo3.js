@@ -3,7 +3,11 @@ const clc = require("cli-color");
 let request = require('request');
 const {sleep} = require('../../../helpers/sleep.js')
 
-exports.getUrlBodyFromAo3 = (jar,url,log) =>{
+exports.getUrlBodyFromAo3 = async (jar,url,log) =>{
+    return getUrlBody(jar,url,log)
+}
+
+const getUrlBody = (jar,url,log) =>{
     return new Promise(function(resolve, reject) {
         request.get({url,jar, credentials: 'include'}, async function (err, httpResponse, body) {
             if(err){  
@@ -13,12 +17,11 @@ exports.getUrlBodyFromAo3 = (jar,url,log) =>{
             }else if(body.includes("Retry later")){
                 console.log('failed to connect - sleeping and tring again',url)
                 log && log.info(`----- failed to connect - sleeping and tring again`,url);
-                sleep(9000)
-                log && log.info(`----- failed to connect - tring again`);
-                getUrlBodyFromAo3(jar,url)
+                await sleep(10000)
+                resolve(getUrlBody(jar,url,log))  
             }else{
                 console.log('getUrlBodyFromAo3:',url)
-                resolve(body) 
+                resolve(body);
             }       
         });
     });

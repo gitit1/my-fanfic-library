@@ -21,7 +21,7 @@ exports.ao3GetFanfics =  async (jar, log, fandom, type) => {
 
     let numberOfPages = 0,fanficsInFandom,savedFanficsCurrent=0;
 
-    let body = await ao3Funcs.getUrlBodyFromAo3(jar,ao3URL);
+    let body = await ao3Funcs.getUrlBodyFromAo3(jar,ao3URL,log);
             
     let $ = cheerio.load(body);
      
