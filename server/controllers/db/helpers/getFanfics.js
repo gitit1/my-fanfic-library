@@ -1,14 +1,13 @@
 const clc = require("cli-color");
 const mongoose = require('../../../config/mongoose');
 const FanficSchema = require('../../../models/Fanfic');
-const pLimit = require('p-limit');
 
 exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList,userSorted)=>{
     return new Promise(async function(resolve, reject) {
         skip = (Number(skip)<0) ? 0 : Number(skip)
         limit = (Number(limit)<0) ? 0 : Number(limit) 
         let promises = [];
-        //const limitPromise = pLimit(1)
+
         console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
         sort = userSorted ? {} : (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
         console.log('sort 3:',sort)

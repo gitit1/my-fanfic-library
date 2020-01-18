@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "fix-memory-limit": "cross-env LIMIT=8192 increase-memory-limit",
-    "start": "nodemon server.js"
+    "start": " nodemon --ignore public/ server.js"
   },
   "keywords": [],
   "author": "",
