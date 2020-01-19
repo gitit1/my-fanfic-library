@@ -15,7 +15,7 @@ exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
 
     try {
         if(fandom=='All'){
-            let allFandoms = fetchFandoms(), promises = [];
+            let allFandoms = await fetchFandoms(), promises = [];
             if(allFandoms){
                 let p = Promise.resolve();
                 switch (choice) {
