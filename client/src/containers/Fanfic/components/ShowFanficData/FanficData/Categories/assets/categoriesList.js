@@ -26,6 +26,7 @@ export const categories = [
   { label: 'Doctor/Hospital' },
   { label: 'Enemies to Lovers' },
   { label: 'Escort' },
+  { label: 'Fan Art (Not a Fanfic)' },
   { label: 'Fake Relationship' },
   { label: 'Family (Kids)/Pregnant' },
   { label: 'Farm/Ranch' },

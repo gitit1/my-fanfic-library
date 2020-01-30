@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import ImageZoom from 'react-medium-image-zoom'
 import * as actions from '../../../../../store/actions';
 
 import CardMedia from '@material-ui/core/CardMedia';
@@ -36,33 +37,32 @@ class FanficImage extends Component{
   }
 
   render(){
-    const {fanfic,images} = this.props
+    const {fanfic,images} = this.props;
+    const { FandomName, FanficID, FanficTitle } = fanfic;
     const {imagePath,color} = this.state
     let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
     isImage = imagePath!=='' ? true :  isImage;
     let fanficImage = fanfic.image ? fanfic.image : imagePath;
-
-    // const color = isImage && (images.addImageFlag===null) ? null : getRandomColor();
+    const src = isImage 
+      ? `/fandoms/${FandomName.toLowerCase()}/fanficsImages/${fanficImage}`
+      : `/fandoms/${FandomName.toLowerCase()}/fanfic_general.jpg`;
+    const  alt = FanficTitle;
+    const className = isImage ? 'card_image' : 'card_image_opacity card_image';
     return(
       <div className='details-image'>
-            { images.addImageFlag===fanfic.FanficID ?
+            { images.addImageFlag===FanficID ?
               <div className='card_image_layer' >
-                <ImageUpload  id='fanficImage' ref={this.fileUploadRef}   FandomName={fanfic.FandomName}
+                <ImageUpload  id='fanficImage' ref={this.fileUploadRef}   FandomName={FandomName}
                               imageLabel='Fanfic Image' type='image'/> 
                 <Button  type="submit" variant="contained"  className='send_button' onClick={this.saveImageOfFanfic}>Upload</Button>
 
               </div>
               : 
               <div className='card_image_layer' style={{backgroundColor:color}}>
-                <CardMedia className={isImage ? 'card_image' : 'card_image_opacity card_image'}
-                    image={isImage 
-                    ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanficImage}`
-                    : `/fandoms/${fanfic.FandomName.toLowerCase()}/fanfic_general.jpg`
-                    } 
-                    title={fanfic.FanficTitle}
-                >
-                  {!isImage && <span className='card_image_overlay'>{fanfic.FanficTitle}</span>}
-                </CardMedia>
+                  <ImageZoom
+                    defaultStyles={{overlay: {backgroundColor:  '#212121' }}}
+                    image={{ src, alt, className }}
+                  />
               </div>
             }
       </div>
