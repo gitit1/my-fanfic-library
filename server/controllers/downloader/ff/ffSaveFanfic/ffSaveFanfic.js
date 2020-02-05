@@ -12,7 +12,7 @@ exports.ffSaveFanfic = async (fandomName,download,url,fanfic) =>{
         const status = await saveFanficToDB(fandomName,fanfic);
         status && await updateFandomData(fanfic);
         download=='true' && await downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'epub', fandomName, FanficID)     
-        download=='true' && await downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'pdf', fandomName, FanficID)     
+        // download=='true' && await downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'pdf', fandomName, FanficID)     
         resolve();
     });
 }
