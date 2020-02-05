@@ -7,6 +7,10 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>02-05-2020:</strong></span><span className={classes.Content}>Added Sorting by reading date[MFL-9]</span></p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
+      <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>01-18-2020:</strong></span><span className={classes.Content}>0001/feat/create_backup_cron_for_db</span></p>
         <p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
