@@ -167,7 +167,7 @@ exports.getFiltersRules = async (filters,userEmail) =>{
         sortList.push({'LastUpdateOfNote':1})
     }
 
-    console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList,sortList])
+    //console.log('[filtersUserList,filtersFanficList]: ',[filtersUserList,filtersFanficList,sortList,ignoreList,userSortFlag])
     return [filtersUserList,filtersFanficList,sortList,ignoreList,userSortFlag]
     
 

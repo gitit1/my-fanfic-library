@@ -12,8 +12,6 @@ exports.getFilteredFanficsListFromDB = async (req,res)=>{
 
     filtersArrays = await getFiltersRules(filters,userEmail)//[0] - userData filters , [1] - fanfics filters, [2] - sort 
     sortObj = Object.assign({}, ...filtersArrays[2]);
-    //console.log('sortObj:',sortObj)
-
     if(filtersArrays[2].length!==0 && filtersArrays[0].length===0 && filtersArrays[1].length===0){
         let filteredFanficsData = await getFilteredFanficsHandler(userEmail,fandomName,{},sortObj,pageLimit,pageNumber)
         res.send([filteredFanficsData[0],filteredFanficsData[1],filteredFanficsData[2]])
