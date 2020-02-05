@@ -8,23 +8,25 @@ exports.userDataFiltersHandler = (userEmail,fandomName,filtersArrays,sortObj,pag
     return new Promise(function(resolve, reject) {
         try {
             //USER DATA FILTERS:
-            let idsList=[]
+            let idsList=[],ordered = [];
             const filterObj = Object.assign({'userEmail': userEmail},{'FanficList.FandomName':fandomName},{'FanficList.FanficID': { $nin: filtersArrays[3] }}, ...filtersArrays[0]);
-            console.log('----filterObj:',filterObj)
-            // FandomUserData.find({'userEmail': userEmail}, async function(err, data) {
             FandomUserData.aggregate([{$unwind:"$FanficList"},{$match:filterObj},
-                                    {$group :  {_id : {FandomName: "$FanficList.FandomName", FanficID: "$FanficList.FanficID"}} },
-                                    {$project: { _id: 0,FandomName:'$_id.FandomName',FanficID:'$_id.FanficID'}}
+                                    {$group :  {_id : {FandomName: "$FanficList.FandomName", FanficID: "$FanficList.FanficID", Date:'$FanficList.Date'}} },
+                                    {$project: { _id: 0,FandomName:'$_id.FandomName',FanficID:'$_id.FanficID', Date:'$_id.Date'}},        
                                     ], async function(err, filtered) {
-                                        pageLimit = Number(pageLimit), pageNumber = Number(pageNumber)
-                                        filtered.map(fanfic => idsList.push(fanfic.FanficID));
-                                        // let initSkip = (pageLimit*pageNumber)-pageLimit;
-                                        
-                                        const filterObj = Object.assign({FanficID: {$in: idsList}}, ...filtersArrays[1]);
-                                        console.log('filterObj 2:',filterObj)
-                                        let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber)
+                                        pageLimit = Number(pageLimit), pageNumber = Number(pageNumber);
+                                        filtered.sort( function ( a, b ) { return b.Date - a.Date; } ).map(fanfic => idsList.push(fanfic.FanficID));
+                                        shortIds =  filtersArrays[4] ? 
+                                                    Object.assign({FanficID: {$in: idsList.slice(pageNumber-1, (pageLimit*pageNumber)-1)}}, ...filtersArrays[1]) : null;
+                                        const filterObj =  Object.assign({FanficID: {$in: idsList}}, ...filtersArrays[1]);
+                                        let filteredData = await getFilteredFanficsHandler(userEmail,fandomName,filterObj,sortObj,pageLimit,pageNumber,filtersArrays[4],shortIds);
+                                        if(filtersArrays[4]){                                            
+                                            await idsList.map(id => {return filteredData[0].filter(fanfic => {if(id === fanfic.FanficID){ ordered.push(fanfic);}});});
+                                            filteredData[0] = ordered;
+                                        }
                                         resolve(filteredData)
-            })       
+
+                                    })       
         } catch (error) {
             reject(error) 
         }
