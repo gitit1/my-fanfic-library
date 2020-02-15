@@ -8,7 +8,7 @@ const MyLatestActivity = (props) => {
     return(
         <React.Fragment>
             <div className='myLatestActivity'>
-                {updates.map(activity=>{
+                {(props.updates && props.updates!==null) ? updates.map(activity=>{
                     const {Date,FandomName,ActivityType,Author,FanficTitle,FanficID,Source} = activity;
                     return(
                         <p key={Date}>{`${FandomName} - ${ActivityType} - `}
@@ -19,7 +19,7 @@ const MyLatestActivity = (props) => {
                         </p>
                     )
     
-                })}
+                }) : <p></p>}
             </div>
             <div className='link_see_all'><Link to="/myLatestActivity">See All</Link></div>
         </React.Fragment>

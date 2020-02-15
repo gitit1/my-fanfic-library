@@ -17,8 +17,9 @@ const settings = {
 
 const LatestUpdates = (props) => (
     <div className='latestUpdates'>
-        <Slider {...settings}>
-            {props.updates.map(update=>(
+        {props.updates && props.updates!==null ? 
+            <Slider {...settings}>
+                {props.updates.map(update=>(
                 <div key={update.Date}>
                     <h4 className='latestUpdates_date_header'>
                         {new Date(update.Date).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}
@@ -32,9 +33,10 @@ const LatestUpdates = (props) => (
                             </span>
                         )
                     }
-                </div>
-            ))}
-        </Slider>
+                </div>              
+                ))} 
+            </Slider>
+         : <div></div>}
         <Link to="/latestUpdates">See All</Link> 
     </div>
 );
