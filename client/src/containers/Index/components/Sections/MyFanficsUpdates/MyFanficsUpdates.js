@@ -7,9 +7,9 @@ const MyFanficsUpdates = (props) => {
     return(
         <React.Fragment>
             <div className='myFanficsUpdates'>
-                {updates.map(fanfics=>(
+                {(props.updates && props.updates!==null) ? updates.map(fanfics=>(
                     <p key={fanfics.FanficID}>{`${fanfics.FanficID} - ${fanfics.Status} - ${fanfics.StatusDetails}`}</p>
-                ))}
+                )) : <p></p>}
             </div>
             <div className='link_see_all'><Link to="/myFanficsUpdates">See All</Link></div>
         </React.Fragment>
