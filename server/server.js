@@ -32,7 +32,6 @@ app.use('/',routes);
 //app.listen(port, () => console.log(`Listening on port ${port}`));
 
 if (keys.nodeEnv==='development'){  
-	// require('./cronJobs/cron');
 	app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
 }
 // else if(keys.nodeEnv==='straight'){

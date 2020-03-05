@@ -60,7 +60,8 @@ class ManageDownloader extends Component{
         },
         showData:0,
         showGridDataBox:false,
-        showGridButtons:true
+        showGridButtons:true,
+        backupDBmsg:''
     }
 
     componentDidMount(){
@@ -150,9 +151,15 @@ class ManageDownloader extends Component{
     toggleBottons= () =>{
         this.props.smallSize && this.setState({showGridDataBox: false,showGridButtons: true});
     }
+    backupDB = ()=>{
+        this.setState({backupDBmsg: 'Backup is happening on server...'});
+        this.props.backupDB().then(()=>{
+            this.setState({backupDBmsg: 'Done with backup'});
+        })
+    }
 
     render(){
-        const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox} = this.state
+        const {fandom,fandomSelect,switches,logs,showData,showGridButtons,showGridDataBox,backupDBmsg} = this.state
         const {smallSize} = this.props
         return(
             <Container header='Downloader' className='managedownloader'>
@@ -160,11 +167,15 @@ class ManageDownloader extends Component{
                     <GridChooseFandom fandomSelect={fandomSelect} switches={switches} inputChange={this.inputChangedHandler} switchChange={this.switchChangeHandler}/>
                     {this.props.smallSize && showGridDataBox &&  <Button variant="contained" className='backButton' onClick={()=>this.toggleBottons()}>Back to Bottons</Button>}
                     {
-                     fandomSelect.value!=='' &&
-                        <React.Fragment> 
+                     fandomSelect.value!=='' ?
+                        <> 
                             <GridButtons sendRequestsToServer={this.sendRequestsToServerHandler} addNewFanfic={this.addNewFanficHandler} showBox={showGridButtons}/>
                             <GridDataBox fandom={fandom} showData={showData} logs={logs} switches={switches} showBox={showGridDataBox} smallSizeMode={smallSize}/>
-                        </React.Fragment>
+                        </> :
+                        <div className='backup'>
+                            <Button variant="contained" className='backupButton' onClick={()=>this.backupDB()}>Backup DB</Button>
+                            <div className='backupMessage'>{backupDBmsg}</div>
+                        </div>
                     }
                 </Grid>
             </Container>
@@ -183,7 +194,8 @@ const mapStateToProps = state =>{
   const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
-        onGetFandoms:              ()                                  =>      dispatch(actions.getFandomsFromDB())
+        onGetFandoms:               ()  =>      dispatch(actions.getFandomsFromDB()),
+        backupDB:                   ()  =>      dispatch(actions.backupDB())
     };
   }
   

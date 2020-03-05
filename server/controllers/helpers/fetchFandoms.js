@@ -1,8 +1,8 @@
-const db  =  require("../db/db.js");
+const {getAllFandoms}  =  require("../db/CRUD/Fandoms/getAllFandomsFromDB");
 
 exports.fetchFandoms = () =>{
     return new Promise(async function(resolve, reject) {
-        db.getAllFandoms().then(fetchedFandoms=>{
+        getAllFandoms().then(fetchedFandoms=>{
             if(!fetchedFandoms){
                 reject(false)
             }else{
