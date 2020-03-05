@@ -22,11 +22,11 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
     const getFanficList = ()=>{
         return new Promise(function(resolve, reject) {
             FanficDB.find({Source:'AO3'}).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).exec(async function(err, fanfics) { 
-                const limit = pLimit(1);
+                const limit = pLimit(5);
                                            
                 for (let i = 0; i < fanfics.length; i++) {
                     promises.push(limit(async () =>{
-                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        await new Promise(resolve => setTimeout(resolve, 4000));
                         await checkIfDeleted(jar,fanfics[i],i)
                     } ));
                 }
@@ -40,7 +40,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
         return new Promise(function(resolve, reject) {
             request.get({url,jar: jar,credentials: 'include'}, async function (err, httpResponse, body) {
                 try {
-                    func.delay(2000).then(async () => {
+                    func.delay(4000).then(async () => {
                         console.log('fanfic number: ', index,' , id: ',fanfic.FanficID);
                         log.info(`-----Fanfic number: ${index} , id: ${fanfic.FanficID}`);  
 
@@ -64,6 +64,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
                                 }else if (httpResponse.body.includes("Retry later")){
                                     console.log('site is down, move on');
                                     log.info(`-----Retry later: ${fanfic.FanficID}`);
+									func.delay(25000);
                                 }else if (fanfic.Deleted){
                                     console.log(clc.redBright(`Restored fanfic:: ${fanfic.FanficTitle}`));
                                     log.info(`-----Found fanfic who restored: ${fanfic.FanficID}`);

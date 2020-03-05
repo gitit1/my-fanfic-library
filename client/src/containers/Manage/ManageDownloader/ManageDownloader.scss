@@ -1,99 +1,102 @@
-@import '../../../style/_colors';
-@import '../../../style/_fonts';
-@import '../../../style/_varibles';
+@import "../../../style/_colors";
+@import "../../../style/_fonts";
+@import "../../../style/_varibles";
 
-@mixin code_box{
-    width:80%;
-    margin-top: 50px;
-    min-height: 50vh;  
-    background: #eee;
+@mixin code_box {
+  width: 80%;
+  margin-top: 50px;
+  min-height: 50vh;
+  background: #eee;
 }
 
+.managedownloader {
+  width: 98%;
 
-.managedownloader{
-    width: 98%;
-
-    select{
-        width: 200px;
-        margin: 0 auto;
+  select {
+    width: 200px;
+    margin: 0 auto;
+  }
+  .backup {
+    margin: 0 auto;
+    .backupMessage {
+      line-height: 30px;
     }
-
-    .grid_buttons{
-        button{
-            margin-top: 50px;
-            width: 200px;
-            height: 100px
-        }
+  }
+  .grid_buttons {
+    button {
+      margin-top: 50px;
+      width: 200px;
+      height: 100px;
     }
-    .grid_code {
-        // margin-top: 2%;
+  }
+  .grid_code {
+    // margin-top: 2%;
 
-        .code_box{
-            @include code_box;
-            color: #666;
-            border-radius: 5px;
-            white-space: pre;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            // margin: 0 auto;
-            font-size: 14px;
-            overflow: auto;
-        }
+    .code_box {
+      @include code_box;
+      color: #666;
+      border-radius: 5px;
+      white-space: pre;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      // margin: 0 auto;
+      font-size: 14px;
+      overflow: auto;
     }
+  }
 
-    .addNewFanfic_container{
-        @include code_box;
-    }
+  .addNewFanfic_container {
+    @include code_box;
+  }
 }
 
 @media only screen and (max-width: $screenSizeM) {
-    .managedownloader{
-        width: 100%;
-    
-        .MuiFormControl-root{
-            margin-top: 3%;
-        }
-        .backButton{
-            margin: 0 auto;
-            width:200px;
-            height: 30px;
-            font-size: 0.7em;
-        }
-        .grid_buttons{
-            margin: 0 auto;
-            display: grid;
-            button{
-                margin-top: 0;
-                width: 180px;
-                height: 80px;
-                font-size: 0.8em;
-                margin-top: 2%;
-            }
-        }
-        .grid_code {
-            .code_box{
-                margin: 0 auto;
-                width: 98%; 
-                font-size: 0.8em;
-            }
+  .managedownloader {
+    width: 100%;
 
-        }
-        .addNewFanfic_container{
-            margin: 0 auto;
-            margin-top: 2%;
-            width: 98%;
-            background-color: #fff;
-            .input_url{
-                margin: 0 auto;
-                width: 90%;
-            }
-            button{
-                margin: 0 auto;
-                margin-top: 2%;
-                width:150px;
-                height: 30px;
-                font-size: 0.7em;               
-            }
-        }
+    .MuiFormControl-root {
+      margin-top: 3%;
     }
+    .backButton {
+      margin: 0 auto;
+      width: 200px;
+      height: 30px;
+      font-size: 0.7em;
+    }
+    .grid_buttons {
+      margin: 0 auto;
+      display: grid;
+      button {
+        margin-top: 0;
+        width: 180px;
+        height: 80px;
+        font-size: 0.8em;
+        margin-top: 2%;
+      }
+    }
+    .grid_code {
+      .code_box {
+        margin: 0 auto;
+        width: 98%;
+        font-size: 0.8em;
+      }
+    }
+    .addNewFanfic_container {
+      margin: 0 auto;
+      margin-top: 2%;
+      width: 98%;
+      background-color: #fff;
+      .input_url {
+        margin: 0 auto;
+        width: 90%;
+      }
+      button {
+        margin: 0 auto;
+        margin-top: 2%;
+        width: 150px;
+        height: 30px;
+        font-size: 0.7em;
+      }
+    }
+  }
 }

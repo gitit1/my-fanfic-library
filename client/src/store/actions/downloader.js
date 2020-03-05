@@ -13,6 +13,21 @@ export const getDataOfFanficSuccess = (fanficData) =>{
     };
 };
 
+export const backupDB = () => {
+    console.log('[actions: fandom.js] - backupDB')
+    // console.log('fanfic:',fanfic)
+    return dispatch =>{
+        dispatch(downloaderStart())
+        return axios.get(`/db/backupDB`)
+        .then(() =>{
+            dispatch(downloaderSuccess())
+            return true;
+        })
+        .catch(error =>{
+            dispatch(downloaderFail(error))
+        })  
+    };
+}
 
 export const getDataOfFanfic = (type,fandomName,url,fanficData) =>{
     console.log('[actions: fandom.js] - getFandomsFromDB');
@@ -59,7 +74,7 @@ export const saveDataOfFanficToDB = (fandomName,fanfic,download,url,image) =>{
 
 export const updateFanficData = (fandomName,fanfic) =>{
     console.log('[actions: fandom.js] - getFandomsFromDB')
-    console.log('fanfic:',fanfic)
+    // console.log('fanfic:',fanfic)
     return dispatch =>{
         dispatch(downloaderStart())
         return axios.post(`/downloader/updateExistFanfic?fandomName=${fandomName}`,fanfic)

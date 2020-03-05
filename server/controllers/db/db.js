@@ -25,6 +25,7 @@ const db = {
     ...require('./UserData/addFandomToUserFavorites'),
     ...require('./UserData/getUserFandomsFromDB'),
     ...require('./UserData/getFullUserDataFromDB'),
+    ...require('./Backup/backupDB'),
 }
 
 module.exports=db;
