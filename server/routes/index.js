@@ -40,7 +40,9 @@ try {
   router.post('/db/addFandomToUserFavorites',db.addFandomToUserFavorites);
   router.post('/db/getUserFandoms',db.getUserFandomsFromDB);
   router.post('/db/getFullUserData',db.getFullUserDataFromDB);
-  
+  //Backup
+  router.get('/db/backupDB',db.backupDB);
+
   //User
   router.post('/users/register',users.register);
   router.post('/users/login',users.login);
@@ -55,6 +57,7 @@ try {
   router.get('/updates/latestUpdates',updates.latestUpdates)
   router.get('/updates/myLatestActivities',updates.myLatestActivities)
   router.get('/updates/myFanficsUpdate',updates.myFanficsUpdate)
+
 
 
 } catch(e) {

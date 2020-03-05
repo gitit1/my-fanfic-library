@@ -7,8 +7,18 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
       <LazyLoad height={100} >
-        <p><span className={classes.Date}><strong>02-05-2020:</strong></span><span className={classes.Content}>Added Sorting by reading date [MFL-9]</span></p>
-        <p><span className={classes.Date}></span>&nbsp;</p>
+        <p><span className={classes.Date}><strong>03-05-2020:</strong></span>
+          <span className={classes.Content}>
+            Manager- created backup for db (server -b build funcionality & routing, client - button in manager page) <a href="https://myfanficslibrary.atlassian.net/browse/MFL-44" target="_blank">[MFL-44]</a>
+          </span>
+        </p><p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
+      <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>02-05-2020:</strong></span>
+          <span className={classes.Content}>
+            Added Sorting by reading date <a href="https://myfanficslibrary.atlassian.net/browse/MFL-9" target="_blank">[MFL-9]</a>
+          </span>
+        </p><p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
       <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>01-26-2020:</strong></span><span className={classes.Content}>0004/feat/create_backup_cron_for_db</span></p>
@@ -29,9 +39,12 @@ const News = () => (
         <p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
       <LazyLoad height={100} >
-        <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>[037-git] fix little bug in dashboard for new users</span></p>
-        <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>[036-git] Added logs for downloader methods</span></p>
-        <p><span className={classes.Date}></span>&nbsp;</p>
+        <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>Fix little bug in dashboard for new users</span></p>
+        <p><span className={classes.Date}><strong>12-28-2019:</strong></span>
+          <span className={classes.Content}>
+            Added logs for downloader methods <a href="https://myfanficslibrary.atlassian.net/browse/MFL-1" target="_blank">[MFL-1]</a>
+          </span>
+        </p><p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
        <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>12-27-2019:</strong></span><span className={classes.Content}>[035-git] split download fanfic method to 2 - partial and full</span></p>

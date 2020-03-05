@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const clc = require("cli-color");
 
 const getFanfics = require('../controllers/connection/connection');
-const { backupDB } = require('../controllers/Other/backupDB')
+const { backupDB } = require('../controllers/db/Backup/backupDB')
  
 console.log('in cron file!!')
 //Frequency: At 02:00 on every day-of-week from Sunday through Thusday. (https://crontab.guru/)
@@ -27,7 +27,7 @@ cron.schedule('0 23 * * sat', async ()=>{
 
 cron.schedule('0 20 * * sat', async ()=>{
     console.log(clc.bgRed('CronJob Awoke: [backupDB]'));
-    await backupDB();   
+    await backupDB();
 });
 
 //TODO: ARCHIVE LATESTUPDATE - IF COUNT > LIMIT - TAKE THE EXTRA TO ARCHIVE BY MONTH;
