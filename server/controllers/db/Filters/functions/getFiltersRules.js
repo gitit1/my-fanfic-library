@@ -46,11 +46,23 @@ exports.getFiltersRules = async (filters,userEmail) =>{
                 break;
             case 'deleted':
                 filtersFanficList.push({$or: [{'Deleted':true},{'Source':'Backup'}]})
-                break;                  
+                break; 
+            case 'hasImage':
+                filtersFanficList.push({'image':{ "$exists": true }})
+                break;    
+            case 'noImage':
+                filtersFanficList.push({'image':{ "$exists": false }})
+                break;
+            case 'hasCategories':
+                filtersFanficList.push({'Categories':{ "$exists": true }})
+                break;    
+            case 'noCategories':
+                filtersFanficList.push({'Categories':{ "$exists": false }})
+                break;
             //Sort Filters:
             case 'readingDate':
                 userSortFlag=true;
-                break;
+                break;  
             case 'dateLastUpdate':
                 sortList.push({'LastUpdateOfFic':-1})
                 break;
