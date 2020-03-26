@@ -9,7 +9,7 @@ import FiltersForm from './components/FiltersForm/FiltersForm';
 const Filters = (props) => {
 
     const {getCategories} = props;
-    const {checked,drawer,toggleDrawer,filterHandler,cancel,activeFilter} = props.filters;
+    const {checked,drawer,toggleDrawer,filterHandler,cancel,activeFilter,isManager} = props.filters;
     return(
         <Grid className={'buttons'} item xs={3}>
             <Button onClick={toggleDrawer(true)}>Filters</Button>
@@ -24,6 +24,7 @@ const Filters = (props) => {
                                     checked={checked}
                                     getCategories={getCategories}
                                     filteredCategories={checked.categories}
+                                    isManager={isManager}
                     />
                 </div>
             </Drawer>
