@@ -1,9 +1,6 @@
 import {deletedFanfics} from '../../../../Fandoms/components/functions';
 
 export const fanficsNumbersFunc = (fandom,ignoredCount,listFlag,listName) => {
-    console.log('fandom:::',fandom)
-    console.log('ignoredCount:::',ignoredCount)
-    console.log('list:::',listFlag)
     let fanficsNumbers = {};
     if(!listFlag){
         const AO3DeletedFanfics     = fandom['AO3'] && fandom['AO3'].DeletedFanfics ? fandom['AO3'].DeletedFanfics : 0;
