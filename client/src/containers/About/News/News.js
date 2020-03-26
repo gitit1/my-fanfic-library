@@ -6,6 +6,18 @@ import LazyLoad from 'react-lazyload';
 const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
+    <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>03-26-2020:</strong></span>
+          <span className={classes.Content}>
+            <a href="https://myfanficslibrary.atlassian.net/browse/MFL-11" target="_blank">[MFL-11]</a>
+            <ul>
+              <li>Added categories: 'Age Gap', 'Childhood Friends/Childhood Lovers', 'Crime/Mafia'</li>
+              <li>Manager- Fix "add image" button on fanfic page</li>
+              <li>Manager- Added filter for images/categories</li>
+            </ul>
+          </span>
+        </p><p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
       <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>03-05-2020:</strong></span>
           <span className={classes.Content}>

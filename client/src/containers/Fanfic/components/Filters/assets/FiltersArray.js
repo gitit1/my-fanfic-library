@@ -16,6 +16,26 @@ export const filtersArray = {
             type : 'checkbox',
             name:   'deleted',
             display: 'Deleted (Archive)'
+        },{
+            type : 'checkbox',
+            name:  'hasImage',
+            display: 'Has Image',
+            manager: true
+        },{
+            type : 'checkbox',
+            name:  'noImage',
+            display: 'Without Image',
+            manager: true
+        },{
+            type : 'checkbox',
+            name:  'hasCategories',
+            display: 'Has Categories',
+            manager: true
+        },{
+            type : 'checkbox',
+            name:  'noCategories',
+            display: 'Without Categories',
+            manager: true
         }
     ],
     UserData:[
@@ -132,6 +152,10 @@ export const filtersArrayInit = {
     finished:false,
     inProgress:false,
     ignore:false,
+    hasImage:false,
+    noImage:false,
+    hasCategories:false,
+    noCategories:false,
     noUserData:false,
     
     bookmarks:false,
@@ -159,6 +183,10 @@ export const filtersArrayAttr = {
     finished:false,
     inProgress:false,
     ignore:false,
+    hasImage:false,
+    noImage:false,
+    hasCategories:false,
+    noCategories:false,
     noUserData:false,
     
     bookmarks:false,
