@@ -14,6 +14,7 @@ exports.getFanficsFromDB = async (req,res) =>{
     ignoreList = await getIgnoredList(FandomName,userEmail);
     readingLists = await getReadingLists(userEmail);
     let filters = {},readingList = null;
+    const hasIgnoreList = ignoreList.length>0 ? true :false;
     
     if(list==='true'){
         console.log('readingLists:',readingLists)
@@ -21,14 +22,11 @@ exports.getFanficsFromDB = async (req,res) =>{
             return f.Name === FandomName;
         });
         console.log('readingList:',readingList)
-        filters = (ignoreList.length>0) ? {FanficID : { $in: readingList.Fanfics}} : { FanficID : { $nin: ignoreList } , FanficID : { $in: readingList.Fanfics}}
+        filters = hasIgnoreList ? { FanficID : { $nin: ignoreList } , FanficID : { $in: readingList.Fanfics}} : {FanficID : { $in: readingList.Fanfics}}
     }else{
-        filters = (ignoreList.length>0) ? { FanficID : { $nin: ignoreList }} : null;
+        filters = hasIgnoreList ? { FanficID : { $nin: ignoreList }} : null;
     }
-    console.log('list:',list)
-    //console.log('filters 2:',filters)
-
-    // const filters = null;
+    
     getFanfics(skip,limit,FandomName,filters,sort,list,readingList).then(async fanfics=>{
         if(userEmail!='null'){
             userData = await checkForUserDataInDBOnCurrentFanfics(userEmail,fanfics)
