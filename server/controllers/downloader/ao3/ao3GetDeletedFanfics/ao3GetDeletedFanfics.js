@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const mongoose = require('../../../../config/mongoose');
 let request = require('request')
 const pLimit = require('p-limit');
- const log = require('log-to-file');
+const log = require('log-to-file');
 
 const FandomModal = require('../../../../models/Fandom');
 const FanficSchema = require('../../../../models/Fanfic');
@@ -22,7 +22,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
     const getFanficList = ()=>{
         return new Promise(function(resolve, reject) {
             FanficDB.find({Source:'AO3'}).sort({['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1}).exec(async function(err, fanfics) { 
-                const limit = pLimit(5);
+                const limit = pLimit(3);
                                            
                 for (let i = 0; i < fanfics.length; i++) {
                     promises.push(limit(async () =>{
@@ -64,7 +64,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandomName) =>{
                                 }else if (httpResponse.body.includes("Retry later")){
                                     console.log('site is down, move on');
                                     log.info(`-----Retry later: ${fanfic.FanficID}`);
-									func.delay(25000);
+									await func.delay(40000);
                                 }else if (fanfic.Deleted){
                                     console.log(clc.redBright(`Restored fanfic:: ${fanfic.FanficTitle}`));
                                     log.info(`-----Found fanfic who restored: ${fanfic.FanficID}`);
