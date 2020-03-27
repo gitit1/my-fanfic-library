@@ -4,7 +4,6 @@ exports.getReadingLists = (userEmail) =>{
     console.log('[db controller] getReadingLists')
     return new Promise(function(resolve, reject) {
         FandomUserData.findOne({userEmail: userEmail}, async function(err, user) { 
-            console.log('hee')
             if (err) {  
                 console.log('there is an error in getReadingLists()')
                 reject([]); 
