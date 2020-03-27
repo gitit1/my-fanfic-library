@@ -34,13 +34,13 @@ app.use('/',routes);
 if (keys.nodeEnv==='development'){  
 	app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
 }
-// else if(keys.nodeEnv==='straight'){
-// 	require('./cronJobs/cron');
-// 	app.get('/*', function(req, res) {
-// 		res.sendFile(require('path').join(buildDir,'/index.html'));
-// 	});
-// 	app.listen(5010, () => console.log(`Listening on port 5010 - production mode`));
-// }
+else if(keys.nodeEnv==='straight'){
+	//Straight!!!
+	app.get('/*', function(req, res) {
+		res.sendFile(require('path').join(buildDir,'/index.html'));
+	});
+	app.listen(5010, () => console.log(`Listening on port 5010 - production mode`));
+}
 else{
 	//Gay!!!
 	port = 5000;
