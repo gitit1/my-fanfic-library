@@ -57,6 +57,7 @@ export const categories = [
   { label: 'Music' },
   { label: 'Musician' },
   { label: 'Neighbors' },
+  { label: 'NSFW' },
   { label: 'Pirates' },
   { label: 'Police' },
   { label: 'Political' },

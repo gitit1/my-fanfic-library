@@ -27,8 +27,8 @@
       float: left;
       width: 210px;
       display: flex;
-      justify-content: center;
-      //align-items: center;
+      justify-content: space-around;
+      align-items: center;
       height: 100%;
 
       .card_image {
