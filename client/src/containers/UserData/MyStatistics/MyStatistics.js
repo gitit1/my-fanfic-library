@@ -60,7 +60,7 @@ class MyStatistics extends Component{
                           <GeneralBarChart data={fandomData}/>
                           <GeneralAllFandomData data={fandomData} />
                         </div>
-                        <Grid  className={classes.StatisticsGrid} container>
+                        <Grid  className={classes.StatisticsGrid} container alignItems="flex-start">
                           <FandomCard userData={userData} fandomData={fandomData} fandoms={fandoms}/>
                         </Grid>    
     

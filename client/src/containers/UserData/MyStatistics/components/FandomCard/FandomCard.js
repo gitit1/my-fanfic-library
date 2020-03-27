@@ -31,11 +31,13 @@ const renderCustomizedLabel = (data) => (
 
 const FandomCard = (props) => {
     const {fandomData,fandoms,userData} = props;
-    console.log('fandomData:',fandomData)
-    console.log('fandoms:',fandoms)
+    let counter = 0;
     return(
-        fandomData.map(f=>{
+        <>
+        {fandomData.map(f=>{
             const COLORS = ['#82ca9d', '#8884d8', '#ffc658', '#D62728','#1f77b4'];
+            const isEmpty = f.Finished===0 && f["In Progress"]===0 && f["Favorite"]===0 && f.Ignored===0 && f.Follow===0;
+            counter = !isEmpty ? counter+1 : counter;
             const data = [
               { name: 'Finished', value: f.Finished },
               { name: 'In Progress', value: f["In Progress"] },
@@ -49,6 +51,7 @@ const FandomCard = (props) => {
             const latestFics = getLatestFanfic(userData,fandom.FandomName);
             
             return(
+                !isEmpty &&
                 <Card className={classes.StatisticsCard} key={f.name} >
                     <CardContent className={classes.CardContent}>
                         <div className={classes.cardHeader}>
@@ -140,7 +143,9 @@ const FandomCard = (props) => {
                     </CardContent>
               </Card>
             )
-          })
+          })}
+          {counter%2===1 && <Card className={classes.StatisticsCard} ></Card>}
+          </>
     )
 };
 
