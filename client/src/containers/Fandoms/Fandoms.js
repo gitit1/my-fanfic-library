@@ -6,8 +6,10 @@ import * as actions from '../../store/actions';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Container from '../../components/UI/Container/Container';
 
+import TextField from '@material-ui/core/TextField';
+
 import ShowFandomData from './components/ShowFandomData/ShowFandomData';
-import FilterSection from './components/FilterSection/FilterSection';
+//import FilterSection from './components/FilterSection/FilterSection';
 import BoxContent from './components/BoxContent'
 import classes from './Fandoms.module.scss';
 class AllFandoms extends Component{
@@ -94,9 +96,10 @@ class AllFandoms extends Component{
                     <description></description>
                     <meta name={`This page contains wlw fandoms`} content={`fandoms,fandom,lesbian,wlw,fanfic,fanfics,love,gay`}></meta>
                 </Helmet>
-                {/* <div className={classes.FilterSection}>
-                  <FilterSection fandomsList={fandomsList} getNewList={this.getNewFandomList} onChange={this.handleChange}/>
-                </div> */}
+                <div className={classes.FilterSection}>
+                  {/* <FilterSection fandomsList={fandomsList} getNewList={this.getNewFandomList} onChange={this.handleChange}/> */}
+                  <TextField id="standard-basic" label="Standard" />
+                </div>
                 <ShowFandomData fandoms={listFandoms} screenSize={size} smallSize={smallSize} hadButtons={false} userFandoms={userFandoms}
                                       userEmail={userEmail} isAuthenticated={isAuthenticated} markFavFandom={this.markFavoriteFandom} changeImage={this.changeImage}
                                       changeImageFlag={changeImageFlag}

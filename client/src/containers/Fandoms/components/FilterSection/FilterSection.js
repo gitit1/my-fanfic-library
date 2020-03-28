@@ -147,6 +147,8 @@ const useStyles = makeStyles(theme => ({
   };
   
   function Option(props) {
+    // console.log('in option',props.value)
+
     return (
       <MenuItem
         ref={props.innerRef}
@@ -316,10 +318,17 @@ const useStyles = makeStyles(theme => ({
     
     const handleChange = e =>{
       e.persist();
-      console.log('handleChange:',e.key)
+      setSingle(null);
+      //let isWordCharacter = e.key.length === 1;
+      // if(isWordCharacter){
+      //   props.getMultiChoices(String.fromCharCode(e.which))
+      // } else if (e.key === 'Backspace') {
+      //   props.getMultiChoices('Backspace')
+      // }
     }
     const handleChangeSingle = value => { 
-      setSingle(value);
+      setSingle(value); 
+      props.getSingleChoice(value);
     };
   
     // const handleChangeMulti = value => {
@@ -337,7 +346,7 @@ const useStyles = makeStyles(theme => ({
     };
     
     return (
-        <div className={classes.root}>
+        <div className={classes.root} onBlur={() => setSingle(null)}>
           <NoSsr>
             <Select
               classes={classes}
