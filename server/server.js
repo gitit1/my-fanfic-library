@@ -36,11 +36,10 @@ else if (keys.nodeEnv === 'straight') {
 	app.get('/*', function (req, res) {
 		res.sendFile(require('path').join(buildDir, '/index.html'));
 	});
-	app.listen(5010, () => console.log(`Listening on port 5010 - production mode`));
+	app.listen(5008, () => console.log(`Listening on port 5010 - production mode`));
 }
 else {
 	//Gay!!!
-	port = 5000;
 	require('./cronJobs/cron');
 	app.get('/*', function (req, res) {
 		res.sendFile(require('path').join(buildDir, '/index.html'));
