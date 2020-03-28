@@ -7,6 +7,18 @@ const News = () => (
   <Container header='News & Updates'>
     <div className={classes.News}>
     <LazyLoad height={100} >
+        <p><span className={classes.Date}><strong>03-27-2020:</strong></span>
+          <span className={classes.Content}>
+            <ul>
+              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-6" target="_blank">[MFL-6] - Fanfic Page - fix empty tags (hidden)</a></li>
+              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-51" target="_blank">[MFL-51] - My Statics Page - not showing empty fandoms anymore</a></li>
+              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-8" target="_blank">[MFL-8] - Fixed ignore filter (now not showing anymore)</a></li>
+            </ul>
+          </span>
+        </p>
+        <p><span className={classes.Date}></span>&nbsp;</p>
+      </LazyLoad>
+    <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>03-26-2020:</strong></span>
           <span className={classes.Content}>
             <a href="https://myfanficslibrary.atlassian.net/browse/MFL-11" target="_blank">[MFL-11]</a>

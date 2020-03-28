@@ -1,5 +1,16 @@
 .FilterSection {
-  width: 65%;
+  width: 75%;
   margin: 0 auto;
   margin-top: 1%;
+  margin-bottom: 1%;
+
+  input  {
+    width:300px;
+    text-align: center;
+  }
+  label{
+    margin-left: 80px!important;
+  }
+  
 }
+
