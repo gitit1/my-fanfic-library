@@ -17,29 +17,27 @@ app.use(express.static(publicDir));
 app.use(express.static(buildDir));
 app.use(express.static(__dirname));
 
-// Passport middleware
 app.use(passport.initialize());
-// Passport config
 require("./config/passport")(passport);
 
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use('/', routes);
 
 if (keys.nodeEnv === 'development') {
+	//development!!! (Ver 1)
 	app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
 }
 else if (keys.nodeEnv === 'straight') {
-	//Straight!!!
+	//Straight!!! (Ver 3)
 	app.get('/*', function (req, res) {
 		res.sendFile(require('path').join(buildDir, '/index.html'));
 	});
-	app.listen(5008, () => console.log(`Listening on port 5010 - production mode`));
+	app.listen(5008, () => console.log(`Listening on port 5008 - production mode`));
 }
 else {
-	//Gay!!!
+	//Gay!!! (Ver 2)
 	require('./cronJobs/cron');
 	app.get('/*', function (req, res) {
 		res.sendFile(require('path').join(buildDir, '/index.html'));
