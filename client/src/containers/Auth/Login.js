@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import {loginUser} from '../../store/actions';
+import { loginUser } from '../../store/actions';
 
 import classes from './Login.module.scss';
 import classnames from 'classnames';
@@ -23,7 +23,7 @@ class Login extends Component {
       errors: {}
     };
   }
-  
+
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
@@ -31,87 +31,87 @@ class Login extends Component {
     }
   }
 
-componentWillReceiveProps(nextProps) {
-  if (nextProps.auth.isAuthenticated) {
-    this.props.history.push("/dashboard"); // push user to dashboard when they login
-  }
-  if (nextProps.errors) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard"); // push user to dashboard when they login
+    }
+    if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
       });
+    }
   }
-}
 
-onChange = e => {
+  onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
-onSubmit = e => {
+  onSubmit = e => {
     e.preventDefault();
     const userData = {
       email: this.state.email,
       password: this.state.password
     };
-  console.log(userData);
-  this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
-};
+    console.log(userData);
+    this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+  };
 
-render() {
+  render() {
     const { errors } = this.state;
-return (
-    <Container header='Login'>
-      {
-        this.props.auth.siteVer!==3 &&
-        <div className={classes.ClosedToinvitation}>
-          <h3>The site is currently open with invitation only.</h3>
-          <h5>Want to join the pilot? <Link to="/contact">Contact Us</Link></h5>
-        </div>
-      }
-      <Card className={classes.Login}>
-        <Grid container className={classes.ContainerGrid}>
-          <Grid item xs={8} className={classes.FormGrid}>
-            <form noValidate onSubmit={this.onSubmit}>
-              <TextField 
-                className={classnames("", classes.Email , {
-                  invalid: errors.email || errors.emailnotfound
-                })}
-                error={errors.email}
-                label='Email'
-                id="email"
-                type="email"
-                margin="dense"
-                value={this.state.email}
-                onChange={this.onChange}/>
-              <span className="red-text">
-                {errors.email}
-                {errors.emailnotfound}
-              </span>
-              <br/>
-              <TextField 
-                className={classnames("", classes.Password, {
-                  invalid: errors.password || errors.passwordincorrect
-                })}
-                error={errors.password}
-                label='Password'
-                id="password"
-                type="password"
-                margin="dense"
-                value={this.state.password}
-                onChange={this.onChange}/>
+    return (
+      <Container header='Login'>
+        {
+          this.props.auth.siteVer !== 3 &&
+          <div className={classes.ClosedToinvitation}>
+            <h3>The site is currently open with invitation only.</h3>
+            <h5>Want to join the pilot? <Link to="/contact">Contact Us</Link></h5>
+          </div>
+        }
+        <Card className={classes.Login}>
+          <Grid container className={classes.ContainerGrid}>
+            <Grid item xs={8} className={classes.FormGrid}>
+              <form noValidate onSubmit={this.onSubmit}>
+                <TextField
+                  className={classnames("", classes.Email, {
+                    invalid: errors.email || errors.emailnotfound
+                  })}
+                  error={errors.email}
+                  label='Email'
+                  id="email"
+                  type="email"
+                  margin="dense"
+                  value={this.state.email}
+                  onChange={this.onChange} />
+                <span className="red-text">
+                  {errors.email}
+                  {errors.emailnotfound}
+                </span>
+                <br />
+                <TextField
+                  className={classnames("", classes.Password, {
+                    invalid: errors.password || errors.passwordincorrect
+                  })}
+                  error={errors.password}
+                  label='Password'
+                  id="password"
+                  type="password"
+                  margin="dense"
+                  value={this.state.password}
+                  onChange={this.onChange} />
 
-              <span className="red-text">
-                {errors.password}
-                {errors.passwordincorrect}
-              </span>
-              <br/>                               
-              <br/>                               
-              <Button  type="submit" variant="contained"  className='send_button'>Login</Button>
-            </form>
-            <br/> 
-            { this.props.auth.siteVer===3 && <div className={classes.Registrer}>Don't have an account? <Link to="/register">Register</Link></div> }
+                <span className="red-text">
+                  {errors.password}
+                  {errors.passwordincorrect}
+                </span>
+                <br />
+                <br />
+                <Button type="submit" variant="contained" className='send_button'>Login</Button>
+              </form>
+              <br />
+              {this.props.auth.siteVer === 3 && <div className={classes.Registrer}>Don't have an account? <Link to="/register">Register</Link></div>}
+            </Grid>
           </Grid>
-        </Grid>
-      </Card>
-    </Container>
+        </Card>
+      </Container>
     );
   }
 }
@@ -125,4 +125,4 @@ const mapStateToProps = state => ({
   errors: state.auth
 });
 
-export default connect(mapStateToProps,{loginUser})(Login);
+export default connect(mapStateToProps, { loginUser })(Login);

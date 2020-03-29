@@ -1,5 +1,5 @@
-import React,{Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import * as actions from '../../store/actions';
 
@@ -19,43 +19,43 @@ import './Index.scss';
 const LIMIT_FOR_LATEST_UPDATES = 3;
 const LIMIT_FOR_MY_LATEST_ACTIVITIES = 10;
 
-class Index extends Component{
-    state={
-        latestUpdates:[],
-        loading:true
+class Index extends Component {
+    state = {
+        latestUpdates: [],
+        loading: true
     }
-    componentWillMount(){
-        const {userEmail,isAuthenticated} = this.props;
-        this.props.onGetLatestUpdates(LIMIT_FOR_LATEST_UPDATES).then(async ()=>{
-             if(isAuthenticated){
-                 await this.props.onGetMyLatestActivities(LIMIT_FOR_MY_LATEST_ACTIVITIES,userEmail)
-                 await this.props.onGetMyFanficsUpdates(userEmail,LIMIT_FOR_MY_LATEST_ACTIVITIES,LIMIT_FOR_LATEST_UPDATES)
-                 await this.props.onGetUserFandoms(userEmail)
-                 this.setState({loading:false})
-             }else{
-                 this.setState({loading:false})
-             }
-         })
+    componentWillMount() {
+        const { userEmail, isAuthenticated } = this.props;
+        this.props.onGetLatestUpdates(LIMIT_FOR_LATEST_UPDATES).then(async () => {
+            if (isAuthenticated) {
+                await this.props.onGetMyLatestActivities(LIMIT_FOR_MY_LATEST_ACTIVITIES, userEmail)
+                await this.props.onGetMyFanficsUpdates(userEmail, LIMIT_FOR_MY_LATEST_ACTIVITIES, LIMIT_FOR_LATEST_UPDATES)
+                await this.props.onGetUserFandoms(userEmail)
+                this.setState({ loading: false })
+            } else {
+                this.setState({ loading: false })
+            }
+        })
     }
-    render(){
-        const {loading} = this.state;
-        const {fandoms,screenSize,smallSize,latestUpdates,myLatestActivities,isAuthenticated,myFanficsUpdates,userFandoms,siteVer} = this.props;
-        return(
+    render() {
+        const { loading } = this.state;
+        const { fandoms, screenSize, smallSize, latestUpdates, myLatestActivities, isAuthenticated, myFanficsUpdates, userFandoms, siteVer } = this.props;
+        return (
             <Container>
-                { loading ? <Spinner/> :
+                {loading ? <Spinner /> :
                     <Grid container className='index_page'>
-                        <Welcome isAuthenticated={isAuthenticated} siteVer={siteVer}/>
+                        <Welcome isAuthenticated={isAuthenticated} siteVer={siteVer} />
                         <IndexContainer header='Fandoms'>
                             <IndexFandoms numOfFandoms={fandoms.length} smallSize={smallSize} userFandoms={userFandoms}
-                                            fandoms={fandoms} screenSize={screenSize}/>
+                                fandoms={fandoms} screenSize={screenSize} />
                         </IndexContainer>
                         <IndexContainer header='Latest Updates'>
-                            <LatestUpdates updates={latestUpdates}/>
+                            <LatestUpdates updates={latestUpdates} />
                         </IndexContainer>
-                        {isAuthenticated && 
+                        {isAuthenticated &&
                             <>
                                 <IndexContainer header='My Fanfics Updates'>
-                                    <MyFanficsUpdates updates={myFanficsUpdates}/>
+                                    <MyFanficsUpdates updates={myFanficsUpdates} />
                                 </IndexContainer>
                                 <IndexContainer header='My Latest Activities'>
                                     <MyLatestActivity updates={myLatestActivities} />
@@ -70,30 +70,30 @@ class Index extends Component{
     }
 }
 
-const mapStateToProps = state =>{
-    return{
-        fandoms:                state.fandoms.fandoms,
-        loading:                state.fandoms.loading,
-        userFandoms:            state.fandoms.userFandoms,
-        screenSize:             state.screenSize.size,
-        smallSize:              state.screenSize.smallSize,
-        latestUpdates:          state.updates.latestUpdates,
-        myLatestActivities:     state.updates.myLatestActivities,
-        myFanficsUpdates:       state.updates.myFanficsUpdates,
-        loadingUpdate:          state.updates.loading,
-        isAuthenticated:        state.auth.isAuthenticated,
-        userEmail:              state.auth.user.email,
-        siteVer:                state.auth.siteVer
-    };   
-}   
+const mapStateToProps = state => {
+    return {
+        fandoms: state.fandoms.fandoms,
+        loading: state.fandoms.loading,
+        userFandoms: state.fandoms.userFandoms,
+        screenSize: state.screenSize.size,
+        smallSize: state.screenSize.smallSize,
+        latestUpdates: state.updates.latestUpdates,
+        myLatestActivities: state.updates.myLatestActivities,
+        myFanficsUpdates: state.updates.myFanficsUpdates,
+        loadingUpdate: state.updates.loading,
+        isAuthenticated: state.auth.isAuthenticated,
+        userEmail: state.auth.user.email,
+        siteVer: state.auth.siteVer
+    };
+}
 
-const mapDispatchedToProps = dispatch =>{
-    return{
-        onGetLatestUpdates:         (limit)                         =>  dispatch(actions.getLatestUpdates(limit)),
-        onGetMyLatestActivities:    (limit,userEmail)               =>  dispatch(actions.getMyLatestActivities(limit,userEmail)),
-        onGetMyFanficsUpdates:      (userEmail,limit,daysLimit)     =>  dispatch(actions.myFanficsUpdates(userEmail,limit,daysLimit)),
-        onGetUserFandoms:           (userEmail)                     =>  dispatch(actions.getUserFandoms(userEmail))
+const mapDispatchedToProps = dispatch => {
+    return {
+        onGetLatestUpdates: (limit) => dispatch(actions.getLatestUpdates(limit)),
+        onGetMyLatestActivities: (limit, userEmail) => dispatch(actions.getMyLatestActivities(limit, userEmail)),
+        onGetMyFanficsUpdates: (userEmail, limit, daysLimit) => dispatch(actions.myFanficsUpdates(userEmail, limit, daysLimit)),
+        onGetUserFandoms: (userEmail) => dispatch(actions.getUserFandoms(userEmail))
     }
 }
-  
-  export default connect(mapStateToProps,mapDispatchedToProps)(Index);
+
+export default connect(mapStateToProps, mapDispatchedToProps)(Index);
