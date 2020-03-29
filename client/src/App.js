@@ -51,7 +51,7 @@ if (localStorage.jwtToken) {
   const decoded = jwt_decode(token);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
-// Check for expired token
+  // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
     // Logout user
@@ -61,51 +61,62 @@ if (localStorage.jwtToken) {
   }
 }
 
-
+const siteVer = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? 1 : (window.location.href.includes('mfl')) ? 3 : 2;
+console.log('Site Version:', siteVer);
 
 function App() {
 
 
   return (
-      <Layout>
-        <Switch>
-          <Route        exact path="/"                    component={Index}                           />
-          {/* Updates */}
-          <Route              path="/latestUpdates"       component={FullLatestUpdates}     level={2} />
-          <Route              path="/myLatestActivity"    component={FullMyLatestActivity}  level={2} />
-          <Route              path="/myFanficsUpdates"    component={FullMyFanficsUpdates}  level={2} />
-          {/* <Route              path='/redirect'            component={RedirectToLink}        level={2} /> */}
-          {/* Fandoms */}
-          <PrivateRoute       path="/fandoms"             component={Fandoms}               level={2} />
-          {/* <Route              path="/fandoms"             component={Fandoms}               level={1} /> */}
-          <PrivateRoute       path="/fanfics/:FandomName" component={Fanfic}                level={2} />
-          {/* <Route              path="/fanfics/:FandomName" component={Fanfic}                level={1} /> */}
-          {/* Search */}
-          {/* <Route              path="/search"              component={Search}                          /> */}
-          <PrivateRoute       path="/search"              component={Search}                level={1} />
-          {/* UserData */}  
-          <PrivateRoute exact path="/dashboard"           component={Dashboard}             level={2} />
-          <PrivateRoute exact path="/myTracker"           component={MyStatistics}          level={2} />
-          <PrivateRoute exact path="/readingList"         component={ReadingList}           level={2} />
-          {/* Manage */}  
-          <PrivateRoute exact path="/manageDownloader"    component={ManageDownloader}      level={1} />
-          <PrivateRoute exact path="/manageFandoms"       component={ManageFandoms}         level={1} />
-          <PrivateRoute exact path="/addnewfandom"        component={AddNewFandom}          level={1} />
-          <PrivateRoute exact path="/addNewFanfic"        component={AddNewFanfic}          level={1} />
-          {/* About */}
-          <Route              path="/about"               component={About}                           />
-          <Route              path="/contact"             component={ContactUs}                       />
-          <Route              path="/disclaimers"         component={Disclaimers}                     />
-          <Route              path="/news"                component={News}                            />
-          {/* Auth */}  
-          {/* <Route              path="/register"            component={Registrer}                       /> */}
-          <PrivateRoute       path="/register"            component={Registrer}             level={2} />
-          <Route              path="/login"               component={Login}                           />
-          <Route              path="/404"                 component={RedirectPage}                    />
-
-          <Redirect to="/404" />
-        </Switch>
-      </Layout>
+    <Layout>
+      <Switch>
+        <Route exact path="/" component={Index} />
+        {/* UserData */}
+        <PrivateRoute exact path="/dashboard" component={Dashboard} level={2} />
+        <PrivateRoute exact path="/myTracker" component={MyStatistics} level={2} />
+        <PrivateRoute exact path="/readingList" component={ReadingList} level={2} />
+        {/* Manage */}
+        <PrivateRoute exact path="/manageDownloader" component={ManageDownloader} level={1} />
+        <PrivateRoute exact path="/manageFandoms" component={ManageFandoms} level={1} />
+        <PrivateRoute exact path="/addnewfandom" component={AddNewFandom} level={1} />
+        <PrivateRoute exact path="/addNewFanfic" component={AddNewFanfic} level={1} />
+        {/* About */}
+        <Route path="/about" component={About} />
+        <Route path="/contact" component={ContactUs} />
+        <Route path="/disclaimers" component={Disclaimers} />
+        <Route path="/news" component={News} />
+        {/* Auth */}
+        <Route path="/login" component={Login} />
+        <Route path="/404" component={RedirectPage} />
+        {/* Updates */}
+        <Route path="/latestUpdates" component={FullLatestUpdates} level={2} />
+        <Route path="/myLatestActivity" component={FullMyLatestActivity} level={2} />
+        <Route path="/myFanficsUpdates" component={FullMyFanficsUpdates} level={2} />
+        {
+          siteVer === 3 ?
+            <>
+              {/* Fandoms */}
+              <Route path="/fandoms" component={Fandoms} level={1} />
+              <Route path="/fanfics/:FandomName" component={Fanfic} level={1} />
+              {/* Search */}
+              <Route path="/search" component={Search} />
+              {/* Auth */}
+              <Route path="/register" component={Registrer} />
+            </>
+            :
+            <>
+              {/* Fandoms */}
+              <PrivateRoute path="/fandoms" component={Fandoms} level={2} />
+              <PrivateRoute path="/fanfics/:FandomName" component={Fanfic} level={2} />
+              {/* Search */}
+              <PrivateRoute path="/search" component={Search} level={1} />
+              {/* Auth */}
+              <PrivateRoute path="/register" component={Registrer} level={2} />
+            </>
+        }
+        <Redirect to="/404" />
+      </Switch>
+    </Layout>
   );
 }
 
