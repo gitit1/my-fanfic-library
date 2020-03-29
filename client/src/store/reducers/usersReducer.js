@@ -7,7 +7,8 @@ const initialState = {
     isManager: false,
     user: {},
     userData: {},
-    loading: false
+    loading: false,
+    siteVer: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')  ? 1: (window.location.href.includes('mfl')) ?  3 : 2
 };
 
 const setCurrentUser = (state,action) =>{

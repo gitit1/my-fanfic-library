@@ -39,13 +39,12 @@ class Index extends Component{
     }
     render(){
         const {loading} = this.state;
-        const {fandoms,screenSize,smallSize,latestUpdates,myLatestActivities,isAuthenticated,myFanficsUpdates,userFandoms} = this.props;
-
+        const {fandoms,screenSize,smallSize,latestUpdates,myLatestActivities,isAuthenticated,myFanficsUpdates,userFandoms,siteVer} = this.props;
         return(
             <Container>
                 { loading ? <Spinner/> :
                     <Grid container className='index_page'>
-                        <Welcome isAuthenticated={isAuthenticated}/>
+                        <Welcome isAuthenticated={isAuthenticated} siteVer={siteVer}/>
                         <IndexContainer header='Fandoms'>
                             <IndexFandoms numOfFandoms={fandoms.length} smallSize={smallSize} userFandoms={userFandoms}
                                             fandoms={fandoms} screenSize={screenSize}/>
@@ -83,7 +82,8 @@ const mapStateToProps = state =>{
         myFanficsUpdates:       state.updates.myFanficsUpdates,
         loadingUpdate:          state.updates.loading,
         isAuthenticated:        state.auth.isAuthenticated,
-        userEmail:              state.auth.user.email
+        userEmail:              state.auth.user.email,
+        siteVer:                state.auth.siteVer
     };   
 }   
 

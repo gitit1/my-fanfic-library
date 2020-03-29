@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', routes);
-
+console.log('keys.nodeEnv:',keys.nodeEnv)
 if (keys.nodeEnv === 'development') {
 	app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
 }
@@ -36,7 +36,7 @@ else if (keys.nodeEnv === 'straight') {
 	app.get('/*', function (req, res) {
 		res.sendFile(require('path').join(buildDir, '/index.html'));
 	});
-	app.listen(5008, () => console.log(`Listening on port 5010 - production mode`));
+	app.listen(5008, () => console.log(`Listening on port 5008 - production mode`));
 }
 else {
 	//Gay!!!
