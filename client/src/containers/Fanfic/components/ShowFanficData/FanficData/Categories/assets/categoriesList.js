@@ -1,5 +1,6 @@
 export const categories = [
   { label: 'Abandoned' },
+  { label: 'Action' },
   { label: 'Actress' },
   { label: 'Age Gap' },
   { label: 'Alpha/Omega/Beta Verse' },
@@ -71,6 +72,7 @@ export const categories = [
   { label: 'Royalty' },
   { label: 'RPF - Real person fiction' },
   { label: 'Science Fiction' },
+  { label: 'Search for Fanfic (Not a Fanfic)' },
   { label: 'Secret Relationship' },
   { label: 'Self Harm/Violence' },
   { label: 'Slow Burn' },
