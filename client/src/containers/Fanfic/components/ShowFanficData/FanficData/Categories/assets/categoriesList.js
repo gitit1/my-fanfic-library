@@ -71,6 +71,7 @@ export const categories = [
   { label: 'Royalty' },
   { label: 'RPF - Real person fiction' },
   { label: 'Science Fiction' },
+  { label: 'Search for Fanfic (Not a Fanfic)' },
   { label: 'Secret Relationship' },
   { label: 'Self Harm/Violence' },
   { label: 'Slow Burn' },
