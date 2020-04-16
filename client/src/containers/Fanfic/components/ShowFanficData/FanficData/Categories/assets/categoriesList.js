@@ -1,5 +1,6 @@
 export const categories = [
   { label: 'Abandoned' },
+  { label: 'Action' },
   { label: 'Actress' },
   { label: 'Age Gap' },
   { label: 'Alpha/Omega/Beta Verse' },
