@@ -54,6 +54,7 @@ export const categories = [
   { label: 'Magic/Supernatural' },
   { label: 'Marriage/Wedding' },
   { label: 'Mental Health' },
+  { label: 'Mermaid' },
   { label: 'Military/War' },
   { label: 'Model/Celebrity' },
   { label: 'Modern AU' },
