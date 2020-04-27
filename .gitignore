@@ -71,3 +71,6 @@ public/
 
 config/keys.js
 client/package.json
+
+package.json*
+package-lock.json*
