@@ -2,13 +2,13 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 let request = require('request');
 
-const mongoose = require('../../../config/mongoose');
-const FandomModal = require('../../../models/Fandom');
+const mongoose = require('../../../../config/mongoose');
+const FandomModal = require('../../../../models/Fandom');
 
 let jar = request.jar();
 request = request.defaults({jar: jar,followAllRedirects: true});
 
-const {fixStringForPath} = require('../../helpers/fixStringForPath.js');
+const {fixStringForPath} = require('../../../helpers/fixStringForPath.js');
 const fanficsPath = "public/fandoms";
 
 exports.downloadFanfic = async (url,source,fileName,savedAs,fandomName,fanficId) =>{

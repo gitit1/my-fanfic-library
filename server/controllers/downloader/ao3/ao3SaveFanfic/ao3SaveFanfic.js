@@ -2,9 +2,10 @@
 const FandomModal = require('../../../../models/Fandom');
 
 const {saveFanficToServerHandler} = require('../helpers/saveFanficsToServer');
-const {saveFanficToDB} = require('../../helpers/saveFanficToDB');
 const {getUrlBodyFromAo3} = require('../helpers/getUrlBodyFromAo3')
  
+const funcs = require('../../helpers/index');
+
 exports.ao3SaveFanfic = async (jar,fandomName,download,url,fanfic) =>{ 
     console.log('fandomName,download,url,fanfic:',fandomName,download,url,fanfic)
     return await new Promise(async function(resolve, reject) {  
@@ -22,8 +23,8 @@ exports.ao3SaveFanfic = async (jar,fandomName,download,url,fanfic) =>{
                     fanfic["NeedToSaveFlag"] = true               
                 }
     
-                saveFanficToDB(fandomName,fanfic).then(async () =>{
-                    await updateFandomData(fanfic);
+                funcs.saveFanficToDB(fandomName,fanfic).then(async () =>{
+                    await funcs.updateFandomDataInDB(fanfic);
                     resolve()
                 }).catch(error=>{
                     console.log('error:::',error)
@@ -33,8 +34,8 @@ exports.ao3SaveFanfic = async (jar,fandomName,download,url,fanfic) =>{
         }else{
             fanfic["SavedFic"]   =   false
             fanfic["NeedToSaveFlag"] = true  
-            saveFanficToDB(fandomName,fanfic).then(async () =>{
-                await updateFandomData(fanfic);
+            funcs.saveFanficToDB(fandomName,fanfic).then(async () =>{
+                await funcs.updateFandomDataInDB(fanfic);
                 resolve()
             }).catch(error=>{
                 console.log('error:::',error)

@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import GridChooseFandom from '../ManageDownloader/components/GridChooseFnadom/index';
 import  AddNewFanficAutomatic from './components/AddNewFanficAutomatic/AddNewFanficAutomatic';
 import  AddNewFanficManually from './components/AddNewFanficManually/AddNewFanficManually';
+import  AddNewFanficFromFileReader from './components/AddNewFanficFromFileReader/AddNewFanficFromFileReader';
 
 import './AddNewFanfic.scss'
 class AddNewFanfic extends Component{
@@ -90,14 +91,17 @@ class AddNewFanfic extends Component{
                                 onClick={()=>this.setState({show:1,showSwitches:false})}>Manually</Button>
                         <Button variant="contained" disabled={disable} className='addNewFanficAutomaticBTN' 
                                 onClick={()=>this.setState({show:2,showSwitches:true})}>Automatic</Button>
+                        <Button variant="contained" disabled={disable} className='addNewFanficAutomaticBTN' 
+                                onClick={()=>this.setState({show:3,showSwitches:true})}>File Reader</Button>
                     </React.Fragment> 
                 }
 
                 {(show===1) ? 
                 <AddNewFanficManually fandomName={fandomSelect.value} showBtns={this.showBtns}/>
-                : (show===2) &&
+                : (show===2) ?
                 <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} switches={switches} showBtns={this.showBtns}/>
-                
+                : (show===3) &&
+                <AddNewFanficFromFileReader  fandomName={fandomSelect.value} showBtns={this.showBtns}/>
                 }
             </Container>
         )

@@ -50,6 +50,8 @@ try {
   //Downloader
   router.get('/downloader/getFanficData',downloader.getNewFanfic)
   router.post('/downloader/getFanficData',downloader.getNewFanfic)
+  router.post('/downloader/getFanficDataFromFile',downloader.getFanficDataFromFile)
+  router.post('/downloader/saveFanficFromFile',downloader.saveFanficFromFile)
   router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
   router.post('/downloader/updateExistFanfic',downloader.updateExistFanfic)
   
