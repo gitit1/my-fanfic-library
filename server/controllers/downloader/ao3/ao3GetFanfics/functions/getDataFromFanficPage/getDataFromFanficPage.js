@@ -4,8 +4,9 @@ const {getDataFromPage} = require('./functions/getDataFromPage');
 const {getPublishDate} = require('./functions/getPublishDate');
 const {checkIfFanficIsNewOrUpdated} = require('./functions/checkIfFanficIsNewOrUpdated');
 const {saveFanficToServerHandler} = require('../../../helpers/saveFanficsToServer');
-const {saveFanficToDB} = require('../../../../helpers/saveFanficToDB');
 const {getUrlBodyFromAo3} = require('../../../helpers/getUrlBodyFromAo3');
+
+const funcs = require('../../../../helpers/index');
 
 exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, saveMethod, savedNotAuto) =>{
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
@@ -44,7 +45,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, sav
                             fanfic["NeedToSaveFlag"] = true               
                         }
             
-                        return saveFanficToDB(fandomName,fanfic).then(async () =>{
+                        return funcs.saveFanficToDB(fandomName,fanfic).then(async () =>{
                             return counter  
                         }).catch(error=>{
                             console.log('error:::',error);
@@ -55,7 +56,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, sav
                 }else{
                     fanfic["NeedToSaveFlag"] = false;
                     fanfic["SavedFic"]   =   false;
-                    return saveFanficToDB(fandomName,fanfic).then(async () =>{
+                    return funcs.saveFanficToDB(fandomName,fanfic).then(async () =>{
                         console.log(`------------------`)
                         return counter  
                     }).catch(error=>{

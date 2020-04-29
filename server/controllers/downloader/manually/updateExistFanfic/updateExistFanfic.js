@@ -1,6 +1,6 @@
 const clc = require("cli-color");
 const mongoose = require('../../../../config/mongoose');
-const {createFanficObj} = require('../helpers/createFanficObj');
+const {createFanficObj} = require('../../helpers/functions/createFanficObj');
 const multer = require('multer');
 
 exports.updateExistFanfic = async (fandomName,req,res) =>{

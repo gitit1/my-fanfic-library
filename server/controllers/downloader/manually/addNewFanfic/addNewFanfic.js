@@ -1,13 +1,12 @@
-const {checkForSimilar} = require('../../helpers/checkForSimilar');
-const {createFanficObj} = require('../helpers/createFanficObj');
+const funcs = require('../../helpers/index');
 
-exports.addNewFanfic = async (fandomName,fanficData) =>{
-    const fanfic = await createFanficObj(fandomName,fanficData);
-    const checkForSimilarResult     =   await checkForSimilar(fanfic,fandomName)
+exports.addNewFanfic = async (fandomName, fanficData) => {
+    const fanfic = await funcs.createFanficObj(fandomName, fanficData);
+    const checkForSimilarResult = await funcs.checkForSimilar(fanfic, fandomName)
 
-    if(!checkForSimilarResult){
-        return([fanfic]) 
-    }else{
-        return([fanfic,checkForSimilarResult[0]])
+    if (!checkForSimilarResult) {
+        return ([fanfic])
+    } else {
+        return ([fanfic, checkForSimilarResult[0]])
     }
 }

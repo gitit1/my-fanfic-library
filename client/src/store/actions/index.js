@@ -40,7 +40,9 @@ export {
 } from './users';
 
 export{
-    getDataOfFanfic,
+    getFanficData,
+    getFanficDataFromFile,
+    saveFanficFromFile,
     saveDataOfFanficToDB,
     updateFanficData,
     backupDB

@@ -1,6 +1,6 @@
 
-const mongoose = require('../../../config/mongoose');
-const FanficSchema = require('../../../models/Fanfic');
+const mongoose = require('../../../../config/mongoose');
+const FanficSchema = require('../../../../models/Fanfic');
 
 exports.checkForSimilar = (fanfic,fandomName) =>{
     console.log('checkForSimilar')

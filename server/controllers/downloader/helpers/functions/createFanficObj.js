@@ -1,4 +1,4 @@
-exports.createFanficObj = async (fandomName,fanficData) =>{
+exports.createFanficObj = async (fandomName,fanficData,isInFileReader) =>{
     let todayDate = new Date();
     return await new Promise(async function(resolve, reject) {
             fanfic = {
@@ -11,20 +11,20 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 NumberOfChapters:   Number(fanficData.NumberOfChapters),
                 Complete:           fanficData.Complete==='true' ? true : false,
                 Oneshot:            fanficData.Oneshot==='true' ? true : false,
-                URL:                fanficData.FanficURL!=='' ? fanficData.FanficURL : null,
+                URL:                isInFileReader ? fanficData.URL : fanficData.FanficURL!=='' ? fanficData.FanficURL : null,
                 Rating:             fanficData.Rating,
                 PublishDate:        Number(fanficData.PublishDate),
-                LastUpdateOfFic:    Number(fanficData.UpdateDate),
+                LastUpdateOfFic:    isInFileReader ? Number(fanficData.LastUpdateOfFic) : Number(fanficData.UpdateDate),
                 LastUpdateOfNote:   todayDate.getTime(),
-                Tags:               [
+                Tags:               isInFileReader ? fanficData.Tags : [
                                         fanficData.Warnings!=='' ? {warnings:fanficData.Warnings.split(',')} : undefined,
                                         fanficData.Relationships!=='' ? {relationships:fanficData.Relationships.split(',')} : undefined,
                                         fanficData.Characters!=='' ? {characters:fanficData.Characters.split(',')} : undefined,
                                         fanficData.Tags!=='' ? {tags:fanficData.Tags.split(',')} : undefined
                                     ].filter(x => x !== undefined),
-                FandomsTag:         fanficData.FandomsTags!=='' ? fanficData.FandomsTags.split(',') : null,
-                Categories:         fanficData.Categories!=='' ? fanficData.Categories.split(',') : null,
-                Description:        fanficData.Summary,
+                FandomsTags:        isInFileReader ? fanficData.FandomsTags : fanficData.FandomsTags!=='' ? fanficData.FandomsTags.split(',') : null,
+                Categories:         isInFileReader ? null : fanficData.Categories!=='' ? fanficData.Categories.split(',') : null,
+                Description:        isInFileReader ? fanficData.Description : fanficData.Summary,
                 Language:           fanficData.Language,
                 Words:              Number(fanficData.Words),   
                 NumberOfChapters:   Number(fanficData.NumberOfChapters),   
@@ -32,9 +32,9 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 Kudos:              Number(fanficData.Kudos),   
                 Bookmarks:          Number(fanficData.Bookmarks),   
                 Hits:               Number(fanficData.Hits),
-                Series:             fanficData.SeriesName!=='' ? fanficData.SeriesName : undefined,
-                SeriesPart:         fanficData.SeriesNumber!=='' ? Number(fanficData.SeriesNumber) : undefined,
-                SeriesURL:          fanficData.SeriesNumber!=='' ? '' : undefined
+                Series:             isInFileReader ? null : fanficData.Series!=='' ? fanficData.SeriesName : undefined,
+                SeriesPart:         isInFileReader ? null : fanficData.SeriesPart!=='' ? Number(fanficData.SeriesNumber) : undefined,
+                SeriesURL:          isInFileReader ? null : fanficData.SeriesURL!=='' ? '' : undefined
             }
             resolve(fanfic)
     });
