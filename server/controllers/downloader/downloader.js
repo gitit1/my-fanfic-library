@@ -41,7 +41,7 @@ exports.getFanficDataFromFile = async (req, res) => {
     console.log('getFanficDataFromFile');
     switch (filetype.toLowerCase()) {
         case 'epub':
-            await fileReader.getEpub(fandomName, fileName, req, res).then(fanfic => {
+            await fileReader.getEpub(fandomName, filetype, fileName, req, res).then(fanfic => {
                 res.send(fanfic);
             });
             break;
