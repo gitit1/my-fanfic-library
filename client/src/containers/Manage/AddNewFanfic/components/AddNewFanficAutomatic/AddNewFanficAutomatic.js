@@ -227,7 +227,7 @@ const mapStateToProps = state =>{
 const mapDispatchedToProps = dispatch =>{
   return{
       onGetFandoms:           ()                                                                                =>  dispatch(actions.getFandomsFromDB()),
-      onGetFanficData:        (type,fandomName,url)                                                             =>  dispatch(actions.getDataOfFanfic(type,fandomName,url)),
+      onGetFanficData:        (type,fandomName,url)                                                             =>  dispatch(actions.getFanficData(type,fandomName,url)),
       onSaveFanficDataToDB:   (fandomName,fanfic,download,url,image)                                            =>  dispatch(actions.saveDataOfFanficToDB(fandomName,fanfic,download,url,image)),
       onMarkHandler:          (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)           =>  dispatch(actions.addFanficToUserMarks(userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark)),
       onStatusHandler:        (userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)  =>  dispatch(actions.addFanficToUserStatus(userEmail,fandomName,fanficId,author,fanficTitle,source,statusType,status,data)),

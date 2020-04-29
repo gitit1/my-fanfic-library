@@ -3,9 +3,9 @@ const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 const multer = require('multer');
 const fs = require('fs-extra');
-const {createFanficObj} = require('../helpers/createFanficObj');
-const {saveFanficToDB} = require('../../helpers/saveFanficToDB')
+
 const {fixStringForPath} = require('../../../helpers/fixStringForPath.js');
+const funcs = require('../../helpers/index');
 
 exports.saveNewFanfic = async (fandomName,req, res) =>{ 
     return await new Promise(async function(resolve, reject) {  
@@ -38,7 +38,7 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
                 return resultMessage;
             }
             
-            let fanfic = await createFanficObj(fandomName,req.body);
+            let fanfic = await funcs.createFanficObj(fandomName,req.body);
             
 
             fanfic['status']            =   'old';
@@ -50,29 +50,10 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
             console.log('fanfic.Status:',fanfic.Status);
             console.log('fanfic.FanficID:',fanfic.FanficID);
             console.log('fanfic:',fanfic);
-            const status = await saveFanficToDB(fandomName,fanfic);
-            status && await updateFandomData(fanfic)
+            const status = await funcs.saveFanficToDB(fandomName,fanfic);
+            status && await funcs.updateFandomDataInDB(fanfic)
             resolve();
         })
 
     });
-}
-
-
-const updateFandomData = async (fanfic) =>{
-    console.log('[Manually] - updateFandomData')
-    const fandomName = fanfic.FandomName;
-    const isComplete = fanfic.Complete ? `${fanfic.Source}.CompleteFanfics` : `${fanfic.Source}.OnGoingFanfics`
-    const sourceFanficsInFandom = `${fanfic.Source}.FanficsInFandom`;
-    const sourceSavedFanfics = `${fanfic.Source}.SavedFanfics`;
-    await FandomModal.updateOne({ 'FandomName': fandomName },
-                                {
-                                    $inc: { 'FanficsInFandom':1,
-                                            [sourceFanficsInFandom]:1,
-                                            [isComplete]:1,
-                                            [sourceSavedFanfics]:1
-                                          },
-                                });
-
-    return null;
 }

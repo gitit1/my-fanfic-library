@@ -1,6 +1,7 @@
-const mongoose = require('../../../config/mongoose');
-const func = require('../helpers/generalFunctions');
-const UpdatesModal = require('../../../models/Updates');
+const mongoose = require('../../../../config/mongoose');
+const UpdatesModal = require('../../../../models/Updates');
+
+const funcs = require('./generalFunctions');
 
 exports.saveFanficToDB = (fandomName,fanfic) =>{
     // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fandomName));   
@@ -8,13 +9,13 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
         let status = (fanfic.Status==='new'||fanfic.Status==='updated') ? true : false;
         mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"] }, async function(err, dbFanfic) {
             if (err) { 
-                func.delay(1000).then(async () => reject(false))
+                funcs.delay(1000).then(async () => reject(false))
                 return reject()
             }
             let isExist = (dbFanfic===null) ? false : true;
             if(!isExist){
                 mongoose.dbFanfics.collection(fandomName).insertOne(fanfic, async function (error, response) {
-                    await func.delay(1000).then(async () => {
+                    await funcs.delay(1000).then(async () => {
                         status && await saveUpdatesToDB(fandomName,fanfic)
                         resolve(true)
                     })
@@ -22,7 +23,7 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
                                
             }else{ 
                 mongoose.dbFanfics.collection(fandomName).updateOne({ 'FanficID': fanfic["FanficID"]},{$set: fanfic}, async function (error, response) {
-                    await func.delay(1000).then(async () => {
+                    await funcs.delay(1000).then(async () => {
                         status && await saveUpdatesToDB(fandomName,fanfic)
                         resolve(true)
                     })
@@ -46,7 +47,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
         (fanfic.StatusDetails!=='old') ? (
             UpdatesModal.findOne({Date: fanficDate}, async function(err, dbUpdate) {
                 if (err) { 
-                    console.log('---error')
+                    console.log('---error',fanfic.FanficID)
                     func.delay(1000).then(async () => reject(false))
                     return reject()
                 }

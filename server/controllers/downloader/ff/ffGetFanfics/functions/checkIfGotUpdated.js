@@ -1,11 +1,10 @@
 const {getDataFromPage} = require('../../helpers/getDataFromPage');
-const {saveFanficToDB} = require('../../../helpers/saveFanficToDB');
-const {downloadFanfic} = require('../../../helpers/downloadFanfic');
-const func = require('../../../helpers/generalFunctions');
 const {fixStringForPath} = require('../../../../helpers/fixStringForPath.js');
 
+const funcs = require('../../../helpers/index');
+
 exports.checkIfGotUpdated = (autoSave,fanfic) =>{ 
-    return func.delay(7000).then(()=>{
+    return funcs.delay(7000).then(()=>{
         return new Promise(function(resolve, reject) {        
             const oldData = fanfic;
             console.log('fanficName',fanfic.FanficTitle)
@@ -33,9 +32,9 @@ exports.checkIfGotUpdated = (autoSave,fanfic) =>{
                 newData.fileName    =   fixStringForPath(oldData.fileName);
                 newData.savedAs     =   oldData.savedAs;
         
-                await saveFanficToDB(fanfic.FandomName,newData).then(async res=>{ 
+                await funcs.saveFanficToDB(fanfic.FandomName,newData).then(async res=>{ 
                     const {URL, Source, fileName, savedAs, FandomName, FanficID} = newData;        
-                    updated && autoSave && await downloadFanfic(URL, Source, fileName, savedAs, FandomName, FanficID);
+                    updated && autoSave && await funcs.downloadFanfic(URL, Source, fileName, savedAs, FandomName, FanficID);
                     !res ? reject() : (updated && autoSave) ? resolve(true) : resolve(false)               
                 });
             })
