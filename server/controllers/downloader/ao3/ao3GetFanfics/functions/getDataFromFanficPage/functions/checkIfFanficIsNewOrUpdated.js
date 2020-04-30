@@ -60,17 +60,4 @@ exports.checkIfFanficIsNewOrUpdated = async (log, fandomName,fanfic) =>{
             return ([true,false,fanfic])
         }
         return ([newFic,updated,fanfic])
-    // }else{
-	// 	console.log('---- new fanfic');
-	// 	let isNew = (savedFanficsLastUpdate===undefined) ? await mongoose.dbFanfics.collection(fandomName).findOne({FanficID: fanfic["FanficID"]}) :  null;
-    //     if(isNew===null){
-	// 		console.log('---- new fanfic');
-	// 		return([true,false,fanfic])
-    //     }else if(isNew['SavedFic']){
-	// 		console.log('---- fanfic is not saved');
-	// 		 return([false,true,fanfic]) 
-	// 	} else{
-    //         return([false,false,fanfic])          
-    //     }
-    // }
 }

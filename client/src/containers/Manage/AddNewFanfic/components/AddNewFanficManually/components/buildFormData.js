@@ -14,37 +14,33 @@ export const buildFormData = (fandomName,fanficForm) =>{
 
         let fanficFormData = new FormData();
         fanficFormData.append("FandomName", fandomName);
-        fanficFormData.append("Rating", Rating);
         fanficFormData.append("FanficID", fanficForm['FanficID'].value);
         fanficFormData.append("FanficTitle", fanficForm['FanficTitle'].value);
-        fanficFormData.append("FanficURL", fanficForm['FanficURL'].value);
         fanficFormData.append("Author", fanficForm['Author'].value);
         fanficFormData.append("AuthorURL", fanficForm['AuthorURL'].value);
-        fanficFormData.append("FandomsTags", fanficForm['FandomsTags'].value);
+        fanficFormData.append("Source", fanficForm['Source'].value);
+        fanficFormData.append("NumberOfChapters", fanficForm['NumberOfChapters'].value);
+        fanficFormData.append("Complete", fanficForm['Complete'].value);
+        fanficFormData.append("Oneshot", Oneshot);
+        fanficFormData.append("URL", fanficForm['FanficURL'].value);
+        fanficFormData.append("Rating", Rating);
+        fanficFormData.append("PublishDate", PublishDate);
+        fanficFormData.append("LastUpdateOfFic", UpdateDate);
         fanficFormData.append("Warnings", fanficForm['Warnings'].value);
         fanficFormData.append("Relationships", fanficForm['Relationships'].value);
         fanficFormData.append("Characters", fanficForm['Characters'].value);
         fanficFormData.append("Tags", fanficForm['Tags'].value);
+        fanficFormData.append("FandomsTags", fanficForm['FandomsTags'].value);
         fanficFormData.append("Categories", fanficForm['Categories'].value);
-        fanficFormData.append("SeriesName", fanficForm['SeriesName'].value);
-        fanficFormData.append("SeriesNumber", fanficForm['SeriesNumber'].value);
-        fanficFormData.append("Summary", fanficForm['Summary'].value);
-        fanficFormData.append("Source", fanficForm['Source'].value);
-        fanficFormData.append("PublishDate", PublishDate);
-        fanficFormData.append("UpdateDate", UpdateDate);
+        fanficFormData.append("Description", fanficForm['Summary'].value);
         fanficFormData.append("Language", Language);
         fanficFormData.append("Words", fanficForm['Words'].value);
-        fanficFormData.append("NumberOfChapters", fanficForm['NumberOfChapters'].value);
-        fanficFormData.append("Complete", fanficForm['Complete'].value);
-        fanficFormData.append("Oneshot", Oneshot);
         fanficFormData.append("Comments", Comments);
         fanficFormData.append("Kudos", Kudos);
         fanficFormData.append("Bookmarks", Bookmarks);
         fanficFormData.append("Hits", Hits);
-
-        // console.log('fanficFormData:')
-        // for (var pair of fanficFormData.entries()) {
-        //     console.log(pair[0]+ ' : '+ pair[1]); 
-        //  }
+        fanficFormData.append("SeriesName", fanficForm['SeriesName'].value);
+        fanficFormData.append("SeriesNumber", fanficForm['SeriesNumber'].value);
+        fanficFormData.append("SeriesURL", null);
     return fanficFormData;
 }

@@ -82,7 +82,6 @@ exports.getDataFromAO3Epub = async (fandomName, data) => {
                 tagArr[0].push(tag.text());
             });
         });
-
         if (warnings[0] == 'No Archive Warnings Apply' || warnings[0] == 'Creator Chose Not To Use Archive Warnings') {
             tags.push({ 'relationships': relationships }, { 'characters': characters }, { 'tags': freeforms });
         } else {
