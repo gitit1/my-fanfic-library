@@ -1,4 +1,4 @@
-exports.createFanficObj = async (fandomName,fanficData,isInFileReader) =>{
+exports.createFanficObj = async (fandomName,fanficData) =>{
     let todayDate = new Date();
     return await new Promise(async function(resolve, reject) {
             fanfic = {
@@ -11,30 +11,29 @@ exports.createFanficObj = async (fandomName,fanficData,isInFileReader) =>{
                 NumberOfChapters:   Number(fanficData.NumberOfChapters),
                 Complete:           fanficData.Complete==='true' ? true : false,
                 Oneshot:            fanficData.Oneshot==='true' ? true : false,
-                URL:                isInFileReader ? fanficData.URL : fanficData.FanficURL!=='' ? fanficData.FanficURL : null,
+                URL:                fanficData.URL!=='' ? fanficData.URL : null,
                 Rating:             fanficData.Rating,
                 PublishDate:        Number(fanficData.PublishDate),
-                LastUpdateOfFic:    isInFileReader ? Number(fanficData.LastUpdateOfFic) : Number(fanficData.UpdateDate),
+                LastUpdateOfFic:    Number(fanficData.LastUpdateOfFic),
                 LastUpdateOfNote:   todayDate.getTime(),
-                Tags:               isInFileReader ? fanficData.Tags : [
-                                        fanficData.Warnings!=='' ? {warnings:fanficData.Warnings.split(',')} : undefined,
-                                        fanficData.Relationships!=='' ? {relationships:fanficData.Relationships.split(',')} : undefined,
-                                        fanficData.Characters!=='' ? {characters:fanficData.Characters.split(',')} : undefined,
-                                        fanficData.Tags!=='' ? {tags:fanficData.Tags.split(',')} : undefined
+                Tags:               [
+                                        fanficData.Warnings && fanficData.Warnings!=='' ? {warnings:fanficData.Warnings.split(',')} : undefined,
+                                        fanficData.Relationships && fanficData.Relationships!=='' ? {relationships:fanficData.Relationships.split(',')} : undefined,
+                                        fanficData.Characters && fanficData.Characters!=='' ? {characters:fanficData.Characters.split(',')} : undefined,
+                                        fanficData.Tags && fanficData.Tags!=='' ? {tags:fanficData.Tags.split(',')} : undefined
                                     ].filter(x => x !== undefined),
-                FandomsTags:        isInFileReader ? fanficData.FandomsTags : fanficData.FandomsTags!=='' ? fanficData.FandomsTags.split(',') : null,
-                Categories:         isInFileReader ? null : fanficData.Categories!=='' ? fanficData.Categories.split(',') : null,
-                Description:        isInFileReader ? fanficData.Description : fanficData.Summary,
+                FandomsTags:        fanficData.FandomsTags!=='' ? fanficData.FandomsTags.split(',') : null,
+                Categories:         !fanficData.Categories ? undefined : fanficData.Categories!=='' ? fanficData.Categories.split(',') : null,
+                Description:        fanficData.Description,
                 Language:           fanficData.Language,
-                Words:              Number(fanficData.Words),   
-                NumberOfChapters:   Number(fanficData.NumberOfChapters),   
+                Words:              Number(fanficData.Words),     
                 Comments:           Number(fanficData.Comments),   
                 Kudos:              Number(fanficData.Kudos),   
                 Bookmarks:          Number(fanficData.Bookmarks),   
                 Hits:               Number(fanficData.Hits),
-                Series:             isInFileReader ? null : fanficData.Series!=='' ? fanficData.SeriesName : undefined,
-                SeriesPart:         isInFileReader ? null : fanficData.SeriesPart!=='' ? Number(fanficData.SeriesNumber) : undefined,
-                SeriesURL:          isInFileReader ? null : fanficData.SeriesURL!=='' ? '' : undefined
+                Series:             fanficData.Series && fanficData.Series!=='' ? fanficData.Series : undefined,
+                SeriesPart:         fanficData.Series && fanficData.SeriesPart!=='' ? Number(fanficData.SeriesPart) : undefined,
+                SeriesURL:          fanficData.Series && fanficData.SeriesURL ? fanficData.SeriesURL : undefined
             }
             resolve(fanfic)
     });
