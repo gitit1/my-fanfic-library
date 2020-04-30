@@ -37,9 +37,8 @@ exports.saveNewFanfic = async (fandomName, fileName, req, res) => {
                 resultMessage = 'Other Error';
                 return resultMessage;
             }
-
-            let fanfic = await funcs.createFanficObj(fandomName, req.body, true);
-
+            let fanfic = await funcs.createFanficObj(fandomName, req.body);
+            
             fanfic['status'] = 'old';
             fanfic['fileName'] = req.body.fileName;
             fanfic['savedAs'] = req.body.savedAs;

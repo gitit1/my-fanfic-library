@@ -48,7 +48,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
             UpdatesModal.findOne({Date: fanficDate}, async function(err, dbUpdate) {
                 if (err) { 
                     console.log('---error',fanfic.FanficID)
-                    func.delay(1000).then(async () => reject(false))
+                    funcs.delay(1000).then(async () => reject(false))
                     return reject()
                 }
                 let isExist = (dbUpdate===null) ? false : true;
@@ -83,7 +83,7 @@ const saveUpdatesToDB = (fandomName,fanfic) =>{
                     UpdatesModal.findOne({ 'Date': fanficDate, 'Fandom.FandomName': fandomName }, async function(err, dbUpdate) {
                         if (err) { 
                             console.log('---date exist error')
-                            func.delay(1000).then(async () => reject(false))
+                            funcs.delay(1000).then(async () => reject(false))
                             return reject()
                         }
                         let isExist = (dbUpdate===null) ? false : true;

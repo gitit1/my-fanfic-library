@@ -167,13 +167,22 @@ class AddNewFanficManually extends Component {
 
         let formData = new FormData();
         for ( var key in fanfic ) {
-            formData.append(key, fanfic[key]);
+            if(key!=='Tags'){formData.append(key, fanfic[key]);}      
         }
+
+        for (let index = 0; index < 4; index++) {
+            if (fanfic['Tags'][index]) {
+                let key = Object.keys(fanfic['Tags'][index])[0] , value = fanfic['Tags'][index][key];
+                key = key.charAt(0).toUpperCase() + key.slice(1);
+                console.log('key:',key)
+                formData.append(key, value);
+            }
+        }
+
         formData.append('fileName', `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);
         formData.append('savedAs', type);
         anotherFiler && formData.append(fileUpload2, this.fileUploadRef2.current.state.file);
 
-        console.log('fandomName:',fandomName)
         this.props.onSaveFanficFromFile(fandomName, fileName, formData).then(() => {
             let msg = <p>Saved Fanfic to DB</p>
             this.setState({ msg, showUserData: true, saved: true })
@@ -312,7 +321,7 @@ class AddNewFanficManually extends Component {
                             fanfic={fanfic} size={size} showUserData={showUserData} userData={userData} markAs={this.markAsHandler} savedData={savedData}
                             markStatus={this.markStatusHandler} toggleChapterB={this.inputChapterHandler} saveFanficData={this.saveFanficData} msg={msg}
                         />
-                        {fileReaderFlag && !loading && !saved &&
+                        {fileReaderFlag && !loading && !saved && (similarFanfic === null) &&
                                 <>
                                     <FileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Pdf' FandomName={fanfic.FandomName} type='doc' />
                                     <Button color="primary" clicked={() => this.saveFanficFromFile()}>Save Fanfic</Button>
@@ -325,7 +334,7 @@ class AddNewFanficManually extends Component {
                                 {showUploadButton && <Button color="primary" clicked={() => this.saveFanficData(true)}>Save</Button>}
                             </React.Fragment>
                         }
-                        {saved && ((similarFanfic === null) || (similarFanfic !== null && similarFanfic.FanficID !== fanfic.FanficID)) &&
+                        {saved && ((similarFanfic === null) || (similarFanfic !== null && similarFanfic.FanficID !== fanfic.FanficID)) && !fileReaderFlag &&
                             <React.Fragment>
                                 <Button color="primary" clicked={() => this.initialState()}>Add Another One</Button>
                             </React.Fragment>
