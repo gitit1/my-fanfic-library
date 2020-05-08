@@ -1,13 +1,27 @@
-@import '../../../../../../style/_colors';
-@import '../../../../../../style/_fonts';
+@import "../../../../../../style/_colors";
+@import "../../../../../../style/_fonts";
+@import "../../../../../../style/_varibles";
 
-%nav_style_font{
+%nav_style_font {
     font-family: $font_header;
     font-weight: 600;
-    color: $color_header;    
 }
 
+.Login {
+    button span {
+        @extend %nav_style_font;
+        color: $color_header;
+    }
+}
 
-button span{
-    @extend %nav_style_font
+@media only screen and (max-width: $screenSizeM) {
+    .Login button span {
+        color: black;
+    }
+}
+
+@media (max-width: $screenSizeS) {
+    .Login button span {
+        color: black;
+    }
 }
