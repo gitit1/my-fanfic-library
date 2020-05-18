@@ -82,6 +82,18 @@ const GeneralFilters = ({classes,checked,filter}) => {
                             value={checked['author']}
                             onChange={(event)=>filter('author',event,'filter')}
                         />
+                        <TextField
+                            id="series"
+                            label="Series"
+                            // style={{ margin: 8 }}
+                            // fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            value={checked['series']}
+                            onChange={(event)=>filter('series',event,'filter')}
+                        />
                     </React.Fragment>
                     }
             </FormControl>

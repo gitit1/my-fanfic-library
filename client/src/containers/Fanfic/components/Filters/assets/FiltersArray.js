@@ -200,6 +200,7 @@ export const filtersArrayAttr = {
     wordsFrom:"",
     wordsTo:"",
     title:"",
+    series:"",
     fanficId:"",
 
     categories:[],
