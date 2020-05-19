@@ -9,18 +9,17 @@ const FandomModal = require('../../../../models/Fandom');
 
 exports.addEditFandomToDB =  async (req,res) =>{
     console.log(clc.blue('[db controller] addEditFandomToDB()'));
+    console.log('req.query:',req.query);
 
-    let {fandomName,mode,date,mainImage,iconImage,fanficImage} = req.query;
+    let {fandomName,mode,mainImage,mainImageGif,iconImage,fanficImage} = req.query;
     fandomName = fandomName.replace("%26","&");
     const pathForImage = 'public/fandoms/',fandomNameLowerCase = fandomName.toLowerCase();
     let   images=[],resultMessage = '';
  
-    mainImage &&    images.push('Image_Name_Main')
-    iconImage &&    images.push('Image_Name_Icon')
-    fanficImage &&  images.push('Image_Name_Fanfic')
-
-    console.log('mainImage:',mainImage)
-    console.log('fanficImage:',fanficImage)
+    mainImage    &&     images.push('Image_Name_Main_Still')
+    mainImageGif &&     images.push('Image_Name_Main')
+    iconImage    &&     images.push('Image_Name_Icon')
+    fanficImage  &&     images.push('Image_Name_Fanfic')
 
     if (images.length>0 && !fs.existsSync(pathForImage+fandomNameLowerCase)){
         fs.mkdirSync(pathForImage+fandomNameLowerCase,{recursive: true});
@@ -49,11 +48,13 @@ exports.addEditFandomToDB =  async (req,res) =>{
         }
         //check if I have an updated image/prev image/no image
         if(mode === 'add'){ 
-            ImageMain       =   mainImage         ?   mainImage : '';
+            ImageMainStill  =   mainImage         ?   mainImage : '';
+            ImageMain       =   mainImageGif      ?   mainImageGif : '';
             ImageIcon       =   iconImage         ?   iconImage : '';
             ImageFanfic     =   fanficImage       ?   fanficImage : '';
         }else{
-            ImageMain       =   mainImage     ?   mainImage : req.body.Image_Name_Main;
+            ImageMainStill  =   mainImage     ?   mainImage : req.body.Image_Name_Main_Still;
+            ImageMain       =   mainImageGif  ?   mainImageGif : req.body.Image_Name_Main;
             ImageIcon       =   iconImage     ?   iconImage : req.body.Image_Name_Icon;
             ImageFanfic     =   fanficImage   ?   fanficImage : req.body.Image_Name_Fanfic;
             
@@ -73,6 +74,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "id":                       req.body.id,
             "FandomName":               req.body.FandomName,
             "FandomUniverse":           req.body.FandomUniverse,
+            "Collection":               req.body.CollectionName,
             "SearchKeys":               req.body.SearchKeys,
             "AutoSave":                 (req.body.AutoSave === 'true') ? true : false,
             "SaveMethod":               req.body.SaveMethod,
@@ -80,6 +82,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
             "LastUpdate":               Date.now(),
             "Images":                   {
                 "Image_Name_Main":              ImageMain,
+                "Image_Name_Main_Still":        ImageMainStill,
                 "Image_Name_Icon":              ImageIcon,
                 "Image_Name_Fanfic":            ImageFanfic,
                 "Image_Name_Path":              req.body.FandomName
@@ -101,7 +104,11 @@ exports.addEditFandomToDB =  async (req,res) =>{
                         const fandomData = new FandomModal(fandom);
                         console.log(clc.green(`Fandom ${fandomName}  was updated in the db`))
                         await fandomData.save();
-                        await mongoose.dbFanfics.createCollection(fandomName);
+                        if(!req.body.CollectionName || req.body.CollectionName===''){
+                            await mongoose.dbFanfics.createCollection(fandomName);
+                        }else{
+                            await mongoose.dbFanfics.createCollection(req.body.CollectionName);
+                        }
                         resultMessage = 'Success';
                         return res.send(resultMessage)
                     }
@@ -128,9 +135,7 @@ exports.addEditFandomToDB =  async (req,res) =>{
             console.log(`Error in addEditFandomToDB()`)
             resultMessage = 'Error';
             return res.send(resultMessage);
-        }     
-        // console.log('resultMessage:',resultMessage)
-        // return resultMessage
+        }
     
     })
   
