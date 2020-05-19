@@ -50,7 +50,8 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
             console.log('fanfic.Status:',fanfic.Status);
             console.log('fanfic.FanficID:',fanfic.FanficID);
             console.log('fanfic:',fanfic);
-            const status = await funcs.saveFanficToDB(fandomName,fanfic);
+            const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
+            const status = await funcs.saveFanficToDB(fandomName,fanfic, fandomData[0].Collection);
             status && await funcs.updateFandomDataInDB(fanfic)
             resolve();
         })

@@ -24,6 +24,7 @@ import Card from '@material-ui/core/Card';
 class AddNewFandom extends Component{
     
     mainImageRef= React.createRef();
+    mainImageGifRef= React.createRef();
     iconImageRef= React.createRef();
     fanficImageRef= React.createRef();
     
@@ -33,8 +34,9 @@ class AddNewFandom extends Component{
         fandomAddedFlag:0,
         editMode:false,
         imageNameMain:null,
+        imageNameMainGif:null,
         imageNameIcon:null,
-        imageNameFanfic:null
+        imageNameFanfic:null,
     }
   
     componentWillMount(){
@@ -98,7 +100,8 @@ class AddNewFandom extends Component{
                 }
             },
             formIsValid:true,
-            imageNameMain: this.props.fandom.Images.Image_Name_Main,
+            imageNameMain: this.props.fandom.Images.Image_Name_Main_Still,
+            imageNameMainGif: this.props.fandom.Images.Image_Name_Main,
             imageNameIcon: this.props.fandom.Images.Image_Name_Icon,
             imageNameFanfic: this.props.fandom.Images.Image_Name_Fanfic
         }));
@@ -106,7 +109,6 @@ class AddNewFandom extends Component{
 
 
     sendFandomToServerHandler = (event) => {
-        console.log('here..')
         event.preventDefault();
 
         let fandomsNames = [];
@@ -131,6 +133,7 @@ class AddNewFandom extends Component{
         fandomFormData.append("SearchKeys", fandomForm['SearchKeys'].value);
         fandomFormData.append("AutoSave",   fandomForm['AutoSave'].value);
         fandomFormData.append("SaveMethod", saveType);
+        fandomFormData.append("CollectionName",   fandomForm['CollectionName'].value);
         fandomFormData.append("FanficsInFandom", (editMode ? fandom.FanficsInFandom : 0));
         fandomFormData.append("OnGoingFanfics", (editMode ? fandom.OnGoingFanfics : 0));
         fandomFormData.append("CompleteFanfics", (editMode ? fandom.CompleteFanfics : 0));
@@ -139,13 +142,17 @@ class AddNewFandom extends Component{
         fandomFormData.append("fandomsNames", fandomsNames);
         (editMode)  &&  fandomFormData.append("FandomID", fandom.id);
         (editMode && fandom.Images.Image_Name_Main!=='' )  &&  fandomFormData.append("Image_Name_Main", fandom.Images.Image_Name_Main);
+        (editMode && fandom.Images.Image_Name_Main_Still!=='' )  &&  fandomFormData.append("Image_Name_Main_Still", fandom.Images.Image_Name_Main_Still);
         (editMode && fandom.Images.Image_Name_Icon!=='' )  &&  fandomFormData.append("Image_Name_Icon", fandom.Images.Image_Name_Icon);
         (editMode && fandom.Images.Image_Name_Fanfic!=='' )  &&  fandomFormData.append("Image_Name_Fanfic", fandom.Images.Image_Name_Fanfic);
         
         let isMainImage =  ( this.mainImageRef.current.state.file===undefined||
                              this.mainImageRef.current.state.file===null||
                             !this.mainImageRef.current.state.file) ? false : true;
-        let isIconImage =  ( this.iconImageRef.current.state.file===undefined||
+        let isMainImageGif =  ( this.mainImageGifRef.current.state.file===undefined||
+                                this.mainImageGifRef.current.state.file===null||
+                                !this.mainImageGifRef.current.state.file) ? false : true;                            
+        let isIconImage =   ( this.iconImageRef.current.state.file===undefined||
                              this.iconImageRef.current.state.file===null||
                             !this.iconImageRef.current.state.file) ? false : true;
         let isFanficImage = ( this.fanficImageRef.current.state.file===undefined||
@@ -153,18 +160,24 @@ class AddNewFandom extends Component{
                             !this.fanficImageRef.current.state.file) ? false : true;
 
         let imageDate = new Date().getTime();
-        let mainImage = false,iconImage = false,fanficImage=false;
+        let mainImage = false,mainImageGif = false,iconImage = false,fanficImage=false;
         
         if(isMainImage){
             let type= this.mainImageRef.current.state.file.name.split('.');
             type = type[type.length-1];
-            mainImage = `${fandomName.toLowerCase()}_${imageDate}.${type}`;
+            mainImage = `${fandomName.toLowerCase().replace('&','and')}_${imageDate}.${type}`;
             fandomFormData.append(mainImage, this.mainImageRef.current.state.file)
+        }
+        if(isMainImageGif){
+            let type= this.mainImageGifRef.current.state.file.name.split('.');
+            type = type[type.length-1];
+            mainImageGif = `${fandomName.toLowerCase().replace('&','and')}_${imageDate}.${type}`;
+            fandomFormData.append(mainImageGif, this.mainImageGifRef.current.state.file)            
         }
         if(isIconImage){
             let type= this.iconImageRef.current.state.file.name.split('.');
             type = type[type.length-1];
-            iconImage = `${fandomName.toLowerCase()}_icon_${imageDate}.${type}`;
+            iconImage = `${fandomName.toLowerCase().replace('&','and')}_icon_${imageDate}.${type}`;
             fandomFormData.append(iconImage, this.iconImageRef.current.state.file)
         }
         if(isFanficImage){
@@ -177,11 +190,12 @@ class AddNewFandom extends Component{
         let mode =  this.state.editMode ? 'edit' : 'add';
         
         if(this.mainImageRef.current.state.file.name){this.setState({imageNameMain:fandomName+'_'+imageDate+'.'+this.mainImageRef.current.state.file.name.split('.')[1]})}
+        if(this.mainImageGifRef.current.state.file.name){this.setState({imageNameMainGif:fandomName+'_'+imageDate+'.'+this.mainImageGifRef.current.state.file.name.split('.')[1]})}
         if(this.iconImageRef.current.state.file.name){this.setState({imageNameIcon:fandomName+'_'+imageDate+'.'+this.iconImageRef.current.state.file.name.split('.')[1]})}
         if(this.fanficImageRef.current.state.file.name){this.setState({imageNameFanfic:fandomName+'_'+imageDate+'.'+this.fanficImageRef.current.state.file.name.split('.')[1]})}
 
 
-        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandomFormData,mainImage,iconImage,fanficImage).then(()=>{
+        this.props.onAddFandom(this.state.fandomForm['FandomName'].value,mode,fandomFormData,mainImage,mainImageGif,iconImage,fanficImage).then(()=>{
         
             switch  (this.props.message) {
                 case 'Success':
@@ -197,12 +211,9 @@ class AddNewFandom extends Component{
                     this.setState({fandomAddedFlag:3})
                     break;
                 default:
-                    //alert(this.props.message); 
                     break;           
             }    
         });      
-        //this.setState({fandomName:this.state.fandomForm['FandomName'].value});
-        // this.setState({editMode:false,uploading:false});
         
         return null
 
@@ -250,14 +261,15 @@ class AddNewFandom extends Component{
         let updatedFandomForm = null;
         
 
-        if(inputIdentifier==='AutoSave'){
-            const updatedFormElement1 = updateObject(this.state.fandomForm['SaveMethod'],{
+        if(inputIdentifier==='AutoSave' || inputIdentifier==='Collection'){
+            let changeAttr = inputIdentifier==='AutoSave' ? 'SaveMethod' : 'CollectionName';
+            const updatedFormElement1 = updateObject(this.state.fandomForm[changeAttr],{
                 visible: JSON.parse(event.target.value)
             });
 
             updatedFandomForm = updateObject(this.state.fandomForm,{
                 [inputIdentifier]:updatedFormElement,
-                'SaveMethod':updatedFormElement1
+                [changeAttr]:updatedFormElement1
             })
         }else{
             updatedFandomForm = updateObject(this.state.fandomForm,{
@@ -274,7 +286,7 @@ class AddNewFandom extends Component{
     }
 
     render(){
-        const {fandomForm,editMode,fandomAddedFlag,formIsValid,imageNameMain,imageNameIcon,imageNameFanfic} = this.state;
+        const {fandomForm,editMode,fandomAddedFlag,formIsValid,imageNameMain,imageNameMainGif,imageNameIcon,imageNameFanfic} = this.state;
         const {loading} = this.props;
 
         const formElementsArray = [];
@@ -293,6 +305,8 @@ class AddNewFandom extends Component{
                         <Grid item xs={4} className='add_new_fandom_main_image'>
                             <ImageUpload id='main' ref={this.mainImageRef} edit={editMode} fileName={imageNameMain} FandomName={fandomForm['FandomName'].value} 
                                          label='Please Select Main Image' imageLabel='Main Image' type='image'/>
+                            <ImageUpload id='mainGif' ref={this.mainImageGifRef} edit={editMode} fileName={imageNameMainGif} FandomName={fandomForm['FandomName'].value} 
+                                         label='Please Select Main Image Gif' imageLabel='Main Image Gif' type='image'/>             
                         </Grid>
                         <Grid item xs={8} className='add_new_fandom_content'>
                             <BuildForm onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler} 
@@ -335,7 +349,8 @@ const mapDispatchedToProps = dispatch =>{
     return{
         // initFandom:     () => dispatch(actions.fandomInit()),
         onGetFandoms:       ()                                                          =>      dispatch(actions.getFandomsFromDB()),
-        onAddFandom:        (FandomName,mode,fandom,mainImage,iconImage,fanficImage)    =>      dispatch(actions.addFandomToDB(FandomName,mode,fandom,mainImage,iconImage,fanficImage)),
+        onAddFandom:        (FandomName,mode,fandom,mainImage,mainImageGif,iconImage,fanficImage)    =>      
+                            dispatch(actions.addFandomToDB(FandomName,mode,fandom,mainImage,mainImageGif,iconImage,fanficImage)),
         onPostFandom:       (fandom)                                                    =>      dispatch(actions.getFandom(fandom))
 
     };

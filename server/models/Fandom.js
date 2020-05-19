@@ -9,6 +9,7 @@ const FandomSchema = new Schema({
     AutoSave:                   {type: Boolean},
     SaveMethod:                 {type: String},
     FanficsInFandom:            {type: Number},
+    Collection:                 {type: String},
     Info:                       {
                                     Year:                       {type: Number},
                                     Canon:                      {type: Boolean},                              
@@ -61,6 +62,7 @@ const FandomSchema = new Schema({
     },
     Images:                     {
                                     Image_Name_Main:            {type: String},
+                                    Image_Name_Main_Still:      {type: String},
                                     Image_Name_Icon:            {type: String},                              
                                     Image_Name_Fanfic:          {type: String},                              
                                     Image_Name_Path:            {type: String},                              
