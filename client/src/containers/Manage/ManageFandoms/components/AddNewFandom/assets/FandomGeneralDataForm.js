@@ -30,7 +30,7 @@ export const fandomGeneralForm = [{
         touched:false,
         visible: true,
         disabled:false
-},
+    },
     SearchKeys: {
         label: 'Search Key:',
         elementType:'input', 
@@ -75,6 +75,36 @@ export const fandomGeneralForm = [{
         value:'',
         validation:{},
         valid: true,
+        visible: false,
+        disabled:false
+    },
+    Collection: {
+        label: 'Link to Collection?',
+        elementType:'select', 
+        elementConfig:{
+            options: [{value: false,displayValue: 'No'},
+                      {value: true,displayValue: 'Yes'}
+                      ]
+        },
+        value:'',
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
+    },
+    CollectionName: {
+        label: 'Collection Name:',
+        elementType: 'input', 
+        elementConfig:{
+            type: 'text',
+            placeholder: 'Collection Name'
+        },
+        value:'',
+        validation: {
+            required: false
+        },
+        valid:true,
+        touched:false,
         visible: false,
         disabled:false
     }

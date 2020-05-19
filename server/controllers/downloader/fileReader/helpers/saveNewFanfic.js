@@ -1,7 +1,6 @@
 
 const FandomModal = require('../../../../models/Fandom');
 const multer = require('multer');
-const fs = require('fs-extra');
 const { fixStringForPath } = require('../../../helpers/fixStringForPath.js');
 
 const funcs = require('../../helpers/index');
@@ -47,7 +46,8 @@ exports.saveNewFanfic = async (fandomName, fileName, req, res) => {
 
             await funcs.saveFileToServer(`${tempPath}/${fileName}`, `${pathForDocs}/${req.body.fileName}.${fileName.split('.')[1]}`)
 
-            const status = await funcs.saveFanficToDB(fandomName, fanfic);
+            const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
+            const status = await funcs.saveFanficToDB(fandomName, fanfic, fandomData[0].Collection);
             status && await funcs.updateFandomDataInDB(fanfic)
             resolve();
         })
