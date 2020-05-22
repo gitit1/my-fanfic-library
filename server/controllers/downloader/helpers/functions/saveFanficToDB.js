@@ -9,6 +9,7 @@ exports.saveFanficToDB = (fandomName, fanfic, collection) => {
         let status = (fanfic.Status === 'new' || fanfic.Status === 'updated') ? true : false;
 
         const collectionName = (collection && collection !== '') ? collection : fandomName;
+        console.log('collectionName:',collectionName)
 
         mongoose.dbFanfics.collection(collectionName).findOne({ FanficID: fanfic["FanficID"] }, async function (err, dbFanfic) {
             if (err) {

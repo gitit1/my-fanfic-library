@@ -5,7 +5,7 @@ const { sleep } = require('../../../../helpers/sleep');
 const ffHelpers = require('../../helpers/index');
 const { checkFanfic } = require('../functions/checkFanfic')
 
-exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url) => {
+exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url, collection) => {
     console.log(clc.blue('[ff controller] getDataFromFFFandomPage()'));
     try {
         let page = await ffHelpers.getUrlBodyFromSite(url)
@@ -22,7 +22,7 @@ exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url) => {
         // console.log('pagesArray: ',pageNumber,' - done sleeping...');
 
         
-        // n = 1; //TODO: TEMP
+        //n = 1; //TODO: TEMP
 
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
@@ -30,7 +30,7 @@ exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url) => {
             console.log('done sleeping...');
             let data = $('.zpointer').eq(count).html();
 
-            await checkFanfic(log, data, fandomName).then(res => {
+            await checkFanfic(log, data, fandomName, collection).then(res => {
                 donePromise++;
                 res === 0 && counter++;
             })

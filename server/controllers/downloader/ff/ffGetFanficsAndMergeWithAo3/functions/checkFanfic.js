@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const funcs = require('../../../helpers/index');
 const { fixStringForPath } = require('../../../../helpers/fixStringForPath')
 
-exports.checkFanfic = async (log, data, fandomName) => {
+exports.checkFanfic = async (log, data, fandomName, collection) => {
     return new Promise(async function (resolve, reject) {
 
         let fanfic = {}, tags = [], freeforms = [], characters = [], relationships = [];
@@ -92,18 +92,18 @@ exports.checkFanfic = async (log, data, fandomName) => {
 
         //log.info(`-----Found Similar: ${exsistsFanfic.FanficID} , ff-id: ${fanfic.FanficID}`); 
         const linkHasImage = !$('.stitle img').attr('data-original') ? false : `https:${$('.stitle img').attr('data-original')}`;
-        const imageName = linkHasImage && fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).jpg`);
-        const imagePath = linkHasImage && `public/fandoms/${fandomName}/fanficsImages/${imageName}`;
         // console.log('linkHasImage:', linkHasImage)
         // console.log('imageName:', imageName)
         // console.log('imagePath:', imagePath)
 
         if (isFanficExsist) {
-            let exsistsFanfic = isFanficExsist[0];
+            const exsistsFanfic = isFanficExsist[0];
             const { FanficID_FF, Source, Deleted, image, NumberOfChapters } = exsistsFanfic;
-            let isLinkedToFF = FanficID_FF === undefined ? false : true;
-            let isDeleted = Deleted === undefined ? false : true;
-            let hasImage = image === undefined ? false : true;
+            const isLinkedToFF = FanficID_FF === undefined ? false : true;
+            const isDeleted = Deleted === undefined ? false : true;
+            const hasImage = image === undefined ? false : true;
+            const imageName = linkHasImage && fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${exsistsFanfic.FanficID}).jpg`);
+            const imagePath = linkHasImage && `public/fandoms/${fandomName.toLowerCase()}/fanficsImages/${imageName}`;
 
             if (!isLinkedToFF && Source === 'AO3') {
                 // Exsist as ao3 but not have ff linked
@@ -130,7 +130,7 @@ exports.checkFanfic = async (log, data, fandomName) => {
                     await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
                 }
                 // Update DB
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic);
+                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
             } else if (isLinkedToFF && Source === 'AO3' && fanfic.NumberOfChapters > NumberOfChapters) {
 
                 exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
@@ -148,7 +148,7 @@ exports.checkFanfic = async (log, data, fandomName) => {
                     await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
                 }
                 // Update DB
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic);
+                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
                 await funcs.downloadFanfic(fanfic.URL, Source, fixStringForPath(`${Author}_${FanficTitle} (${FanficID})`), 'epub', fandomName, FanficID);
             } else if (isLinkedToFF && !isDeleted && !hasImage && linkHasImage) {
                 // Exsist with ao3 with linked ff but with no image (and ff has image)
@@ -160,7 +160,7 @@ exports.checkFanfic = async (log, data, fandomName) => {
                 // Update DB
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'image';
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic);
+                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
             } else if (isLinkedToFF && isDeleted) {
                 // Exsist as ao3 with ff but deleted from ao3 
                 console.log(`-----Found Similar (Exsist as ao3 with ff but deleted from ao3): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
@@ -187,7 +187,7 @@ exports.checkFanfic = async (log, data, fandomName) => {
                 exsistsFanfic.StatusDetails = 'old';
                 await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
                 // Update DB
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic);
+                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
                 // } else if (Source === 'FF' && !isLinkedToFF) {
                 //     exsistsFanfic.URL_FF = fanfic.URL;
                 //     exsistsFanfic.AuthorURL_FF = fanfic.AuthorURL;
@@ -214,9 +214,11 @@ exports.checkFanfic = async (log, data, fandomName) => {
                 exsistsFanfic.Tags = fanfic.Tags 
                 exsistsFanfic.Status = 'old';
                 exsistsFanfic.StatusDetails = 'old';
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic);
+                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
             }
         } else {
+            const imageName = linkHasImage && fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).jpg`);
+            const imagePath = linkHasImage && `public/fandoms/${fandomName.toLowerCase()}/fanficsImages/${imageName}`;
             // Not exsist
             console.log(`-----Adding new Fanfic: ${fanfic.FanficID}`);
             log.info(`-----Adding new Fanfic: ${fanfic.FanficID}`);
@@ -225,7 +227,7 @@ exports.checkFanfic = async (log, data, fandomName) => {
                 fanfic.image = imageName;
                 await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
             }
-            const status = await funcs.saveFanficToDB(fandomName, fanfic);
+            const status = await funcs.saveFanficToDB(fandomName, fanfic, collection);
             status && await funcs.updateFandomDataInDB(fanfic);
             await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`), 'epub', fandomName, fanfic.FanficID);
         }
