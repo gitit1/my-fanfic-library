@@ -7,7 +7,7 @@ const {getUrlBodyFromAo3} = require('../helpers/getUrlBodyFromAo3')
 const funcs = require('../../helpers/index');
 
 exports.ao3SaveFanfic = async (jar,fandomName,download,url,fanfic) =>{ 
-    console.log('fandomName,download,url,fanfic:',fandomName,download,url,fanfic)
+    // console.log('fandomName,download,url,fanfic:',fandomName,download,url,fanfic)
     return await new Promise(async function(resolve, reject) {  
         if(download=='true'){
             let urlBody = await getUrlBodyFromAo3(jar,url) //TODO: fix it 'epub'

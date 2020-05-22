@@ -7,11 +7,31 @@ exports.checkForSimilar = (fanfic,fandomName) =>{
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     return new Promise(function(resolve, reject) {
         FanficDB.find({'FanficID':fanfic.FanficID}).exec(async function(err, fanficResult) {
-            console.log('fanficResult',fanficResult)
             if(fanficResult&&fanficResult.length!==0){
                 resolve(fanficResult)
             }else{
                 FanficDB.find({$or: [{'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}},{'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}]}).exec(async function(err, fanficResult) {
+                    err && reject(err)
+                    if(fanficResult.length===0){
+                        resolve(false)
+                    }else{
+                        resolve(fanficResult)
+                    }
+                });
+            }
+        });
+    })
+}
+
+exports.checkForExactSimilar = (fanfic,fandomName) =>{
+    console.log('checkForExactSimilar')
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
+    return new Promise(function(resolve, reject) {
+        FanficDB.find({'FanficID':fanfic.FanficID}).exec(async function(err, fanficResult) {
+            if(fanficResult&&fanficResult.length!==0){
+                resolve(fanficResult)
+            }else{
+                FanficDB.find({$and: [{'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}},{'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}]}).exec(async function(err, fanficResult) {
                     err && reject(err)
                     if(fanficResult.length===0){
                         resolve(false)

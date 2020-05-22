@@ -4,6 +4,8 @@ const UpdatesModal = require('../../../../models/Updates');
 const funcs = require('./generalFunctions');
 
 exports.saveFanficToDB = (fandomName,fanfic) =>{
+    // console.log('saveFanficToDB - fandomName:',fandomName)
+    // console.log('fanfic:',fanfic)
     // console.log(clc.bgGreenBright('[ao3 controller] saveFanfficToDB()',fandomName));   
     return new Promise(async function(resolve, reject) {
         let status = (fanfic.Status==='new'||fanfic.Status==='updated') ? true : false;
@@ -13,8 +15,11 @@ exports.saveFanficToDB = (fandomName,fanfic) =>{
                 return reject()
             }
             let isExist = (dbFanfic===null) ? false : true;
+            console.log('isExist?',isExist)
             if(!isExist){
                 mongoose.dbFanfics.collection(fandomName).insertOne(fanfic, async function (error, response) {
+                    console.log('error:',error)
+                    // console.log('response:',response)
                     await funcs.delay(1000).then(async () => {
                         status && await saveUpdatesToDB(fandomName,fanfic)
                         resolve(true)

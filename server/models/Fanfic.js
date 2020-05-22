@@ -4,10 +4,13 @@ const Schema = mongoose.Schema;
 const FanficSchema = new Schema({
     FandomName:             {type: String},
     FanficID:               {type: Number, unique: true},
+    FanficID_FF:            {type: Number},
     FanficTitle:            {type: String},
     URL:                    {type: String},
+    URL_FF:                 {type: String},
     Author:                 {type: String},
     AuthorURL:              {type: String},    
+    AuthorURL_FF:           {type: String},    
     NumberOfChapters:       {type: Number},    
     Complete:               {type: Boolean},    
     Rating:                 {type: String},  

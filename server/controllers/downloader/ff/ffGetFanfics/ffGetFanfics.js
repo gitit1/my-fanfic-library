@@ -9,7 +9,7 @@ exports.ffGetFanfics = async (fandom) =>{
 
             for (let i = 0; i < dbFanfic.length; i++) {
                 // await promises.push(limit(res => func.delay(7000).then(async res => {checkIfGotUpdated(fandom.AutoSave,dbFanfic[i])})))
-                await promises.push(limit(() => checkIfGotUpdated(fandom.AutoSave,dbFanfic[i])))
+                promises.push(limit(() => checkIfGotUpdated(fandom.AutoSave, dbFanfic[i])))
             }
 
             await Promise.all(promises).then(async results=> {
