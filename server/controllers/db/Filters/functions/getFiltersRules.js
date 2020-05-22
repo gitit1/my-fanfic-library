@@ -114,29 +114,30 @@ exports.getFiltersRules = async (filters, fandomName, userEmail) => {
                 break;
             //Search:
             case 'tags':
-                filtersFanficList.push({ 'Tags': { $elemMatch: { [filter.split('_')[1]]: filterValue } } })
+                filtersFanficList.push({ 'Tags': { $elemMatch: { [filter.split('_')[1]]: filterValue } } });
                 break;
             case 'fanficId':
-                filtersFanficList.push({ 'FanficID': Number(filterValue) })
+                filtersFanficList.push({ 'FanficID': Number(filterValue) });
                 notFanficId = false;
                 break;
             case 'author'://author with text
-                filtersFanficList.push({ 'Author': { $regex: `.*${filterValue.replace('%20', '')}.*`, '$options': 'i' } })
+                filtersFanficList.push({ 'Author': { $regex: `.*${filterValue.replace('%20', '')}.*`, '$options': 'i' } });
                 break;
             case 'title':
-                filtersFanficList.push({ 'FanficTitle': { $regex: `.*${filterValue.replace('%20', '')}.*`, '$options': 'i' } })
+                filtersFanficList.push({ 'FanficTitle': { $regex: `.*${filterValue.replace('%20', '')}.*`, '$options': 'i' } });
+                break;
+            case 'series':
+                filtersFanficList.push({ 'Series': { $regex: `.*${filterValue.replace('%20', '')}.*`, '$options': 'i' } });
                 break;
             case 'categories':
-                console.log('filterValue:', filterValue)
-                filtersFanficList.push({ 'Categories': { $all: filterValue.replace('%20', '').split(',') } })
+                filtersFanficList.push({ 'Categories': { $all: filterValue.replace('%20', '').split(',') } });
                 break;
             case 'wordsFrom':
                 if (wordsFlag) {
-                    index = filtersFanficList.findIndex(x => x.Words)
-                    filtersFanficList[index].Words = Object.assign(filtersFanficList[index].Words, { $gte: Number(filterValue) })
+                    index = filtersFanficList.findIndex(x => x.Words);
+                    filtersFanficList[index].Words = Object.assign(filtersFanficList[index].Words, { $gte: Number(filterValue) });
                 } else {
                     filtersFanficList.push({ 'Words': { $gte: Number(filterValue) } })
-                    // sortList.push({'Words':-1})
                     wordsFlag = true;
                 }
                 break;
@@ -162,7 +163,7 @@ exports.getFiltersRules = async (filters, fandomName, userEmail) => {
         filtersUserList.push({ 'FanficList.Status': 'Finished' });
     }
     let ignoreList = await getIgnoredList(fandomName, userEmail);
-    
+
     if (ignoreList.length > 0 && searchWithIgnoreFlag && filtersUserList.length === 0 && notFanficId) {
         filtersFanficList.push({ FanficID: { $nin: ignoreList } })
         ignoreList = []

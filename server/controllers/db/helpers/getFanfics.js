@@ -1,51 +1,51 @@
 const clc = require("cli-color");
 const mongoose = require('../../../config/mongoose');
+const FandomModal = require('../../../models/Fandom');
 const FanficSchema = require('../../../models/Fanfic');
 
-exports.getFanfics = (skip,limit,fandomName,filters,sortObj,list,readingList,userSorted)=>{
-    return new Promise(async function(resolve, reject) {
-        skip = (Number(skip)<0) ? 0 : Number(skip)
-        limit = (Number(limit)<0) ? 0 : Number(limit) 
+exports.getFanfics = (skip, limit, fandomName, filters, sortObj, list, readingList, userSorted) => {
+    return new Promise(async function (resolve, reject) {
+        skip = (Number(skip) < 0) ? 0 : Number(skip)
+        limit = (Number(limit) < 0) ? 0 : Number(limit)
         let promises = [];
+        let fullFilters = { 'FandomName': fandomName, ...filters }
 
-        console.log(clc.bgGreenBright('[db controller] getFanfics()')); 
-        sort = userSorted ? {} : (sortObj===null) ? {['LastUpdateOfFic']: -1 , ['LastUpdateOfNote']: 1} : sortObj
-        console.log('sort 3:',sort)
+        console.log(clc.bgGreenBright('[db controller] getFanfics()'));
 
-        if(list==='true'){
-            // console.log('readingList:',readingList.FanficsFandoms.readingList.Fanfics)
+        sort = userSorted ? {} : (sortObj === null) ? { ['LastUpdateOfFic']: -1, ['LastUpdateOfNote']: 1 } : sortObj
+        console.log('sort 3:', sort)
+
+        if (list === 'true') {
             readingList.FanficsFandoms.map(async fandom => {
-                console.log('fandomName:',fandom)
-                const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandom);
-                //const fanfics1 = await getFanficsofFandoms(FanficDB,filters,0,0)
-                // promises.push(limitPromise(() => {getFanficsofFandoms(FanficDB,filters,0,0) }));
-                promises.push(getFanficsofFandoms(FanficDB,filters,0,0));
-             });
+                const fandomData = await FandomModal.find({ 'FandomName': fandom }, function (err, fandoms) { if (err) { throw err; } });
+                const collectionName = (fandomData[0].Collection && fandomData[0].Collection !== '') ? fandomData[0].Collection : fandom;
 
-            await Promise.all(promises).then(async fanfics=> {
-                // console.log('fanfics:',fanfics)
-                let arrfanfics = await fanfics.reduce(function(arr, e) {return arr.concat(e)})
-                console.log('skip 1:',fanfics)
-                console.log('skip 1:',skip)
-                console.log('arrfanfics:',arrfanfics)
-                console.log('limit+skip 1:',limit+skip)
-                arrfanfics = await arrfanfics.slice(skip, limit+skip)
+                const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema, collectionName);
+                promises.push(getFanficsofFandoms(FanficDB, fullFilters, 0, 0));
+            });
+
+            await Promise.all(promises).then(async fanfics => {
+                let arrfanfics = await fanfics.reduce(function (arr, e) { return arr.concat(e) })
+                arrfanfics = await arrfanfics.slice(skip, limit + skip)
                 resolve(arrfanfics)
             });
-                
-        }else{
-            const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
-            fanfics = await getFanficsofFandoms(FanficDB,filters,skip,limit)
+
+        } else {
+            const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
+            const collectionName = (fandomData[0].Collection && fandomData[0].Collection !== '') ? fandomData[0].Collection : fandomName;
+
+            const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema, collectionName);
+            fanfics = await getFanficsofFandoms(FanficDB, fullFilters, skip, limit)
             resolve(fanfics)
-        } 
-    }); 
+        }
+    });
 }
 
-const getFanficsofFandoms = (FanficDB,filters,skip,limit) =>{
-    return new Promise(function(resolve, reject) {
-        FanficDB.find(filters).sort(sort).skip(skip).limit(limit).exec(async function(err, fanfics) {
+const getFanficsofFandoms = (FanficDB, filters, skip, limit) => {
+    return new Promise(function (resolve, reject) {
+        FanficDB.find(filters).sort(sort).skip(skip).limit(limit).exec(async function (err, fanfics) {
             err && reject(err)
             resolve(fanfics)
         })
-    });     
+    });
 }

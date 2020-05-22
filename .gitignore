@@ -37,6 +37,7 @@ build/
 backups/
 node_modules/
 jspm_packages/
+public/
 
 # TypeScript v1 declaration files
 typings/
@@ -65,7 +66,6 @@ typings/
 
 #server
 config
-backup/
 public/
 
 config/keys.js

@@ -44,8 +44,8 @@ exports.getFanfics = async (fandom, log, type) => {
     // let SavedFanfics = getFanficsAO3[1] + getFanficsFF[1];
     
 }
-exports.getDeletedFanfics = async (log, fandomName) => {
-    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandomName);
+exports.getDeletedFanfics = async (log, fandomName, collection) => {
+    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandomName, collection);
     return getDeletedFanfics;
 }
 exports.saveMissingFanfics = async (fandom) => {
