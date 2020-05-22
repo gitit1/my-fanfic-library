@@ -35,7 +35,6 @@ exports.backupDB = async () => {
                 fs.writeFile(`${path}/${allFandoms[i].FandomName}.json`, JSON.stringify(fanfics, null, 4), (err) => {
                     if (err) { console.error(err); return; };
                     console.log(`${allFandoms[i].FandomName} - File has been created`);
-                    resolve();
                 });
             })
         }));
