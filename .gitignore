@@ -65,7 +65,6 @@ typings/
 
 #server
 config
-backup/
 public/
 
 config/keys.js
