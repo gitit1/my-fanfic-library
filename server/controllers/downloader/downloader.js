@@ -27,7 +27,7 @@ exports.getFanfics = async (fandom, log, type) => {
     };
     const log2 = logger.createRollingFileLogger(opts);
     
-    await ao3.ao3GetFanfics(jar, log, fandom, type);
+    // await ao3.ao3GetFanfics(jar, log, fandom, type);
     await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type)
     // getFanficsFF = await ffGetFanfics(fandom);
     // console.log('getFanficsAO3:', getFanficsAO3);

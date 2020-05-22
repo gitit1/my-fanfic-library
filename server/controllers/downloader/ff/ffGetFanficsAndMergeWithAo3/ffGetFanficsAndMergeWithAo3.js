@@ -13,7 +13,7 @@ const { getDataFromFFFandomPage } = require('./functions/getDataFromFFFandomPage
 
 exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
     console.log(clc.blue(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
-    const { FandomName, FFSearchUrl } = fandom;
+    const { FandomName, FFSearchUrl, Collection } = fandom;
 
     //temp - lost girl / atypical / ouat
     //FFSearchUrl = "http://www.fanfiction.net/tv/Lost-Girl/?&srt=1&r=10&c1=55093&c2=55096" 
@@ -39,7 +39,7 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
 
     for (let i = 1; i < numberOfPages + 1; i++) {
         promises.push(limit(async () => {
-            await getDataFromFFFandomPage(log, FandomName, i, `${FFSearchUrl}&p=${i}`)
+            await getDataFromFFFandomPage(log, FandomName, i, `${FFSearchUrl}&p=${i}`, Collection)
         }));
     }
 

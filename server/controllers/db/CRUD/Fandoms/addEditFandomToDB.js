@@ -88,9 +88,10 @@ exports.addEditFandomToDB =  async (req,res) =>{
                 "Image_Name_Path":              req.body.FandomName
             }
         }
-        if(req.body.AutoSave === 'true'){
-            fs.mkdirSync(pathForImage+fandomNameLowerCase+'/fanfics',{recursive: true});
-        }
+        // if(req.body.AutoSave === 'true'){
+        fs.mkdirSync(pathForImage+fandomNameLowerCase+'/fanfics',{recursive: true});
+        fs.mkdirSync(pathForImage+fandomNameLowerCase+'/fanficsImages',{recursive: true});
+        // }
         //TODO:add already exsist:
         try {
             if(req.query.mode === 'add'){
