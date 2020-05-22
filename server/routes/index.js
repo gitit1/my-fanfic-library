@@ -60,7 +60,7 @@ try {
   router.get('/updates/myLatestActivities',updates.myLatestActivities)
   router.get('/updates/myFanficsUpdate',updates.myFanficsUpdate)
   
-  router.get('/ffgetfanfics',downloader.ffGetFanficsHandler)
+  // router.get('/ffgetfanfics',downloader.ffGetFanficsHandler)
   
 } catch(e) {
   console.log(`ERROR!! \n${e.stack}`);

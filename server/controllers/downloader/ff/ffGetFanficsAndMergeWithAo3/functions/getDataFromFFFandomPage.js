@@ -22,7 +22,7 @@ exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url) => {
         // console.log('pagesArray: ',pageNumber,' - done sleeping...');
 
         
-        n = 1; //TODO: TEMP
+        // n = 1; //TODO: TEMP
 
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');

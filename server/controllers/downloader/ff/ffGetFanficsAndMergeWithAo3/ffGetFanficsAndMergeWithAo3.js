@@ -15,8 +15,6 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
     console.log(clc.blue(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
     const { FandomName, FFSearchUrl } = fandom;
 
-    let FandomName = fandom;
-
     //temp - lost girl / atypical / ouat
     //FFSearchUrl = "http://www.fanfiction.net/tv/Lost-Girl/?&srt=1&r=10&c1=55093&c2=55096" 
     //FFSearchUrl = "https://www.fanfiction.net/tv/Atypical/?&srt=1&r=10&c1=167272&c2=167279"
