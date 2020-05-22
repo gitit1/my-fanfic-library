@@ -22,7 +22,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, sav
         let newFic = check[0], updated = check[1];
         fanfic = check[2];
 
-        if (((newFic || updated || savedNotAuto) && autoSave) || fanfic["PublishDate"] === 0) {
+        // if (((newFic || updated || savedNotAuto) && autoSave) || fanfic["PublishDate"] === 0) {
             let counter = -1;
 
             if (newFic || fanfic["PublishDate"] === 0) {
@@ -65,6 +65,6 @@ exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, sav
                     return error
                 })
             }
-        }
-    });
+        });
+    // });
 }
