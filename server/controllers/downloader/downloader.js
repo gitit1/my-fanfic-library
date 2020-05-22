@@ -8,23 +8,41 @@ TODO:  function/router: wattpadAddNewFanfic
 TODO:  function/router: wattpadDownloadFanfic
 TODO:  function/router: wattpadSaveMissingFanfics
 */
+const FandomModal = require('../../models/Fandom');
 const multer = require('multer');
 const ao3 = require('./ao3/ao3');
 const ff = require('./ff/ff');
 const manually = require('./manually/manually');
 const fileReader = require('./fileReader/fileReader');
 
+const logger = require('simple-node-logger');
 let request = require('request')
 let jar = request.jar();
 
 exports.getFanfics = async (fandom, log, type) => {
-    let getFanficsAO3 = await ao3.ao3GetFanfics(jar, log, fandom, type);
-    console.log('getFanficsAO3:', getFanficsAO3);
-    let getFanficsFF = await ff.ffGetFanfics(fandom);
-    console.log('getFanficsFF:', getFanficsFF);
-    let fanficsInFandom = getFanficsAO3[0] + getFanficsFF[0];
-    let SavedFanfics = getFanficsAO3[1] + getFanficsFF[1];
-    return [fanficsInFandom, SavedFanfics];
+    const opts = {
+        logDirectory: `public/logs/downloader`,
+        fileNamePattern: `${fandom.FandomName}-<DATE>-ff-automatic-downloader.log`,
+        dateFormat: 'YYYY.MM.DD'
+    };
+    const log2 = logger.createRollingFileLogger(opts);
+    
+    await ao3.ao3GetFanfics(jar, log, fandom, type);
+    await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type)
+    // getFanficsFF = await ffGetFanfics(fandom);
+    // console.log('getFanficsAO3:', getFanficsAO3);
+    // let getFanficsFF = await ffGetFanfics(fandom, log, type);
+    // console.log('getFanficsFF:', getFanficsFF);
+
+    return await FandomModal.findOne({'FandomName': fandom.FandomName},async function(err, selectedFandom) {
+        
+        return [selectedFandom.FanficsInFandom, 0];
+    });
+
+    // const fanficsInFandom = await mongoose.dbFanfics.collection(collectionName).countDocuments({'Source':'AO3'});
+    // let fanficsInFandom = getFanficsAO3[0] + getFanficsFF[0];
+    // let SavedFanfics = getFanficsAO3[1] + getFanficsFF[1];
+    
 }
 exports.getDeletedFanfics = async (log, fandomName, collection) => {
     let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandomName, collection);
@@ -51,7 +69,7 @@ exports.getFanficDataFromFile = async (req, res) => {
     }
 }
 
-exports.saveFanficFromFile = async (req,res) => {
+exports.saveFanficFromFile = async (req, res) => {
     const { fandomName, fileName } = req.query;
     console.log('saveFanficFromFile');
     await fileReader.saveNewFanfic(fandomName, fileName, req, res).then(() => {
@@ -99,3 +117,19 @@ exports.updateExistFanfic = async (req, res) => {
     await manually.updateExistFanfic(req.query.fandomName, req, res);
     res.send();
 }
+
+// exports.ffGetFanficsHandler = async (req, res) => {
+//     // await ffGetFanfics('test fandom', 'partial')
+//     await ffGetFanfics('Cazzie', 'partial')
+// }
+
+// const ffGetFanfics = async (fandomName, type) => {
+//     const opts = {
+//         logDirectory: `public/logs/downloader`,
+//         fileNamePattern: `${fandomName}-<DATE>-ff-automatic-downloader.log`,
+//         dateFormat: 'YYYY.MM.DD'
+//     };
+
+//     const log = logger.createRollingFileLogger(opts);
+//     await ff.ffGetFanficsAndMergeWithAo3(log, fandomName, type)
+// }

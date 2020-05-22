@@ -29,7 +29,6 @@ const getFandomFanfics = async (socket, log, fandom, type) => {
 
     let startTime = now();
     let fanficsLengths = await downloader.getFanfics(fandom, log, type);
-    console.log('fanficsLengths:', fanficsLengths)
     let endTime = now();
 
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));

@@ -1,7 +1,7 @@
 
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
-
+const { fixStringForPath } = require('../../../helpers/fixStringForPath')
 const funcs = require('../../helpers/index');
 
 exports.ffSaveFanfic = async (fandomName, download, url, fanfic) => {

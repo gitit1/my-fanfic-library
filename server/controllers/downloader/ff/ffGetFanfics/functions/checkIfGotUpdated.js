@@ -7,9 +7,9 @@ exports.checkIfGotUpdated = (autoSave, fanfic) => {
     return funcs.delay(7000).then(() => {
         return new Promise(function (resolve, reject) {
             const oldData = fanfic;
-            console.log('fanficName', fanfic.FanficTitle)
-            if (fanfic.Deleted) { resolve(true) };
-            getDataFromPage(fanfic.URL, fanfic.FandomName).then(async newData => {
+            console.log('fanficName',fanfic.FanficTitle)
+            if(fanfic.Deleted || fanfic.Complete){resolve(true)};
+            getDataFromPage(fanfic.URL,fanfic.FandomName).then(async newData=>{
                 const updated = (
                     (newData.NumberOfChapters > oldData.NumberOfChapters) ||
                     (newData.LastUpdateOfFic > oldData.LastUpdateOfFic) ||
