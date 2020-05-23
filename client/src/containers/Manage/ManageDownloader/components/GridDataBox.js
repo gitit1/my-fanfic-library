@@ -7,7 +7,7 @@ import {savedFanfics,deletedFanfics} from '../../../Fandoms/components/functions
 class GridDataBox extends Component{
     render(){
         let grid = '';
-        const {fandom,logs,showData,switches,showBox} = this.props;
+        const {fandom,logs,showData,showBox} = this.props;
 
         switch (showData) {
             case 0:
@@ -22,9 +22,6 @@ class GridDataBox extends Component{
                     <p><b>Deleted Fanfics:</b> {deletedFanfics(fandom)}</p>
                     <p><b>Last Update:</b> {new Date(fandom.FanficsLastUpdate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                 </div>
-                break;
-            case 2:
-                grid = <AddNewFanficAutomatic fandomName={fandom.FandomName} switches={switches}/>
                 break;
             default:
                 break;

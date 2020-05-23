@@ -12,6 +12,7 @@ const FanficSchema = new Schema({
     AuthorURL:              {type: String},    
     AuthorURL_FF:           {type: String},    
     NumberOfChapters:       {type: Number},    
+    HasFFLink:              {type: Boolean},    
     Complete:               {type: Boolean},    
     Rating:                 {type: String},  
     Categories:             [],  

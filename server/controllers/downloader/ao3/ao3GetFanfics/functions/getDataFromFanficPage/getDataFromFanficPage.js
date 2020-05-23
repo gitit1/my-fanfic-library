@@ -8,63 +8,61 @@ const { getUrlBodyFromAo3 } = require('../../../helpers/getUrlBodyFromAo3');
 
 const funcs = require('../../../../helpers/index');
 
-exports.getDataFromFanficPage = async (jar, log, page, fandomName, autoSave, saveMethod, collection, savedNotAuto) => {
-    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()'));   
+exports.getDataFromFanficPage = async (jar, log, page, fandom, savedNotAuto) => {
+    //console.log(clc.blueBright('[ao3 controller] getDataFromPage()')); 
+    const { FandomName, AutoSave, SaveMethod, Collection, SavedFanficsLastUpdate } = fandom;
+    let fanfic = await getDataFromPage(page, FandomName);
+    console.log(`-----${fanfic["FanficTitle"]}------`)
+    log.info(`-----FanficID: ${fanfic.FanficID}`);
+
+    let check = await checkIfFanficIsNewOrUpdated(log, FandomName, fanfic, Collection);
+    console.log(`newFic: ${check[0]},updated: ${check[1]}`)
+    let newFic = check[0], updated = check[1];
+    fanfic = check[2];
+
     pageUrl = 'https://archiveofourown.org' + page.find('div.header h4 a').first().attr('href') + '?view_adult=true';
-    await getUrlBodyFromAo3(jar, pageUrl, log).then(async urlBody => {
-        let fanfic = await getDataFromPage(page, fandomName);
-        
-        console.log(`-----${fanfic["FanficTitle"]}------`)
-        log.info(`-----FanficID: ${fanfic.FanficID}`);
+    let counter = -1;
 
-        let check = await checkIfFanficIsNewOrUpdated(log, fandomName, fanfic, autoSave);
-        console.log(`newFic: ${check[0]},updated: ${check[1]}`)
-        let newFic = check[0], updated = check[1];
-        fanfic = check[2];
+    if ((newFic || updated || savedNotAuto || SavedFanficsLastUpdate === undefined) && AutoSave) {
 
-        // if (((newFic || updated || savedNotAuto) && autoSave) || fanfic["PublishDate"] === 0) {
-            let counter = -1;
-
+        return await getUrlBodyFromAo3(jar, pageUrl, log).then(async urlBody => {
             if (newFic || fanfic["PublishDate"] === 0) {
                 fanfic["PublishDate"] = await getPublishDate(urlBody)
             }
 
-            if ((newFic || updated || savedNotAuto) && autoSave) {
-                // if((newFic || updated || savedFanficsLastUpdate===undefined) && autoSave){
+            await saveFanficToServerHandler(jar, fanfic['URL'], urlBody, FandomName, SaveMethod, savedNotAuto).then(async fanficInfo => {
 
-                return await saveFanficToServerHandler(jar, fanfic['URL'], urlBody, fandomName, saveMethod, savedNotAuto).then(async fanficInfo => {
+                if (Number(fanficInfo[0]) > 0) {
+                    fanfic["SavedFic"] = true
+                    fanfic["NeedToSaveFlag"] = false
+                    fanfic["fileName"] = fanficInfo[1];
+                    fanfic["savedAs"] = fanficInfo[2];
+                    counter = 0
+                } else {
+                    console.log("--didn't managed to save file will try next full run")
+                    fanfic["SavedFic"] = false
+                    fanfic["NeedToSaveFlag"] = true
+                }
 
-                    if (Number(fanficInfo[0]) > 0) {
-                        fanfic["SavedFic"] = true
-                        fanfic["NeedToSaveFlag"] = false
-                        fanfic["fileName"] = fanficInfo[1];
-                        fanfic["savedAs"] = fanficInfo[2];
-                        counter = 0
-                    } else {
-                        console.log("--didn't managed to save file will try next full run")
-                        fanfic["SavedFic"] = false
-                        fanfic["NeedToSaveFlag"] = true
-                    }
-
-                    return funcs.saveFanficToDB(fandomName, fanfic, collection).then(async () => {
-                        return counter
-                    }).catch(error => {
-                        console.log('error:::', error);
-                        console.log(`------------------`)
-                        return counter
-                    })
-                })
-            } else {
-                fanfic["NeedToSaveFlag"] = false;
-                fanfic["SavedFic"] = false;
-                return funcs.saveFanficToDB(fandomName, fanfic, collection).then(async () => {
-                    console.log(`------------------`)
+                return funcs.saveFanficToDB(FandomName, fanfic, Collection).then(async () => {
                     return counter
                 }).catch(error => {
-                    console.log('error:::', error)
-                    return error
+                    console.log('error:::', error);
+                    console.log(`------------------`)
+                    return counter
                 })
-            }
+            })
+
         });
+    } else {
+        return funcs.saveFanficToDB(FandomName, fanfic, Collection).then(async () => {
+            console.log(`------------------`)
+            return counter
+        }).catch(error => {
+            console.log('error:::', error)
+            return error
+        })
+    }
+
     // });
 }

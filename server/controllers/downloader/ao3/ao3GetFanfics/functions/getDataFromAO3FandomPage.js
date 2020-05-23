@@ -12,17 +12,14 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, log, page, fandom, sa
         log.info(`----- fanfics in page:`, $);
         console.log('num fanfics in page: ', n)
         let counter;
-        const { FandomName, AutoSave, SaveMethod, Collection } = fandom;
-        console.log('pagesArray: ', pageNumber, ' - sleeping...');
-        await sleep(4000);
-        console.log('pagesArray: ', pageNumber, ' - done sleeping...');
+
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
             await sleep(4000);
             console.log('done sleeping...');
             let page = $('ol.work').children('li').eq(count);
 
-            await getDataFromFanficPage(jar, log, page, FandomName, AutoSave, SaveMethod, Collection, savedNotAuto).then(res => {
+            await getDataFromFanficPage(jar, log, page, fandom, savedNotAuto).then(res => {
                 donePromise++;
                 res === 0 && counter++;
             })

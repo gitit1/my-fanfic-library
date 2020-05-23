@@ -10,13 +10,10 @@ exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url, colle
     try {
         let page = await ffHelpers.getUrlBodyFromSite(url)
 
-        //let page = '' //TODO: TEMP
-
         let $ = cheerio.load(page), donePromise = 0;
         let n = $('.zpointer').length;
         console.log('number of fanfics in page: ', n)
         let counter;
-
 
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');

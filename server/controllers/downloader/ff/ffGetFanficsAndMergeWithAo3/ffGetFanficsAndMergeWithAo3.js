@@ -3,13 +3,9 @@ const cheerio = require('cheerio');
 let request = require('request')
 const pLimit = require('p-limit');
 
-const mongoose = require('../../../../config/mongoose');
 const ffHelpers = require('../helpers/index');
 const { getDataFromFFFandomPage } = require('./functions/getDataFromFFFandomPage')
-
-//FFSearchUrl
-
-
+const { updateFandomFanficsNumbers } = require('../../helpers/index')
 
 exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
     console.log(clc.blue(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
@@ -28,7 +24,7 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
     tempNum = $('#content_wrapper center a:contains("Last")').attr('href');
     numberOfPages = tempNum ? Number(tempNum.split('&p=')[1]) : $('#content_wrapper center a:contains("Next »")') ? 2 : 1;
 
-    numberOfPages = (type === 'partial') ? (numberOfPages > 10) ? 2 : numberOfPages : numberOfPages;
+    numberOfPages = (type === 'partial') ?  1 : numberOfPages;
 
     console.log('numberOfPages:', numberOfPages);
 
@@ -42,13 +38,13 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
         }));
     }
 
-    return await Promise.all(promises).then(async results => {
-        // let counterArray = results.filter(function (num) { return (!isNaN(num)); });
-        // savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
-        // console.log('counterArray:', counterArray)
-        return;
+    await Promise.all(promises).then(async results => {
+        let counterArray = results.filter(function (num) { return (!isNaN(num)); });
+        savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
     });
 
-      
+    await updateFandomFanficsNumbers(fandom, 'FF');
+
+    return [fanficsInFandom,savedFanficsCurrent]; 
 
 }
