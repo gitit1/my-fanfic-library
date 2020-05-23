@@ -9,7 +9,7 @@ exports.saveFanficToDB = (fandomName, fanfic, collection) => {
         let status = (fanfic.Status === 'new' || fanfic.Status === 'updated') ? true : false;
 
         const collectionName = (collection && collection !== '') ? collection : fandomName;
-        console.log('collectionName:',collectionName)
+        //console.log('collectionName:',collectionName)
 
         mongoose.dbFanfics.collection(collectionName).findOne({ FanficID: fanfic["FanficID"] }, async function (err, dbFanfic) {
             if (err) {
@@ -65,7 +65,7 @@ const saveUpdatesToDB = (fandomName, fanfic) => {
                     'StatusDetails': fanfic.StatusDetails
                 }]
                 if (!isExist) {
-                    console.log('---date not exist')
+                    // console.log('---date not exist')
                     let type = fanfic.Status === 'new' ? 'New' : 'Updated';
 
                     let update = {
@@ -83,10 +83,10 @@ const saveUpdatesToDB = (fandomName, fanfic) => {
                     await fandomData.save();
                     resolve();
                 } else {
-                    console.log('---date exist')
+                    // console.log('---date exist')
                     UpdatesModal.findOne({ 'Date': fanficDate, 'Fandom.FandomName': fandomName }, async function (err, dbUpdate) {
                         if (err) {
-                            console.log('---date exist error')
+                            // console.log('---date exist error')
                             funcs.delay(1000).then(async () => reject(false))
                             return reject()
                         }

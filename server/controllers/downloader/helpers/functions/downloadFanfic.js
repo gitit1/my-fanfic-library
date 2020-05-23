@@ -11,62 +11,68 @@ request = request.defaults({ jar: jar, followAllRedirects: true });
 const { fixStringForPath } = require('../../../helpers/fixStringForPath.js');
 const fanficsPath = "public/fandoms";
 
-exports.downloadFanfic = async (url, source, fileName, savedAs, fandomName, fanficId, Collection) => {
+exports.downloadFanfic = async (url, source, fileName, savedAs, fandomName, fanficId, collection) => {
     fileName = fixStringForPath(fileName);
     let fullFilename = `${fanficsPath}/${fandomName.toLowerCase()}/fanfics/${fileName}.${savedAs}`
     let sourceCode = (source === 'FF') ? 'ffnet' : null
-    const collectionName = (Collection && Collection !== '') ? Collection : fandomName;
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu'
+    const collectionName = (collection && collection !== '') ? collection : fandomName;
+    const browser = await puppeteer.launch(
+        {
+        ignoreHTTPSErrors: true,
+        args :[
+          '--ignore-certificate-errors',
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--lang=ja,en-US;q=0.9,en;q=0.8',
+          '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
         ]
     });
     const page = await browser.newPage();
-    await page.goto('http://ff2ebook.com/');
-    await page.screenshot({ path: 'example.png' });
-    await page.focus('#fic-input-form input')
-    await page.keyboard.type(url)
-    await page.click('#fic-input-submit')
-    console.log('url:', url)
-
-    return new Promise(function (resolve, reject) {
-        setTimeout(async () => {
-            url = `http://ff2ebook.com/download.php?source=${sourceCode}&id=${fanficId}&filetype=${savedAs}`
-            // return await new Promise(async (resolve, reject) => {
-                console.log('downloadFanfic - fileName:', fullFilename)
-                console.log('url:', url)
-                const file = fs.createWriteStream(fullFilename);
-                request({ url, jar, credentials: 'include' }).pipe(file);
-
-                file.on('finish', () => {
-                    // page.close();
-                    // browser.close();
-                    // resolve(0)
-                    console.log('finished')
-                }).on('close', () => {
-                    fs.readFileSync(fullFilename, 'utf8');
-                    // page.close();
-                    // browser.close();
-                    console.log('closed')
-                }).on('error', () =>
-                    reject(console.log(`There was an error in: downloader(): ${url} , filename: ${fullFilename}`)
-                    )).on('timeout', async function (e) {
-                        console.log(`TimeOut - redownloading: ${url}`)
-                        downloadFanfic(source, fileName, savedAs, fandomName);
-                    });
-                await updateSavedFandomData(fandomName, source, fanficId, fileName, savedAs, collectionName)
-                resolve(0);
-            // });
-        }, 15000);
-    });
+    try {
+        return await new Promise(async function (resolve, reject) {
+            await page.goto('http://ff2ebook.com/');
+            await page.waitFor('body')
+            // await page.screenshot({ path: 'example.png' });
+            await page.focus('#fic-input-form input')
+            await page.keyboard.type(url)
+            await page.click('#fic-input-submit')
+            // console.log('url:', url)
+        
+            setTimeout(async () => {
+                url = `http://ff2ebook.com/download.php?source=${sourceCode}&id=${fanficId}&filetype=${savedAs}`
+                    console.log('downloadFanfic - fileName:', fullFilename)
+                    console.log('url:', url)
+                    const file = fs.createWriteStream(fullFilename);
+                    request({ url, jar, credentials: 'include' }).pipe(file);
+    
+                    file.on('finish', () => {
+                        console.log('finished stramimg file')
+                    }).on('close', async () => {
+                        fs.readFileSync(fullFilename, 'utf8');
+                        console.log('closed straming');
+                        await updateSavedFandomData(fandomName, source, fanficId, fileName, savedAs, collectionName);
+                        resolve(0);
+                    }).on('error', () =>
+                        reject(console.log(`There was an error in: downloader(): ${url} , filename: ${fullFilename}`)
+                        )).on('timeout', async function (e) {
+                            console.log(`TimeOut - redownloading: ${url}`)
+                            downloadFanfic(source, fileName, savedAs, fandomName);
+                        });                   
+            }, 20000);
+        });
+    } catch (error) {
+        console.log('error in download file:',error);
+        unsavedFanficDBdata()
+    } finally{
+        console.log('downloadFanfic::: Finally close connection');
+        await page.close();
+        await browser.close();
+    }
 }
 
 const updateSavedFandomData = async (fandomName, source, fanficId, fileName, savedAs, collectionName) => {
-    console.log('updateSavedFandomData')
+    console.log('updateSavedFandomData::: collection: ',collectionName, ' id: ',fanficId);
     await savedFanficDBdata(collectionName, fanficId, fileName, savedAs);
     await savedFandomDBdata(fandomName, source, collectionName);
     return null;
@@ -77,6 +83,17 @@ const savedFanficDBdata = (collectionName, fanficId, filename, savedAs) => {
     return new Promise(function (resolve, reject) {
         mongoose.dbFanfics.collection(collectionName)
             .updateOne({ 'FanficID': fanficId }, { $set: { 'SavedFic': true, 'NeedToSaveFlag': false, 'fileName': filename, 'savedAs': savedAs } }
+                , function (error, result) {
+                    error && reject(error);
+                    resolve(result)
+                })
+    });
+}
+const unsavedFanficDBdata = (collectionName, fanficId, filename, savedAs) => {
+    console.log('unsavedFanficDBdata')
+    return new Promise(function (resolve, reject) {
+        mongoose.dbFanfics.collection(collectionName)
+            .updateOne({ 'FanficID': fanficId }, { $set: { 'SavedFic': false, 'NeedToSaveFlag': true, 'fileName': filename, 'savedAs': savedAs } }
                 , function (error, result) {
                     error && reject(error);
                     resolve(result)

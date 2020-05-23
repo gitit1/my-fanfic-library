@@ -6,7 +6,7 @@ const ffHelpers = require('../../helpers/index');
 const { checkFanfic } = require('../functions/checkFanfic')
 
 exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url, collection) => {
-    console.log(clc.blue('[ff controller] getDataFromFFFandomPage()'));
+    console.log(clc.blue('[ff controller] getDataFromFFFandomPage() - pageNumber:',pageNumber));
     try {
         let page = await ffHelpers.getUrlBodyFromSite(url)
 
@@ -14,20 +14,14 @@ exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, url, colle
 
         let $ = cheerio.load(page), donePromise = 0;
         let n = $('.zpointer').length;
-        //console.log('num fanfics in page: ', n)
+        console.log('number of fanfics in page: ', n)
         let counter;
 
-        // console.log('pagesArray: ',pageNumber,' - sleeping...');
-        // await sleep(5000);
-        // console.log('pagesArray: ',pageNumber,' - done sleeping...');
-
-        
-        //n = 1; //TODO: TEMP
 
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
-            await sleep(8000);
-            console.log('done sleeping...');
+            await sleep(4000);
+            console.log('done sleeping... getting info of fanfic',count);
             let data = $('.zpointer').eq(count).html();
 
             await checkFanfic(log, data, fandomName, collection).then(res => {
