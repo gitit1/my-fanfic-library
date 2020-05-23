@@ -39,7 +39,8 @@ const FanficSchema = new Schema({
     Image:                  {type: String},      
     Status:                 {type: String},      
     StatusDetails:          {type: String},
-    Deleted:                {type: Boolean},      
+    Deleted:                {type: Boolean}, 
+    image:                  {type: String}     
  });
  
  

@@ -15,10 +15,9 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
     console.log(clc.blue(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
     const { FandomName, FFSearchUrl, Collection } = fandom;
 
-    //temp - lost girl / atypical / ouat
-    //FFSearchUrl = "http://www.fanfiction.net/tv/Lost-Girl/?&srt=1&r=10&c1=55093&c2=55096" 
-    //FFSearchUrl = "https://www.fanfiction.net/tv/Atypical/?&srt=1&r=10&c1=167272&c2=167279"
-    //FFSearchUrl = "https://www.fanfiction.net/tv/Once-Upon-a-Time/?&srt=1&r=10&c1=74164&c2=74168"
+    if(!FFSearchUrl){
+        return;
+    }
 
     let numberOfPages = 0, fanficsInFandom, savedFanficsCurrent = 0;
 
@@ -27,7 +26,7 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
     let $ = cheerio.load(body);
 
     tempNum = $('#content_wrapper center a:contains("Last")').attr('href');
-    numberOfPages = tempNum ? Number(tempNum.split('&p=')[1]) : 1;
+    numberOfPages = tempNum ? Number(tempNum.split('&p=')[1]) : $('#content_wrapper center a:contains("Next »")') ? 2 : 1;
 
     numberOfPages = (type === 'partial') ? (numberOfPages > 10) ? 2 : numberOfPages : numberOfPages;
 
