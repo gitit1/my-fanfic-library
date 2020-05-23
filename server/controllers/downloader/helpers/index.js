@@ -6,7 +6,8 @@ const fileReader = {
     ...require('./functions/fsCommands'),
     ...require('./functions/createFanficObj'),
     ...require('./functions/updateFandomDataInDB'),
-    ...require('./functions/downloadImageFromLink')
+    ...require('./functions/downloadImageFromLink'),
+    ...require('./functions/updateFandomFanficsNumbers')
 }
 
 module.exports=fileReader;

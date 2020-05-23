@@ -4,7 +4,7 @@ const funcs = require('./functions/index')
 const logger = require('simple-node-logger');
 const {fetchFandoms}  =  require("../helpers/fetchFandoms.js");
 
-exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
+exports.manageDownloader = async (socket,fandom,choice,callType,method, ao3, ff) =>{
     console.log(clc.blue('[connection] manageDownloader'));
     const opts = {
         logDirectory:`public/logs/downloader`,
@@ -22,14 +22,14 @@ exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
                     case 'getFandomFanficsPartial':
                         await allFandoms.map(async fandom => promises.push(
                             await new Promise(resolve => setTimeout(resolve, 30000)),
-                            p = p.then(() => funcs.getFandomFanfics(socket,log,fandom,'partial') )                             
+                            p = p.then(() => funcs.getFandomFanfics(socket,log,fandom,'partial', ao3, ff) )                             
                         ))
                         break;  
                     case 'getFandomFanficsFull':
                             console.log('---  not stand by full')
                             await allFandoms.map(async fandom => promises.push(
                                 await new Promise(resolve => setTimeout(resolve, 30000)),
-                                p = p.then(() => funcs.getFandomFanfics(socket,log,fandom,'full') )                             
+                                p = p.then(() => funcs.getFandomFanfics(socket,log,fandom,'full', ao3, ff) )                             
                             ))
                             break;                                        
                     case 'getDeletedFanfics':
@@ -65,11 +65,11 @@ exports.manageDownloader = async (socket,fandom,choice,callType,method) =>{
             switch (choice) {
                 case 'getFandomFanficsPartial':
                     console.log('--- stand by part')
-                    await funcs.getFandomFanfics(socket,log,fandom,'partial')
+                    await funcs.getFandomFanfics(socket,log,fandom,'partial', ao3, ff)
                     break; 
                 case 'getFandomFanficsFull':
                         console.log('--- stand by full')
-                    await funcs.getFandomFanfics(socket,log,fandom,'full')
+                    await funcs.getFandomFanfics(socket,log,fandom,'full', ao3, ff)
                     break;                
                 case 'getDeletedFanfics':
                     await funcs.getDeletedFanfics(socket, log, fandom)

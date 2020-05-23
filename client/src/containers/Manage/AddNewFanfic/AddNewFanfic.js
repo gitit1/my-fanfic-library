@@ -99,7 +99,7 @@ class AddNewFanfic extends Component{
                 {(show===1) ? 
                 <AddNewFanficManually fandomName={fandomSelect.value} showBtns={this.showBtns}/>
                 : (show===2) ?
-                <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} switches={switches} showBtns={this.showBtns}/>
+                <AddNewFanficAutomatic fandomName={fandomSelect.value} fandoms={fandoms} showBtns={this.showBtns}/>
                 : (show===3) &&
                 <AddNewFanficFromFileReader  fandomName={fandomSelect.value} showBtns={this.showBtns}/>
                 }

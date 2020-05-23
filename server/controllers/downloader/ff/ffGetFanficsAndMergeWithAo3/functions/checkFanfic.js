@@ -86,8 +86,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
         fanfic.Source = 'FF';
         fanfic.Status = 'new';
         fanfic.StatusDetails = 'new';
-        // fanfic.FanficID_FF = fanfic.FanficID_FF;
-        // fanfic.URL_FF = fanfic.URL;
+        fanfic.Deleted = false;
 
         const isFanficExsist = await funcs.checkForExactSimilar(fanfic, fandomName);
 
@@ -108,6 +107,8 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
 
             const fileName = fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${exsistsFanfic.FanficID})`);
 
+            exsistsFanfic.Deleted = false; // TODO: remove after running on all fandoms
+
             if (!isLinkedToFF && Source === 'AO3') {
                 // Exsist as ao3 but not have ff linked
                 console.log(`-----Found Similar (Exist as AO3 but not linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
@@ -117,6 +118,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 exsistsFanfic.AuthorURL_FF = fanfic.AuthorURL;
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'old';
+                exsistsFanfic.HasFFLink = true;
                 // Check if ff is more updated
                 if (fanfic.NumberOfChapters > NumberOfChapters) {
                     exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
@@ -144,6 +146,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 exsistsFanfic.LastUpdateOfNote = fanfic.LastUpdateOfNote;
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'old';
+                exsistsFanfic.HasFFLink = true;
 
                 // Add Image (if needed)
                 if (!hasImage && linkHasImage) {
@@ -163,14 +166,16 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 // Update DB
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'image';
+                exsistsFanfic.HasFFLink = true;
                 await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-            } else if (isLinkedToFF && isDeleted) {
+            } else if (isLinkedToFF && isDeleted && Source === 'AO3') {
                 // Exsist as ao3 with ff but deleted from ao3 
                 console.log(`-----Found Similar (Exsist as ao3 with ff but deleted from ao3): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
                 log.info(`-----Found Similar (Exsist as ao3 with ff but deleted from ao3 ): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
                 exsistsFanfic.Deleted = false;
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'not deleted';
+                exsistsFanfic.HasFFLink = true;
                 // Add Image (if needed)
                 if (!hasImage) {
                     exsistsFanfic.image = imageName;
@@ -221,7 +226,6 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             }
         } else {
             // Not exsist
-            // console.log(`-----Adding new Fanfic: ${fanfic.FanficID}`);
             const imageName = linkHasImage && fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).jpg`);
             const imagePath = linkHasImage && `public/fandoms/${fandomName.toLowerCase()}/fanficsImages/${imageName}`;
             const fileName = fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);

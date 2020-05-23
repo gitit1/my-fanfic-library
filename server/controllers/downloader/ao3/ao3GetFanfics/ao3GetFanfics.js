@@ -6,11 +6,12 @@ const pLimit = require('p-limit');
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 const ao3Funcs = require('./functions')
+const { updateFandomFanficsNumbers } = require('../../helpers/index')
 
 exports.ao3GetFanfics = async (jar, log, fandom, type) => {
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
     console.log(clc.blue(`[ao3 controller] ao3GetFanfics() - ${type} run`));
-    const { FandomName, SearchKeys, Collection } = fandom;
+    const { SearchKeys } = fandom;
  
     request = request.defaults({ jar: jar, followAllRedirects: true });
 
@@ -34,12 +35,12 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
         numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
     }
 
-    numberOfPages = (type==='partial') ? (numberOfPages > 10) ? 2 : numberOfPages : numberOfPages;
+    numberOfPages = (type === 'partial') ?  2 : numberOfPages;
     console.log('numberOfPages:',numberOfPages)
 
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
 
-    const limit = (type === 'partial') ? pLimit(1) : pLimit(4);
+    const limit = (type === 'partial') ? pLimit(1) : pLimit(6);
 
     let promises = [];
 
@@ -54,34 +55,7 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
         savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
     });
 
-    const collectionName = (Collection && Collection !== '') ? Collection : FandomName;
-    fanficsInFandom = await mongoose.dbFanfics.collection(collectionName).countDocuments({'FandomName': FandomName});
-
-    const AO3FanficsInFandom = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': 'AO3', 'FandomName': FandomName });
-    const AO3CompleteFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': 'AO3', 'Complete': true, 'FandomName': FandomName });
-    const AO3SavedFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': 'AO3', 'SavedFic': true, 'FandomName': FandomName });
-    AO3SavedFanfics === 0 ? savedFanficsCurrent : AO3SavedFanfics;
-    const AO3OnGoingFanfics = AO3FanficsInFandom - AO3CompleteFanfics;
-
-    await FandomModal.updateOne({ 'FandomName': FandomName },
-        {
-            $set: {
-                'FanficsInFandom': fanficsInFandom,
-                'AO3.FanficsInFandom': AO3FanficsInFandom,
-                'AO3.CompleteFanfics': AO3CompleteFanfics,
-                'AO3.OnGoingFanfics': AO3OnGoingFanfics,
-                'AO3.SavedFanfics': AO3SavedFanfics,
-                'LastUpdate': new Date().getTime(),
-                'FanficsLastUpdate': new Date().getTime(),
-                'SavedFanficsLastUpdate': new Date().getTime()
-            }
-        },
-        (err, result) => {
-            if (err) throw err;
-
-        }
-    );
-
-    return; 
-        
+    await updateFandomFanficsNumbers(fandom, 'AO3');
+    
+    return [fanficsInFandom,savedFanficsCurrent]; 
 }

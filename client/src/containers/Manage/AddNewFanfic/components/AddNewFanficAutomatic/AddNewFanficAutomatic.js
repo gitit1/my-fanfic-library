@@ -62,10 +62,10 @@ class AddNewFanficAutomatic extends Component{
     saveFanficData = (save)=>{
       console.log('saveFanficData')
       const {url} = this.state
-      const {fandomName,fanfic,switches} = this.props
+      const {fandomName,fanfic} = this.props
       if(save){
           this.setState({showData:true,showUserData:true,savedData:true})
-          this.props.onSaveFanficDataToDB(fandomName,fanfic,switches.save,url,false).then((res=>{
+          this.props.onSaveFanficDataToDB(fandomName,fanfic,'true',url,false).then((res=>{
               let msg = <p>Saved Fanfic to DB</p>
               this.setState({msg,showSaveButton:false})
           }))

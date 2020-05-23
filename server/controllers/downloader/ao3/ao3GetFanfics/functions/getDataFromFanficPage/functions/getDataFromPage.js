@@ -83,6 +83,7 @@ exports.getDataFromPage = (page,fandomName) =>{
         fanfic["SeriesURL"]             =       fanfic["Series"] && 'https://archiveofourown.org'+ page.find('ul.series li a').attr('href');
         
         fanfic["NeedToSaveFlag"]        =       false;
+        fanfic.Deleted                  =       false;
 
         resolve(fanfic);
     });
