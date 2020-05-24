@@ -19,46 +19,52 @@ const FandomSchema = new Schema({
                                     Summary:                    {type: String},                                
     },
     AO3:                     {
-                                    FanficsInFandom:  {type: Number},
-                                    OnGoingFanfics:   {type: Number},
-                                    CompleteFanfics:  {type: Number},
-                                    SavedFanfics:     {type: Number},
-                                    DeletedFanfics:   {type: Number}     
+                                    TotalFanficsInFandom:   {type: Number},
+                                    FanficsInSite:          {type: Number},         
+                                    OnGoingFanfics:         {type: Number},
+                                    CompleteFanfics:        {type: Number},
+                                    SavedFanfics:           {type: Number},
+                                    DeletedFanfics:         {type: Number}     
     },
     FF:                     {
-                                    FanficsInFandom:  {type: Number},
-                                    OnGoingFanfics:   {type: Number},
-                                    CompleteFanfics:  {type: Number},
-                                    SavedFanfics:     {type: Number},
-                                    DeletedFanfics:   {type: Number}
+                                    TotalFanficsInFandom:   {type: Number},
+                                    FanficsInSite:          {type: Number},  
+                                    OnGoingFanfics:         {type: Number},
+                                    CompleteFanfics:        {type: Number},
+                                    SavedFanfics:           {type: Number},
+                                    DeletedFanfics:         {type: Number}
     },
     Backup:                     {
-                                    FanficsInFandom:  {type: Number},
-                                    OnGoingFanfics:   {type: Number},
-                                    CompleteFanfics:  {type: Number},
-                                    SavedFanfics:     {type: Number},
-                                    DeletedFanfics:   {type: Number}
+                                    TotalFanficsInFandom:   {type: Number},
+                                    FanficsInSite:          {type: Number},  
+                                    OnGoingFanfics:         {type: Number},
+                                    CompleteFanfics:        {type: Number},
+                                    SavedFanfics:           {type: Number},
+                                    DeletedFanfics:         {type: Number}
     },
     Patreon:                    {
-                                    FanficsInFandom:  {type: Number},
-                                    OnGoingFanfics:   {type: Number},
-                                    CompleteFanfics:  {type: Number},
-                                    SavedFanfics:     {type: Number},
-                                    DeletedFanfics:   {type: Number}
+                                    TotalFanficsInFandom:   {type: Number},
+                                    FanficsInSite:          {type: Number},  
+                                    OnGoingFanfics:         {type: Number},
+                                    CompleteFanfics:        {type: Number},
+                                    SavedFanfics:           {type: Number},
+                                    DeletedFanfics:         {type: Number}
     },
     Tumblr:                    {
-                                    FanficsInFandom:  {type: Number},
-                                    OnGoingFanfics:   {type: Number},
-                                    CompleteFanfics:  {type: Number},
-                                    SavedFanfics:     {type: Number},
-                                    DeletedFanfics:   {type: Number}
+                                    TotalFanficsInFandom:   {type: Number},
+                                    FanficsInSite:          {type: Number},  
+                                    OnGoingFanfics:         {type: Number},
+                                    CompleteFanfics:        {type: Number},
+                                    SavedFanfics:           {type: Number},
+                                    DeletedFanfics:         {type: Number}
     },
     Wattpad:                    {
-                                    FanficsInFandom:  {type: Number},
-                                    OnGoingFanfics:   {type: Number},
-                                    CompleteFanfics:  {type: Number},
-                                    SavedFanfics:     {type: Number},
-                                    DeletedFanfics:   {type: Number}
+                                    TotalFanficsInFandom:   {type: Number},
+                                    FanficsInSite:          {type: Number},  
+                                    OnGoingFanfics:         {type: Number},
+                                    CompleteFanfics:        {type: Number},
+                                    SavedFanfics:           {type: Number},
+                                    DeletedFanfics:         {type: Number}
     },
     Images:                     {
                                     Image_Name_Main:            {type: String},

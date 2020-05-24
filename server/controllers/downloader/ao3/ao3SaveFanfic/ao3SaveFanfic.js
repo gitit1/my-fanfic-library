@@ -50,21 +50,3 @@ exports.ao3SaveFanfic = async (jar, fandomName, download, url, fanfic) => {
     });
 
 }
-
-//TODO: add save method here and in ff
-
-const updateFandomData = async (fanfic) => {
-    const fandomName = fanfic.FandomName;
-    const isComplete = fanfic.Complete ? 'AO3.CompleteFanfics' : 'AO3.OnGoingFanfics'
-
-    await FandomModal.updateOne({ 'FandomName': fandomName },
-        {
-            $inc: {
-                'FanficsInFandom': 1,
-                'AO3.FanficsInFandom': 1,
-                [isComplete]: 1
-            },
-        });
-
-    return null;
-}

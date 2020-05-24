@@ -135,9 +135,6 @@ class AddNewFandom extends Component{
         fandomFormData.append("SaveMethod", saveType);
         fandomFormData.append("CollectionName",   fandomForm['CollectionName'].value);
         fandomFormData.append("FanficsInFandom", (editMode ? fandom.FanficsInFandom : 0));
-        fandomFormData.append("OnGoingFanfics", (editMode ? fandom.OnGoingFanfics : 0));
-        fandomFormData.append("CompleteFanfics", (editMode ? fandom.CompleteFanfics : 0));
-        fandomFormData.append("SavedFanfics", (editMode ? fandom.SavedFanfics : 0));
         fandomFormData.append("LastUpdate", new Date().getTime());
         fandomFormData.append("fandomsNames", fandomsNames);
         (editMode)  &&  fandomFormData.append("FandomID", fandom.id);

@@ -23,10 +23,9 @@ if (key.nodeEnv === 'straight') {
 }
 
 io.on('connection', (socket) => {
-  socket.on('getFandomFanfics', (fandomData, choice, method, ao3, ff) => {
-    console.log('[socket.js] getFandomFanfics()', ao3, ff);
-    func.manageDownloader(socket, fandomData, choice, 'site', method, ao3, ff)
-
+  socket.on('getFandomFanfics', (fandomData, choice, ao3, ff) => {
+    console.log('[socket.js] getFandomFanfics()', choice);
+    func.manageDownloader(socket, fandomData, choice, 'site', ao3, ff)
   });
 });
 io.on('error', function (err) {

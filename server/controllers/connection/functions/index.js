@@ -1,8 +1,7 @@
 const funcs = { 
     ...require('./getFandomFanfics.js'),
     ...require('./getDeletedFanfics.js'),
-    ...require('./saveFanfics.js'), 
-    ...require('./saveMissingFanfics.js') 
+    ...require('./updateFandomNumbers.js'),
 }
 
 module.exports=funcs;

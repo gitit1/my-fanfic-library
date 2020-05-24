@@ -55,7 +55,7 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
         savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
     });
 
-    await updateFandomFanficsNumbers(fandom, 'AO3');
+    fanficsInFandom = await updateFandomFanficsNumbers(fandom, 'AO3');
     
     return [fanficsInFandom,savedFanficsCurrent]; 
 }

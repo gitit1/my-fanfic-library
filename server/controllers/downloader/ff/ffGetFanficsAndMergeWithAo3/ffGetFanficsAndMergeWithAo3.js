@@ -43,7 +43,7 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
         savedFanficsCurrent = savedFanficsCurrent + counterArray.reduce((a, b) => a + b, 0);
     });
 
-    await updateFandomFanficsNumbers(fandom, 'FF');
+    fanficsInFandom = await updateFandomFanficsNumbers(fandom, 'FF');
 
     return [fanficsInFandom,savedFanficsCurrent]; 
 
