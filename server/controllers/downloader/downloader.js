@@ -8,7 +8,7 @@ TODO:  function/router: wattpadAddNewFanfic
 TODO:  function/router: wattpadDownloadFanfic
 TODO:  function/router: wattpadSaveMissingFanfics
 */
-const FandomModal = require('../../models/Fandom');
+const mongoose = require('../../config/mongoose');
 const multer = require('multer');
 const ao3 = require('./ao3/ao3');
 const ff = require('./ff/ff');
@@ -25,24 +25,24 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
         fileNamePattern: `${fandom.FandomName}-<DATE>-ff-automatic-downloader.log`,
         dateFormat: 'YYYY.MM.DD'
     };
-    
-    if(!ao3Flag && !ffFlag){ return [0,0]}
+
+    if (!ao3Flag && !ffFlag) { return [0, 0] }
 
     const log2 = logger.createRollingFileLogger(opts);
 
     getFanficsAO3 = ao3Flag && await ao3.ao3GetFanfics(jar, log, fandom, type);
     getFanficsFF = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type);
 
-    console.log('getFanficsAO3:',getFanficsAO3)
-    console.log('getFanficsFF:',getFanficsFF)
+    console.log('getFanficsAO3:', getFanficsAO3)
+    console.log('getFanficsFF:', getFanficsFF)
     console.log('------------')
     const allFanfics = getFanficsAO3 && getFanficsFF ? getFanficsFF[0] : getFanficsAO3 ? getFanficsAO3[0] : getFanficsFF[0];
-    const savedFanfics = getFanficsAO3 && getFanficsFF ? getFanficsFF[1]+getFanficsAO3[1] : getFanficsAO3 ? getFanficsAO3[1] : getFanficsFF[1];
+    const savedFanfics = getFanficsAO3 && getFanficsFF ? getFanficsFF[1] + getFanficsAO3[1] : getFanficsAO3 ? getFanficsAO3[1] : getFanficsFF[1];
 
-    console.log('allFanfics:',allFanfics)
-    console.log('savedFanfics:',savedFanfics)
+    console.log('allFanfics:', allFanfics)
+    console.log('savedFanfics:', savedFanfics)
     return [allFanfics, savedFanfics];
-    
+
 }
 exports.getDeletedFanfics = async (log, fandomName, collection) => {
     let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandomName, collection);
@@ -118,3 +118,18 @@ exports.updateExistFanfic = async (req, res) => {
     await manually.updateExistFanfic(req.query.fandomName, req, res);
     res.send();
 }
+
+exports.testingArea = async (req, res) => {
+    console.log('testingArea')
+    let fandomName = 'Vauseman'
+
+    mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
+        console.log('dbFanfic.length:',dbFanfic.length)
+        for (let index = 0; index < dbFanfic.length; index++) {
+            mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
+                { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) {})
+        }
+    });
+}
+
+

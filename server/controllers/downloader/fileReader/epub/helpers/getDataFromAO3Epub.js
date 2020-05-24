@@ -14,7 +14,7 @@ exports.getDataFromAO3Epub = async (fandomName, data) => {
         fanfic["LastUpdateOfNote"] = todayDate.getTime();
 
         fanfic["FandomName"] = fandomName;
-        fanfic["Source"] = 'Backup';
+        fanfic["Source"] = 'AO3';
         fanfic["Deleted"] = true;
 
         fanfic["FanficID"] = Number($('.message a').last().attr('href').split('/works/')[1]);

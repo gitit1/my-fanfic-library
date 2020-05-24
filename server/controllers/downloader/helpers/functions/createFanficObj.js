@@ -1,5 +1,6 @@
 exports.createFanficObj = async (fandomName,fanficData) =>{
     let todayDate = new Date();
+    
     return await new Promise(async function(resolve, reject) {
             fanfic = {
                 FandomName:         fandomName,
@@ -33,7 +34,8 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 Hits:               Number(fanficData.Hits),
                 Series:             fanficData.Series && fanficData.Series!=='' ? fanficData.Series : undefined,
                 SeriesPart:         fanficData.Series && fanficData.SeriesPart!=='' ? Number(fanficData.SeriesPart) : undefined,
-                SeriesURL:          fanficData.Series && fanficData.SeriesURL ? fanficData.SeriesURL : undefined
+                SeriesURL:          fanficData.Series && fanficData.SeriesURL ? fanficData.SeriesURL : undefined,
+                Deleted:            fanficData.Deleted && fanficData.Deleted ? fanficData.Deleted : false
             }
             resolve(fanfic)
     });

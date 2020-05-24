@@ -20,9 +20,11 @@ const getEpubMetadata = (fandomName, tempPath) => {
         epub.on("end", async function () {
 
             console.log(epub.flow[0].id);
-            // epub.flow.forEach(function(chapter){
-            //     console.log(chapter.id);
-            // });
+            //TODO: TEMP
+            epub.flow.forEach(function(chapter){
+                console.log(chapter.id);
+            });
+
             switch (epub.flow[0].id) {
                 //ao3
                 case 'preface':

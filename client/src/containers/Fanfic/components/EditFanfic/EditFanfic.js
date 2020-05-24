@@ -128,7 +128,10 @@ class EditFanfic extends Component{
                     type: 'text',
                     placeholder: 'Fandoms Tags - Seperate by comma , Example: "tag 1,tag 2"'
                 },
-                value:this.props.fanfic.FandomsTag!==null ? this.props.fanfic.FandomsTag.join(',') : '',
+                value:  this.props.fanfic.FandomsTag===null ? '' : 
+                        this.props.fanfic.FandomsTag > 1 ? 
+                        this.props.fanfic.FandomsTag.join(',') : 
+                        this.props.fanfic.FandomsTag,
                 validation: {},
                 valid:true,
                 touched:false,
@@ -263,7 +266,8 @@ class EditFanfic extends Component{
                 elementType:'select', 
                 elementConfig:{
                     options: [
-                                {value: 'Backup',displayValue: 'Backup'},
+                                { value: 'AO3', displayValue: 'AO3' },
+                                { value: 'FF', displayValue: 'FF' },
                                 {value: 'Patreon',displayValue: 'Patreon'},
                                 {value: 'Tumblr',displayValue: 'Tumblr'},
                                 {value: 'Wattpad',displayValue: 'Wattpad'}
@@ -435,6 +439,21 @@ class EditFanfic extends Component{
                 validation: {},
                 valid:true,
                 touched:false,
+                visible: true,
+                disabled:false
+            },
+            Deleted: {
+                label: 'Deleted',
+                classNameCustom:'Deleted',
+                elementType:'select', 
+                elementConfig:{
+                    options: [{value: false,displayValue: 'No'},
+                              {value: true,displayValue: 'Yes'}
+                              ]
+                },
+                value:this.props.fanfic.Deleted ? this.props.fanfic.Deleted : true,
+                validation:{},
+                valid: true,
                 visible: true,
                 disabled:false
             }

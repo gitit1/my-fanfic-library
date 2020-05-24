@@ -12,7 +12,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
 
         fanfic.FandomName = fandomName;
         fanfic.FanficTitle = $('.stitle').text().trim();
-        fanfic.URL = `www.fanfiction.net${$('.stitle').attr('href')}`;
+        fanfic.URL = `https://www.fanfiction.net${$('.stitle').attr('href')}`;
         fanfic.Author = $('a').eq(2).text().trim();
         fanfic.Author = (fanfic.Author === 'reviews' || fanfic.Author === '') ? $('a').eq(1).text().trim() : fanfic.Author;
         fanfic.AuthorURL = `www.fanfiction.net${$('a').eq(1).attr('href')}`;
@@ -99,7 +99,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             const { FanficID_FF, Source, Deleted, image, NumberOfChapters } = exsistsFanfic;
             
             const isLinkedToFF = FanficID_FF === undefined ? false : true;
-            const isDeleted = Deleted === undefined ? false : true;
+            const isDeleted = Deleted === undefined ? false : Deleted;
 
             const hasImage = (image === undefined || image === '') ? false : true;
             const imageName = linkHasImage && fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${exsistsFanfic.FanficID}).jpg`);
@@ -177,7 +177,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 exsistsFanfic.StatusDetails = 'not deleted';
                 exsistsFanfic.HasFFLink = true;
                 // Add Image (if needed)
-                if (!hasImage) {
+                if (!hasImage && linkHasImage) {
                     exsistsFanfic.image = imageName;
                     await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
                 }

@@ -288,7 +288,7 @@ class Fanfic extends Component {
     getbackfilters = (filters, filterArr) => {
         let tempFilters = filters;
         const sort = ['dateLastUpdate', 'publishDate', 'authorSort', 'titleSort', 'hits', 'kudos', 'bookmarks', 'comments']
-        const source = ['all', 'ao3', 'ff', 'backup']
+        const source = ['all', 'ao3', 'ff']
 
         for (let key in filterArr) {
             let value = filterArr[key].replace(/%20/g, ' ').replace(/%27/g, "'");

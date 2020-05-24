@@ -119,10 +119,6 @@ export const filtersArray = {
             display: 'AO3'
         },{
             type : 'checkbox',
-            name: 'backup',
-            display: 'Backup'
-        },{
-            type : 'checkbox',
             name: 'ff',
             display: 'FF'
         },{

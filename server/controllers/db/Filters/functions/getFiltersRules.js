@@ -45,7 +45,7 @@ exports.getFiltersRules = async (filters, fandomName, userEmail) => {
                 filtersFanficList.push({ 'Oneshot': true })
                 break;
             case 'deleted':
-                filtersFanficList.push({ $or: [{ 'Deleted': true }, { 'Source': 'Backup' }] })
+                filtersFanficList.push({ 'Deleted': true })
                 break;
             case 'hasImage':
                 filtersFanficList.push({ 'image': { "$exists": true } })
@@ -96,9 +96,6 @@ exports.getFiltersRules = async (filters, fandomName, userEmail) => {
                 break;
             case 'ao3':
                 filtersFanficList.push({ 'Source': 'AO3' })
-                break;
-            case 'backup':
-                filtersFanficList.push({ 'Source': 'Backup' })
                 break;
             case 'ff':
                 filtersFanficList.push({ 'Source': 'FF' })

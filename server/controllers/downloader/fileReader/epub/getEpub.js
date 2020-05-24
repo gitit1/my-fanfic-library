@@ -35,7 +35,7 @@ exports.getEpub = async (fandomName, filetype, fileName, req, res) => {
                 return resultMessage;
             }
 
-            keys.nodeEnv !== 'development' && await funcs.delay(3000);
+            keys.nodeEnv !== 'development' && await funcs.delay(5000);
             await readEpub(fandomName, `${tempPath}/${fileName}.${filetype}`).then(async fanfic => {
                 const checkForSimilarResult = await funcs.checkForSimilar(fanfic, fandomName);
     

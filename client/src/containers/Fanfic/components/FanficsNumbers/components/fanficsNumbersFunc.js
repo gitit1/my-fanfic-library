@@ -12,7 +12,6 @@ export const fanficsNumbersFunc = (fandom,ignoredCount,listFlag,listName) => {
         const tumblrFanficsCount    = fandom['Tumblr'] ? fandom['Tumblr'].FanficsInSite : 0;
         const patreonFanficsCount   = fandom['Patreon'] ? fandom['Patreon'].FanficsInSite : 0;
         const wattpadFanficsCount   = fandom['Wattpad'] ? fandom['Wattpad'].FanficsInSite : 0;
-        const backup                = fandom['Backup'] ? fandom['Backup'].FanficsInSite : 0;
         
         fanficsNumbers = {
                 fanficsTotalCount:          fandom.FanficsInFandom,
@@ -23,7 +22,7 @@ export const fanficsNumbersFunc = (fandom,ignoredCount,listFlag,listName) => {
                 patreonFanficsCount:        patreonFanficsCount,
                 tumblrFanficsCount:         tumblrFanficsCount,
                 wattpadFanficsCount:        wattpadFanficsCount,
-                fanficsDeletedCount:        Number(deletedFanfics(fandom)) + backup,
+                fanficsDeletedCount:        Number(deletedFanfics(fandom))
         };
     }else{
         const list = fandom.find(f => {
