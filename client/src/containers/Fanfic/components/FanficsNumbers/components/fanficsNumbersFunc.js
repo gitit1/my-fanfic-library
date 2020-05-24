@@ -6,13 +6,13 @@ export const fanficsNumbersFunc = (fandom,ignoredCount,listFlag,listName) => {
         const AO3DeletedFanfics     = fandom['AO3'] && fandom['AO3'].DeletedFanfics ? fandom['AO3'].DeletedFanfics : 0;
         const FFDeletedFanfics      = fandom['FF'] && fandom['FF'].DeletedFanfics  ? fandom['FF'].DeletedFanfics : 0;
     
-        const ao3FanficsCount       = fandom['AO3'] ?  fandom['AO3'].FanficsInFandom-AO3DeletedFanfics : 0
-        const ffFanficsCount        = fandom['FF']  ?  fandom['FF'].FanficsInFandom-FFDeletedFanfics : 0
+        const ao3FanficsCount       = fandom['AO3'] ?  fandom['AO3'].FanficsInSite : 0
+        const ffFanficsCount        = fandom['FF']  ?  fandom['FF'].FanficsInSite : 0
         
-        const tumblrFanficsCount    = fandom['Tumblr'] ? fandom['Tumblr'].FanficsInFandom : 0;
-        const patreonFanficsCount   = fandom['Patreon'] ? fandom['Patreon'].FanficsInFandom : 0;
-        const wattpadFanficsCount   = fandom['Wattpad'] ? fandom['Wattpad'].FanficsInFandom : 0;
-        const backup                = fandom['Backup'] ? fandom['Backup'].FanficsInFandom : 0;
+        const tumblrFanficsCount    = fandom['Tumblr'] ? fandom['Tumblr'].FanficsInSite : 0;
+        const patreonFanficsCount   = fandom['Patreon'] ? fandom['Patreon'].FanficsInSite : 0;
+        const wattpadFanficsCount   = fandom['Wattpad'] ? fandom['Wattpad'].FanficsInSite : 0;
+        const backup                = fandom['Backup'] ? fandom['Backup'].FanficsInSite : 0;
         
         fanficsNumbers = {
                 fanficsTotalCount:          fandom.FanficsInFandom,

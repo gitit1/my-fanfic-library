@@ -108,18 +108,20 @@ class ManageDownloader extends Component {
 
         let ao3 = this.state.switches.AO3;
         let ff = this.state.switches.FF;
-        let method = this.state.typeSelect.value;
-        console.log('ao3 ff',ao3,ff)
 
-        switch (choice) {
-            case 'saveFanfics':
-                socket.emit('getFandomFanfics', this.state.fandom, choice, method, ao3, ff);
-                break;
+        socket.emit('getFandomFanfics', this.state.fandom, choice, ao3, ff);
 
-            default:
-                socket.emit('getFandomFanfics', this.state.fandom, choice, method, ao3, ff);
-                break;
-        }
+        // console.log('ao3 ff',ao3,ff)
+
+        // switch (choice) {
+        //     case 'updateFandomNumbers':
+        //         socket.emit('getFandomNumbers', this.state.fandom, choice, method, ao3, ff);
+        //         break;
+
+        //     default:
+        //         socket.emit('getFandomFanfics', this.state.fandom, choice, method, ao3, ff);
+        //         break;
+        // }
 
     }
 
