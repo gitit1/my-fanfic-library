@@ -245,7 +245,8 @@ export const fanficDataForm = [{
         elementType: 'select',
         elementConfig: {
             options: [
-                { value: 'Backup', displayValue: 'Backup' },
+                { value: 'AO3', displayValue: 'AO3' },
+                { value: 'FF', displayValue: 'FF' },
                 { value: 'Patreon', displayValue: 'Patreon' },
                 { value: 'Tumblr', displayValue: 'Tumblr' },
                 { value: 'Wattpad', displayValue: 'Wattpad' }
@@ -419,5 +420,20 @@ export const fanficDataForm = [{
         touched: false,
         visible: true,
         disabled: false
+    },
+    Deleted: {
+        label: 'Deleted',
+        classNameCustom:'Deleted',
+        elementType:'select', 
+        elementConfig:{
+            options: [{value: false,displayValue: 'No'},
+                      {value: true,displayValue: 'Yes'}
+                      ]
+        },
+        value: true,
+        validation:{},
+        valid: true,
+        visible: true,
+        disabled:false
     }
 }]

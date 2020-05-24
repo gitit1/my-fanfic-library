@@ -39,6 +39,7 @@ export const buildFormData = (fandomName,fanficForm) =>{
         fanficFormData.append("Kudos", Kudos);
         fanficFormData.append("Bookmarks", Bookmarks);
         fanficFormData.append("Hits", Hits);
+        fanficFormData.append("Deleted", fanficForm['Deleted'].value);
         fanficFormData.append("SeriesName", fanficForm['SeriesName'].value);
         fanficFormData.append("SeriesNumber", fanficForm['SeriesNumber'].value);
         fanficFormData.append("SeriesURL", null);

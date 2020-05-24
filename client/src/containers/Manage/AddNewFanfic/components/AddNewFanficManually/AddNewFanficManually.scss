@@ -148,6 +148,7 @@
             .Comments,
             .Kudos,
             .Bookmarks,
+            .Deleted,
             .Hits{
                 float: left;
                 width: 10%;
@@ -174,12 +175,18 @@
             .Bookmarks{
                 margin-left: -38%;
                 margin-top:calc(7% + 103px);
+                width:13%;
+            }
+            .Deleted{
+                margin-left: -23%;
+                margin-top:calc(7% + 99px);
+                width:13%;
             }
 
             .send_button{
+                margin-left: -5%;
                 float: left;
                 margin-top:calc(7% + 106px);
-                margin-left: -5%;
             }
         }
 

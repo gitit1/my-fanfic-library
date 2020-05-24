@@ -34,14 +34,6 @@ const FandomSchema = new Schema({
                                     SavedFanfics:           {type: Number},
                                     DeletedFanfics:         {type: Number}
     },
-    Backup:                     {
-                                    TotalFanficsInFandom:   {type: Number},
-                                    FanficsInSite:          {type: Number},  
-                                    OnGoingFanfics:         {type: Number},
-                                    CompleteFanfics:        {type: Number},
-                                    SavedFanfics:           {type: Number},
-                                    DeletedFanfics:         {type: Number}
-    },
     Patreon:                    {
                                     TotalFanficsInFandom:   {type: Number},
                                     FanficsInSite:          {type: Number},  

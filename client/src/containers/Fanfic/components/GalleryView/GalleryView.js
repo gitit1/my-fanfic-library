@@ -35,7 +35,7 @@ class GalleryView extends Component{
                         let isImage = fanfic.image&&fanfic.image !== '' ? true : false;
                         let complete = fanfic.Complete===true ? true : false;
                         let oneshot = fanfic.Oneshot===true ? true : false;
-                        let source = ( (fanfic.Source==='AO3' && fanfic.Deleted===true) || fanfic.Source==='Backup') ? 'Backup' : fanfic.Source;
+                        let source =  fanfic.Source;
                         const imgLink = isImage   ? `/fandoms/${fanfic.FandomName.toLowerCase()}/fanficsImages/${fanfic.image}`
                         : `/fandoms/${fanfic.FandomName.toLowerCase()}/fanfic_general.jpg`;
                         return (
