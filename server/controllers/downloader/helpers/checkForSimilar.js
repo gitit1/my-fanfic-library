@@ -3,7 +3,7 @@ const mongoose = require('../../../config/mongoose');
 const FanficSchema = require('../../../models/Fanfic');
 
 exports.checkForSimilar = (fanfic,fandomName) =>{
-    console.log('checkForSimilar')
+    console.log('[helper] checkForSimilar')
     const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema,fandomName);
     return new Promise(function(resolve, reject) {
         FanficDB.find({'FanficID':fanfic.FanficID}).exec(async function(err, fanficResult) {

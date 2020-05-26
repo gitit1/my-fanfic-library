@@ -3,7 +3,6 @@ const cheerio = require('cheerio');
 const mongoose = require('../../../../config/mongoose');
 let request = require('request')
 const pLimit = require('p-limit');
-const log = require('log-to-file');
 
 const FandomModal = require('../../../../models/Fandom');
 const FanficSchema = require('../../../../models/Fanfic');
