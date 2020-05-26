@@ -16,7 +16,7 @@ exports.checkForSimilar = async (fanfic,fandomName) =>{
             }else{
                 FanficDB.find({$or: [{'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}},{'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}]}).exec(async function(err, fanficResult) {
                     err && reject(err)
-                    if(fanficResult.length===0){
+                    if(fanficResult===undefined || fanficResult.length===0){
                         resolve(false)
                     }else{
                         resolve(fanficResult)
@@ -29,6 +29,14 @@ exports.checkForSimilar = async (fanfic,fandomName) =>{
 
 exports.checkForExactSimilar = async (fanfic,fandomName) =>{
     console.log('checkForExactSimilar');
+	let fanficTitle = fanfic.FanficTitle;
+	
+    if(fanficTitle.includes('(') && !fanficTitle.includes(')')){
+        fanficTitle = fanficTitle.replace(/\(/g, "");
+    } else if(fanficTitle.includes(')') && !fanficTitle.includes('(')){
+        fanficTitle = fanficTitle.replace(/\)/g, "");
+    }
+	
     const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
     const collectionName = (fandomData[0].Collection && fandomData[0].Collection !== '') ? fandomData[0].Collection : fandomName;
 
@@ -38,9 +46,9 @@ exports.checkForExactSimilar = async (fanfic,fandomName) =>{
             if(fanficResult&&fanficResult.length!==0){
                 resolve(fanficResult)
             }else{
-                FanficDB.find({$and: [{'FanficTitle': {$regex : `.*${fanfic.FanficTitle}.*`, '$options' : 'i'}},{'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}]}).exec(async function(err, fanficResult) {
+                FanficDB.find({$and: [{'FanficTitle': {$regex : `.*${fanficTitle}.*`, '$options' : 'i'}},{'Author': {$regex : `.*${fanfic.Author}.*`, '$options' : 'i'}}]}).exec(async function(err, fanficResult) {
                     err && reject(err)
-                    if(fanficResult.length===0){
+                    if(fanficResult===undefined || fanficResult.length===0){
                         resolve(false)
                     }else{
                         resolve(fanficResult)

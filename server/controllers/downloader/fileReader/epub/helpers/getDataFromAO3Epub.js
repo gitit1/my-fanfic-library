@@ -15,7 +15,7 @@ exports.getDataFromAO3Epub = async (fandomName, data) => {
 
         fanfic["FandomName"] = fandomName;
         fanfic["Source"] = 'AO3';
-        fanfic["Deleted"] = true;
+
 
         fanfic["FanficID"] = Number($('.message a').last().attr('href').split('/works/')[1]);
         fanfic["URL"] = $('.message a').last().attr('href');
@@ -97,6 +97,7 @@ exports.getDataFromAO3Epub = async (fandomName, data) => {
         fanfic["Kudos"] = 100;
         fanfic["Comments"] = 100;
         fanfic["Bookmarks"] = 100;
+        fanfic["Deleted"] = true;
 
         let series = $('dt:contains("Series:")').length > 0 && $('dt:contains("Series:")').next('dd').find('a').text();
         if(series){

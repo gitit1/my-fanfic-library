@@ -11,6 +11,11 @@ exports.fixStringForPath = (fileName) =>{
     newFileName = newFileName.replace(/\:/g, "");
     newFileName = newFileName.replace(/é/g, "e");
     newFileName = newFileName.replace(/%22/g, "");
+    if(newFileName.includes('(') && !newFileName.includes(')')){
+        newFileName = newFileName.replace(/\(/g, "");
+    } else if(newFileName.includes(')') && !newFileName.includes('(')){
+        newFileName = newFileName.replace(/\)/g, "");
+    }
     console.log('[db controller] fixStringForPath: newFileName',newFileName);
     return newFileName;
 }
