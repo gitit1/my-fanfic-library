@@ -36,7 +36,6 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
     }
 
     numberOfPages = (type === 'partial') ?  2 : numberOfPages;
-    console.log('numberOfPages:',numberOfPages)
 
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
 

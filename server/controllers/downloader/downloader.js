@@ -12,6 +12,7 @@ const mongoose = require('../../config/mongoose');
 const multer = require('multer');
 const ao3 = require('./ao3/ao3');
 const ff = require('./ff/ff');
+const wp = require('./wattpad/getWPLinks')
 const manually = require('./manually/manually');
 const fileReader = require('./fileReader/fileReader');
 
@@ -133,3 +134,9 @@ exports.testingArea = async (req, res) => {
 }
 
 
+//wattpad
+exports.wpd = async (req, res) => {
+    console.log('wpd');
+    await wp.wpDownloader('avalance');
+    res.send('wpd done');
+}
