@@ -2,6 +2,7 @@ const clc = require("cli-color");
 let EPub = require("epub");
 const cheerio = require('cheerio');
 const { getDataFromAO3Epub } = require('./helpers/getDataFromAO3Epub');
+const { getDataFromFF2BookEpub } = require('./helpers/getDataFromFF2BookEpub');
 
 exports.readEpub = (fandomName, tempPath) => {
     console.log(clc.greenBright('[Downloader - Epub Reader] readEpub()'));
@@ -21,18 +22,22 @@ const getEpubMetadata = (fandomName, tempPath) => {
 
             console.log(epub.flow[0].id);
             //TODO: TEMP
-            epub.flow.forEach(function(chapter){
-                console.log(chapter.id);
-            });
+            // epub.flow.forEach(function(chapter){
+            //     console.log(chapter.id);
+            // });
 
-            switch (epub.flow[0].id) {
-                //ao3
-                case 'preface':
+            switch (epub.flow[0].id) {               
+                case 'preface'://ao3
                     epub.getChapter("preface", async function (err, data) {
                         let fanfic = await getDataFromAO3Epub(fandomName, data);
                         resolve(fanfic)
                     });
-
+                    break;
+                case 'title'://www.FF2EBOOK.com
+                    epub.getChapter("title", async function (err, data) {
+                        let fanfic = await getDataFromFF2BookEpub(fandomName, data);
+                        resolve(fanfic)
+                    });
                     break;
                 default:
                     reject()

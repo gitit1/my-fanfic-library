@@ -34,7 +34,7 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
 
     for (let i = 1; i < numberOfPages + 1; i++) {
         promises.push(limit(async () => {
-            await getDataFromFFFandomPage(log, FandomName, i, `${FFSearchUrl}&p=${i}`, Collection)
+            await getDataFromFFFandomPage(log, FandomName, i, numberOfPages, `${FFSearchUrl}&p=${i}`, Collection)
         }));
     }
 

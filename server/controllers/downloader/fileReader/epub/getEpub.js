@@ -9,7 +9,7 @@ exports.getEpub = async (fandomName, filetype, fileName, req, res) => {
     return await new Promise(async function (resolve, reject) {
         console.log('in readFromEpub');
 
-        fandomName = fandomName.replace("%26", "&").toLowerCase();
+        fandomName = fandomName.replace("%26", "&");
         const tempPath = `public/temp-files`;
 
 
@@ -37,7 +37,7 @@ exports.getEpub = async (fandomName, filetype, fileName, req, res) => {
 
             keys.nodeEnv !== 'development' && await funcs.delay(5000);
             await readEpub(fandomName, `${tempPath}/${fileName}.${filetype}`).then(async fanfic => {
-                const checkForSimilarResult = await funcs.checkForSimilar(fanfic, fandomName);
+                const checkForSimilarResult = await funcs.checkForExactSimilar(fanfic, fandomName);
     
                 if (!checkForSimilarResult) {
                     return resolve([fanfic])

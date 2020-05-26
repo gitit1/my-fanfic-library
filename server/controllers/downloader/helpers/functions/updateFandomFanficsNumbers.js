@@ -53,7 +53,7 @@ exports.updateFandomFanficsNumbers = (fandom, source) => {
 
             }
         );
-        resolve()
+        resolve(fanficsInFandom)
     }).catch((error) => {
         return false;
     });

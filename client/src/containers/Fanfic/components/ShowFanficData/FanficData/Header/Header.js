@@ -5,10 +5,12 @@ import Chip from '@material-ui/core/Chip';
 import { isHiatus } from './functions/isHiatus';
 
 const Header = (props) => {
-    const { LastUpdateOfFic, Rating, Complete, Deleted, FandomsTags, FandomName, Oneshot, Source } = props.fanfic;
+    const { LastUpdateOfFic, Rating, Complete, Deleted, FandomsTags, FanficTitle, Author,
+            FandomName, Oneshot, Source, AuthorURL, URL } = props.fanfic;
     const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false;
-    const url = props.fanfic.URL.includes("http") ? props.fanfic.URL : `http://${props.fanfic.URL}`;
-    const authorURL = props.fanfic.AuthorURL.includes("http") ? props.fanfic.URL : `http://${props.fanfic.AuthorURL}`;
+
+    const url = (URL && URL.length<2 || !URL) ? '' : URL.includes("http") ? URL : `http://${URL}`;
+    const authorURL = (AuthorURL && AuthorURL.length<2 || !AuthorURL) ? '' : AuthorURL.includes("http") ? URL : `http://${AuthorURL}`;
     return (
         <React.Fragment>
             <div className='card_content_header_left'>
@@ -18,9 +20,9 @@ const Header = (props) => {
                 {Rating && <img src={`/images/icons/${Rating}.png`} alt={Rating} title={Rating} />}
                 <div className='text_content'>
                     <Typography variant="subtitle1" >
-                        <a href={url} target="_blank" rel="noopener noreferrer" className='title'>{props.fanfic.FanficTitle}</a>
+                        <a href={url} target="_blank" rel="noopener noreferrer" className='title'>{FanficTitle}</a>
                         {(props.size === 's') ? <br /> : ' '} by&nbsp;
-                        <a href={authorURL} target="_blank" rel="noopener noreferrer">{props.fanfic.Author}</a>
+                        <a href={authorURL} target="_blank" rel="noopener noreferrer">{Author}</a>
                         {props.rlMode && ` [${FandomName}]`}
                         {(props.size === 's') ?
                             <React.Fragment>
