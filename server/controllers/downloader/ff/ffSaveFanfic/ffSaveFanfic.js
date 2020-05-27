@@ -11,8 +11,7 @@ exports.ffSaveFanfic = async (fandomName, download, url, fanfic) => {
 
         const status = await funcs.saveFanficToDB(fandomName, fanfic, fandomData[0].Collection);
         status && await funcs.updateFandomDataInDB(fanfic);
-        download == 'true' && await funcs.downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'epub', fandomName, FanficID, Collection)
-        // download=='true' && await downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'pdf', fandomName, FanficID)     
+        download == 'true' && await funcs.downloadFanfic(url, Source, `${Author}_${FanficTitle} (${FanficID})`, 'epub', fandomName, FanficID, Collection)   
         resolve();
     });
 }

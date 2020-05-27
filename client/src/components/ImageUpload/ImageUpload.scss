@@ -17,6 +17,8 @@
             width: 100%;
             // margin-top: 35%;
         }
+
+ 
         // margin: 20px 45px;
     // }
     // .image_upload_button{
@@ -28,4 +30,12 @@
 
 .doc_upload{
     height: 36px;
+}
+
+.disable{
+    cursor: not-allowed;
+    button {
+        pointer-events: none;
+        opacity: 0.7;
+    }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import * as actions from '../../../../../store/actions';
 import Button from '../../../../../components/UI/Button/Button';
 import FileUploader from '../../../../../components/ImageUpload/ImageUpload'
@@ -13,12 +13,28 @@ class AddNewFanficFromFileReader extends Component {
     state = {
         msg: "",
         showData: 0,
-        file: ""
+        file: "",
+        deletedFlag: true,
+        disableFlag: false
     }
 
     componentWillMount() {
         this.props.showBtns(false);
         this.props.onGetFandoms();
+    }
+
+    initialState = () => {
+        console.log('initialState:')
+        this.setState({
+            msg: "",
+            showData: 0,
+            file: "",
+            disableFlag: false
+        })
+    }
+
+    switchChange = () => {
+        this.setState({ deletedFlag: !this.state.deletedFlag })
     }
 
     getFanficData = () => {
@@ -32,30 +48,39 @@ class AddNewFanficFromFileReader extends Component {
             let fileType = this.fileUploadRef.current.state.file.name.split('.')[1];
             let fileName = `filetocheck_${Date.now()}`
             let fileUpload = `${fileName}.${fileType}`;
-            
+
             formData.append(fileUpload, this.fileUploadRef.current.state.file)
-            this.props.onGetFanficData(this.props.fandomName, fileName, fileType, formData).then(res => {
-                if (res==='wrong file') {
+            console.log('this.state.deletedFlag::', this.state.deletedFlag)
+            this.props.onGetFanficData(this.props.fandomName, fileName, fileType, formData, this.state.deletedFlag).then(res => {
+                if (res === 'wrong file') {
                     this.setState({ msg: "The file you tried to upload is incorrect" })
                     return;
                 }
                 // console.log(this.props.fanfic)
-                this.setState({ showData: 1, msg: "", file: fileUpload })
+                this.setState({ showData: 1, msg: "", file: fileUpload, disableFlag: true })
             })
         }
     }
 
     render() {
         const { fandomName, showBtns } = this.props;
-        const { showData, msg, file } = this.state;
+        const { showData, msg, file, deletedFlag, disableFlag } = this.state;
         return (
             <div className='AddNewFanficFromFileReader'>
                 <Grid container className="AddNewFanficFromFileReader_Grid">
-                    <FileUploader id='file1' ref={this.fileUploadRef} edit={false} FandomName={fandomName} type='doc' />
+                    <FormGroup row className="checkbox_sites">
+                        <FormControlLabel
+                            control={<Checkbox checked={deletedFlag} onChange={() => this.switchChange()} name="isDeleted" color="primary" />}
+                            label="is Deleted from Origin?" />
+                    </FormGroup>
+                    <FileUploader id='file1' ref={this.fileUploadRef} edit={false} FandomName={fandomName} type='doc'/>
+                    {/* <FileUploader id='file1' ref={this.fileUploadRef} edit={false} FandomName={fandomName} type='doc' disable={disableFlag} /> */}
                     <Button clicked={this.getFanficData}>Get Data</Button>
                 </Grid>
                 <p>{msg}</p><br />
-                {showData === 1 && <AddNewFanficManually fandomName={fandomName} fileReaderFlag={true} fileName={file} showBtns={showBtns} />}
+                {showData === 1 && <AddNewFanficManually    fandomName={fandomName} fileReaderFlag={true} 
+                                                            fileName={file} showBtns={showBtns} deletedFlag={deletedFlag} />}
+                {/* {showData === 1 && <Button clicked={this.initialState}>Add Another One</Button>} */}
             </div>
         )
     }
@@ -74,7 +99,7 @@ const mapStateToProps = state => {
 const mapDispatchedToProps = dispatch => {
     return {
         onGetFandoms: () => dispatch(actions.getFandomsFromDB()),
-        onGetFanficData: (fandomName, fileName, fileType, file) => dispatch(actions.getFanficDataFromFile(fandomName, fileName, fileType, file)),
+        onGetFanficData: (fandomName, fileName, fileType, file, deleted) => dispatch(actions.getFanficDataFromFile(fandomName, fileName, fileType, file, deleted)),
     };
 }
 

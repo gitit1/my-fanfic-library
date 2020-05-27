@@ -47,9 +47,6 @@ exports.saveNewFanfic = async (fandomName,req, res) =>{
             fanfic['SavedFic']          =   true;
             fanfic['NeedToSaveFlag']    =   false;
         
-            console.log('fanfic.Status:',fanfic.Status);
-            console.log('fanfic.FanficID:',fanfic.FanficID);
-            console.log('fanfic:',fanfic);
             const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
             const status = await funcs.saveFanficToDB(fandomName,fanfic, fandomData[0].Collection);
             status && await funcs.updateFandomDataInDB(fanfic)

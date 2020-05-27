@@ -35,7 +35,8 @@ exports.createFanficObj = async (fandomName,fanficData) =>{
                 Series:             fanficData.Series && fanficData.Series!=='' ? fanficData.Series : undefined,
                 SeriesPart:         fanficData.Series && fanficData.SeriesPart!=='' ? Number(fanficData.SeriesPart) : undefined,
                 SeriesURL:          fanficData.Series && fanficData.SeriesURL ? fanficData.SeriesURL : undefined,
-                Deleted:            fanficData.Deleted && fanficData.Deleted ? Boolean(fanficData.Deleted) : false
+                Deleted:            fanficData.Deleted && (typeof fanficData.Deleted === 'boolean') ? fanficData.Deleted :
+                                                          (fanficData.Deleted==='true') ? true : false
             }
             resolve(fanfic)
     });

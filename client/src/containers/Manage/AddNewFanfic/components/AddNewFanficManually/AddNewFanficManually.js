@@ -157,7 +157,7 @@ class AddNewFanficManually extends Component {
         }
     }
     saveFanficFromFile = () => {
-        const { fanfic, fandomName, fileName } = this.props;
+        const { fanfic, fandomName, fileName, deletedFlag } = this.props;
         let anotherFiler = this.fileUploadRef2.current === null || (this.fileUploadRef2.current !== null && this.fileUploadRef2.current.state.file === '') ? false : true;
         let type = fileName.split('.')[1];
         let type2 = anotherFiler && this.fileUploadRef2.current.state.file.name.split('.')[1];
@@ -165,16 +165,19 @@ class AddNewFanficManually extends Component {
 
         let fileUpload2 = anotherFiler && `${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID}).${type2}`;
 
+        fanfic.Deleted = deletedFlag!==undefined ? deletedFlag : fanfic.Deleted;
         let formData = new FormData();
         for ( var key in fanfic ) {
-            if(key!=='Tags'){formData.append(key, fanfic[key]);}      
+            if(key!=='Tags' && key!=='Deleted'){formData.append(key, fanfic[key]);}      
         }
+
+        const deleted = deletedFlag!==undefined ? deletedFlag : fanfic.Deleted;
+        formData.append('Deleted', deleted);
 
         for (let index = 0; index < 4; index++) {
             if (fanfic['Tags'][index]) {
                 let key = Object.keys(fanfic['Tags'][index])[0] , value = fanfic['Tags'][index][key];
                 key = key.charAt(0).toUpperCase() + key.slice(1);
-                console.log('key:',key)
                 formData.append(key, value);
             }
         }
