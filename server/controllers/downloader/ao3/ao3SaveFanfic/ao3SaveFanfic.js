@@ -7,7 +7,6 @@ const { getUrlBodyFromAo3 } = require('../helpers/getUrlBodyFromAo3')
 const funcs = require('../../helpers/index');
 
 exports.ao3SaveFanfic = async (jar, fandomName, download, url, fanfic) => {
-    console.log('fandomName,download,url,fanfic:', fandomName, download, url, fanfic);
 
     let fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) {
         if (err) { throw err; }

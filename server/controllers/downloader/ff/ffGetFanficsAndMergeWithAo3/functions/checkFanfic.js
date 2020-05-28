@@ -90,6 +90,9 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             fanfic.NumberOfChapters = 1
             fanfic.Oneshot = true
         }
+        if (fanfic.NumberOfChapters===1 && fanfic.Complete) {
+            fanfic.Oneshot = true
+        }
 
         fanfic.Tags = tags;
         fanfic.Source = 'FF';
@@ -116,7 +119,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
 
             const fileName = fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${exsistsFanfic.FanficID})`);
 
-            exsistsFanfic.Deleted = false; // TODO: remove after running on all fandoms
+            exsistsFanfic.Deleted = false;
 
             if (!isLinkedToFF && Source === 'AO3') {
                 // Exsist as ao3 but not have ff linked
@@ -215,17 +218,26 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             } else if (Source === 'FF') {
                 console.log(msg5(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`));
                 log.info(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`);
+                exsistsFanfic.FanficTitle = fanfic.FanficTitle;
+                exsistsFanfic.URL = fanfic.URL;
+                exsistsFanfic.Author = fanfic.Author;
+                exsistsFanfic.AuthorURL = fanfic.AuthorURL;
                 exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
                 exsistsFanfic.Complete = fanfic.Complete;
+                exsistsFanfic.Rating = fanfic.Rating;
+                exsistsFanfic.Tags = fanfic.Tags;
+                exsistsFanfic.Language = fanfic.Language;
+                exsistsFanfic.Kudos = fanfic.Kudos;
+                exsistsFanfic.Comments = fanfic.Comments;
+                exsistsFanfic.Bookmarks = fanfic.Bookmarks;
                 exsistsFanfic.Words = fanfic.Words;
+                exsistsFanfic.Description = fanfic.Description;
+                exsistsFanfic.Oneshot = fanfic.Oneshot;
+
                 exsistsFanfic.PublishDate = fanfic.PublishDate;
                 exsistsFanfic.LastUpdateOfFic = fanfic.LastUpdateOfFic;
                 exsistsFanfic.LastUpdateOfNote = fanfic.LastUpdateOfNote;
-                exsistsFanfic.Comments = fanfic.Comments
-                exsistsFanfic.Kudos = fanfic.Kudos
-                exsistsFanfic.Bookmarks = fanfic.Bookmarks
-                exsistsFanfic.Description = fanfic.Description
-                exsistsFanfic.Tags = fanfic.Tags
+                
                 exsistsFanfic.Status = 'old';
                 exsistsFanfic.StatusDetails = 'old';
                 await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
