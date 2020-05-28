@@ -29,12 +29,12 @@ export const backupDB = () => {
     };
 }
 
-export const getFanficDataFromFile = (fandomName, fileName, fileType, file) =>{
+export const getFanficDataFromFile = (fandomName, fileName, fileType, file, deleted) =>{
     console.log('[actions: fandom.js] - getFanficDataFromFile')
 
     return dispatch =>{
         dispatch(downloaderStart())
-        return axios.post(`/downloader/getFanficDataFromFile?fandomName=${fandomName}&fileName=${fileName}&filetype=${fileType}`,file)
+        return axios.post(`/downloader/getFanficDataFromFile?fandomName=${fandomName}&fileName=${fileName}&filetype=${fileType}&isDeleted=${deleted}`,file)
         .then(fetchedData =>{
             if(!fetchedData.data){
                 return 'wrong file';

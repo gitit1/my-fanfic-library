@@ -3,7 +3,7 @@ const clc = require("cli-color");
 let EPub = require("epub");
 const cheerio = require('cheerio');
 
-exports.getDataFromAO3Epub = async (fandomName, data) => {
+exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
     console.log(clc.blue('[Downloader - Epub Reader] getDataFromAO3Epub()'));
     return new Promise(async function (resolve, reject) {
         let $ = cheerio.load(data);
@@ -97,7 +97,7 @@ exports.getDataFromAO3Epub = async (fandomName, data) => {
         fanfic["Kudos"] = 100;
         fanfic["Comments"] = 100;
         fanfic["Bookmarks"] = 100;
-        fanfic["Deleted"] = true;
+        fanfic["Deleted"] = deleted;
 
         let series = $('dt:contains("Series:")').length > 0 && $('dt:contains("Series:")').next('dd').find('a').text();
         if(series){
