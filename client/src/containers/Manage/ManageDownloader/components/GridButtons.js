@@ -1,12 +1,11 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import { Grid, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
+import { Grid, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 
 
 
 const GridButtons = (props) => {
     return props.showBox &&
-        <Grid className='grid_buttons' item xs={6}>
+        <Grid className='grid_buttons' item xs={props.xs}>
             <FormGroup row className="checkbox_sites">
                 <FormControlLabel
                     control={<Checkbox checked={props.switches.AO3} onChange={() => props.switchChange('AO3')} name="AO3" value="AO3" color="primary" />}
@@ -23,7 +22,11 @@ const GridButtons = (props) => {
             <Button variant="contained" onClick={() => props.sendRequestsToServer('getDeletedFanfics')}>Get/Update Deleted Fanfics</Button>
             <br />
             <Button variant="contained" onClick={() => props.sendRequestsToServer('updateFandomNumbers')}>Update Numbers Of Fandom</Button>
-            <br />
+            <br />           
+            {!props.isAllFandoms && <>
+                <Button variant="contained" onClick={() => props.sendRequestsToServer('handleDuplicateTitles')}>Handle Duplicate Titles</Button>
+                <br /></>
+            }
         </Grid>
 
 };

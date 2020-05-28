@@ -6,15 +6,25 @@ const { fetchFandoms } = require("../helpers/fetchFandoms.js");
 
 exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => {
     console.log(clc.blue('[connection] manageDownloader'));
+    let log,log2;
+
     const opts = {
         logDirectory: `public/logs/downloader`,
         fileNamePattern: callType === 'site' ? `<DATE>-manually-${choice}.log` : `<DATE>-cron-${choice}.log`,
         dateFormat: 'YYYY.MM.DD'
     };
-    const log = logger.createRollingFileLogger(opts);
+    log = logger.createRollingFileLogger(opts);
+    if(fandom !== 'All'){
+        const opts2 = {
+            logDirectory: `public/logs/downloader/duplicate-titles`,
+            fileNamePattern: `<DATE>-${fandom.FandomName}.log`,
+            dateFormat: 'YYYY.MM.DD'
+        };
+        log2 = logger.createRollingFileLogger(opts2);
+    }
 
     try {
-        if (fandom == 'All') {
+        if (fandom === 'All') {
             let allFandoms = await fetchFandoms(), promises = [];
             if (allFandoms) {
                 let p = Promise.resolve();
@@ -26,7 +36,6 @@ exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => 
                         ))
                         break;
                     case 'getFandomFanficsFull':
-                        console.log('---  not stand by full')
                         await allFandoms.map(async fandom => promises.push(
                             await new Promise(resolve => setTimeout(resolve, 30000)),
                             p = p.then(() => funcs.getFandomFanfics(socket, log, fandom, 'full', ao3, ff))
@@ -58,11 +67,9 @@ exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => 
         } else {
             switch (choice) {
                 case 'getFandomFanficsPartial':
-                    console.log('--- stand by part')
                     await funcs.getFandomFanfics(socket, log, fandom, 'partial', ao3, ff)
                     break;
                 case 'getFandomFanficsFull':
-                    console.log('--- stand by full')
                     await funcs.getFandomFanfics(socket, log, fandom, 'full', ao3, ff)
                     break;
                 case 'getDeletedFanfics':
@@ -70,6 +77,9 @@ exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => 
                     break;
                 case 'updateFandomNumbers':
                     await funcs.updateFandomNumbers(socket, fandom, ao3, ff)
+                    break;
+                case 'handleDuplicateTitles':
+                    await funcs.handleDuplicateTitles(socket, log2, fandom)
                     break;
             }
 

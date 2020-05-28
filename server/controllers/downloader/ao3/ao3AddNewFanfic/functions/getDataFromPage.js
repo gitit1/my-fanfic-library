@@ -44,9 +44,9 @@ exports.getDataFromPage = (jar, url, fandomName) => {
         fanfic["Oneshot"] = (fanfic["Complete"] && fanfic["NumberOfChapters"] === 1) ? true : false
 
 
-        fanfic["FanficTitle"] = $('#workskin h2.heading').first().text();
+        fanfic["FanficTitle"] = $('#workskin h2.heading').first().text().trim();
         fanfic["URL"] = url;
-        fanfic["Author"] = $('#workskin h3.heading a[rel=author]').text();
+        fanfic["Author"] = $('#workskin h3.heading a[rel=author]').text().trim();
         fanfic["Author"] = (fanfic["Author"] === fanfic["FanficTitle"] || fanfic["Author"] == "") ? 'Anonymous' : fanfic["Author"]
 
         fanfic["AuthorURL"] = 'https://archiveofourown.org' + $('#workskin h3.heading a').attr('href');

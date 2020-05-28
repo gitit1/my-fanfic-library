@@ -3,7 +3,7 @@
 @import "../../../style/_varibles";
 
 @mixin code_box {
-  width: 80%;
+  width: 100%;
   margin-top: 50px;
   min-height: 50vh;
   background: #eee;
@@ -30,9 +30,9 @@
       display: block!important;
     }
     button {
-      margin-top: 50px;
+      margin-top: 40px;
       width: 200px;
-      height: 100px;
+      height: 70px;
     }
     button:first-of-type {
       margin-top: -10px!important;
@@ -51,6 +51,10 @@
       // margin: 0 auto;
       font-size: 14px;
       overflow: auto;
+
+      &.short{
+        min-height: 10vh;
+      }
     }
   }
 

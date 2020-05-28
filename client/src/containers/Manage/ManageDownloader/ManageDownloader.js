@@ -53,6 +53,7 @@ class ManageDownloader extends Component {
             ready: true
         },
         serverData: null,
+        duplicatesList: [],
         logs: [],
         showSwitches: true,
         switches: {
@@ -90,11 +91,9 @@ class ManageDownloader extends Component {
     }
 
     sendRequestsToServerHandler = async (choice) => {
-        // const {serverData} = this.state;
-        const { smallSize } = this.props;
         socket.removeAllListeners()
         this.setState({ serverData: null, logs: [], showData: 0 })
-        smallSize && this.setState({ showGridDataBox: true, showGridButtons: false });
+        this.props.smallSize && this.setState({ showGridDataBox: true, showGridButtons: false });
 
         socket.on('getFanficsData', serverData => {
             this.setState({ serverData })
@@ -105,23 +104,17 @@ class ManageDownloader extends Component {
             }
         });
 
+        socket.on('getDuplicateList', serverData => {
+            this.setState({
+                duplicatesList: serverData,
+                showData: 2
+            });
+        });
 
         let ao3 = this.state.switches.AO3;
         let ff = this.state.switches.FF;
 
         socket.emit('getFandomFanfics', this.state.fandom, choice, ao3, ff);
-
-        // console.log('ao3 ff',ao3,ff)
-
-        // switch (choice) {
-        //     case 'updateFandomNumbers':
-        //         socket.emit('getFandomNumbers', this.state.fandom, choice, method, ao3, ff);
-        //         break;
-
-        //     default:
-        //         socket.emit('getFandomFanfics', this.state.fandom, choice, method, ao3, ff);
-        //         break;
-        // }
 
     }
 
@@ -150,9 +143,12 @@ class ManageDownloader extends Component {
 
     switchChangeHandler = (name) => {
         console.log('in switchChangeHandler')
-        this.setState(prevState => ({ switches: { ...prevState.switches, 
-                                                  [name]: !this.state.switches[name] 
-                                                } }));
+        this.setState(prevState => ({
+            switches: {
+                ...prevState.switches,
+                [name]: !this.state.switches[name]
+            }
+        }));
     }
 
     toggleBottons = () => {
@@ -166,11 +162,12 @@ class ManageDownloader extends Component {
     }
 
     render() {
-        const { fandom, fandomSelect, switches, logs, showData, showGridButtons, showGridDataBox, backupDBmsg } = this.state
-        const { smallSize } = this.props
+        const { fandom, fandomSelect, switches, logs, showData, showGridButtons, showGridDataBox, backupDBmsg, duplicatesList } = this.state
+        const { smallSize } = this.props;
+        const isAllFandoms = (fandom === 'All') ? true : false
         return (
             <Container header='Downloader' className='managedownloader'>
-                <Grid container className='downloader' spacing={2}>
+                <Grid container className='downloader'>
                     <GridChooseFandom fandomSelect={fandomSelect} inputChange={this.inputChangedHandler} />
                     {this.props.smallSize && showGridDataBox &&
                         <Button variant="contained" className='backButton' onClick={() => this.toggleBottons()}>Back to Bottons</Button>
@@ -178,13 +175,23 @@ class ManageDownloader extends Component {
                     {
                         fandomSelect.value !== '' ?
                             <>
-                                <GridButtons 
+                                <GridButtons
                                     sendRequestsToServer={this.sendRequestsToServerHandler}
                                     showBox={showGridButtons}
                                     switches={switches}
                                     switchChange={this.switchChangeHandler}
+                                    isAllFandoms={isAllFandoms}
+                                    xs={4}
                                 />
-                                <GridDataBox fandom={fandom} showData={showData} logs={logs} showBox={showGridDataBox} smallSizeMode={smallSize} />
+                                <GridDataBox
+                                    fandom={fandom}
+                                    showData={showData}
+                                    logs={logs}
+                                    showBox={showGridDataBox}
+                                    smallSizeMode={smallSize}
+                                    duplicatesList={duplicatesList}
+                                    xs={8}
+                                />
                             </> :
                             <div className='backup'>
                                 <Button variant="contained" className='backupButton' onClick={() => this.backupDB()}>Backup DB</Button>
