@@ -31,9 +31,6 @@ const getFandomFanfics = async (socket, log, fandom, type, ao3, ff) => {
         socket && socket.emit('getFanficsData', `<b>FF URL:</b> ${FFSearchUrl}`);
     }
 
-    const ao3URL = await createAO3Url(SearchKeys);
-    socket && socket.emit('getFanficsData', `<b>AO3 URL:</b> ${ao3URL}`);
-
     console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
     log.info(`Executing: getFanficsOfFandom:`);
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
