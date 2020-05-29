@@ -45,7 +45,8 @@ export{
     saveFanficFromFile,
     saveDataOfFanficToDB,
     updateFanficData,
-    backupDB
+    backupDB,
+    saveAsSimilarFanfic
 }from './downloader'
 
 export{

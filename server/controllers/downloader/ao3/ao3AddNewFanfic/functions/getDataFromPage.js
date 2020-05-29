@@ -9,6 +9,7 @@ exports.getDataFromPage = (jar, url, fandomName) => {
     return new Promise(async function (resolve, reject) {
         await loginToAO3();
 
+        url = url.includes('chapters') ? url.split('/chapters/')[0] : url;
         let body = await getUrlBodyFromAo3(jar, url + '?view_adult=true');
         let $ = cheerio.load(body);
 
@@ -19,7 +20,11 @@ exports.getDataFromPage = (jar, url, fandomName) => {
 
         fanfic["FandomName"] = fandomName;
         fanfic["Source"] = 'AO3';
-        fanfic["FanficID"] = Number(url.replace(/.*\/works\/(.*[0-9])\/.*/, '$1'));
+        fanfic["URL"] = url;
+
+        id = url.split('/works/')[1];
+        id = id.includes('chapters') ? id.split('/chapters/')[0] : id;
+        fanfic["FanficID"] = Number(id);
 
         fanficUpdateDate = $('dd.status').text();
         fanficPublishedDate = $('dd.published').text();
@@ -44,9 +49,8 @@ exports.getDataFromPage = (jar, url, fandomName) => {
         fanfic["Oneshot"] = (fanfic["Complete"] && fanfic["NumberOfChapters"] === 1) ? true : false
 
 
-        fanfic["FanficTitle"] = $('#workskin h2.heading').first().text();
-        fanfic["URL"] = url;
-        fanfic["Author"] = $('#workskin h3.heading a[rel=author]').text();
+        fanfic["FanficTitle"] = $('#workskin h2.heading').first().text().trim();
+        fanfic["Author"] = $('#workskin h3.heading a[rel=author]').text().trim();
         fanfic["Author"] = (fanfic["Author"] === fanfic["FanficTitle"] || fanfic["Author"] == "") ? 'Anonymous' : fanfic["Author"]
 
         fanfic["AuthorURL"] = 'https://archiveofourown.org' + $('#workskin h3.heading a').attr('href');
@@ -74,7 +78,7 @@ exports.getDataFromPage = (jar, url, fandomName) => {
         fanfic["FandomsTags"] = fandomsTags;
 
         fanfic["Language"] = $('dd.language').text()
-        fanfic["Description"] = $('blockquote.userstuff').html();
+        fanfic["Description"] = $('blockquote.userstuff').html().trim();
         fanfic["Hits"] = $('dd.hits').text() === "" ? 0 : Number($('dd.hits').text());
         fanfic["Kudos"] = $('dd.kudos').text() === "" ? 0 : Number($('dd.kudos').text());
         fanfic["Comments"] = ($('dd.comments').text()) === "" ? 0 : Number($('dd.comments').text());
@@ -86,6 +90,7 @@ exports.getDataFromPage = (jar, url, fandomName) => {
         fanfic["SeriesURL"] = fanfic["Series"] && 'https://archiveofourown.org' + $('dd.series .position a').attr('href');
 
         fanfic["NeedToSaveFlag"] = false;
+        fanfic["Deleted"] = false;
 
         resolve(fanfic);
     });

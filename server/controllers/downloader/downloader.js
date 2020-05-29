@@ -15,6 +15,7 @@ const ff = require('./ff/ff');
 const wp = require('./wattpad/getWPLinks')
 const manually = require('./manually/manually');
 const fileReader = require('./fileReader/fileReader');
+const funcs = require('./helpers/index')
 
 const logger = require('simple-node-logger');
 let request = require('request')
@@ -79,7 +80,7 @@ exports.saveFanficFromFile = async (req, res) => {
 }
 
 exports.getNewFanfic = async (req, res) => {
-    const { type, url, fandomName } = req.query;
+    const { type, url, fanficID, fandomName } = req.query;
     let data = null;
     if (type === 'manually') {
         let upload = multer({}).single();
@@ -87,11 +88,14 @@ exports.getNewFanfic = async (req, res) => {
             data = await manually.addNewFanfic(fandomName, req.body)
             res.send(data);
         })
-    } else {
+    } else if (type === 'automatic') {
         data = url.includes('archiveofourown.org') ? await ao3.ao3AddNewFanfic(jar, url, fandomName) :
             url.includes('fanfiction.net') ? await ff.ffAddNewFanfic(url, fandomName)
                 // : url.includes('wattpad.com') ? await 'wattpad'
                 : null;
+        res.send(data);
+    } else {
+        data = await funcs.getFanficByID(fandomName, fanficID)
         res.send(data);
     }
 }
@@ -121,19 +125,14 @@ exports.updateExistFanfic = async (req, res) => {
     res.send();
 }
 
-exports.testingArea = async (req, res) => {
-    console.log('testingArea')
-    let fandomName = 'Vauseman'
+exports.saveAsSimilarFanfic = async (req, res) => {
+    const { isSimilar, fandomName, fanfic1ID, fanfic2ID } = req.query;
 
-    mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
-        console.log('dbFanfic.length:',dbFanfic.length)
-        for (let index = 0; index < dbFanfic.length; index++) {
-            mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
-                { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) {})
-        }
+    const similar = (isSimilar==='true') ? true : false;
+    await manually.saveAsSimilarFanfic(similar, fandomName, fanfic1ID, fanfic2ID).then(() => {
+        res.send(true);
     });
 }
-
 
 //wattpad
 exports.wpd = async (req, res) => {
@@ -141,3 +140,18 @@ exports.wpd = async (req, res) => {
     await wp.wpDownloader('avalance');
     res.send('wpd done');
 }
+
+//testing
+exports.testingArea = async (req, res) => {
+    console.log('testingArea')
+    let fandomName = 'SwanQueen'
+
+    // mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
+    //     console.log('dbFanfic.length:',dbFanfic.length)
+    //     for (let index = 0; index < dbFanfic.length; index++) {
+    //         mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
+    //             { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) {})
+    //     }
+    // }); 
+} 
+

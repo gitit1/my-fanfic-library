@@ -3,7 +3,7 @@
 @import "../../../style/_varibles";
 
 @mixin code_box {
-  width: 80%;
+  width: 100%;
   margin-top: 50px;
   min-height: 50vh;
   background: #eee;
@@ -30,17 +30,21 @@
       display: block!important;
     }
     button {
-      margin-top: 50px;
+      margin-top: 40px;
       width: 200px;
-      height: 100px;
+      height: 70px;
     }
     button:first-of-type {
       margin-top: -10px!important;
     }
   }
   .grid_code {
-    // margin-top: 2%;
-
+    .duplicateTitles{
+      margin-top: 50px;
+      .merge{
+        margin-left: 8px;
+      }
+    }
     .code_box {
       @include code_box;
       color: #666;
@@ -48,7 +52,6 @@
       white-space: pre;
       white-space: pre-wrap;
       word-wrap: break-word;
-      // margin: 0 auto;
       font-size: 14px;
       overflow: auto;
     }

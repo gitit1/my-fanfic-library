@@ -73,12 +73,13 @@ exports.getDataFromPage = async (url,fandomName) =>{
         fanfic.URL                  =       url
         fanfic.Source               =       'FF'
         fanfic.FandomName           =       fandomName;
-        fanfic.FanficTitle          =       $('#profile_top b.xcontrast_txt').first().text();
-        fanfic.Author               =       $('#profile_top a.xcontrast_txt').first().text();
+        fanfic.FanficTitle          =       $('#profile_top b.xcontrast_txt').first().text().trim();
+        fanfic.Author               =       $('#profile_top a.xcontrast_txt').first().text().trim();
         fanfic.AuthorURL            =       'https://www.fanfiction.net' + $('#profile_top a.xcontrast_txt').first().attr('href');
         fanfic.LastUpdateOfFic      =       Number($('#profile_top span.xgray span').first().attr('data-xutime')+'000');
         fanfic.PublishDate          =       (fanfic.Oneshot) ? fanfic.LastUpdateOfFic : Number($('#profile_top span.xgray span').last().attr('data-xutime')+'000');
         fanfic.LastUpdateOfNote     =       new Date().getTime();
+        fanfic.Deleted              =       false;
         fanfic.Tags = tags;
     
         resolve(fanfic);

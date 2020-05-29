@@ -1,13 +1,12 @@
 import React,{Component} from 'react';
 import { Grid } from '@material-ui/core';
-import AddNewFanficAutomatic from '../../AddNewFanfic/components/AddNewFanficAutomatic/AddNewFanficAutomatic'
-
-import {savedFanfics,deletedFanfics} from '../../../Fandoms/components/functions'
+import { savedFanfics, deletedFanfics } from '../../../Fandoms/components/functions';
+import DuplicateTitles from './DuplicateTitles'
 
 class GridDataBox extends Component{
     render(){
         let grid = '';
-        const {fandom,logs,showData,showBox} = this.props;
+        const {fandom,logs,showData,showBox, duplicatesList} = this.props;
 
         switch (showData) {
             case 0:
@@ -17,17 +16,20 @@ class GridDataBox extends Component{
                 grid =                                         
                 <div className='code_box'>
                     <p><b>Fandom Name:</b> {fandom.FandomName}</p>
-                    <p><b>Fanfics in Fandom:</b> {fandom.FanficsInFandom}</p>
+                    <p><b>Fanfics in Fandom:</b> {fandom.FanficsInFandom.toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                     <p><b>Saved Fanfics:</b> {savedFanfics(fandom)}</p>
                     <p><b>Deleted Fanfics:</b> {deletedFanfics(fandom)}</p>
                     <p><b>Last Update:</b> {new Date(fandom.FanficsLastUpdate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                 </div>
                 break;
+            case 2:
+                grid = <DuplicateTitles list={duplicatesList} fandomName={fandom.FandomName} logs={logs}/>
+                break;
             default:
                 break;
         }
         return(
-            showBox ? <Grid className='grid_code' item xs={this.props.smallSizeMode ? 12 : 6}>{grid}</Grid> : null
+            showBox ? <Grid className='grid_code' item xs={this.props.smallSizeMode ? 12 : this.props.xs}>{grid}</Grid> : null
         )
     }
 

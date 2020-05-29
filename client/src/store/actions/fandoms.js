@@ -3,14 +3,14 @@ import axios from '../axios-server';
 
 
 export const getFandomsFromDBStart = () =>{
-    console.log('[actions: fandom.js] - getFandomsFromDBStart')
+    console.log('[actions: fandoms] - getFandomsFromDBStart')
     return{
         type: actionTypes.GET_FANDOMS_START
     };
 };
 
 export const getFandomsFromDBSuccess = (fandoms) =>{
-    console.log('[actions: fandom.js] - getFandomsFromDBSuccess')
+    console.log('[actions: fandoms] - getFandomsFromDBSuccess')
     return{
         type: actionTypes.GET_FANDOMS_SUCCESS,
         fandoms: fandoms
@@ -18,7 +18,7 @@ export const getFandomsFromDBSuccess = (fandoms) =>{
 };
 
 export const getFandomsFromDBFail = (error) =>{
-    console.log('[actions: fandom.js] - getFandomsFromDBFail')
+    console.log('[actions: fandoms] - getFandomsFromDBFail')
     return{
         type: actionTypes.GET_FANDOMS_FAIL,
         error: error
@@ -26,7 +26,7 @@ export const getFandomsFromDBFail = (error) =>{
 };
 
 export const getFandomsFromDB = () =>{
-    console.log('[actions: fandom.js] - getFandomsFromDB')
+    console.log('[actions: fandoms] - getFandomsFromDB')
     return dispatch =>{
         dispatch(getFandomsFromDBStart())
         return axios.get('/db/getAllFandoms')

@@ -64,22 +64,22 @@ const getEpubMetadata = (log, fandomName, paths) => {
                     let newPdfPath      = `public/fandoms/${fanfic.FandomName}/fanfics/${fanficNaming}.pdf`;
 
                     let pdfSaved = await saveFileToServer(oldPdfPath, newPdfPath);
-                    let epubSaved = await  saveFileToServer(epubfile, newFanficPath);
+                    let epubSaved = await saveFileToServer(epubfile, newFanficPath);
                     let imageSaved = await saveFileToServer(`${paths[0]}/cover.jpg`, imageNewPath);
 
-                    if(pdfSaved || epubSaved){
+                    if (pdfSaved || epubSaved) {
                         fanfic.SavedFic = true;
                         fanfic.savedAs = epubSaved && pdfSaved ? 'epub,pdf' : epubSaved ? 'epub' : 'pdf';
                         fanfic.fileName = fanficNaming;
                         fanfic.NeedToSaveFlag = false;
                         deleteFolderRecursive(paths[0])
-                    }else{
+                    } else {
                         fanfic.SavedFic = false;
                         fanfic.NeedToSaveFlag = true;
                     }
 
-                    fanfic.image = imageSaved &&  `${fanficNaming}.jpg`;
-                    await saveFanficToDB(fandomName,fanfic);
+                    fanfic.image = imageSaved && `${fanficNaming}.jpg`;
+                    await saveFanficToDB(fandomName, fanfic);
                 }
                 resolve();
             });

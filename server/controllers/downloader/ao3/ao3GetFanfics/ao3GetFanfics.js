@@ -11,8 +11,8 @@ const { updateFandomFanficsNumbers } = require('../../helpers/index')
 exports.ao3GetFanfics = async (jar, log, fandom, type) => {
     // TODO: IF WE SAVE FILE - ADD THE MISSING DATA TO DB
     console.log(clc.blue(`[ao3 controller] ao3GetFanfics() - ${type} run`));
-    const { SearchKeys } = fandom;
-
+    const { SearchKeys, FanficsLastUpdate } = fandom;
+ 
     request = request.defaults({ jar: jar, followAllRedirects: true });
 
     await ao3Funcs.loginToAO3(jar);
@@ -38,8 +38,10 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
     numberOfPages = (type === 'partial') ? 2 : numberOfPages;
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
 
-    const limit = (type === 'partial') ? pLimit(1) : pLimit(6);
+    const limit = (type === 'partial' || FanficsLastUpdate===undefined) ? pLimit(1) : pLimit(6);
+    
     console.log('Number of Pages:', numberOfPages)
+    
     let promises = [];
 
     for (let pageNumber = 0; pageNumber < pagesArray.length; pageNumber++) {

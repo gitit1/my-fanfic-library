@@ -5,10 +5,10 @@ const clc = require("cli-color");
 const downloader = require('../../downloader/downloader')
 // const ao3 =  require('../../downloader/ao3/ao3')
 const now = require('performance-now')
-
+const { createAO3Url } = require('../../downloader/ao3/ao3GetFanfics/functions/createAO3Url')
 
 const getFandomFanfics = async (socket, log, fandom, type, ao3, ff) => {
-    const { FandomName, SearchKeys } = fandom;
+    const { FandomName, SearchKeys, FFSearchUrl } = fandom;
     log.info(`--------------------------------Start--------------------------------`);
 
     console.log(clc.cyanBright(`Server got fandom: ${FandomName}`));
@@ -19,9 +19,17 @@ const getFandomFanfics = async (socket, log, fandom, type, ao3, ff) => {
     log.info(`Server got keys: ${SearchKeys}`);
     socket && socket.emit('getFanficsData', `<b>Server got keys:</b> ${SearchKeys}`);
 
+    // let fandomUrlName = SearchKeys.replace(/ /g, '%20').replace(/\//g, '*s*');
+    // socket && socket.emit('getFanficsData', `<b>Fixing keys to match url search:</b> ${fandomUrlName}`);
+    
+    if(ao3){
+        const ao3URL = await createAO3Url(SearchKeys);
+        socket && socket.emit('getFanficsData', `<b>AO3 URL:</b> ${ao3URL}`);
+    }
 
-    let fandomUrlName = SearchKeys.replace(/ /g, '%20').replace(/\//g, '*s*');
-    socket && socket.emit('getFanficsData', `<b>Fixing keys to match url search:</b> ${fandomUrlName}`);
+    if(ff){
+        socket && socket.emit('getFanficsData', `<b>FF URL:</b> ${FFSearchUrl}`);
+    }
 
     console.log(clc.cyanBright(`Executing: getFanficsOfFandom()`));
     log.info(`Executing: getFanficsOfFandom:`);

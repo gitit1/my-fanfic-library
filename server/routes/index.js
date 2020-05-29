@@ -54,6 +54,7 @@ try {
   router.post('/downloader/saveFanficFromFile',downloader.saveFanficFromFile)
   router.post('/downloader/saveNewFanfic',downloader.saveNewFanfic)
   router.post('/downloader/updateExistFanfic',downloader.updateExistFanfic)
+  router.post('/downloader/saveAsSimilarFanfic',downloader.saveAsSimilarFanfic)
 
   router.get('/downloader/wattpad',downloader.wpd)
   
