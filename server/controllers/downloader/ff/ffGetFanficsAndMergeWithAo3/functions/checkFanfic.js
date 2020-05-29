@@ -5,7 +5,6 @@ const { fixStringForPath } = require('../../../../helpers/fixStringForPath')
 
 const msgHeader = clc.xterm(55).bgXterm(254);
 const msg1 = clc.xterm(17).bgXterm(254);
-const msg1_1 = clc.xterm(62).bgXterm(254);
 const msg2 = clc.xterm(18).bgXterm(254);
 const msg3 = clc.xterm(19).bgXterm(254);
 const msg4 = clc.xterm(20).bgXterm(254);
@@ -107,7 +106,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
 
         if (isFanficExsist) {
             const exsistsFanfic = isFanficExsist[0];
-            const { FanficID_FF, Source, Deleted, image, NumberOfChapters } = exsistsFanfic;
+            const { FanficID_FF, Source, Deleted, image, NumberOfChapters, Complete } = exsistsFanfic;
             
             const isLinkedToFF = FanficID_FF === undefined ? false : true;
             const isDeleted = Deleted === undefined ? false : Deleted;
@@ -133,7 +132,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'old';
                 // Check if ff is more updated
-                if (fanfic.NumberOfChapters > NumberOfChapters) {
+                if ((fanfic.NumberOfChapters > NumberOfChapters) && !Complete) {
                     console.log(msg1(`----- FF is more updated - saving the data`));
                     exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
                     exsistsFanfic.Complete = fanfic.Complete;
@@ -150,7 +149,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 }
                 // Update DB
                 await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-            } else if (isLinkedToFF && Source === 'AO3' && fanfic.NumberOfChapters > NumberOfChapters) {
+            } else if (isLinkedToFF && Source === 'AO3' && (fanfic.NumberOfChapters > NumberOfChapters) && !Complete) {
                 console.log(msg1(`-----Found Similar (Exist as AO3 && linekd to FF but FF is more updated): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
                 log.info(`-----Found Similar (Exist as AO3 && linekd to FF but FF is more updated): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
                 exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
@@ -199,29 +198,17 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 // Update DB
                 await funcs.saveFanficToDB(fandomName, exsistsFanfic);
             } else if (isLinkedToFF && Source === 'AO3'){
-                console.log(msg1_1(`-----Found Similar (Exist as AO3 && linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
+                console.log(msg4(`-----Found Similar (Exist as AO3 && linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
                 log.info(`-----Found Similar (Exist as AO3 && linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);                
-            } else if (Source === 'FF' && !hasImage && linkHasImage) {
-                // Exsist as ff without image (and ff has image)
-                console.log(msg4(`-----Found Similar (Exsist as ff without image (and ff has image)): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
-                log.info(`-----Found Similar (Exsist as ff without image (and ff has image)): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
-                exsistsFanfic.URL_FF = fanfic.URL;
-                exsistsFanfic.AuthorURL_FF = fanfic.AuthorURL;
-                // Add Image 
-                exsistsFanfic.image = imageName;
-                exsistsFanfic.Status = 'update';
-                exsistsFanfic.StatusDetails = 'old';
-                await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
-                // Update DB
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-                // Fanfic is not saved
-                if (!exsistsFanfic.SavedFic || exsistsFanfic.NeedToSaveFlag) {
-                    console.log('Fanfic is not saved.. going to save it')
-                    await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fileName, 'epub', fandomName, fanfic.FanficID, collection);
-                }
             } else if (Source === 'FF') {
                 console.log(msg5(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`));
                 log.info(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`);
+
+                if(!hasImage && linkHasImage){
+                    exsistsFanfic.image = imageName;
+                    exsistsFanfic.Status = 'update';
+                    await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
+                }
                 exsistsFanfic.FanficTitle = fanfic.FanficTitle;
                 exsistsFanfic.URL = fanfic.URL;
                 exsistsFanfic.Author = fanfic.Author;
@@ -239,19 +226,21 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 exsistsFanfic.PublishDate = fanfic.PublishDate;
                 exsistsFanfic.LastUpdateOfFic = fanfic.LastUpdateOfFic;
                 exsistsFanfic.LastUpdateOfNote = fanfic.LastUpdateOfNote;
-                
                 exsistsFanfic.Status = 'old';
                 exsistsFanfic.StatusDetails = 'old';
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
                 // Fanfic is not saved/updated
-                if( exsistsFanfic.NumberOfChapters < fanfic.NumberOfChapters ||
-                    exsistsFanfic.Complete !== fanfic.Complete ||
+                if( (exsistsFanfic.NumberOfChapters < fanfic.NumberOfChapters) ||
+                    (exsistsFanfic.Complete !== fanfic.Complete) ||
                     !exsistsFanfic.SavedFic || 
                     exsistsFanfic.NeedToSaveFlag){
                         exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
                         exsistsFanfic.Complete = fanfic.Complete;
-                        console.log('Fanfic got updated or is not saved.. going to save it')
+                        exsistsFanfic.Status = 'updated';
+                        console.log('Fanfic got updated or is not saved.. going to save it');
+                        await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
                         await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fileName, 'epub', fandomName, fanfic.FanficID, collection);
+                } else {
+                    await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
                 }
             }
         } else {

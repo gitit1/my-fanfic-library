@@ -31,7 +31,7 @@ exports.getDataFromPage = (page,fandomName) =>{
         fanfic["Author"]                =       page.find('div.header h4.heading a[rel=author]').text();
         fanfic["Author"]                =       (fanfic["Author"]===fanfic["FanficTitle"]||fanfic["Author"]=="") ? 'Anonymous' : fanfic["Author"]
     
-        fanfic["AuthorURL"]             =       'https://archiveofourown.org'+ page.find('div.header h4 a').last().attr('href');
+        fanfic["AuthorURL"]             =       'https://archiveofourown.org'+ page.find('div.header h4.heading a[rel=author]').attr('href');
     
         
         rating = page.find('span.rating span').text();
