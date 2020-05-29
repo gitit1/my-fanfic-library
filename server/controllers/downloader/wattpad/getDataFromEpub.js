@@ -2,7 +2,7 @@ const clc = require("cli-color");
 const fs = require('fs');
 let EPub = require("epub");
 const cheerio = require('cheerio');
-// const { checkForExactSimilar } = require('../helpers/checkForSimilar')
+
 const { saveFanficToDB } = require('../helpers/functions/saveFanficToDB')
 const { getUrlBodyFromSite } = require('../ff/helpers/getUrlBodyFromSite')
 const { fixStringForPath } = require('../../helpers/fixStringForPath')
@@ -20,8 +20,7 @@ const getRating = async (url) => {
     return new Promise(async function (resolve, reject) {
         let body = await getUrlBodyFromSite(url);
         let $ = cheerio.load(body);
-        //console.log(body)
-        // console.log($('span:contains(" Mature ")').text())
+
         if ($('span:contains(" Mature ")').text() === ' Mature ') {
             resolve('mature')
         }
@@ -74,12 +73,6 @@ const getEpubMetadata = (log, fandomName, paths) => {
                     fanfic.FanficID = $('h3 a').first().attr('href').split('/story/')[1];
                     fanfic.FandomName = fandomName;
                     fanfic.URL = $('h3 a').first().attr('href');
-                    //similarFanfic = await checkForExactSimilar(fanfic, fandomName);
-                    // if (similarFanfic) {
-                    //     console.log('similarFanfic!!!! ', fanfic.FanficID)
-                    //     log.info(`----- FanficID: ${fanfic.FanficID} , Author: ${fanfic.Author} , FanficTitle: ${fanfic.FanficTitle} /n WattpadUrl: ${fanfic.URL}`);
-                    //     return resolve();
-                    // }
 
                     for (let index = 0; index < 15; index++) {
                         const attr = $('div').html().split(/<br *\/?>/i)[index];
@@ -112,29 +105,29 @@ const getEpubMetadata = (log, fandomName, paths) => {
                     fanfic.Source = "Wattpad";
                     fanfic.Oneshot = fanfic.NumberOfChapters === 1 ? true : false;
 
-                    let oldPdfPath = epubfile.replace('epub','pdf');
-                    let fanficNaming    = fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);
-                    let newFanficPath   = `public/fandoms/${fanfic.FandomName}/fanfics/${fanficNaming}.epub`;
-                    let imageNewPath    =  `public/fandoms/${fanfic.FandomName}/fanficsImages/${fanficNaming}.jpg`;
-                    let newPdfPath      = `public/fandoms/${fanfic.FandomName}/fanfics/${fanficNaming}.pdf`;
+                    let oldPdfPath = epubfile.replace('epub', 'pdf');
+                    let fanficNaming = fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${fanfic.FanficID})`);
+                    let newFanficPath = `public/fandoms/${fanfic.FandomName}/fanfics/${fanficNaming}.epub`;
+                    let imageNewPath = `public/fandoms/${fanfic.FandomName}/fanficsImages/${fanficNaming}.jpg`;
+                    let newPdfPath = `public/fandoms/${fanfic.FandomName}/fanfics/${fanficNaming}.pdf`;
 
                     let pdfSaved = await saveFileToServer(oldPdfPath, newPdfPath);
-                    let epubSaved = await  saveFileToServer(epubfile, newFanficPath);
+                    let epubSaved = await saveFileToServer(epubfile, newFanficPath);
                     let imageSaved = await saveFileToServer(`${paths[0]}/cover.jpg`, imageNewPath);
 
-                    if(pdfSaved || epubSaved){
+                    if (pdfSaved || epubSaved) {
                         fanfic.SavedFic = true;
                         fanfic.savedAs = epubSaved && pdfSaved ? 'epub,pdf' : epubSaved ? 'epub' : 'pdf';
                         fanfic.fileName = fanficNaming;
                         fanfic.NeedToSaveFlag = false;
                         deleteFolderRecursive(paths[0])
-                    }else{
+                    } else {
                         fanfic.SavedFic = false;
                         fanfic.NeedToSaveFlag = true;
                     }
 
-                    fanfic.image = imageSaved &&  `${fanficNaming}.jpg`;
-                    await saveFanficToDB(fandomName,fanfic);
+                    fanfic.image = imageSaved && `${fanficNaming}.jpg`;
+                    await saveFanficToDB(fandomName, fanfic);
                 }
                 resolve();
             });
