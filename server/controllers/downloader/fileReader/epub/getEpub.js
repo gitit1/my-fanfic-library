@@ -5,7 +5,7 @@ const { fixStringForPath } = require('../../../helpers/fixStringForPath.js');
 const funcs = require('../../helpers/index');
 const keys = require("../../../../config/keys");
 
-exports.getEpub = async (fandomName, filetype, fileName, req, res) => {
+exports.getEpub = async (fandomName, filetype, fileName, deleted, req, res) => {
     return await new Promise(async function (resolve, reject) {
         console.log('in readFromEpub');
 
@@ -36,7 +36,7 @@ exports.getEpub = async (fandomName, filetype, fileName, req, res) => {
             }
 
             keys.nodeEnv !== 'development' && await funcs.delay(5000);
-            await readEpub(fandomName, `${tempPath}/${fileName}.${filetype}`).then(async fanfic => {
+            await readEpub(fandomName, `${tempPath}/${fileName}.${filetype}`, deleted).then(async fanfic => {
                 const checkForSimilarResult = await funcs.checkForExactSimilar(fanfic, fandomName);
 
                 if (!checkForSimilarResult) {

@@ -2,7 +2,7 @@
 const clc = require("cli-color");
 const cheerio = require('cheerio');
 
-exports.getDataFromFF2BookEpub = async (fandomName, data) => {
+exports.getDataFromFF2BookEpub = async (fandomName, data, deleted) => {
     console.log(clc.blue('[Downloader - Epub Reader] getDataFromAO3Epub()'));
     return new Promise(async function (resolve, reject) {
 
@@ -65,7 +65,7 @@ exports.getDataFromFF2BookEpub = async (fandomName, data) => {
         fanfic["Kudos"] = 100;
         fanfic["Comments"] = 100;
         fanfic["Bookmarks"] = 100;
-        fanfic["Deleted"] = true;
+        fanfic["Deleted"] = deleted;
 
         resolve(fanfic)
     })

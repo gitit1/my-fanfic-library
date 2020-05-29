@@ -29,7 +29,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
         fanfic.FanficID = Number(fanfic.URL.split('/1/')[0].split('/s/')[1]);
 
         fanfic.LastUpdateOfFic = Number($('.xgray span').first().attr('data-xutime') + '000');
-        fanfic.PublishDate = (fanfic.Oneshot) ? fanfic.LastUpdateOfFic : Number($('.xgray span').last().attr('data-xutime') + '000');
+        fanfic.PublishDate = (!$('.xgray span').last().attr('data-xutime')) ? fanfic.LastUpdateOfFic : Number($('.xgray span').last().attr('data-xutime') + '000');
         fanfic.LastUpdateOfNote = new Date().getTime();
 
         $('.xgray').text().split(' - ').forEach(attr => {
@@ -124,12 +124,14 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 // Exsist as ao3 but not have ff linked
                 console.log(msg1(`-----Found Similar (Exist as AO3 but not linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
                 log.info(`-----Found Similar (Exist as AO3 but not linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
+               
                 exsistsFanfic.FanficID_FF = fanfic.FanficID;
                 exsistsFanfic.URL_FF = fanfic.URL;
                 exsistsFanfic.AuthorURL_FF = fanfic.AuthorURL;
+                exsistsFanfic.HasFFLink = true;
+
                 exsistsFanfic.Status = 'update';
                 exsistsFanfic.StatusDetails = 'old';
-                exsistsFanfic.HasFFLink = true;
                 // Check if ff is more updated
                 if (fanfic.NumberOfChapters > NumberOfChapters) {
                     console.log(msg1(`----- FF is more updated - saving the data`));

@@ -57,11 +57,12 @@ exports.saveMissingFanfics = async (fandom) => {
 }
 
 exports.getFanficDataFromFile = async (req, res) => {
-    const { fandomName, filetype, fileName } = req.query;
+    const { fandomName, filetype, fileName, isDeleted } = req.query;
     console.log('getFanficDataFromFile');
+    const deleted = isDeleted==='true' ? true : false;
     switch (filetype.toLowerCase()) {
         case 'epub':
-            await fileReader.getEpub(fandomName, filetype, fileName, req, res).then(fanfic => {
+            await fileReader.getEpub(fandomName, filetype, fileName, deleted, req, res).then(fanfic => {
                 res.send(fanfic);
             });
             break;
@@ -70,7 +71,6 @@ exports.getFanficDataFromFile = async (req, res) => {
             break;
     }
 }
-
 exports.saveFanficFromFile = async (req, res) => {
     const { fandomName, fileName } = req.query;
     console.log('saveFanficFromFile');
@@ -108,7 +108,8 @@ exports.saveNewFanfic = async (req, res) => {
         await manually.saveNewFanfic(fandomName, req, res).then(() => {
             res.send();
         });
-    } else {
+    } else { //Automatic
+        fanfic.Deleted = false;
         url.includes('archiveofourown.org') && await ao3.ao3SaveFanfic(jar, fandomName, download, url, fanfic).then(() => {
             res.send();
         })

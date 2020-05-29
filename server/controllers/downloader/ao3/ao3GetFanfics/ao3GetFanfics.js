@@ -35,15 +35,16 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
         numberOfPages = Number($('#main').find('ol.pagination li').eq(-2).text());
     }
 
-    numberOfPages = (type === 'partial') ?  2 : numberOfPages;
-
+    numberOfPages = (type === 'partial') ? 2 : numberOfPages;
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
 
     const limit = (type === 'partial' || FanficsLastUpdate===undefined) ? pLimit(1) : pLimit(6);
-
+    
+    console.log('Number of Pages:', numberOfPages)
+    
     let promises = [];
 
-    for (let pageNumber = 0; pageNumber < pagesArray.length; i++) {
+    for (let pageNumber = 0; pageNumber < pagesArray.length; pageNumber++) {
         promises.push(limit(async () => {
             await ao3Funcs.getDataFromAO3FandomPage(jar, pageNumber, numberOfPages, log, pagesArray[pageNumber], fandom, savedNotAuto)
         }));
@@ -55,6 +56,6 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
     });
 
     fanficsInFandom = await updateFandomFanficsNumbers(fandom, 'AO3');
-    
-    return [fanficsInFandom,savedFanficsCurrent]; 
+
+    return [fanficsInFandom, savedFanficsCurrent];
 }

@@ -16,13 +16,13 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
             await sleep(4000);
-            console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count} / ${n} ] from page [ ${pageNumber} / ${numberOfPages} ]`));
+            console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count+1} / ${n} ] from page [ ${pageNumber+1} / ${numberOfPages} ]`));
             let page = $('ol.work').children('li').eq(count);
 
             await getDataFromFanficPage(jar, log, page, fandom, savedNotAuto).then(res => {
                 donePromise++;
                 res === 0 && counter++;
-            })
+            });
             if (donePromise == n) { return counter }
         }
     } catch (e) { console.log(e); }
