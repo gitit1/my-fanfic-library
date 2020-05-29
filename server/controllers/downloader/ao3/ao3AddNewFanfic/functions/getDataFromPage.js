@@ -90,6 +90,7 @@ exports.getDataFromPage = (jar, url, fandomName) => {
         fanfic["SeriesURL"] = fanfic["Series"] && 'https://archiveofourown.org' + $('dd.series .position a').attr('href');
 
         fanfic["NeedToSaveFlag"] = false;
+        fanfic["Deleted"] = false;
 
         resolve(fanfic);
     });

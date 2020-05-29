@@ -79,6 +79,7 @@ exports.getDataFromPage = async (url,fandomName) =>{
         fanfic.LastUpdateOfFic      =       Number($('#profile_top span.xgray span').first().attr('data-xutime')+'000');
         fanfic.PublishDate          =       (fanfic.Oneshot) ? fanfic.LastUpdateOfFic : Number($('#profile_top span.xgray span').last().attr('data-xutime')+'000');
         fanfic.LastUpdateOfNote     =       new Date().getTime();
+        fanfic.Deleted              =       false;
         fanfic.Tags = tags;
     
         resolve(fanfic);
