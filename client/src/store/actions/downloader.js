@@ -126,3 +126,18 @@ export const updateFanficData = (fandomName, fanfic) => {
             })
     };
 };
+
+export const saveAsSimilarFanfic = (isSimilar, fandomName, id1, id2) => {
+    console.log('[actions: downloader] - saveAsSimilarFanfic')
+    return dispatch => {
+        dispatch(downloaderStart())
+        return axios.post(`/downloader/saveAsSimilarFanfic?isSimilar=${isSimilar}&fandomName=${fandomName}&fanfic1ID=${id1}&fanfic2ID=${id2}`)
+            .then(() => {
+                dispatch(downloaderSuccess())
+                return true;
+            })
+            .catch(error => {
+                dispatch(downloaderFail(error))
+            })
+    };
+}

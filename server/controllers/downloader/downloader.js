@@ -124,6 +124,15 @@ exports.updateExistFanfic = async (req, res) => {
     res.send();
 }
 
+exports.saveAsSimilarFanfic = async (req, res) => {
+    const { isSimilar, fandomName, fanfic1ID, fanfic2ID } = req.query;
+
+    const similar = (isSimilar==='true') ? true : false;
+    await manually.saveAsSimilarFanfic(similar, fandomName, fanfic1ID, fanfic2ID).then(() => {
+        res.send(true);
+    });
+}
+
 //wattpad
 exports.wpd = async (req, res) => {
     console.log('wpd');

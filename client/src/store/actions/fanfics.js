@@ -180,7 +180,6 @@ export const saveImageOfReadingList = (userEmail,name,image) =>{
     };
 }
 
-
 export const deleteFanficFromDB = (fandomName,fanficId,source,complete,deleted)=>{
     console.log('[actions: fanfics.js] - saveReadingList')
     return dispatch =>{
@@ -217,7 +216,6 @@ export const getReadingList = (userEmail) =>{
         });   
     };    
 }
-
 
 export const saveImageOfFanfic = (fandomName,fanficId,image) =>{
     console.log('[actions: fandom.js] - addFandomToDB')

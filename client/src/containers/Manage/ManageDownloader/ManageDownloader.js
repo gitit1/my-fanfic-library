@@ -107,8 +107,15 @@ class ManageDownloader extends Component {
         socket.on('getDuplicateList', serverData => {
             this.setState({
                 duplicatesList: serverData,
-                showData: 2
+                showData: 0
             });
+            if (this.state.duplicatesList.length > 0) {
+                setTimeout(() => {
+                    this.setState({
+                        showData: 2
+                    });
+                }, 2000);
+            }
         });
 
         let ao3 = this.state.switches.AO3;

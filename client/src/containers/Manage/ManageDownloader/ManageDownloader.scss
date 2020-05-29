@@ -39,8 +39,12 @@
     }
   }
   .grid_code {
-    // margin-top: 2%;
-
+    .duplicateTitles{
+      margin-top: 50px;
+      .merge{
+        margin-left: 8px;
+      }
+    }
     .code_box {
       @include code_box;
       color: #666;
@@ -48,13 +52,8 @@
       white-space: pre;
       white-space: pre-wrap;
       word-wrap: break-word;
-      // margin: 0 auto;
       font-size: 14px;
       overflow: auto;
-
-      &.short{
-        min-height: 10vh;
-      }
     }
   }
 

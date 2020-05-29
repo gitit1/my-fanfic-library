@@ -23,14 +23,7 @@ class GridDataBox extends Component{
                 </div>
                 break;
             case 2:
-                grid =
-                <>
-                    <div className='code_box short'>
-                        {logs.map((log,index)=>(<p key={index} dangerouslySetInnerHTML={{ __html:log}}/>))}
-                        {duplicatesList.length===0 && <p>There is No Duplication that we didn't handle in this fandom.</p>}
-                    </div>  
-                    {duplicatesList.length>0 && <DuplicateTitles list={duplicatesList} fandomName={fandom.FandomName}/>}
-                </>
+                grid = <DuplicateTitles list={duplicatesList} fandomName={fandom.FandomName}/>
                 break;
             default:
                 break;
