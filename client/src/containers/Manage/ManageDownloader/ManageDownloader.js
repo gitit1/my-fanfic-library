@@ -95,6 +95,10 @@ class ManageDownloader extends Component {
         this.setState({ serverData: null, logs: [], showData: 0 })
         this.props.smallSize && this.setState({ showGridDataBox: true, showGridButtons: false });
 
+        let ao3 = this.state.switches.AO3;
+        let ff = this.state.switches.FF;
+
+
         socket.on('getFanficsData', serverData => {
             this.setState({ serverData })
             this.state.logs.push(this.state.serverData)
@@ -117,9 +121,6 @@ class ManageDownloader extends Component {
                 }, 2000);
             }
         });
-
-        let ao3 = this.state.switches.AO3;
-        let ff = this.state.switches.FF;
 
         socket.emit('getFandomFanfics', this.state.fandom, choice, ao3, ff);
 

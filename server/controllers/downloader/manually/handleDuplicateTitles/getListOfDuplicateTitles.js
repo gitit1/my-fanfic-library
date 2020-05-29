@@ -18,14 +18,16 @@ exports.getListOfDuplicateTitles = async (log, fandom) => {
                     uniqueIds: { $addToSet: "$FanficID" },
                     Author: { $addToSet: "$Author" },
                     FandomName: { $addToSet: '$FandomName'},
+                    SimilarCheck: {$addToSet: '$SimilarCheck'},
                     count: { $sum: 1 }
                 }
             },
-            { $match: { count: { "$eq": 2 } , FandomName: {"$eq": FandomName} }
+            { $match: { count: { "$eq": 2 } , FandomName: {$eq: FandomName, $size: 1}, SimilarCheck: {$ne: 'unique'} }
         }], async function(err, cursor) {
             let resultsList = [];
             if (err) {
-                console.log(err)
+                console.log(err);
+                reject(err);
               } else {
                 cursor.on("data", function(doc) {
                     resultsList.push(doc)

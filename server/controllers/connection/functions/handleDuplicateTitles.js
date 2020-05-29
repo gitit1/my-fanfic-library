@@ -13,10 +13,10 @@ const handleDuplicateTitles = async (socket, log, fandom) => {
         socket && socket.emit('getFanficsData', `<b style="color:green">There is No Duplication that we didn't handle in this fandom.</b>`);
     } else {
         socket && socket.emit('getFanficsData', `Got <b>${list.length}</b> pairs of duplicates!`);
-        socket && socket.emit('getFanficsData', `<b style="color:red">Lets Start Comparing them!<b/>`);
+        socket && socket.emit('getFanficsData', `<b style="color:red">Lets Start Comparing them!</b>`);
         socket && socket.emit('getFanficsData', `Loading...`);
     }
-    socket && socket.emit('getFanficsData', `End!`);
+    socket && socket.emit('getFanficsData', `<br/>`);
 }
 
 module.exports = { handleDuplicateTitles }

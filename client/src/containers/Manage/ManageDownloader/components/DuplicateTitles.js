@@ -8,14 +8,14 @@ class DuplicateTitles extends Component {
     state = {
         index: 0,
         showFlag: false,
-        hideButtons: false,
+        showCodeBox: false,
         fanfic1: null,
         fanfic2: null,
         msg: ''
     }
 
     componentDidMount() {
-        console.log('list length is: ', this.props.list.length);
+        console.log('list length is: ', this.props.list);
         this.loadNewPair();
     }
 
@@ -25,7 +25,7 @@ class DuplicateTitles extends Component {
         
         this.setState({
             showFlag: false,
-            msg: `Waiting for data for Pair ${index} out of ${list.length}`
+            msg: `Waiting for data for Pair ${index + 1} out of ${list.length}`
         }, ()=>this.getFanficsData())      
     }
 
@@ -35,13 +35,13 @@ class DuplicateTitles extends Component {
 
         const id1 = list[index].uniqueIds[0];
         const id2 = list[index].uniqueIds[1];
-        await onGetFanficData('id', fandomName, id1).then(() => {
+        await onGetFanficData('id', fandomName, id1).then(fanfic1 => {
             console.log('got 1', id1)
-            this.setState({ fanfic1: this.props.fanfic })
+            this.setState({ fanfic1 })
         })
-        await onGetFanficData('id', fandomName, id2).then(() => {
+        await onGetFanficData('id', fandomName, id2).then(fanfic2 => {
             console.log('got 2', id2)
-            this.setState({ fanfic2: this.props.fanfic })
+            this.setState({ fanfic2 })
         })
         this.setState({
             showFlag: true,
@@ -74,43 +74,47 @@ class DuplicateTitles extends Component {
                 this.setState({
                     showFlag: isFinished,
                     msg: !isFinished ? `Saved! Moving to next one...` : `Done!`,
-                    hideButtons: isFinished
+                    showCodeBox: isFinished
                 },()=>{
                     !isFinished && setTimeout(() => {
-                        this.getFanficsData()
-                    }, 2000);
+                        this.loadNewPair()
+                    }, 1000);
                 });
             });            
         }, 2000);
     }
 
     render() {
-        const { index, fanfic1, fanfic2, showFlag, msg, hideButtons } = this.state;
-        const { list, size } = this.props;
+        const { fanfic1, fanfic2, showFlag, msg, showCodeBox } = this.state;
+        const { logs, size, list } = this.props;
         return (
             <div className='duplicateTitles'>
-                {showFlag ?
-                    <>
-                        <p>{msg}</p>
-                        <ShowFanficData fanfic={fanfic1} size={size} showUserData={false} />
-                        <ShowFanficData fanfic={fanfic2} size={size} showUserData={false} />
-                        <br />
-                        { !hideButtons && <>
-                            <Button variant="contained"
-                                className="merge"
-                                color="secondary"
-                                onClick={() => this.saveAsSimilar(true)}>Save as Similar (Merge)</Button>
-                            <Button variant="contained"
-                                className="merge"
-                                color="primary"
-                                onClick={() => this.saveAsSimilar(false)}>Save as Unique (UnMerge)</Button> 
-                        </>}
-                    </>
-                    :
-                    <>
-                        {msg}
-                        <Spinner />
-                    </>
+                { showCodeBox ?
+                    <div className='code_box'>
+                        {logs.map((log,index)=>(<p key={index} dangerouslySetInnerHTML={{ __html:log}}/>))}
+                        <b style={{color: 'green'}}>Finished Comparing all {list.length} pairs!</b>
+                    </div>
+                  :
+                  showFlag ?
+                      <>
+                          <p>{msg}</p>
+                          <ShowFanficData fanfic={fanfic1} size={size} showUserData={false} />
+                          <ShowFanficData fanfic={fanfic2} size={size} showUserData={false} />
+                          <br />
+                        <Button variant="contained"
+                            className="merge"
+                            color="secondary"
+                            onClick={() => this.saveAsSimilar(true)}>Save as Similar (Merge)</Button>
+                        <Button variant="contained"
+                            className="merge"
+                            color="primary"
+                            onClick={() => this.saveAsSimilar(false)}>Save as Unique (UnMerge)</Button> 
+                      </>
+                      :
+                      <>
+                          {msg}
+                          <Spinner />
+                      </>
                 }
             </div>
         )

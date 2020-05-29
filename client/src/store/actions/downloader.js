@@ -48,7 +48,7 @@ export const getFanficDataFromFile = (fandomName, fileName, fileType, file, dele
 };
 
 export const getFanficData = (type, fandomName, id, fanficData) => {
-    console.log('[actions: fandom.js] - getFandomsFromDB');
+    console.log('[actions: downloader] - getFanficData');
 
     return dispatch => {
         dispatch(downloaderStart())
@@ -71,7 +71,7 @@ export const getFanficData = (type, fandomName, id, fanficData) => {
         } else {
             return axios.get(`/downloader/getFanficData?type=${type}&fanficID=${id}&fandomName=${fandomName}`)
                 .then(fetchedData => {
-                    dispatch(getFanficDataSuccess(fetchedData.data)).then(() => { return true });
+                    return fetchedData.data[0]
                 })
                 .catch(error => {
                     dispatch(downloaderFail(error))
@@ -97,7 +97,7 @@ export const saveFanficFromFile = (fandomName, fileName, formData) => {
 }
 export const saveDataOfFanficToDB = (fandomName, fanfic, download, url, image) => {
     image = null;
-    console.log('[actions: fandom.js] - getFandomsFromDB')
+    console.log('[actions: downloader] - saveDataOfFanficToDB')
     return dispatch => {
         dispatch(downloaderStart())
         return axios.post(`/downloader/saveNewFanfic?url=${url}&fandomName=${fandomName}&download=${download}&image=${image}`, fanfic)
@@ -112,7 +112,7 @@ export const saveDataOfFanficToDB = (fandomName, fanfic, download, url, image) =
 };
 
 export const updateFanficData = (fandomName, fanfic) => {
-    console.log('[actions: fandom.js] - getFandomsFromDB')
+    console.log('[actions: downloader] - updateFanficData')
     // console.log('fanfic:',fanfic)
     return dispatch => {
         dispatch(downloaderStart())

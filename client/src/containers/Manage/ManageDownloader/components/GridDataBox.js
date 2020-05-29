@@ -16,14 +16,14 @@ class GridDataBox extends Component{
                 grid =                                         
                 <div className='code_box'>
                     <p><b>Fandom Name:</b> {fandom.FandomName}</p>
-                    <p><b>Fanfics in Fandom:</b> {fandom.FanficsInFandom}</p>
+                    <p><b>Fanfics in Fandom:</b> {fandom.FanficsInFandom.toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                     <p><b>Saved Fanfics:</b> {savedFanfics(fandom)}</p>
                     <p><b>Deleted Fanfics:</b> {deletedFanfics(fandom)}</p>
                     <p><b>Last Update:</b> {new Date(fandom.FanficsLastUpdate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                 </div>
                 break;
             case 2:
-                grid = <DuplicateTitles list={duplicatesList} fandomName={fandom.FandomName}/>
+                grid = <DuplicateTitles list={duplicatesList} fandomName={fandom.FandomName} logs={logs}/>
                 break;
             default:
                 break;
