@@ -56,7 +56,7 @@ export const fandomGeneralForm = [{
             { value: 3, displayValue: '3 - Small Fandom' }
             ]
         },
-        value: '',
+        value: 1,
         validation: {},
         valid: true,
         visible: true,

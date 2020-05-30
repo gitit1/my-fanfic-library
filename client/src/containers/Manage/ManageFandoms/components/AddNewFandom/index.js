@@ -89,7 +89,7 @@ class AddNewFandom extends Component {
                 },
                 'Priority': {
                     ...prevState.fandomForm['Priority'],
-                    value: Priority
+                    value:  Priority ? Priority : 1
                 },
                 'AutoSave': {
                     ...prevState.fandomForm['AutoSave'],

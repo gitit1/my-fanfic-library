@@ -70,12 +70,12 @@ exports.addEditFandomToDB = async (req, res) => {
                 });
             });
         }
-        const fandom = {
+        let fandom = {
             "id": req.body.id,
             "FandomName": req.body.FandomName,
             "FandomUniverse": req.body.FandomUniverse,
-            "Collection": req.body.CollectionName,
             "SearchKeys": req.body.SearchKeys,
+            "Priority": Number(req.body.Priority),
             "AutoSave": (req.body.AutoSave === 'true') ? true : false,
             "SaveMethod": req.body.SaveMethod,
             "FanficsInFandom": Number(req.body.FanficsInFandom),
@@ -87,6 +87,9 @@ exports.addEditFandomToDB = async (req, res) => {
                 "Image_Name_Fanfic": ImageFanfic,
                 "Image_Name_Path": req.body.FandomName
             }
+        }
+        if(req.body.CollectionName.length>1){
+            fandom["Collection"] = req.body.CollectionName
         }
         // if(req.body.AutoSave === 'true'){
         fs.mkdirSync(pathForImage + fandomNameLowerCase + '/fanfics', { recursive: true });
@@ -122,6 +125,7 @@ exports.addEditFandomToDB = async (req, res) => {
                     (err, result) => {
                         if (err) {
                             console.log(clc.red('Error in updating fandom'))
+                            console.log(err)
                             resultMessage = 'Error';
                             return res.send(resultMessage)
                         } else {
