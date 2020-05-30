@@ -51,8 +51,10 @@ class AddNewFandom extends Component {
 
 
     editFandomInitialState = () => {
+        const { FandomName, FandomUniverse, SearchKeys, Priority, 
+                SaveMethod, AutoSave, Collection } = this.props.fandom;
         let options = [];
-        let initialOptions = this.props.fandom['SaveMethod'];
+        let initialOptions = SaveMethod;
         this.state.fandomForm['SaveMethod'].elementConfig.options.map(check => {
             if (initialOptions.includes(check.value)) {
                 options.push({
@@ -66,38 +68,50 @@ class AddNewFandom extends Component {
             }
             return null
         });
-
         this.setState(prevState => ({
             fandomForm: {
                 ...prevState.fandomForm,
                 'FandomName': {
                     ...prevState.fandomForm['FandomName'],
-                    value: this.props.fandom['FandomName'],
+                    value: FandomName,
                     valid: true,
                     disabled: true
                 },
                 'FandomUniverse': {
                     ...prevState.fandomForm['FandomUniverse'],
-                    value: this.props.fandom['FandomUniverse'],
+                    value: FandomUniverse,
                     valid: true
                 },
                 'SearchKeys': {
                     ...prevState.fandomForm['SearchKeys'],
-                    value: this.props.fandom['SearchKeys'],
+                    value: SearchKeys,
                     valid: true
+                },
+                'Priority': {
+                    ...prevState.fandomForm['Priority'],
+                    value: Priority
                 },
                 'AutoSave': {
                     ...prevState.fandomForm['AutoSave'],
-                    value: JSON.parse(this.props.fandom['AutoSave'])
+                    value: JSON.parse(AutoSave)
                 },
                 'SaveMethod': {
                     ...prevState.fandomForm['SaveMethod'],
-                    visible: JSON.parse(this.props.fandom['AutoSave']),
+                    visible: JSON.parse(AutoSave),
                     'elementConfig': {
                         ...prevState.fandomForm['SaveMethod'].elementConfig,
                         options: options
                     }
-                }
+                },
+                'Collection': {
+                    ...prevState.fandomForm['Collection'],
+                    value: (Collection && Collection!=='') ?  true : false              
+                },
+                'CollectionName': {
+                    ...prevState.fandomForm['CollectionName'],
+                    value: (Collection && Collection!=='') ?  Collection : '',
+                    visible: (Collection && Collection!=='') ?  true : false    
+                },
             },
             formIsValid: true,
             imageNameMain: this.props.fandom.Images.Image_Name_Main_Still,
@@ -131,6 +145,7 @@ class AddNewFandom extends Component {
         fandomFormData.append("FandomName", fandomName);
         fandomFormData.append("FandomUniverse", fandomForm['FandomUniverse'].value);
         fandomFormData.append("SearchKeys", fandomForm['SearchKeys'].value);
+        fandomFormData.append("Priority", fandomForm['Priority'].value);
         fandomFormData.append("AutoSave", fandomForm['AutoSave'].value);
         fandomFormData.append("SaveMethod", saveType);
         fandomFormData.append("CollectionName", fandomForm['CollectionName'].value);
@@ -299,13 +314,10 @@ class AddNewFandom extends Component {
             <Container header={header}>
                 <Card className='add_new_fandom'>
                     <Grid container className='add_new_fandom_box'>
-                        <Grid item xs={4} className='add_new_fandom_main_image'>
-                            <ImageUpload id='main' ref={this.mainImageRef} edit={editMode} fileName={imageNameMain} FandomName={fandomForm['FandomName'].value}
-                                label='Please Select Main Image' imageLabel='Main Image' type='image' />
-                            <ImageUpload id='mainGif' ref={this.mainImageGifRef} edit={editMode} fileName={imageNameMainGif} FandomName={fandomForm['FandomName'].value}
-                                label='Please Select Main Image Gif' imageLabel='Main Image Gif' type='image' />
-                        </Grid>
-                        <Grid item xs={8} className='add_new_fandom_content'>
+                        {/* <Grid item xs={4} className='add_new_fandom_main_image'>
+
+                        </Grid> */}
+                        <Grid item xs={12} className='add_new_fandom_content'>
                             <BuildForm onSubmit={this.sendFandomToServerHandler} array={formElementsArray} check={this.inputCheckedHandler}
                                 changed={this.inputChangedHandler} disabled={!formIsValid} buttonSendLabel='SEND' />
                             <ErrorMessages fandomAddedFlag={fandomAddedFlag} />
@@ -314,6 +326,10 @@ class AddNewFandom extends Component {
                             <Grid item className='add_new_fandom_images_card_content'>
                                 <h2>Add images for fanfics:</h2>
                                 <div className='add_new_fandom_images_card_content_images_div'>
+                                <ImageUpload id='main' ref={this.mainImageRef} edit={editMode} fileName={imageNameMain} FandomName={fandomForm['FandomName'].value}
+                                label='Please Select Main Image' imageLabel='Main Image' type='image' />
+                                <ImageUpload id='mainGif' ref={this.mainImageGifRef} edit={editMode} fileName={imageNameMainGif} FandomName={fandomForm['FandomName'].value}
+                                    label='Please Select Main Image Gif' imageLabel='Main Image Gif' type='image' />
                                     <ImageUpload id='icon' ref={this.iconImageRef} edit={editMode} fileName={imageNameIcon} FandomName={fandomForm['FandomName'].value}
                                         label='Please Select Icon Image' imageLabel='Icon Image' type='image' />
                                     <ImageUpload id='fanfic' ref={this.fanficImageRef} edit={editMode} fileName={imageNameFanfic} FandomName={fandomForm['FandomName'].value}

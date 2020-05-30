@@ -3,7 +3,7 @@
 @import '../../../../../style/_varibles';
 
 .add_new_fandom{
-    width: 85%;
+    width: 90%;
     margin: 0 auto;
     // height: 75vh;
     text-align: center;
@@ -28,19 +28,23 @@
             .save_method_checkbox{
                 margin: 0 auto;
                 margin-top: 10px;
-                margin-left: 90px;
+                margin-left: 115px;
                 text-align: left;
+            }
+            .send_button{
+                margin-top: 10px;
             }
             // display: flex;
         }
 
         .add_new_fandom_images_card{
-            width: 98%;
+            width: 100%;
+            border-top: 2px solid #fff;
             margin: 0 auto;
             height: auto;
             text-align: center;
             background-color: $color_background;
-            margin-top: 5%;
+            margin-top: 3%;
             .add_new_fandom_images_card_content{
                 padding: 8px;
                 
