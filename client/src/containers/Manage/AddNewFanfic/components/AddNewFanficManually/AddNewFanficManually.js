@@ -326,7 +326,7 @@ class AddNewFanficManually extends Component {
                         />
                         {fileReaderFlag && !loading && !saved && (similarFanfic === null) &&
                                 <>
-                                    <FileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Pdf' FandomName={fanfic.FandomName} type='doc' />
+                                    <FileUploader id='file2' ref={this.fileUploadRef2} edit={false} label='Upload Another File' FandomName={fanfic.FandomName} type='doc' />
                                     <Button color="primary" clicked={() => this.saveFanficFromFile()}>Save Fanfic</Button>
                                 </>
                         }

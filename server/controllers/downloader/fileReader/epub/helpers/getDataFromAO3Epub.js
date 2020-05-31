@@ -1,6 +1,5 @@
 
 const clc = require("cli-color");
-let EPub = require("epub");
 const cheerio = require('cheerio');
 
 exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
