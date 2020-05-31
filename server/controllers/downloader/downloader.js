@@ -144,14 +144,14 @@ exports.wpd = async (req, res) => {
 //testing
 exports.testingArea = async (req, res) => {
     console.log('testingArea')
-    let fandomName = 'SwanQueen'
+    let fandomName = 'Trishica';
 
-    // mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
-    //     console.log('dbFanfic.length:',dbFanfic.length)
-    //     for (let index = 0; index < dbFanfic.length; index++) {
-    //         mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
-    //             { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) {})
-    //     }
-    // }); 
+    mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
+        console.log('dbFanfic.length:',dbFanfic.length)
+        for (let index = 0; index < dbFanfic.length; index++) {
+            mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
+                { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) {})
+        }
+    }); 
 } 
 
