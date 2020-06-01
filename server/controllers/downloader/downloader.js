@@ -66,6 +66,11 @@ exports.getFanficDataFromFile = async (req, res) => {
                 res.send(fanfic);
             });
             break;
+        case 'pdf':
+            await fileReader.getPdf(fandomName, filetype, fileName, deleted, req, res).then(fanfic => {
+                res.send(fanfic);
+            });
+            break;          
         default:
             res.send(false);
             break;
