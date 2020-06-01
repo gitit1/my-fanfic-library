@@ -1,6 +1,5 @@
 const clc = require("cli-color");
 let EPub = require("epub");
-const cheerio = require('cheerio');
 const { getDataFromAO3Epub } = require('./helpers/getDataFromAO3Epub');
 const { getDataFromFF2BookEpub } = require('./helpers/getDataFromFF2BookEpub');
 const { getDataFromWattpadEpub } = require('./helpers/getDataFromWattpadEpub');

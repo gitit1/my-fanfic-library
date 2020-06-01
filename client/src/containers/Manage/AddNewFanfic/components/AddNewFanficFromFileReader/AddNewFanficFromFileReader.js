@@ -38,6 +38,7 @@ class AddNewFanficFromFileReader extends Component {
     }
 
     getFanficData = () => {
+        this.setState({ showData: 0 })
         if (this.fileUploadRef.current === null ||
             (this.fileUploadRef.current !== null && this.fileUploadRef.current.state.file === '')) {
             let msg = "Please upload a file";

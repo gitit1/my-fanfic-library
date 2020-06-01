@@ -36,15 +36,15 @@ exports.ao3GetFanfics = async (jar, log, fandom, type) => {
     }
 
     let pagePatialLimit = (Priority !== 1) ? 1 : 2;
-    let promiseLimit = (Priority === 1) ? 8 : (Priority === 2) ? 10 : 12;
+    let promiseLimit = (Priority === 1) ? 6 : (Priority === 2) ? 8 : 10;
 
     numberOfPages = (type === 'partial') ? pagePatialLimit : numberOfPages;
 
+    console.log('Number of Pages:', numberOfPages)
     let pagesArray = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
 
     const limit = (type === 'partial' || FanficsLastUpdate === undefined) ? pLimit(1) : pLimit(promiseLimit);
 
-    console.log('Number of Pages:', numberOfPages)
 
     let promises = [];
 

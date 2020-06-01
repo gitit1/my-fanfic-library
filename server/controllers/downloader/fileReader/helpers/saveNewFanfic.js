@@ -37,14 +37,15 @@ exports.saveNewFanfic = async (fandomName, fileName, req, res) => {
                 return resultMessage;
             }
             let fanfic = await funcs.createFanficObj(fandomName, req.body);
+            const newFileName = fixStringForPath(req.body.fileName);
             
             fanfic['status'] = 'old';
-            fanfic['fileName'] = req.body.fileName;
+            fanfic['fileName'] = newFileName;
             fanfic['savedAs'] = req.body.savedAs;
             fanfic['SavedFic'] = true;
             fanfic['NeedToSaveFlag'] = false;
 
-            await funcs.saveFileToServer(`${tempPath}/${fileName}`, `${pathForDocs}/${req.body.fileName}.${fileName.split('.')[1]}`)
+            await funcs.saveFileToServer(`${tempPath}/${fileName}`, `${pathForDocs}/${newFileName}.${fileName.split('.')[1]}`)
 
             const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
             const status = await funcs.saveFanficToDB(fandomName, fanfic, fandomData[0].Collection);

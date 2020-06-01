@@ -5,7 +5,7 @@ import ShowFanficData from './components/showFanficData/showFanficData'
 
 const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,userData,showSaveButton,savedData
                         ,similarFanfic,msg,saveFanficData,markStatus,toggleChapterB,markAs,inputCategoryFlag,
-                        showSelectCategory,showCategory,getCategories,saveCategories,categoriesTemp}) => {
+                        showSelectCategory,showCategory,getCategories,saveCategories,categoriesTemp,fileReaderFlag}) => {
                             
     const showFanfic = (similarFanfic!==null && similarFanfic.FanficID===fanfic.FanficID) ? similarFanfic : fanfic;
     return (
@@ -45,9 +45,11 @@ const GetFanficData = ({fanfic,size,showUserData,loadingFlag,loading,showData,us
                             <br/>
                             <br/>
                             <br/>
-                            <p style={{color:'red'}}><b>Are you sure you want to save it?</b></p>
-                            <Button color="primary" clicked={()=>saveFanficData(true)}>Yes</Button>
-                            <Button color="secondary" clicked={()=>saveFanficData(false)}>No</Button>
+                            { !fileReaderFlag && <>
+                                <p style={{color:'red'}}><b>Are you sure you want to save it?</b></p>
+                                <Button color="primary" clicked={()=>saveFanficData(true)}>Yes</Button>
+                                <Button color="secondary" clicked={()=>saveFanficData(false)}>No</Button>
+                            </>}
                         </div>
                     }
                 </React.Fragment>
