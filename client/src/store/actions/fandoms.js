@@ -1,16 +1,17 @@
 import * as actionTypes from './actionTypes';
 import axios from '../axios-server';
 
+const isDev = (process.env.NODE_ENV === 'development');
 
 export const getFandomsFromDBStart = () =>{
-    console.log('[actions: fandoms] - getFandomsFromDBStart')
+    isDev && console.log('[actions: fandoms] - getFandomsFromDBStart')
     return{
         type: actionTypes.GET_FANDOMS_START
     };
 };
 
 export const getFandomsFromDBSuccess = (fandoms) =>{
-    console.log('[actions: fandoms] - getFandomsFromDBSuccess')
+    isDev && console.log('[actions: fandoms] - getFandomsFromDBSuccess')
     return{
         type: actionTypes.GET_FANDOMS_SUCCESS,
         fandoms: fandoms
@@ -18,7 +19,7 @@ export const getFandomsFromDBSuccess = (fandoms) =>{
 };
 
 export const getFandomsFromDBFail = (error) =>{
-    console.log('[actions: fandoms] - getFandomsFromDBFail')
+    isDev && console.log('[actions: fandoms] - getFandomsFromDBFail')
     return{
         type: actionTypes.GET_FANDOMS_FAIL,
         error: error
@@ -26,7 +27,7 @@ export const getFandomsFromDBFail = (error) =>{
 };
 
 export const getFandomsFromDB = () =>{
-    console.log('[actions: fandoms] - getFandomsFromDB')
+    isDev && console.log('[actions: fandoms] - getFandomsFromDB')
     return dispatch =>{
         dispatch(getFandomsFromDBStart())
         return axios.get('/db/getAllFandoms')
@@ -41,14 +42,14 @@ export const getFandomsFromDB = () =>{
 };
 
 export const editFandomDataStart = () =>{
-    console.log('[actions: fandom.js] - editFandomDataStart')
+    isDev && console.log('[actions: fandom.js] - editFandomDataStart')
     return{
         type: actionTypes.EDIT_FANDOM_START
     };
 };
 
 export const editFandomDataSuccess = (message,fandoms) =>{
-    console.log('[actions: fandom.js] - editFandomDataSuccess')
+    isDev && console.log('[actions: fandom.js] - editFandomDataSuccess')
     return{
         type: actionTypes.EDIT_FANDOM_SUCCESS,
         fandoms: fandoms,
@@ -57,7 +58,7 @@ export const editFandomDataSuccess = (message,fandoms) =>{
 };
 
 export const editFandomDataFail = (error) =>{
-    console.log('[actions: fandom.js] - editFandomDataFail')
+    isDev && console.log('[actions: fandom.js] - editFandomDataFail')
     return{
         type: actionTypes.EDIT_FANDOM_FAIL,
         error: error
@@ -65,7 +66,7 @@ export const editFandomDataFail = (error) =>{
 };
 
 export const addFandomToDB = (fandomName,mode,fandom,mainImage,mainImageGif,iconImage,fanficImage) =>{
-    console.log('[actions: fandom.js] - addFandomToDB')
+    isDev && console.log('[actions: fandom.js] - addFandomToDB')
     let images = '';
     images = (mainImage!==false)        ? (images+`&mainImage=${mainImage}`) : '';
     images = (mainImageGif!==false)     ? (images+`&mainImageGif=${mainImageGif}`) : images;
@@ -87,7 +88,7 @@ export const addFandomToDB = (fandomName,mode,fandom,mainImage,mainImageGif,icon
 };
 
 export const deleteFandomFromDB = (id,fandomName) =>{
-    console.log('[actions: fandom.js] - deleteFandomFromDB')
+    isDev && console.log('[actions: fandom.js] - deleteFandomFromDB')
     return dispatch =>{
         dispatch(editFandomDataStart())
         return axios.post(`/db/deleteFandom?id=${id}&fandomName=${fandomName.replace("&","%26")}`)
@@ -103,7 +104,7 @@ export const deleteFandomFromDB = (id,fandomName) =>{
 };
 
 export const getFandom = (fandom) =>{
-    console.log('[actions: fandom.js] - getFandom')
+    isDev && console.log('[actions: fandom.js] - getFandom')
     return{
         type: actionTypes.GET_FANDOM,
         fandom: fandom
@@ -111,24 +112,20 @@ export const getFandom = (fandom) =>{
 }
 
 export const getLastUpdateDate = () =>{
-    console.log('[actions: fandom.js] - getLastUpdateDate')
+    isDev && console.log('[actions: fandom.js] - getLastUpdateDate')
     return dispatch =>{
-        //dispatch(editFandomDataStart())
         return axios.get(`/db/getLastUpdateDate`)
         .then(res =>{
             return res.data
-            //dispatch(getLastUpdateDate(res.data));
-            //return true;
         })
         .catch(error =>{
             return false
-            //dispatch(editFandomDataFail(error))
         })  
     };    
 }
 
 export const getUserFandomsFromDBSuccess = (userFandoms) =>{
-    console.log('[actions: fandom.js] - getUserFandomsFromDBSuccess')
+    isDev && console.log('[actions: fandom.js] - getUserFandomsFromDBSuccess')
     return{
         type: actionTypes.GET_USER_FANDOMS_SUCCESS,
         userFandoms: userFandoms
@@ -136,7 +133,7 @@ export const getUserFandomsFromDBSuccess = (userFandoms) =>{
 };
 
 export const getUserFandoms = (userEmail) =>{
-    console.log('[actions: fandoms.js] - getUserFandoms')
+    isDev && console.log('[actions: fandoms.js] - getUserFandoms')
     return dispatch =>{
         dispatch(getFandomsFromDBStart())
         return axios.post(`/db/getUserFandoms?userEmail=${userEmail}`)
@@ -152,7 +149,7 @@ export const getUserFandoms = (userEmail) =>{
 }
 
 export const addFandomToUserFavorite = (userEmail,fandom,status) =>{
-    console.log('[actions: fandoms.js] - addFandomToUserFavorite')
+    isDev && console.log('[actions: fandoms.js] - addFandomToUserFavorite')
     return dispatch =>{
         return axios.post(`/db/addFandomToUserFavorites?userEmail=${userEmail}&fandomName=${fandom}&status=${status}`)
         .then(() =>{

@@ -4,7 +4,6 @@ let EPub = require("epub");
 const cheerio = require('cheerio');
 
 const { saveFanficToDB } = require('../helpers/functions/saveFanficToDB');
-const { getUrlBodyFromSite } = require('../ff/helpers/getUrlBodyFromSite');
 const { fixStringForPath } = require('../../helpers/fixStringForPath');
 const { getDataFromWattpadEpub } = require('../fileReader/epub/helpers/getDataFromWattpadEpub')
 const Path = require('path');

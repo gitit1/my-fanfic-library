@@ -1,5 +1,3 @@
-
-const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 const funcs = require('../../helpers/index')
 const { deleteFanficFromDBInt } = require('../../../db/CRUD/Fanfics/deleteFanficFromDB');

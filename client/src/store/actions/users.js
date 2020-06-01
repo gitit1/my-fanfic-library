@@ -2,6 +2,9 @@ import * as actionTypes from './actionTypes';
 import axios from '../axios-server';
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../../utils/setAuthToken";
+
+const isDev = (process.env.NODE_ENV === 'development');
+
 // Register User
 export const registerUser = (userData, history) => dispatch => {
     axios.post("/users/register", userData).then(res => 
@@ -65,7 +68,7 @@ export const logoutUser = () => dispatch => {
 
 // Register User
 export const contactUs = (userData) => dispatch => {
-  console.log('[Users] actions  - contactUs')
+  isDev && console.log('[Users] actions  - contactUs')
   return axios.post("/contactUs", userData).then(res => {
             return(res.data)
     }).catch(err =>
@@ -84,7 +87,7 @@ export const setCurrentUserData = decoded => {
 };
 
 export const getFullUserData = (userEmail) => dispatch => {
-  console.log('[Users] actions  - getFullUserData')
+  isDev && console.log('[Users] actions  - getFullUserData')
   return axios.post(`/db/getFullUserData?userEmail=${userEmail}`).then(res => {
       dispatch(setCurrentUserData(res.data));
   }).catch(err =>
