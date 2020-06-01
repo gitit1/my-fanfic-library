@@ -23,8 +23,20 @@ exports.saveAsSimilarFanfic = async (similar, fandomName, id1, id2) => {
             fanfic1.AuthorURL_FF = fanfic2.AuthorURL;
             fanfic1.URL_FF = fanfic2.URL;
             fanfic1.SimilarCheck = fanfic2.FanficID;
+            fanfic1.Comments  = (fanfic1.Comments < fanfic2.Comments) ? fanfic2.Comments : fanfic1.Comments;
+            fanfic1.Kudos  = (fanfic1.Kudos < fanfic2.Kudos) ? fanfic2.Kudos : fanfic1.Kudos;
+            fanfic1.Bookmarks  = (fanfic1.Bookmarks < fanfic2.Bookmarks) ? fanfic2.Bookmarks : fanfic1.Bookmarks;
             fanfic1.LastUpdateOfNote = todayDate.getTime();
             if (fanfic2.image) { fanfic1.image = fanfic2.image }
+            if ((fanfic2.NumberOfChapters > fanfic1.NumberOfChapters) && !fanfic1.Complete) {
+                fanfic1.NumberOfChapters = fanfic2.NumberOfChapters;
+                fanfic1.Complete = fanfic2.Complete;
+                fanfic1.Words = fanfic2.Words;
+                fanfic1.PublishDate = fanfic2.PublishDate;
+                fanfic1.LastUpdateOfFic = fanfic2.LastUpdateOfFic;
+                fanfic1.LastUpdateOfNote = fanfic2.LastUpdateOfNote;
+            }
+
             await funcs.saveFanficToDB(fandomName, fanfic1, collection);
             await deleteFanficFromDBInt(fandomName, fanfic2.FanficID, fanfic2.Source, fanfic2.Complete, fanfic2.Delete, collection);
             resolve(true)
@@ -33,7 +45,7 @@ exports.saveAsSimilarFanfic = async (similar, fandomName, id1, id2) => {
             fanfic1.LastUpdateOfNote = todayDate.getTime();
 
             fanfic2.SimilarCheck= 'unique';
-            fanfic2.LastUpdateOfNote = todayDate.getTime()
+            fanfic2.LastUpdateOfNote = todayDate.getTime();
 
             await funcs.saveFanficToDB(fandomName, fanfic1, collection);
             await funcs.saveFanficToDB(fandomName, fanfic2, collection);

@@ -81,7 +81,7 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 fanfic.Complete = true;
             }
         });
-
+        
         fanfic.Description = $('.z-padtop').children().remove().end().text().trim();
         if (!fanfic.Complete) {
             fanfic.Complete = false;
@@ -118,88 +118,55 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             const fileName = fixStringForPath(`${fanfic.Author}_${fanfic.FanficTitle} (${exsistsFanfic.FanficID})`);
 
             exsistsFanfic.Deleted = false;
-
-            if (!isLinkedToFF && Source === 'AO3') {
-                // Exsist as ao3 but not have ff linked
-                console.log(msg1(`-----Found Similar (Exist as AO3 but not linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
-                log.info(`-----Found Similar (Exist as AO3 but not linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
-               
-                exsistsFanfic.FanficID_FF = fanfic.FanficID;
-                exsistsFanfic.URL_FF = fanfic.URL;
-                exsistsFanfic.AuthorURL_FF = fanfic.AuthorURL;
-                exsistsFanfic.HasFFLink = true;
-
-                exsistsFanfic.Status = 'update';
-                exsistsFanfic.StatusDetails = 'old';
+            if(Source === 'AO3'){
+                console.log(msg1(`-----Found Similar In AO3: ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
+                log.info(`-----Found Similar In AO3: ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
+                // Check if fanfic is not linked to ff
+                if(!isLinkedToFF){
+                    console.log(msg2(`!!!!! was not linked to FF, Linking it now...`));
+                    log.info(`!!!!! was not linked to FF, Linking it now...`);
+                    exsistsFanfic.FanficID_FF = fanfic.FanficID;
+                    exsistsFanfic.URL_FF = fanfic.URL;
+                    exsistsFanfic.AuthorURL_FF = fanfic.AuthorURL;
+                    exsistsFanfic.HasFFLink = true;                   
+                }
                 // Check if ff is more updated
                 if ((fanfic.NumberOfChapters > NumberOfChapters) && !Complete) {
-                    console.log(msg1(`----- FF is more updated - saving the data`));
+                    console.log(msg3(`!!!!! FF is more updated - saving the data...`));
+                    log.info(`!!!!! FF is more updated - saving the data...`);
                     exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
                     exsistsFanfic.Complete = fanfic.Complete;
                     exsistsFanfic.Words = fanfic.Words;
                     exsistsFanfic.PublishDate = fanfic.PublishDate;
                     exsistsFanfic.LastUpdateOfFic = fanfic.LastUpdateOfFic;
-                    exsistsFanfic.LastUpdateOfNote = fanfic.LastUpdateOfNote;
+                    exsistsFanfic.Status = 'update';
+                    exsistsFanfic.StatusDetails = 'old';  
                     await funcs.downloadFanfic(fanfic.URL, Source, fileName, 'epub', fandomName, exsistsFanfic.FanficID, collection);
                 }
                 // Add Image (if needed)
                 if (!hasImage && linkHasImage) {
-                    exsistsFanfic.image = imageName;
+                    console.log(msg4(`!!!!! Exsist with ao3 with linked ff but with no image - getting FF image...`));
+                    log.info(`!!!!! Exsist with ao3 with linked ff but with no image - getting FF image...`);
+                    exsistsFanfic.image = imageName; 
+                    exsistsFanfic.Status = 'update';
+                    exsistsFanfic.StatusDetails = 'image';
                     await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
                 }
-                // Update DB
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-            } else if (isLinkedToFF && Source === 'AO3' && (fanfic.NumberOfChapters > NumberOfChapters) && !Complete) {
-                console.log(msg1(`-----Found Similar (Exist as AO3 && linekd to FF but FF is more updated): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
-                log.info(`-----Found Similar (Exist as AO3 && linekd to FF but FF is more updated): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
-                exsistsFanfic.NumberOfChapters = fanfic.NumberOfChapters;
-                exsistsFanfic.Complete = fanfic.Complete;
-                exsistsFanfic.Words = fanfic.Words;
-                exsistsFanfic.PublishDate = fanfic.PublishDate;
-                exsistsFanfic.LastUpdateOfFic = fanfic.LastUpdateOfFic;
-                exsistsFanfic.LastUpdateOfNote = fanfic.LastUpdateOfNote;
-                exsistsFanfic.Status = 'update';
-                exsistsFanfic.StatusDetails = 'old';
-                exsistsFanfic.HasFFLink = true;
+                if(isDeleted){
+                    console.log(msg5(`!!!!! Found Deleted from ao3 but not from FF`));
+                    log.info(`!!!!! Found Deleted from ao3 but not from FF`);
+                    exsistsFanfic.Deleted = false;
+                    exsistsFanfic.Status = 'update';
+                    exsistsFanfic.StatusDetails = 'not deleted';
+                }
 
-                // Add Image (if needed)
-                if (!hasImage && linkHasImage) {
-                    exsistsFanfic.image = imageName;
-                    await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
-                }
+                exsistsFanfic.LastUpdateOfNote = fanfic.LastUpdateOfNote;
+                exsistsFanfic.Comments  = (exsistsFanfic.Comments < fanfic.Comments) ? fanfic.Comments : exsistsFanfic.Comments;
+                exsistsFanfic.Kudos  = (exsistsFanfic.Kudos < fanfic.Kudos) ? fanfic.Kudos : exsistsFanfic.Kudos;
+                exsistsFanfic.Bookmarks  = (exsistsFanfic.Bookmarks < fanfic.Bookmarks) ? fanfic.Bookmarks : exsistsFanfic.Bookmarks;
+
                 // Update DB
                 await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-                await funcs.downloadFanfic(fanfic.URL, Source, fileName, 'epub', fandomName, exsistsFanfic.FanficID, collection);
-            } else if (isLinkedToFF && !isDeleted && !hasImage && linkHasImage && Source === 'AO3') {
-                // Exsist with ao3 with linked ff but with no image (and ff has image)
-                console.log(msg2(`-----Found Similar (Exsist with ao3 with linked ff but with no image): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
-                log.info(`-----Found Similar (Exsist with ao3 with linked ff but with no image): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
-                // Add Image 
-                exsistsFanfic.image = imageName;
-                await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
-                // Update DB
-                exsistsFanfic.Status = 'update';
-                exsistsFanfic.StatusDetails = 'image';
-                exsistsFanfic.HasFFLink = true;
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-            } else if (isLinkedToFF && isDeleted && Source === 'AO3') {
-                // Exsist as ao3 with ff but deleted from ao3 
-                console.log(msg3(`-----Found Similar (Exsist as ao3 with ff but deleted from ao3): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
-                log.info(`-----Found Similar (Exsist as ao3 with ff but deleted from ao3 ): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);
-                exsistsFanfic.Deleted = false;
-                exsistsFanfic.Status = 'update';
-                exsistsFanfic.StatusDetails = 'not deleted';
-                exsistsFanfic.HasFFLink = true;
-                // Add Image (if needed)
-                if (!hasImage && linkHasImage) {
-                    exsistsFanfic.image = imageName;
-                    await funcs.downloadImageFromLink(linkHasImage, imagePath, function () { console.log('done'); });
-                }
-                // Update DB
-                await funcs.saveFanficToDB(fandomName, exsistsFanfic);
-            } else if (isLinkedToFF && Source === 'AO3'){
-                console.log(msg4(`-----Found Similar (Exist as AO3 && linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`));
-                log.info(`-----Found Similar (Exist as AO3 && linekd to FF): ${exsistsFanfic.FanficID} , FF_ID: ${fanfic.FanficID}`);                
             } else if (Source === 'FF') {
                 console.log(msg5(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`));
                 log.info(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`);
