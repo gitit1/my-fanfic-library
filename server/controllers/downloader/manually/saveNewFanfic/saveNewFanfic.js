@@ -1,8 +1,6 @@
 
-const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 const multer = require('multer');
-const fs = require('fs-extra');
 
 const {fixStringForPath} = require('../../../helpers/fixStringForPath.js');
 const funcs = require('../../helpers/index');
