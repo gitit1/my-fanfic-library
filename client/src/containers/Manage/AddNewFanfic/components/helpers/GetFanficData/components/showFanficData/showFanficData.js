@@ -18,6 +18,7 @@ import Favorite from './Favorite.js'
 import Finished from './Finished.js'
 import InProgress from './InProgress.js'
 import AddCategories from '../../../../../../../Fanfic/components/ShowFanficData/UserData/AddCategories/AddCategories'
+import SavedFile from '../../../../../../../Fanfic/components/ShowFanficData/UserData/SavedFile/SavedFile'
 
 const ShowFanficData = ({userData,fanfic,categoriesTemp,size,getCategories,saveCategories,markAs,showCategory,
                          markStatus,inputCategoryFlag,showSelectCategory,showUserData,toggleChapterB}) => {
@@ -47,6 +48,9 @@ const ShowFanficData = ({userData,fanfic,categoriesTemp,size,getCategories,saveC
                 </section>
                 <section className='card_content_stat'>
                     <Stat fanfic={fanfic}/> 
+                </section>
+                <section className='card_content_saved_as'>
+                    <SavedFile fanfic={fanfic} />    
                 </section>
                 {showUserData &&
                     <section className='card_content_userData'>
