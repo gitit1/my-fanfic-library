@@ -33,9 +33,25 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
 
     if (!ao3Flag && !ffFlag) { return [0, 0] }
 
+    let getFanficsAO3 = [0,0]
+
+    if(ao3Flag){
+        const searchKeysArr = fandom.SearchKeys.split(',');
+        console.log('searchKeysArr:',searchKeysArr)
+
+        for (let i = 0; i < searchKeysArr.length; i++) {
+            if(i==0){
+                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysArr[i].trim(), '');
+            } else {
+                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysArr[i].trim(), searchKeysArr[0].trim());
+            }
+            getFanficsAO3[0] = getFanficsAO3[0] + getFanficsTemp[0];
+            getFanficsAO3[1] = getFanficsAO3[1] + getFanficsTemp[1];
+        }
+    }
+
     const log2 = logger.createRollingFileLogger(opts);
 
-    getFanficsAO3 = ao3Flag && await ao3.ao3GetFanfics(jar, log, fandom, type);
     getFanficsFF = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type);
 
     const allFanfics = getFanficsAO3 && getFanficsFF ? getFanficsFF[0] : getFanficsAO3 ? getFanficsAO3[0] : getFanficsFF[0];
@@ -45,7 +61,6 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
     console.log('savedFanfics:', savedFanfics);
     msg('end');
     return [allFanfics, savedFanfics];
-
 }
 exports.getDeletedFanfics = async (log, fandomName, collection) => {
     msg('start', `getDeletedFanfics - ${fandomName}`);
@@ -61,9 +76,8 @@ exports.saveMissingFanfics = async (fandom) => {
     return saveMissingFanfics;
 }
 exports.getFanficDataFromFile = async (req, res) => {
-    msg('start', 'getFanficDataFromFile');
-
     const { fandomName, filetype, fileName, isDeleted } = req.query;
+    msg('start', `getFanficDataFromFile, ${filetype.toLowerCase()}`);
     const deleted = isDeleted === 'true' ? true : false;
 
     switch (filetype.toLowerCase()) {
@@ -140,7 +154,7 @@ exports.saveNewFanfic = async (req, res) => {
 }
 
 exports.updateExistFanfic = async (req, res) => {
-    msg('start', `updateExistFanfic - ${fandomName}`);
+    msg('start', `updateExistFanfic`);
     await manually.updateExistFanfic(req.query.fandomName, req, res);
     msg('end');
     res.send();
@@ -180,11 +194,11 @@ exports.testingArea = async (req, res) => {
 const msg = (type, msg) => {
     switch (type) {
         case 'start':
-            console.log(clc.xterm(88).bgXterm(253)('------------------------ Start ------------------------'));
+            // console.log(clc.xterm(88).bgXterm(253)('------------------------ Start ------------------------'));
             console.log(clc.xterm(56).bgXterm(253)(`[Downloader Handler] ${msg}`));
             break;
         case 'end':
-            console.log(clc.xterm(88).bgXterm(253)('------------------------ End ------------------------'));
+            // console.log(clc.xterm(88).bgXterm(253)('------------------------ End ------------------------'));
             break;
         default:
             break;
