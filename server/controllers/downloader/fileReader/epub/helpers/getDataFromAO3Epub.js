@@ -6,7 +6,6 @@ exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
     console.log(clc.blue('[Downloader - Epub Reader] getDataFromAO3Epub()'));
     return new Promise(async function (resolve, reject) {
         let $ = cheerio.load(data);
-
         let fanfic = {};
         let todayDate = new Date();
 
