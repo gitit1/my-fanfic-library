@@ -8,7 +8,7 @@ const { getUrlBodyFromAo3 } = require('../../../helpers/getUrlBodyFromAo3');
 
 const funcs = require('../../../../helpers/index');
 
-exports.getDataFromFanficPage = async (jar, log, page, fandom) => {
+exports.getDataFromFanficPage = async (jar, log, page, fandom, searchKeys) => {
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()')); 
     const { FandomName, AutoSave, SaveMethod, Collection, SavedFanficsLastUpdate } = fandom;
     let fanfic = await getDataFromPage(page, FandomName);
@@ -19,6 +19,7 @@ exports.getDataFromFanficPage = async (jar, log, page, fandom) => {
     console.log(`newFic: ${check[0]},updated: ${check[1]}`)
     let newFic = check[0], updated = check[1];
     fanfic = check[2];
+    fanfic["SearchKeys"] = searchKeys;
 
     pageUrl = 'https://archiveofourown.org' + page.find('div.header h4 a').first().attr('href') + '?view_adult=true';
     let counter = -1;

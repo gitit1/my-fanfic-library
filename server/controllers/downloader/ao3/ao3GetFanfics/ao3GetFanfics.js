@@ -29,7 +29,7 @@ exports.ao3GetFanfics = async (jar, log, fandom, type, searchKeys, mainSearchKey
 
         for (let pageNumber = 0; pageNumber < pagesArray.length; pageNumber++) {
             promises.push(limit(async () => {
-                await ao3Funcs.getDataFromAO3FandomPage(jar, pageNumber, numberOfPages, log, pagesArray[pageNumber], fandom, mainSearchKeys)
+                await ao3Funcs.getDataFromAO3FandomPage(jar, pageNumber, numberOfPages, log, pagesArray[pageNumber], fandom, searchKeys, mainSearchKeys)
             }));
         }
 
