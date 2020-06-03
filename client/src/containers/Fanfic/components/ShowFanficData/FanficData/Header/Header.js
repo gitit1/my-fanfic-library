@@ -10,7 +10,7 @@ const Header = (props) => {
     const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false;
 
     const url = (URL && URL.length<2 || !URL) ? '' : URL.includes("http") ? URL : `http://${URL}`;
-    const authorURL = (AuthorURL && AuthorURL.length<2 || !AuthorURL) ? '' : AuthorURL.includes("http") ? URL : `http://${AuthorURL}`;
+    const authorURL = (AuthorURL && AuthorURL.length<2 || !AuthorURL) ? '' : AuthorURL.includes("http") ? AuthorURL : `http://${AuthorURL}`;
     return (
         <React.Fragment>
             <div className='card_content_header_left'>
