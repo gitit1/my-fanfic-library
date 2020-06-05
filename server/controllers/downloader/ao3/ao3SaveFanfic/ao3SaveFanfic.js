@@ -15,7 +15,7 @@ exports.ao3SaveFanfic = async (jar, fandomName, download, url, fanfic) => {
     return await new Promise(async function (resolve, reject) {
         if (download == 'true') {
             let urlBody = await getUrlBodyFromAo3(jar, url) //TODO: fix it 'epub'
-            await saveFanficToServerHandler(jar, url, urlBody, fandomName, 'epub', 'epub').then(async fanficInfo => {
+            await saveFanficToServerHandler(jar, url, urlBody, fandomName, 'epub').then(async fanficInfo => {
                 if (Number(fanficInfo[0]) > 0) {
                     fanfic.SavedFic = true
                     fanfic.NeedToSaveFlag = false

@@ -10,6 +10,7 @@ const FandomSchema = new Schema({
     SaveMethod:                 {type: String},
     FanficsInFandom:            {type: Number},
     Collection:                 {type: String},
+    FFSearchUrl:                {type: String},
     Priority:                   {type:Number},
     Info:                       {
                                     Year:                       {type: Number},
