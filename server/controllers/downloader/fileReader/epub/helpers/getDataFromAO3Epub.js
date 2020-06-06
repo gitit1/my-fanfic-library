@@ -19,8 +19,8 @@ exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
         fanfic["URL"] = $('.message a').last().attr('href');
 
         let nextText = $('dd:contains("Chapters:")').length > 0 ? 'Chapters' : 'Words';
-        let tesupdatedText = $('dd:contains("Completed:")').length > 0 ? 'Completed' : 
-                             $('dd:contains("Updated:")').length > 0 ? 'Updated' : nextText;
+        let tesupdatedText = $('dd:contains("Completed:")').length > 0 ? 'Completed' :
+            $('dd:contains("Updated:")').length > 0 ? 'Updated' : nextText;
 
 
         let fanficPublishDate = $('dd:contains("Published:")').text().split('Published: ')[1].split(`${tesupdatedText}: `)[0];
@@ -35,13 +35,13 @@ exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
                     fanfic.PublishDate;
         }
 
-        if($('dd:contains("Chapters:")').length === 0){
+        if ($('dd:contains("Chapters:")').length === 0) {
             fanfic["NumberOfChapters"] = 1;
             fanfic["Complete"] = true;
-        }else{
+        } else {
             let chapters = $('dd:contains("Chapters:")').text().split('Chapters: ')[1].split('Words: ')[0];
             fanfic["NumberOfChapters"] = Number(chapters.split('/')[0]);
-    
+
             let chapCurrent = fanfic.NumberOfChapters;
             let chapEnd = chapters.split('/')[1];
             fanfic["Complete"] = (String(chapEnd) !== '?' && (Number(chapCurrent) === Number(chapEnd))) ? true : false;
@@ -53,8 +53,21 @@ exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
 
         fanfic["FanficTitle"] = $('h1').text();
 
-        fanfic["Author"] = $('.byline a').text();
-        fanfic["AuthorURL"] = $('.byline a').attr('href');
+        if ($('.byline a').length > 1) {
+            $('.byline').children('a').each(index => {
+                let authorTag = $('.byline').children('a').eq(index);
+                if (index === 0) {
+                    fanfic["Author"] = authorTag.text();
+                    fanfic["AuthorURL"] = authorTag.attr('href');
+                } else {
+                    fanfic[`Author${index}`] = authorTag.text();
+                    fanfic[`AuthorURL${index}`] = authorTag.attr('href');
+                }
+            });
+        } else {
+            fanfic["Author"] = $('.byline a').text();
+            fanfic["AuthorURL"] = $('.byline a').attr('href');
+        }
 
         let rating = ($('dt:contains("Rating:")').length > 0) && $('dt:contains("Rating:")').next('dd').text();
         switch (rating) {
@@ -98,7 +111,7 @@ exports.getDataFromAO3Epub = async (fandomName, data, deleted) => {
         fanfic["Deleted"] = deleted;
 
         let series = $('dt:contains("Series:")').length > 0 && $('dt:contains("Series:")').next('dd').find('a').text();
-        if(series){
+        if (series) {
             fanfic["Series"] = series;
             fanfic["SeriesPart"] = fanfic["Series"] && Number($('dt:contains("Series:")').next('dd').text().split('Part ')[1].split(' of')[0]);
             fanfic["SeriesURL"] = fanfic["Series"] && $('dt:contains("Series:")').next('dd').find('a').attr('href');
