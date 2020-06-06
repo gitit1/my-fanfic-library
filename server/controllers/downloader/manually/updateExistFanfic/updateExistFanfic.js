@@ -9,7 +9,6 @@ exports.updateExistFanfic = async (fandomName,req,res) =>{
     let upload = multer({}).any();
     await upload(req, res, async function (err) {
         let fanficObj = await createFanficObj(fandomName,req.body);
-        console.log('fanficObj:',fanficObj)
 
         await mongoose.dbFanfics.collection(fandomName).updateOne({FanficID: Number(fanficObj.FanficID)},{$set: fanficObj}, {upsert: true})
     });

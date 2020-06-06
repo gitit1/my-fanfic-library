@@ -8,7 +8,7 @@ const { getUrlBodyFromAo3 } = require('../../../helpers/getUrlBodyFromAo3');
 
 const funcs = require('../../../../helpers/index');
 
-exports.getDataFromFanficPage = async (jar, log, page, fandom, savedNotAuto) => {
+exports.getDataFromFanficPage = async (jar, log, page, fandom, searchKeys) => {
     //console.log(clc.blueBright('[ao3 controller] getDataFromPage()')); 
     const { FandomName, AutoSave, SaveMethod, Collection, SavedFanficsLastUpdate } = fandom;
     let fanfic = await getDataFromPage(page, FandomName);
@@ -19,18 +19,19 @@ exports.getDataFromFanficPage = async (jar, log, page, fandom, savedNotAuto) => 
     console.log(`newFic: ${check[0]},updated: ${check[1]}`)
     let newFic = check[0], updated = check[1];
     fanfic = check[2];
+    fanfic["SearchKeys"] = searchKeys;
 
     pageUrl = 'https://archiveofourown.org' + page.find('div.header h4 a').first().attr('href') + '?view_adult=true';
     let counter = -1;
 
-    if ((newFic || updated || savedNotAuto || SavedFanficsLastUpdate === undefined) && AutoSave) {
+    if ((newFic || updated || SavedFanficsLastUpdate === undefined) && AutoSave) {
 
         return await getUrlBodyFromAo3(jar, pageUrl, log).then(async urlBody => {
             if (newFic || fanfic["PublishDate"] === 0) {
                 fanfic["PublishDate"] = await getPublishDate(urlBody)
             }
 
-            await saveFanficToServerHandler(jar, fanfic['URL'], urlBody, FandomName, SaveMethod, savedNotAuto).then(async fanficInfo => {
+            await saveFanficToServerHandler(jar, fanfic['URL'], urlBody, FandomName, SaveMethod).then(async fanficInfo => {
 
                 if (Number(fanficInfo[0]) > 0) {
                     fanfic["SavedFic"] = true

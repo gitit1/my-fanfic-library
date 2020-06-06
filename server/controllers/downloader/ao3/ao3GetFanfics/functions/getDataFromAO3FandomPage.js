@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 const { sleep } = require('../../../../helpers/sleep.js')
 const { getDataFromFanficPage } = require('./getDataFromFanficPage/getDataFromFanficPage');
 
-exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, page, fandom, savedNotAuto) => {
+exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, page, fandom, searchKeys, mainSearchKeys) => {
     // console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));
     try {
         let $ = cheerio.load(page), donePromise = 0;
@@ -16,10 +16,24 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
             await sleep(4000);
-            console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count+1} / ${n} ] from page [ ${pageNumber+1} / ${numberOfPages} ]`));
-            let page = $('ol.work').children('li').eq(count);
+            console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count + 1} / ${n} ] from page [ ${pageNumber + 1} / ${numberOfPages} ]`));
+            let page = $('ol.work').children('li').eq(count), hasMainSearchKeys;
 
-            await getDataFromFanficPage(jar, log, page, fandom, savedNotAuto).then(res => {
+            if (mainSearchKeys !== '') {
+                hasMainSearchKeys = false;
+                let relTag = page.find('.tags').children('.relationships');
+                relTag.each(index => {
+                    if (!hasMainSearchKeys && index <= 1) {
+                        hasMainSearchKeys = relTag.eq(index).find('a').text() === mainSearchKeys;
+                    };
+                });
+                // I don't want to get specific fanfics:
+                hasMainSearchKeys = fandom.IgnoreSearchKeys && fandom.IgnoreSearchKeys.includes(relTag.eq(0).find('a').text()) ? true : false
+            } else {
+                hasMainSearchKeys = false //HE IS THE MAIN SO I DONT CARE IF HE HAS THEM OR NOT - NEET TO RUN ON IT ANYWAY
+            }
+
+            !hasMainSearchKeys && await getDataFromFanficPage(jar, log, page, fandom, searchKeys).then(res => {
                 donePromise++;
                 res === 0 && counter++;
             });

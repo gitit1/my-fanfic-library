@@ -9,6 +9,7 @@ exports.fixStringForPath = (fileName) =>{
     newFileName = newFileName.replace(/\'/g, "");
     newFileName = newFileName.replace(/\//g, "-");
     newFileName = newFileName.replace(/\#/g, "");
+    newFileName = newFileName.replace(/\*/g, "-");
     newFileName = newFileName.replace(/\:/g, "");
     newFileName = newFileName.replace(/\❤️/g, "");
     newFileName = newFileName.replace(/\|/g, "_");
