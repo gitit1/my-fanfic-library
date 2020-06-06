@@ -28,11 +28,23 @@ exports.getDataFromPage = (page,fandomName) =>{
     
         fanfic["FanficTitle"]           =       page.find('div.header h4.heading a').first().text();
         fanfic["URL"]                   =       'https://archiveofourown.org'+ page.find('div.header h4 a').first().attr('href');
-        fanfic["Author"]                =       page.find('div.header h4.heading a[rel=author]').text();
-        fanfic["Author"]                =       (fanfic["Author"]===fanfic["FanficTitle"]||fanfic["Author"]=="") ? 'Anonymous' : fanfic["Author"]
-    
-        fanfic["AuthorURL"]             =       'https://archiveofourown.org'+ page.find('div.header h4.heading a[rel=author]').attr('href');
-    
+
+        if (page.find('div.header h4.heading a[rel=author]').length > 1) {
+            page.find('div.header h4.heading').children('a[rel=author]').each(index => {
+                let authorTag = page.find('div.header h4.heading').children('a[rel=author]').eq(index);
+                if (index === 0) {
+                    fanfic["Author"] = authorTag.text();
+                    fanfic["AuthorURL"] = 'https://archiveofourown.org'+ authorTag.attr('href');
+                } else {
+                    fanfic[`Author${index}`] = authorTag.text();
+                    fanfic[`AuthorURL${index}`] = 'https://archiveofourown.org'+ authorTag.attr('href');
+                }
+            });
+        } else {
+            fanfic["Author"]                =       page.find('div.header h4.heading a[rel=author]').text();
+            fanfic["Author"]                =       (fanfic["Author"]===fanfic["FanficTitle"]||fanfic["Author"]=="") ? 'Anonymous' : fanfic["Author"];
+            fanfic["AuthorURL"]             =       'https://archiveofourown.org'+ page.find('div.header h4.heading a[rel=author]').attr('href');
+        } 
         
         rating = page.find('span.rating span').text();
         switch(rating){
