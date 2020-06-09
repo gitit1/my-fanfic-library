@@ -15,7 +15,7 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
 
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
-            await sleep(4000);
+            pageNumber === 1 ? await sleep(3000) : await sleep(2500);
             console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count + 1} / ${n} ] from page [ ${pageNumber + 1} / ${numberOfPages} ]`));
             let page = $('ol.work').children('li').eq(count), hasMainSearchKeys;
 
@@ -23,21 +23,23 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
                 hasMainSearchKeys = false;
                 let relTag = page.find('.tags').children('.relationships');
                 relTag.each(index => {
+                    hasMainSearchKeys = fandom.IgnoreSearchKeys && fandom.IgnoreSearchKeys.includes(relTag.eq(index).find('a').text()) ? true : false;
                     if (!hasMainSearchKeys && index <= 1) {
                         hasMainSearchKeys = relTag.eq(index).find('a').text() === mainSearchKeys;
                     };
+                    if (hasMainSearchKeys) return false;
                 });
-                // I don't want to get specific fanfics:
-                hasMainSearchKeys = fandom.IgnoreSearchKeys && fandom.IgnoreSearchKeys.includes(relTag.eq(0).find('a').text()) ? true : false
             } else {
                 hasMainSearchKeys = false //HE IS THE MAIN SO I DONT CARE IF HE HAS THEM OR NOT - NEET TO RUN ON IT ANYWAY
             }
-
-            !hasMainSearchKeys && await getDataFromFanficPage(jar, log, page, fandom, searchKeys).then(res => {
-                donePromise++;
-                res === 0 && counter++;
-            });
-            if (donePromise == n) { return counter }
+            if (!hasMainSearchKeys) {
+                await getDataFromFanficPage(jar, log, page, fandom, searchKeys).then(res => {
+                    donePromise++;
+                    res === 0 && counter++;
+                });
+            } else {
+                if (donePromise == n) { return counter }
+            }
         }
     } catch (e) { console.log(e); }
 }
