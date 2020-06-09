@@ -62,9 +62,9 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
     msg('end');
     return [allFanfics, savedFanfics];
 }
-exports.getDeletedFanfics = async (log, fandomName, collection) => {
-    msg('start', `getDeletedFanfics - ${fandomName}`);
-    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandomName, collection);
+exports.getDeletedFanfics = async (log, fandom) => {
+    msg('start', `getDeletedFanfics - ${fandom.FandomName}`);
+    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandom);
     msg('end');
     return getDeletedFanfics;
 }

@@ -4,7 +4,6 @@
 const clc = require("cli-color");
 const downloader = require('../../downloader/downloader')
 const now = require('performance-now')
-
 const getDeletedFanfics = async (socket, log, fandom) => {
     const { FandomName, Collection } = fandom
     log.info(`--------------------------------Start--------------------------------`);
@@ -18,7 +17,7 @@ const getDeletedFanfics = async (socket, log, fandom) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">checkIfDeletedFromAO3()</span>`);
 
     let startTime = now();
-    let deletedCounters = await downloader.getDeletedFanfics(log, FandomName, Collection);
+    let deletedCounters = await downloader.getDeletedFanfics(log, fandom);
     console.log('deletedCounters', deletedCounters)
     let endTime = now();
     console.log(clc.cyanBright(`Deleted Fanfics data of ${FandomName} was updated!`));
