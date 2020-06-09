@@ -4,105 +4,153 @@ const mongoose = require('../../../../config/mongoose');
 let request = require('request')
 const pLimit = require('p-limit');
 
-const FandomModal = require('../../../../models/Fandom');
+
 const FanficSchema = require('../../../../models/Fanfic');
-const { loginToAO3 } = require('../helpers/loginToAO3');
+const ao3Funcs = require('../ao3GetFanfics/functions/index');
+const { updateFandomFanficsNumbers } = require('../../helpers/index');
 
-const func = require('../../helpers/index');
+// TODO: ADD THE OOPSITE: CHECK IF IS MARKED AS DELETED BUT EXSISTS
 
-exports.ao3GetDeletedFanfics = async (jar, log, fandomName, collection) => {
-    console.log(clc.bgGreenBright('[ao3 controller] checkIfDeletedFromAO3()'));
+exports.ao3GetDeletedFanfics = async (jar, log, fandom) => {
+    return new Promise(async function (resolve, reject) {
+        const { Collection, FandomName, SearchKeys } = fandom;
+        const collectionName = (Collection && Collection !== '') ? Collection : FandomName;
+        const msg = clc.xterm(127).bgXterm(39);
+        const msgH = clc.xterm(125).bgXterm(247);
+        request = request.defaults({ jar: jar, followAllRedirects: true });
 
-    request = request.defaults({ jar: jar, followAllRedirects: true });
-    await loginToAO3(jar)
+        await ao3Funcs.loginToAO3(jar);
+        const ao3URL = await ao3Funcs.createAO3Url(SearchKeys);
 
-    const collectionName = (collection && collection !== '') ? collection : fandomName;
-    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema, collectionName);
+        let numberOfPages = await ao3Funcs.getNumberOfSearchPages(jar, ao3URL, log);
+        console.log(msg('numberOfPages:', numberOfPages));
+        let pagesArray = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
 
-    let promises = [], gotDeletedArray = [];
+        const limit = pLimit(1);
 
-    const getFanficList = () => {
-        return new Promise(function (resolve, reject) {
-            FanficDB.find({ Source: 'AO3', 'FandomName': fandomName }).sort({ ['LastUpdateOfFic']: -1, ['LastUpdateOfNote']: 1 }).exec(async function (err, fanfics) {
-                const limit = pLimit(3);
+        let promises = [], fanficsInAO3 = [];
 
-                for (let i = 0; i < fanfics.length; i++) {
-                    promises.push(limit(async () => {
-                        await new Promise(resolve => setTimeout(resolve, 4000));
-                        await checkIfDeleted(jar, fanfics[i], i, collectionName, fandomName)
-                    }));
-                }
-                resolve()
-            });
+        for (let pageNumber = 0; pageNumber < pagesArray.length; pageNumber++) {
+            promises.push(limit(async () => {
+                const fanficsInPage = await getFanficsIds(pagesArray[pageNumber]);
+                fanficsInAO3 = fanficsInAO3.concat(fanficsInPage);
+            }));
+        }
+
+        await Promise.all(promises).then(async () => {
+            let fanficsInDB = await getListOfFanficsIdsFromDBWhoAreNotDeleted(FandomName, collectionName);
+            console.log(msgH('-------Deleting Fanfics:-----------')); log.info('-------Deleting Fanfics:-----------');
+            console.log(msg('Number of Fanfics in AO3:', fanficsInAO3.length)); log.info(`Number of Fanfics in AO3: ${fanficsInAO3.length}`);
+            console.log(msg('Number of AO3 (Not Deleted) Fanfics in DB:', fanficsInDB.length)); log.info(`Number of Fanfics in DB: ${fanficsInDB.length}`);
+            
+            let deletedFanfics = await compareBetweenAO3andDB(fanficsInAO3, fanficsInDB);
+            
+            if (deletedFanfics.length > 0) {
+                const allDeletedFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'FandomName': FandomName, 'Deleted': true });
+                console.log(msg('Number of New Deleted Fanfics:', deletedFanfics.length)); log.info(`Number of New Deleted Fanfics: ${deletedFanfics.length}`);
+                console.log(msg('Number of All Deleted Fanfics Before Saving New Ones:', allDeletedFanfics));
+                await saveDeletedFanficsInDB(deletedFanfics, collectionName, true);
+                const allDeletedFanficsFull = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'FandomName': FandomName, 'Deleted': true });
+                console.log(msg('Number of All Deleted Fanfics After Saving New Ones:', allDeletedFanficsFull)); log.info(`Number of All Deleted Fanfics After Saving New Ones: ${allDeletedFanficsFull}`);                
+                console.log(msg('Array of New Deleted Fanfics:', deletedFanfics)); log.info(`Array of New Deleted Fanfics: ${deletedFanfics}`);
+                await updateFandomFanficsNumbers(fandom, 'AO3');
+            } else {
+                console.log(msgH('There are no new deleted fanfics'));
+            }
+            console.log(msgH('-----------------------------'));
+
+            console.log(msgH('-------Restoring Fanfics:-----------')); log.info('-------Restoring Fanfics:-----------');
+            fanficsInDB = await getListOfFanficsIdsFromDBWhoAreDeleted(FandomName, collectionName);
+            console.log(msg('Number of Fanfics in AO3:', fanficsInAO3.length));
+            console.log(msg('Number of AO3 (Deleted Fanfics) in DB:', fanficsInDB.length));
+
+            let restoredFanfics = await compareBetweenAO3andDBOfDeleted(fanficsInAO3, fanficsInDB);
+            if (restoredFanfics.length > 0) {
+                const allDeletedFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'FandomName': FandomName, 'Deleted': true });
+                console.log(msg('Number of Restored Fanfics:', restoredFanfics.length));
+                console.log(msg('Number of All Deleted Fanfics Before Saving Restored Ones:', allDeletedFanfics));
+                await saveDeletedFanficsInDB(deletedFanfics, collectionName, false);
+                console.log(msg('Array of Restored Fanfics:', restoredFanfics)); log.info(`Array of Restored Fanfics: ${restoredFanfics}`);
+                const allDeletedFanficsFull = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'FandomName': FandomName, 'Deleted': true });
+                console.log(msg('Number of All Deleted Fanfics After Saving New Ones:', allDeletedFanficsFull)); log.info(`Number of All Deleted Fanfics After Saving New Ones: ${allDeletedFanficsFull}`);                
+                await updateFandomFanficsNumbers(fandom, 'AO3');
+            } else {
+                console.log(msgH('There are no restored fanfics'));
+            }
+            console.log(msgH('-----------------------------'));
         });
-    }
-
-    const checkIfDeleted = (jar, fanfic, index, collectionName, fandomName) => {
-        let url = fanfic.URL;
-        return new Promise(function (resolve, reject) {
-            request.get({ url, jar: jar, credentials: 'include' }, async function (err, httpResponse, body) {
-                try {
-                    func.delay(4000).then(async () => {
-                        console.log('fanfic number: ', index, ' , id: ', fanfic.FanficID);
-                        log.info(`-----Fanfic number: ${index} , id: ${fanfic.FanficID}`);
-
-                        if (httpResponse === undefined || httpResponse.body === undefined) {
-                            reject(console.log(clc.red('Error in checkIfDeleted: body undefined: ', fanfic.FanficID, ' url: ', fanfic.URL)))
-                        } else {
-                            let $ = cheerio.load(httpResponse.body);
-                            if (err) {
-                                reject(console.log(clc.red('Error in checkIfDeleted: ', err)))
-                            } else {
-                                if ($('#main h2').text().includes("Error 404") || $('#main div.error').text().includes("you don't have permission")) {
-                                    console.log(clc.redBright(`Deleted fanfic:: ${fanfic.FanficTitle}`));
-                                    log.info(`-----Deleted fanfic: ${fanfic.FanficID}`);
-                                    if (!fanfic.Deleted) {
-                                        gotDeletedArray.push(fanfic);
-                                        log.info(`-----Added deleted fanfic flag to fanfic: ${fanfic.FanficID}`);
-                                        fanfic.LastUpdateOfNote = new Date().getTime();
-                                        await mongoose.dbFanfics.collection(collectionName).updateOne({ 'FanficID': fanfic.FanficID }, { $set: { Deleted: true, 'SavedFic': true } })
-                                        await mongoose.dbFanfics.collection('deletedFanfics').deleteOne(fanfic)
-                                    }
-                                } else if (httpResponse.body.includes("Retry later")) {
-                                    console.log('site is down, move on');
-                                    log.info(`-----Retry later: ${fanfic.FanficID}`);
-                                    await func.delay(40000);
-                                } else if (fanfic.Deleted) {
-                                    console.log(clc.redBright(`Restored fanfic:: ${fanfic.FanficTitle}`));
-                                    log.info(`-----Found fanfic who restored: ${fanfic.FanficID}`);
-                                    fanfic.LastUpdateOfNote = new Date().getTime();
-                                    await mongoose.dbFanfics.collection(collectionName).updateOne({ 'FanficID': fanfic.FanficID }, { $set: { Deleted: false, 'SavedFic': true } })
-                                    await mongoose.dbFanfics.collection('deletedFanfics').deleteOne(fanfic)
-                                }
-                                resolve();
-                            }
-                        }
-                    })
-                } catch (error) {
-                    console.log('error in checkIfDeleted:', error)// handle error
-                }
-            });
-        });
-    }
-
-
-    await getFanficList();
-
-    return await Promise.all(promises).then(async () => {
-        let DeletedCounter = [];
-        console.log('fandomName:', fandomName)
-        console.log('gotDeletedArray.length:', gotDeletedArray.length)
-        const deletedFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'FandomName': fandomName, 'Source': 'AO3', 'Deleted': true });
-        log.info(`-----deletedFanfics: ${deletedFanfics}`);
-        await FandomModal.updateOne({ 'FandomName': fandomName }, { $set: { 'AO3.DeletedFanfics': deletedFanfics } }, (err, result) => { (err) ? console.log('error:', err) : console.log('update deleted!') });
-
-        DeletedCounter.push(gotDeletedArray.length);
-        DeletedCounter.push(deletedFanfics);
-
-        return DeletedCounter
-    }).catch(error => console.log(clc.red('Error in checkIfDeletedFromAO3()', error)));
+    })
 }
 
-//TODO: add status deleted too fanfic for my update follow up
+const getFanficsIds = (page) => {
+    return new Promise(async function (resolve, reject) {
+        let $ = cheerio.load(page), fanficsIds = [];
+        $('ol.work').children('li').each(index => {
+            let id = Number($('ol.work').children('li').eq(index).attr('id').replace('work_', ''));
+            fanficsIds.push(id)
+        });
+        resolve(fanficsIds)
+    })
+}
 
-//problem : 20372752
+const getListOfFanficsIdsFromDBWhoAreNotDeleted = (fandomName, collectionName) => {
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema, collectionName);
+
+    return new Promise(function (resolve, reject) {
+        FanficDB.find({ Source: 'AO3', 'FandomName': fandomName, 'Deleted': false }).exec(async function (err, fanfics) {
+            let fanficsInDB = [];
+
+            for (let i = 0; i < fanfics.length; i++) {
+                fanficsInDB.push(fanfics[i].FanficID);
+            }
+            resolve(fanficsInDB)
+        });
+    });
+}
+
+const compareBetweenAO3andDB = (fanficsInAO3, fanficsInDB) => {
+    return new Promise(function (resolve, reject) {
+        for (let i = 0; i < fanficsInAO3.length; i++) {
+            position = fanficsInDB.indexOf(fanficsInAO3[i]);
+            if (~position) fanficsInDB.splice(position, 1);
+        }
+        resolve(fanficsInDB)
+    })
+}
+
+const saveDeletedFanficsInDB = (deletedFanfics, collectionName, type) => {
+    return new Promise(async (resolve, reject) => {
+        for (let i = 0; i < deletedFanfics.length; i++) {
+            await mongoose.dbFanfics.collection(collectionName).updateOne({ 'FanficID': deletedFanfics[i] }, { $set: { Deleted: type, 'SavedFic': true } });
+        }
+        resolve();
+    })
+}
+
+// ------------------------------------------
+
+const getListOfFanficsIdsFromDBWhoAreDeleted = (fandomName, collectionName) => {
+    const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema, collectionName);
+
+    return new Promise(function (resolve, reject) {
+        FanficDB.find({ Source: 'AO3', 'FandomName': fandomName, 'Deleted': true }).exec(async function (err, fanfics) {
+            let fanficsInDB = [];
+
+            for (let i = 0; i < fanfics.length; i++) {
+                fanficsInDB.push(fanfics[i].FanficID);
+            }
+            resolve(fanficsInDB)
+        });
+    });
+}
+
+const compareBetweenAO3andDBOfDeleted = (fanficsInAO3, fanficsInDB) => {
+    return new Promise(function (resolve, reject) {
+        let restoredFanfics = [];
+        for (let i = 0; i < fanficsInAO3.length; i++) {
+            position = fanficsInDB.indexOf(fanficsInAO3[i]);
+            if (~position) restoredFanfics.push(fanficsInAO3[i]);
+        }
+        resolve(restoredFanfics)
+    })
+}

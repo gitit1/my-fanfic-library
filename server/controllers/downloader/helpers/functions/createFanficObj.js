@@ -25,7 +25,7 @@ exports.createFanficObj = async (fandomName, fanficData) => {
                 fanficData.Characters && fanficData.Characters !== '' ? { characters: fanficData.Characters.split(',') } : undefined,
                 fanficData.Tags && fanficData.Tags !== '' ? { tags: fanficData.Tags.split(',') } : undefined
             ].filter(x => x !== undefined),
-            FandomsTags: fanficData.FandomsTags !== '' ? fanficData.FandomsTags.split(',') : undefined,
+            FandomsTags: fanficData.FandomsTags && fanficData.FandomsTags !== '' ? fanficData.FandomsTags.split(',') : undefined,
             Categories: !fanficData.Categories ? undefined : fanficData.Categories !== '' ? fanficData.Categories.split(',') : undefined,
             Description: fanficData.Description,
             Language: fanficData.Language,

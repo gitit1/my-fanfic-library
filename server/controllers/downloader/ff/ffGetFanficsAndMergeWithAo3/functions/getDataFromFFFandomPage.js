@@ -16,7 +16,7 @@ exports.getDataFromFFFandomPage = async (log, fandomName, pageNumber, numberOfPa
 		
         for (let count = 0; count < n; count++) {
             console.log('Sleeping...');
-            await sleep(4000);
+            await sleep(3000);
 		    console.log(clc.magenta(`Done sleeping... Getting info of fanfic [ ${count+1} / ${n} ] from page [ ${pageNumber} / ${numberOfPages} ]`));
             let data = $('.zpointer').eq(count).html();
 

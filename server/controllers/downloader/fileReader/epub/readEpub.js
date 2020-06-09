@@ -1,6 +1,7 @@
 const clc = require("cli-color");
 let EPub = require("epub");
 const { getDataFromAO3Epub } = require('./helpers/getDataFromAO3Epub');
+const { getDataFromFFEpub } = require('./helpers/getDataFromFFEpub');
 const { getDataFromFF2BookEpub } = require('./helpers/getDataFromFF2BookEpub');
 const { getDataFromWattpadEpub } = require('./helpers/getDataFromWattpadEpub');
 
@@ -25,6 +26,18 @@ const getEpubMetadata = (fandomName, tempPath, deleted) => {
                 case 'preface'://ao3
                     epub.getChapter("preface", async function (err, data) {
                         let fanfic = await getDataFromAO3Epub(fandomName, data, deleted);
+                        resolve(fanfic)
+                    });
+                    break;
+                // case 'titlepage'://ao3
+                //     epub.getChapter("preface", async function (err, data) {
+                //         let fanfic = await getDataFromAO3Epub(fandomName, data, deleted);
+                //         resolve(fanfic)
+                //     });
+                //     break;                    
+                case 'chapter1'://ff
+                    epub.getChapter("chapter1", async function (err, data) {
+                        let fanfic = await getDataFromFFEpub(fandomName, data, deleted);
                         resolve(fanfic)
                     });
                     break;
