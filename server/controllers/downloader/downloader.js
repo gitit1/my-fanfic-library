@@ -33,26 +33,35 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
 
     if (!ao3Flag && !ffFlag) { return [0, 0] }
 
-    let getFanficsAO3 = [0,0]
+    let getFanficsAO3 = [0, 0]
+    let getFanficsFF = [0, 0]
 
-    if(ao3Flag){
-        const searchKeysArr = fandom.SearchKeys.split(',');
-        console.log('searchKeysArr:',searchKeysArr)
+    if (ao3Flag) {
+        const searchKeysAO3Arr = fandom.SearchKeys.split(',');
+        console.log('AO3 - searchKeysArr:', searchKeysAO3Arr)
 
-        for (let i = 0; i < searchKeysArr.length; i++) {
-            if(i==0){
-                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysArr[i].trim(), '');
+        for (let i = searchKeysAO3Arr.length - 1; i >= 0; i--) {
+            if (i == 0) {
+                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysAO3Arr[i].trim(), '');
             } else {
-                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysArr[i].trim(), searchKeysArr[0].trim());
+                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysAO3Arr[i].trim(), searchKeysAO3Arr[0].trim());
             }
             getFanficsAO3[0] = getFanficsAO3[0] + getFanficsTemp[0];
             getFanficsAO3[1] = getFanficsAO3[1] + getFanficsTemp[1];
         }
     }
 
-    const log2 = logger.createRollingFileLogger(opts);
+    if(ffFlag){
+        const searchKeysFFArr = fandom.FFSearchUrl.split(',');
+        const log2 = logger.createRollingFileLogger(opts);
+        console.log('FF - searchKeysArr:', searchKeysFFArr)
+        for (let i = 0; i < searchKeysFFArr.length; i++) {
+            getFanficsTemp = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type, searchKeysFFArr[i].trim());
+            getFanficsFF[0] = getFanficsFF[0] + getFanficsTemp[0];
+            getFanficsFF[1] = getFanficsFF[1] + getFanficsTemp[1];
+        }
+    }
 
-    getFanficsFF = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type);
 
     const allFanfics = getFanficsAO3 && getFanficsFF ? getFanficsFF[0] : getFanficsAO3 ? getFanficsAO3[0] : getFanficsFF[0];
     const savedFanfics = getFanficsAO3 && getFanficsFF ? getFanficsFF[1] + getFanficsAO3[1] : getFanficsAO3 ? getFanficsAO3[1] : getFanficsFF[1];
@@ -64,9 +73,16 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
 }
 exports.getDeletedFanfics = async (log, fandom) => {
     msg('start', `getDeletedFanfics - ${fandom.FandomName}`);
-    let getDeletedFanfics = await ao3.ao3GetDeletedFanfics(jar, log, fandom);
+    const searchKeysArr = fandom.SearchKeys.split(',');
+    let deletedFanfics = 0, restoredFanfics = 0, allDeleted = 0;
+    for (let i = 0; i < searchKeysArr.length; i++) {
+        let results = await ao3.ao3GetDeletedFanfics(jar, log, fandom, searchKeysArr[i].trim());
+        deletedFanfics = deletedFanfics + results[0];
+        restoredFanfics = restoredFanfics + results[1];
+        allDeleted = results[2];
+    }
     msg('end');
-    return getDeletedFanfics;
+    return [deletedFanfics, restoredFanfics, allDeleted];
 }
 exports.saveMissingFanfics = async (fandom) => {
     //TODO: NOT WORKING PROPERLY - NEED TO FIX IT TO MATCH BOTH FF AND AO3
@@ -119,8 +135,8 @@ exports.getNewFanfic = async (req, res) => {
             res.send(data);
         })
     } else if (type === 'automatic') {
-        data =  url.includes('archiveofourown.org') ? await ao3.ao3AddNewFanfic(jar, url, fandomName) :
-                url.includes('fanfiction.net') ? await ff.ffAddNewFanfic(url, fandomName)
+        data = url.includes('archiveofourown.org') ? await ao3.ao3AddNewFanfic(jar, url, fandomName) :
+            url.includes('fanfiction.net') ? await ff.ffAddNewFanfic(url, fandomName)
                 : null;
         msg('end');
         res.send(data);

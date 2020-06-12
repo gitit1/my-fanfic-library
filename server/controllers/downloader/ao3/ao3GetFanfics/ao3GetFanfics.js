@@ -10,7 +10,7 @@ exports.ao3GetFanfics = async (jar, log, fandom, type, searchKeys, mainSearchKey
     return new Promise(async function (resolve, reject) {
         const { FanficsLastUpdate, Priority } = fandom;
         let promises = [], fanficsInFandom, savedFanficsCurrent = 0; 
-        let pagePatialLimit = (Priority === 3) ? 1 : 2;
+        let pagePatialLimit = (Priority === 1) ? 2 : 1;
         let promiseLimit = (Priority === 1) ? 6 : (Priority === 2) ? 8 : 10;
         const limit = (type === 'partial' || FanficsLastUpdate === undefined) ? pLimit(1) : pLimit(promiseLimit);
 
