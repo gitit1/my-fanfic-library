@@ -15,7 +15,7 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
 
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
-            pageNumber === 1 ? await sleep(3000) : await sleep(2500);
+            pageNumber === 1 ? await sleep(2000) : await sleep(1500);
             console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count + 1} / ${n} ] from page [ ${pageNumber + 1} / ${numberOfPages} ]`));
             let page = $('ol.work').children('li').eq(count), hasMainSearchKeys;
 
@@ -23,7 +23,7 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
                 hasMainSearchKeys = false;
                 let relTag = page.find('.tags').children('.relationships');
                 relTag.each(index => {
-                    hasMainSearchKeys = fandom.IgnoreSearchKeys && fandom.IgnoreSearchKeys.includes(relTag.eq(index).find('a').text()) ? true : false;
+                    hasMainSearchKeys = fandom.IgnoreSearchKeys && fandom.IgnoreSearchKeys.includes(relTag.eq(0).find('a').text()) ? true : false;
                     if (!hasMainSearchKeys && index <= 1) {
                         hasMainSearchKeys = relTag.eq(index).find('a').text() === mainSearchKeys;
                     };

@@ -7,24 +7,24 @@ const ffHelpers = require('../helpers/index');
 const { getDataFromFFFandomPage } = require('./functions/getDataFromFFFandomPage')
 const { updateFandomFanficsNumbers } = require('../../helpers/index')
 
-exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
+exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type, ffSearchUrl) => {
     console.log(clc.blue(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
-    const { FandomName, FFSearchUrl, Collection } = fandom;
+    const { FandomName, Collection } = fandom;
 
-    if(!FFSearchUrl){
+    if (!ffSearchUrl) {
         return;
     }
 
     let numberOfPages = 0, fanficsInFandom, savedFanficsCurrent = 0;
 
-    let body = await ffHelpers.getUrlBodyFromSite(FFSearchUrl);
+    let body = await ffHelpers.getUrlBodyFromSite(ffSearchUrl);
 
     let $ = cheerio.load(body);
 
     tempNum = $('#content_wrapper center a:contains("Last")').attr('href');
     numberOfPages = tempNum ? Number(tempNum.split('&p=')[1]) : $('#content_wrapper center a:contains("Next »")') ? 2 : 1;
 
-    numberOfPages = (type === 'partial') ?  1 : numberOfPages;
+    numberOfPages = (type === 'partial') ? 1 : numberOfPages;
 
     console.log('numberOfPages:', numberOfPages);
 
@@ -34,7 +34,7 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
 
     for (let i = 1; i < numberOfPages + 1; i++) {
         promises.push(limit(async () => {
-            await getDataFromFFFandomPage(log, FandomName, i, numberOfPages, `${FFSearchUrl}&p=${i}`, Collection)
+            await getDataFromFFFandomPage(log, FandomName, i, numberOfPages, `${ffSearchUrl}&p=${i}`, Collection)
         }));
     }
 
@@ -45,6 +45,6 @@ exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type) => {
 
     fanficsInFandom = await updateFandomFanficsNumbers(fandom, 'FF');
 
-    return [fanficsInFandom,savedFanficsCurrent]; 
+    return [fanficsInFandom, savedFanficsCurrent];
 
 }
