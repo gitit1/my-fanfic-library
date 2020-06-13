@@ -26,7 +26,7 @@ exports.getDataFromFFEpub = async (fandomName, data, deleted) => {
 
         fanfic.Description = $('div div div').text();
 
-        if(fandomName === 'SwanQueen'){
+        if (fandomName === 'SwanQueen') {
             fanfic.FandomsTags = ["Once Upon a Time"];
         }
 
@@ -73,8 +73,8 @@ exports.getDataFromFFEpub = async (fandomName, data, deleted) => {
                 fanfic.Kudos = Number(attr.split(': ')[1].replace(' ', '').replace(',', ''));
             } else if (attr.includes('Follows:')) {
                 fanfic.Bookmarks = Number(attr.split(': ')[1].replace(' ', '').replace(',', ''));
-            // } else if (attr.includes('id:')) {
-            //     fanfic.FanficID = Number(attr.split(': ')[1].replace(' ', ''));
+                // } else if (attr.includes('id:')) {
+                //     fanfic.FanficID = Number(attr.split(': ')[1].replace(' ', ''));
             } else if (attr.includes('Complete')) {
                 fanfic.Complete = true;
             } else if (attr.includes('Published')) {
@@ -85,12 +85,11 @@ exports.getDataFromFFEpub = async (fandomName, data, deleted) => {
 
         });
 
-        fanfic.LastUpdateOfFic      =       fanfic.LastUpdateOfFic ? fanfic.LastUpdateOfFic : fanfic.PublishDate;
-        fanfic.LastUpdateOfNote     =       new Date().getTime();
-        fanfic.Deleted              =       deleted;
+        fanfic.LastUpdateOfFic = fanfic.LastUpdateOfFic ? fanfic.LastUpdateOfFic : fanfic.PublishDate;
+        fanfic.LastUpdateOfNote = new Date().getTime();
+        fanfic.Deleted = deleted;
         fanfic.Tags = tags;
 
-        console.log('fanfic:', fanfic)
         resolve(fanfic)
     })
 }

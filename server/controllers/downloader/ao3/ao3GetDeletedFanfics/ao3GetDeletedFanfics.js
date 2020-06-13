@@ -18,7 +18,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandom) => {
         const msg = clc.xterm(127).bgXterm(39);
         const msgH = clc.xterm(125).bgXterm(247);
         request = request.defaults({ jar: jar, followAllRedirects: true });
-        
+
         await ao3Funcs.loginToAO3(jar);
         const searchKeysArr = SearchKeys.split(',');
         let pagesArray = [];

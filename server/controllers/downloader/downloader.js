@@ -51,7 +51,7 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
         }
     }
 
-    if(ffFlag){
+    if (ffFlag) {
         const searchKeysFFArr = fandom.FFSearchUrl.split(',');
         const log2 = logger.createRollingFileLogger(opts);
         console.log('FF - searchKeysArr:', searchKeysFFArr)
