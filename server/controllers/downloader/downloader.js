@@ -73,16 +73,9 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
 }
 exports.getDeletedFanfics = async (log, fandom) => {
     msg('start', `getDeletedFanfics - ${fandom.FandomName}`);
-    const searchKeysArr = fandom.SearchKeys.split(',');
-    let deletedFanfics = 0, restoredFanfics = 0, allDeleted = 0;
-    for (let i = 0; i < searchKeysArr.length; i++) {
-        let results = await ao3.ao3GetDeletedFanfics(jar, log, fandom, searchKeysArr[i].trim());
-        deletedFanfics = deletedFanfics + results[0];
-        restoredFanfics = restoredFanfics + results[1];
-        allDeleted = results[2];
-    }
+    let results = await ao3.ao3GetDeletedFanfics(jar, log, fandom);
     msg('end');
-    return [deletedFanfics, restoredFanfics, allDeleted];
+    return [results[0], results[1], results[2]];
 }
 exports.saveMissingFanfics = async (fandom) => {
     //TODO: NOT WORKING PROPERLY - NEED TO FIX IT TO MATCH BOTH FF AND AO3
