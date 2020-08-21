@@ -8,7 +8,6 @@ exports.getFanfics = (skip, limit, fandomName, filters, sortObj, list, readingLi
         skip = (Number(skip) < 0) ? 0 : Number(skip)
         limit = (Number(limit) < 0) ? 0 : Number(limit)
         let promises = [];
-        let fullFilters = { 'FandomName': fandomName, ...filters }
 
         console.log(clc.bgGreenBright('[db controller] getFanfics()'));
 
@@ -16,13 +15,15 @@ exports.getFanfics = (skip, limit, fandomName, filters, sortObj, list, readingLi
         console.log('sort 3:', sort)
 
         if (list === 'true') {
-            readingList.FanficsFandoms.map(async fandom => {
+            for (let fandomIndex = 0; fandomIndex < readingList.FanficsFandoms.length; fandomIndex++) {
+                let fandom = readingList.FanficsFandoms[fandomIndex];
                 const fandomData = await FandomModal.find({ 'FandomName': fandom }, function (err, fandoms) { if (err) { throw err; } });
                 const collectionName = (fandomData[0].Collection && fandomData[0].Collection !== '') ? fandomData[0].Collection : fandom;
-
+                let fullFilters = { 'FandomName': fandom, ...filters }     
+                
                 const FanficDB = mongoose.dbFanfics.model('Fanfic', FanficSchema, collectionName);
                 promises.push(getFanficsofFandoms(FanficDB, fullFilters, 0, 0));
-            });
+            }
 
             await Promise.all(promises).then(async fanfics => {
                 let arrfanfics = await fanfics.reduce(function (arr, e) { return arr.concat(e) })
@@ -31,6 +32,7 @@ exports.getFanfics = (skip, limit, fandomName, filters, sortObj, list, readingLi
             });
 
         } else {
+            let fullFilters = { 'FandomName': fandomName, ...filters }
             const fandomData = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
             const collectionName = (fandomData[0].Collection && fandomData[0].Collection !== '') ? fandomData[0].Collection : fandomName;
 

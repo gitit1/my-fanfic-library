@@ -7,7 +7,7 @@ import ReadingListImage from './ReadingListImage'
 
 const ShowReadingLists = (props) => {
     const { readingLists, userEmail, imageFlag, imageRlID } = props;
-    console.log('readingLists:', readingLists)
+
     return (
         readingLists.length > 0 &&
         <div className={classes.ReadingList}>

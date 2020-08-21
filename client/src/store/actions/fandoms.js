@@ -148,10 +148,10 @@ export const getUserFandoms = (userEmail) =>{
     }; 
 }
 
-export const addFandomToUserFavorite = (userEmail,fandom,status) =>{
+export const addFandomToUserFavorite = (userEmail,fandomName,status) =>{
     isDev && console.log('[actions: fandoms.js] - addFandomToUserFavorite')
     return dispatch =>{
-        return axios.post(`/db/addFandomToUserFavorites?userEmail=${userEmail}&fandomName=${fandom}&status=${status}`)
+        return axios.post(`/db/addFandomToUserFavorites?userEmail=${userEmail}&fandomName=${fandomName.replace("&","%26")}&status=${status}`)
         .then(() =>{
             return true;
         })

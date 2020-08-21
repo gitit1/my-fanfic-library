@@ -49,7 +49,7 @@ export const getFanficsFromDB = (fandomName,pageNumber,pageLimit,userEmail,list)
 //FOLLOW , FAVORITE , IGNORE
 export const addFanficToUserMarks = (userEmail,fandomName,fanficId,author,fanficTitle,source,markType,mark) =>{
     return dispatch =>{
-        return axios.post(`/db/addFanficToUserMarks?fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&userEmail=${userEmail}&markType=${markType}&mark=${mark}`)
+        return axios.post(`/db/addFanficToUserMarks?fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&userEmail=${userEmail}&markType=${markType}&mark=${mark}`)
         .then(res =>{
             return true;
         })
@@ -64,7 +64,7 @@ export const addFanficToUserStatus = (userEmail,fandomName,fanficId,author,fanfi
     let dateArg = data ? `&data=${data}` : '';
 
     return dispatch =>{
-        return axios.post(`/db/addFanficToUserStatus?fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&userEmail=${userEmail}&statusType=${statusType}&status=${status}${dateArg}`)
+        return axios.post(`/db/addFanficToUserStatus?fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&userEmail=${userEmail}&statusType=${statusType}&status=${status}${dateArg}`)
         .then(res =>{
             // dispatch(addFanficToUserFavoritesSuccess(fetchedFanfics.data));
             return true;
@@ -80,7 +80,7 @@ export const addFanficToUserStatus = (userEmail,fandomName,fanficId,author,fanfi
 export const saveCategories = (fandomName,fanficId,categoriesArray) =>{
     console.log('[actions: fanfics.js] - saveCategories')
     return dispatch =>{
-        return axios.post(`/db/saveCategories?fandomName=${fandomName}&fanficId=${fanficId}&categories=${categoriesArray}`)
+        return axios.post(`/db/saveCategories?fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}&categories=${categoriesArray}`)
         .then(res =>{
             // dispatch(addFanficToUserFavoritesSuccess(fetchedFanfics.data));
             return true;
@@ -129,7 +129,7 @@ export const getFilteredFanficsFromDB = (fandomName,userEmail,filters,pageLimit,
 export const saveReadingList = (userEmail,fandomName,fanficId,author,fanficTitle,source,name) =>{
     console.log('[actions: fanfics.js] - saveReadingList')
     return dispatch =>{
-        return axios.post(`/db/saveReadingList?userEmail=${userEmail}&fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
+        return axios.post(`/db/saveReadingList?userEmail=${userEmail}&fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
         .then(res =>{
             return res.data;
         })
@@ -142,7 +142,7 @@ export const saveReadingList = (userEmail,fandomName,fanficId,author,fanficTitle
 export const deleteFanficFromReadingList = (userEmail,fandomName,fanficId,author,fanficTitle,source,name)=>{
     console.log('[actions: fanfics.js] - deleteFanficFromReadingList')
     return dispatch =>{
-        return axios.post(`/db/deleteFanficFromReadingList?userEmail=${userEmail}&fandomName=${fandomName}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
+        return axios.post(`/db/deleteFanficFromReadingList?userEmail=${userEmail}&fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}&author=${author}&fanficTitle=${fanficTitle}&source=${source}&name=${name}`)
         .then(res =>{
             return res.data;
         })
@@ -183,7 +183,7 @@ export const saveImageOfReadingList = (userEmail,name,image) =>{
 export const deleteFanficFromDB = (fandomName,fanficId,source,complete,deleted)=>{
     console.log('[actions: fanfics.js] - saveReadingList')
     return dispatch =>{
-        return axios.post(`/db/deleteFanfic?fandomName=${fandomName}&fanficId=${fanficId}&source=${source}&complete=${complete}&deleted=${deleted}`)
+        return axios.post(`/db/deleteFanfic?fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}&source=${source}&complete=${complete}&deleted=${deleted}`)
         .then(() =>{
             return true;
         })
@@ -222,7 +222,7 @@ export const saveImageOfFanfic = (fandomName,fanficId,image) =>{
 
     return dispatch =>{
         dispatch(getFanficsFromDBStart())
-        return axios.post(`/db/saveImageOfFanfic?fandomName=${fandomName}&fanficId=${fanficId}`,image)
+        return axios.post(`/db/saveImageOfFanfic?fandomName=${fandomName.replace("&","%26")}&fanficId=${fanficId}`,image)
         .then(res =>{
             return res;
         })
