@@ -17,11 +17,9 @@ exports.getFanficsFromDB = async (req, res) => {
     const hasIgnoreList = ignoreList.length > 0 ? true : false;
 
     if (list === 'true') {
-        console.log('readingLists:', readingLists)
-        readingList = readingLissts[1].find(f => {
+        readingList = readingLists[1].find(f => {
             return f.Name === FandomName;
         });
-        console.log('readingList:', readingList)
         filters = hasIgnoreList ? { FanficID: { $nin: ignoreList }, FanficID: { $in: readingList.Fanfics } } : { FanficID: { $in: readingList.Fanfics } }
     } else {
         filters = hasIgnoreList ? { FanficID: { $nin: ignoreList } } : null;
