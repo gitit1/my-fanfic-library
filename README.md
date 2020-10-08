@@ -24,7 +24,7 @@ So I scraped the 3 biggest Fanfics sites (AO3, FF, Wattpad) and built my own pla
 
 And Much More...
 
-## And In More Deatiled words:
+## And In More Detailed words:
 
 ### How I built the site?
 "My Fanfic Library" site was built as a react learning site.
