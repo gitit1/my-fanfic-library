@@ -1,4 +1,9 @@
 ﻿# My Fanfic Library
+ 
+**http://www.myfanficslibrary.com/** - 
+In order to see data use the demo user:<br/>
+**username:**  test-user@test.com<br/>
+**password:**  test-user
 
 ### Description
 This is My biggest personal projects. I'm a huge reader of fanfics and the current sites are lacking.
