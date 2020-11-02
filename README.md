@@ -1,6 +1,6 @@
 ﻿# My Fanfic Library
- 
-**http://www.myfanficslibrary.com/** - 
+**http://mfl.gititregev.com/**<br/>
+**http://www.myfanficslibrary.com/** (lgbt Version) <br/>
 In order to see data use the demo user:<br/>
 **username:**  test-user@test.com<br/>
 **password:**  test-user
