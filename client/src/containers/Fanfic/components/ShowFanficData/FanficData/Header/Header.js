@@ -25,8 +25,8 @@ const Header = (props) => {
                     <Typography variant="subtitle1" >
                         <a href={url} target="_blank" rel="noopener noreferrer" className='title'>{FanficTitle}</a>
                         {(props.size === 's') ? <br /> : ' '} by&nbsp;
-                        <a href={authorURL} target="_blank" rel="noopener noreferrer">{Author}</a>
-                        {Author1 && <> , <a href={authorURL1} target="_blank" rel="noopener noreferrer">{Author1}</a></>}
+                        <a href={authorURL} target="_blank" rel="noopener noreferrer" className='author'>{Author}</a>
+                        {Author1 && <> , <a href={authorURL1} target="_blank" rel="noopener noreferrer" className='author'>{Author1}</a></>}
                         {props.rlMode && ` [${FandomName}]`}
                         {(props.size === 's') ?
                             <React.Fragment>
