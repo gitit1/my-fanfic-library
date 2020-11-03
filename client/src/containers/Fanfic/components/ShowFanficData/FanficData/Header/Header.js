@@ -10,9 +10,9 @@ const Header = (props) => {
         Author1, AuthorURL1 } = props.fanfic;
     const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false;
 
-    const url = (URL && URL.length < 2 || !URL) ? '' : URL.includes("http") ? URL : `http://${URL}`;
-    const authorURL = (AuthorURL && AuthorURL.length < 2 || !AuthorURL) ? '' : AuthorURL.includes("http") ? AuthorURL : `http://${AuthorURL}`;
-    const authorURL1 = (AuthorURL1 && AuthorURL1.length < 2 || !AuthorURL1) ? '' : AuthorURL1.includes("http") ? AuthorURL1 : `http://${AuthorURL1}`;
+    const url = (URL && (URL.length < 2 || !URL)) ? '' : URL.includes("http") ? URL : `http://${URL}`;
+    const authorURL = (AuthorURL && (AuthorURL.length < 2 || !AuthorURL)) ? '' : AuthorURL.includes("http") ? AuthorURL : `http://${AuthorURL}`;
+    const authorURL1 = (AuthorURL1 && (AuthorURL1.length < 2 || !AuthorURL1)) ? '' : AuthorURL1.includes("http") ? AuthorURL1 : `http://${AuthorURL1}`;
 
     return (
         <React.Fragment>
@@ -25,8 +25,8 @@ const Header = (props) => {
                     <Typography variant="subtitle1" >
                         <a href={url} target="_blank" rel="noopener noreferrer" className='title'>{FanficTitle}</a>
                         {(props.size === 's') ? <br /> : ' '} by&nbsp;
-                        <a href={authorURL} target="_blank" rel="noopener noreferrer">{Author}</a>
-                        {Author1 && <> , <a href={authorURL1} target="_blank" rel="noopener noreferrer">{Author1}</a></>}
+                        <a href={authorURL} target="_blank" rel="noopener noreferrer" className='author'>{Author}</a>
+                        {Author1 && <> , <a href={authorURL1} target="_blank" rel="noopener noreferrer" className='author'>{Author1}</a></>}
                         {props.rlMode && ` [${FandomName}]`}
                         {(props.size === 's') ?
                             <React.Fragment>

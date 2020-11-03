@@ -130,7 +130,7 @@ const FandomCard = (props) => {
                                     {latestFics[4] !== null &&
                                         <div className={classes.cardDataDetailsTypes}>
                                             <p>Latest Follow Fanfic:
-                                            <a href={buildFanficLink(latestFics[4])} target='_blank' className={classes.cardDataDetailsLink1}>
+                                            <a href={buildFanficLink(latestFics[4])} target='_blank' className={classes.cardDataDetailsLink1} rel="noopener noreferrer">
                                                     {latestFics[4].Author} - {latestFics[4].FanficTitle}
                                                 </a>
                                             </p>

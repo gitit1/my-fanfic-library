@@ -10,9 +10,9 @@ const News = () => (
         <p><span className={classes.Date}><strong>03-27-2020:</strong></span>
           <span className={classes.Content}>
             <ul>
-              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-6" target="_blank">[MFL-6] - Fanfic Page - fix empty tags (hidden)</a></li>
-              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-51" target="_blank">[MFL-51] - My Statics Page - not showing empty fandoms anymore</a></li>
-              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-8" target="_blank">[MFL-8] - Fixed ignore filter (now not showing anymore)</a></li>
+              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-6" target="_blank" rel="noopener noreferrer" >[MFL-6] - Fanfic Page - fix empty tags (hidden)</a></li>
+              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-51" target="_blank" rel="noopener noreferrer" >[MFL-51] - My Statics Page - not showing empty fandoms anymore</a></li>
+              <li><a href="https://myfanficslibrary.atlassian.net/browse/MFL-8" target="_blank" rel="noopener noreferrer" >[MFL-8] - Fixed ignore filter (now not showing anymore)</a></li>
             </ul>
           </span>
         </p>
@@ -21,7 +21,7 @@ const News = () => (
     <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>03-26-2020:</strong></span>
           <span className={classes.Content}>
-            <a href="https://myfanficslibrary.atlassian.net/browse/MFL-11" target="_blank">[MFL-11]</a>
+            <a href="https://myfanficslibrary.atlassian.net/browse/MFL-11" target="_blank" rel="noopener noreferrer" >[MFL-11]</a>
             <ul>
               <li>Added categories: 'Age Gap', 'Childhood Friends/Childhood Lovers', 'Crime/Mafia'</li>
               <li>Manager- Fix "add image" button on fanfic page</li>
@@ -33,14 +33,14 @@ const News = () => (
       <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>03-05-2020:</strong></span>
           <span className={classes.Content}>
-            Manager- created backup for db (server -b build funcionality & routing, client - button in manager page) <a href="https://myfanficslibrary.atlassian.net/browse/MFL-44" target="_blank">[MFL-44]</a>
+            Manager- created backup for db (server -b build funcionality & routing, client - button in manager page) <a href="https://myfanficslibrary.atlassian.net/browse/MFL-44" target="_blank" rel="noopener noreferrer" >[MFL-44]</a>
           </span>
         </p><p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
       <LazyLoad height={100} >
         <p><span className={classes.Date}><strong>02-05-2020:</strong></span>
           <span className={classes.Content}>
-            Added Sorting by reading date <a href="https://myfanficslibrary.atlassian.net/browse/MFL-9" target="_blank">[MFL-9]</a>
+            Added Sorting by reading date <a href="https://myfanficslibrary.atlassian.net/browse/MFL-9" target="_blank" rel="noopener noreferrer" >[MFL-9]</a>
           </span>
         </p><p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>
@@ -66,7 +66,7 @@ const News = () => (
         <p><span className={classes.Date}><strong>12-28-2019:</strong></span><span className={classes.Content}>Fix little bug in dashboard for new users</span></p>
         <p><span className={classes.Date}><strong>12-28-2019:</strong></span>
           <span className={classes.Content}>
-            Added logs for downloader methods <a href="https://myfanficslibrary.atlassian.net/browse/MFL-1" target="_blank">[MFL-1]</a>
+            Added logs for downloader methods <a href="https://myfanficslibrary.atlassian.net/browse/MFL-1" target="_blank" rel="noopener noreferrer" >[MFL-1]</a>
           </span>
         </p><p><span className={classes.Date}></span>&nbsp;</p>
       </LazyLoad>

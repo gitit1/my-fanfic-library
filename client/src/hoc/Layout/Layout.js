@@ -46,6 +46,7 @@ class Layout extends Component{
     render(){
         const {loading} = this.state;
         const {auth,children,size} = this.props;
+        console.log('size:',size)
         let page = loading ? null :(
             <div className='layout'>
                 <header>
@@ -54,9 +55,7 @@ class Layout extends Component{
                 <main>
                     {children}
                 </main>
-                <footer>
-                    <Footer lastUpdateDate={this.state.lastUpdateDate}/>
-                </footer>
+                { (size==='l' || size==='m') &&  <footer><Footer lastUpdateDate={this.state.lastUpdateDate}/></footer>  }
             </div>
         )
         return(

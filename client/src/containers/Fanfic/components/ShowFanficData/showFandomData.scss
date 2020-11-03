@@ -13,10 +13,6 @@
     max-width: 100%;
     background-color: #fafafa;
     display: flex;
-    // z-index:888;
-
-    // .border_AO3{border-top: 1px solid $color_AO3;}
-    // .border_FF{border-top: 1px solid $color_FF;}
 
     .card_media {
       width: 150px;
@@ -42,7 +38,6 @@
         opacity: 0.5;
       }
       .card_image_layer {
-        // background-color: rgba(75, 86, 160, 0.7);
         border-radius: 5%;
         width: 200px;
         height: 300px;
@@ -75,7 +70,10 @@
     .card_content {
       padding: 0;
 
-      // flex: '1 0 auto';
+      .author, .title, .series{
+        text-decoration: none !important;;
+        color: inherit;
+      }
 
       .card_content_header {
         width: 100%;

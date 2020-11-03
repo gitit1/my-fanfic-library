@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import ImageZoom from 'react-medium-image-zoom'
 import * as actions from '../../../../../store/actions';
 
-import CardMedia from '@material-ui/core/CardMedia';
 import {getRandomColor} from '../../../../../utils/sharedFunctions';
 import ImageUpload from '../../../../../components/ImageUpload/ImageUpload';
 import Button from '@material-ui/core/Button';
@@ -16,10 +15,7 @@ class FanficImage extends Component{
     color: getRandomColor()
   }
 
-  componentDidMount(){
 
-    this.setState({})
-  }
   saveImageOfFanfic = async () => {
     console.log('saveImageOfFanfic')
     const {fanfic,images,onSaveImageOfFanfic} = this.props;

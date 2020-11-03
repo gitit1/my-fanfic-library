@@ -1,4 +1,5 @@
 @import '../../style/_colors';
+@import '../../style/_varibles';
 
 .fanfics{
     width: 95%;
@@ -15,7 +16,7 @@
         margin: 0 auto;
     }
     .paginationGridButtom{
-        margin-top: 1%;
+        margin: 8px 0 8px 0;
     }
     .fanficNumbers{
         width: 100%;
@@ -43,9 +44,6 @@
     }
     .buttons{       
         width: 100%;
-        // margin-left: 0.5%;
-        // margin-right: 0.5%;
-        // float: right;
         position: relative;
         button{
             position: absolute;
@@ -57,7 +55,6 @@
     }
 
     .SwitchesPanel{
-        // height: 35px;
         width: 100%
     }
 
@@ -68,4 +65,12 @@
 
 .filterDrewer{
     width: 300px!important;
+}
+
+@media only screen and (max-width: $screenSizeS) {
+    .fanfics{
+        .paginationGridButtom{
+            margin: 12px 0 12px 0;
+        }
+    }
 }

@@ -30,7 +30,7 @@ class DuplicateTitles extends Component {
     }
 
     getFanficsData = async () => {
-        const { index, showFlag } = this.state;
+        const { index } = this.state;
         const { list, onGetFanficData, fandomName } = this.props;
 
         const id1 = list[index].uniqueIds[0];

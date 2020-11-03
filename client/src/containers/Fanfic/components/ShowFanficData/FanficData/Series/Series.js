@@ -6,7 +6,7 @@ const Series = (props) => {
     return(
         <React.Fragment>
             { hasSeries && 
-                <p>Part <span>{SeriesPart}</span> of <a href={SeriesURL} target='_blank' rel="noopener noreferrer">{Series}</a></p> 
+                <p>Part <span>{SeriesPart}</span> of <a href={SeriesURL} target='_blank' rel="noopener noreferrer" className='series'>{Series}</a></p> 
             }
         </React.Fragment>
     )

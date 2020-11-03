@@ -8,7 +8,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 import SwitchesPanel from './components/SwitchesPanel/SwitchesPanel'
 import Filters from './components/Filters/Filters';
-import { filtersArrayInit, filtersArrayAttr } from './components/Filters/assets/FiltersArray'
+import { filtersArrayInit } from './components/Filters/assets/FiltersArray'
 
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -192,17 +192,11 @@ class Fanfic extends Component {
                 }
                 break;
             case 'Delete':
-                console.log('DELETE!!!')
-                const { } = this.props;
                 await onDeleteFanfic(fandomName, fanficId, source, mark, deleted).then(async () => {
-                    // await onGetFilteredFanfics(fandomName,userEmail,filterArr,pageLimit,pageNumber).then(()=>{
                     let fanficsDeletedCount = (fanficsNumbers.fanficsDeletedCount - 1 <= 0) ? 0 : fanficsNumbers.fanficsDeletedCount - 1;
                     const fanficsCount = (this.props.counter === 0) ? fanficsNumbers.fanficsTotalCount : this.props.counter;
                     let newPagesCounter = Math.ceil(fanficsCount - 1 / pageLimit);
                     newPagesCounter = (pageNumber > newPagesCounter) ? newPagesCounter : pageNumber;
-                    // TODO: FIX IT 
-                    // let sourceCounter = (source==='AO3') ? fanficsNumbers.ao3FanficsCount-1 : (source==='FF') ? fanficsNumbers.ffFanficsCount-1 : ;
-                    // let sourceNumber = (source==='AO3') ? 'ao3FanficsCount' : 'ffFanficsCount'
                     this.setState({
                         fanficsNumbers: {
                             ...fanficsNumbers,
@@ -213,8 +207,7 @@ class Fanfic extends Component {
                         pageNumber: newPagesCounter,
                         filterArr
                     })
-                    this.paginationClickHandler(newPagesCounter)
-                    // });               
+                    this.paginationClickHandler(newPagesCounter)            
                 })
                 break;
             default:

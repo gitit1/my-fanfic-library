@@ -40,8 +40,8 @@ import ContactUs from './containers/About/ContactUs/ContactUs';
 import Disclaimers from './containers/About/Disclaimers/Disclaimers';
 import News from './containers/About/News/News';
 // import RedirectToLink from './components/RedirectToLink/RedirectToLink'
-// ReactGA.initialize('UA-146053520-01');
-// ReactGA.pageview(window.location.pathname + window.location.search);
+ReactGA.initialize('UA-146053520-01');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 if (localStorage.jwtToken) {
   // Set auth token header auth

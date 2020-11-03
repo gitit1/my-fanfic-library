@@ -9,8 +9,7 @@ import Button from '../../../../components/UI/Button/Button'
 
 const BoxContent = (props) => {
     // console.log('props.userFandoms:',props.userFandoms)
-    const { userFandoms, fandom, changeImageFlag } = props;
-    const isFav = userFandoms&&userFandoms.includes(fandom.FandomName) ? true : false;
+    const { fandom, changeImageFlag } = props;
     const noImage = (fandom.Images.Image_Name_Main&&fandom.Images.Image_Name_Main!=='')&&
                     (fandom.Images.Image_Name_Main_Still&&fandom.Images.Image_Name_Main_Still!=='') ? '' : `/fandoms/nophoto.png`;
     const imageStill = noImage!=='' ? noImage : `/fandoms/${fandom.FandomName.toLowerCase()}/${fandom.Images.Image_Name_Main_Still}`;
