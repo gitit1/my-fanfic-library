@@ -1,6 +1,5 @@
 import React from 'react';
 import ChooseFandom from './chooseFandom'
-import Switches from '../../../../../components/UI/Switches/switches'
 import { Grid } from '@material-ui/core';
 
 const GridChooseFandom = (props) => (

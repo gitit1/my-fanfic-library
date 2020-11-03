@@ -57,7 +57,6 @@ class AddNewFanficFromFileReader extends Component {
                     this.setState({ msg: "The file you tried to upload is incorrect" })
                     return;
                 }
-                // console.log(this.props.fanfic)
                 this.setState({ showData: 1, msg: "", file: fileUpload, disableFlag: true })
             })
         }
@@ -65,7 +64,7 @@ class AddNewFanficFromFileReader extends Component {
 
     render() {
         const { fandomName, showBtns } = this.props;
-        const { showData, msg, file, deletedFlag, disableFlag } = this.state;
+        const { showData, msg, file, deletedFlag } = this.state;
         return (
             <div className='AddNewFanficFromFileReader'>
                 <Grid container className="AddNewFanficFromFileReader_Grid">

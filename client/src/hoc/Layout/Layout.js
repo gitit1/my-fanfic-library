@@ -44,7 +44,7 @@ class Layout extends Component{
         this.props.onSaveScreenSize(size,smallSize)
     }
     render(){
-        const {loading, s} = this.state;
+        const {loading} = this.state;
         const {auth,children,size} = this.props;
         console.log('size:',size)
         let page = loading ? null :(
