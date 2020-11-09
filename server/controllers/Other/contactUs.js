@@ -2,6 +2,7 @@ const clc = require("cli-color");
 const Validator = require("validator");
 const isEmpty = require("is-empty");
 const nodemailer = require('nodemailer');
+const keys = require("../../config/keys");
 
 exports.contactUs = (req,res) =>{
     console.log(clc.blue('[db controller] contactUs()'));
@@ -15,14 +16,14 @@ exports.contactUs = (req,res) =>{
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-              user: 'myfanficslibrary@gmail.com',
-              pass: '039625248alona'
+              user: keys.emailMail,
+              pass: keys.emailPass
             }
           });
           
           var mailOptions = {
-            from: 'myfanficslibrary@gmail.com',
-            to: 'myfanficslibrary@gmail.com',
+            from: keys.emailMail,
+            to: keys.emailMail,
             subject: 'My Fanfics Library - Message',
             text: `Name: ${name} \n Email: ${email} \n Message: ${message} \n`
           };
