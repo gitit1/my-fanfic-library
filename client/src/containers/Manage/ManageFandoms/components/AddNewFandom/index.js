@@ -52,7 +52,7 @@ class AddNewFandom extends Component {
 
     editFandomInitialState = () => {
         const { FandomName, FandomUniverse, SearchKeys, Priority, 
-                SaveMethod, AutoSave, Collection } = this.props.fandom;
+                SaveMethod, AutoSave, Collection, FFSearchUrl } = this.props.fandom;
         let options = [];
         let initialOptions = SaveMethod;
         this.state.fandomForm['SaveMethod'].elementConfig.options.map(check => {
@@ -86,6 +86,10 @@ class AddNewFandom extends Component {
                     ...prevState.fandomForm['SearchKeys'],
                     value: SearchKeys,
                     valid: true
+                },
+                'FFSearchUrl':{
+                    ...prevState.fandomForm['FFSearchUrl'],
+                    value: FFSearchUrl
                 },
                 'Priority': {
                     ...prevState.fandomForm['Priority'],
@@ -149,6 +153,7 @@ class AddNewFandom extends Component {
         fandomFormData.append("AutoSave", fandomForm['AutoSave'].value);
         fandomFormData.append("SaveMethod", saveType);
         fandomFormData.append("CollectionName", fandomForm['CollectionName'].value);
+        fandomFormData.append("FFSearchUrl", fandomForm['FFSearchUrl'].value);
         fandomFormData.append("FanficsInFandom", (editMode ? fandom.FanficsInFandom : 0));
         fandomFormData.append("LastUpdate", new Date().getTime());
         fandomFormData.append("fandomsNames", fandomsNames);

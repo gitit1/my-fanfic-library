@@ -47,6 +47,20 @@ export const fandomGeneralForm = [{
         visible: true,
         disabled: false
     },
+    FFSearchUrl: {
+        label: 'FF Link:',
+        elementType: 'input',
+        elementConfig: {
+            type: 'text',
+            placeholder: 'FF Links - Seperate by Comma'
+        },
+        value: '',
+        validation: {},
+        valid: true,
+        touched: false,
+        visible: true,
+        disabled: false
+    },
     Priority: {
         label: 'Priority of Fandom',
         elementType: 'select',
