@@ -360,10 +360,13 @@
         .card_content_categories {
           .card_content_select_categories_div {
             .SelectCategories_container {
-              margin-left: 8%;
+              margin-top: 20px;
+              margin-left: 0px;
+              display: block;
             }
             button {
-              margin-left: 44%;
+              margin-left: 50%;
+              margin-top: 20px;
             }
           }
         }
@@ -450,6 +453,7 @@
             color: $color_text;
           }
         }
+        
       }
     }
   }
