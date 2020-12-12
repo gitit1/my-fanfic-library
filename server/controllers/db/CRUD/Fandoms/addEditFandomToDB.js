@@ -75,6 +75,7 @@ exports.addEditFandomToDB = async (req, res) => {
             "FandomName": req.body.FandomName,
             "FandomUniverse": req.body.FandomUniverse,
             "SearchKeys": req.body.SearchKeys,
+            "FFSearchUrl": req.body.FFSearchUrl,
             "Priority": Number(req.body.Priority),
             "AutoSave": (req.body.AutoSave === 'true') ? true : false,
             "SaveMethod": req.body.SaveMethod,
