@@ -1,42 +1,36 @@
 const clc = require("cli-color");
 const Validator = require("validator");
-const isEmpty = require("is-empty");
-const nodemailer = require('nodemailer');
 const keys = require("../../config/keys");
+const isEmpty = require("is-empty");
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(keys.sendgridApiKey);
 
 exports.contactUs = (req,res) =>{
     console.log(clc.blue('[db controller] contactUs()'));
     const {name,email,message} = req.body;
 
     const { errors, isValid } = validateForm(req.body);
-    // Check validation
-      if (!isValid) {
-        res.status(400).json(errors);
-      }else{
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: keys.emailMail,
-              pass: keys.emailPass
-            }
-          });
-          
-          var mailOptions = {
-            from: keys.emailMail,
-            to: keys.emailMail,
-            subject: 'My Fanfics Library - Message',
-            text: `Name: ${name} \n Email: ${email} \n Message: ${message} \n`
-          };
-          
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
-        res.send('send')
-      }
+    if (!isValid) {
+      res.status(400).json(errors);
+    }else{
+      const msg = {
+        to: keys.emailMail,
+        from: keys.emailMail,
+        subject: 'My Fanfics Library - Message',
+        text: `Name: ${name} , Email: ${email} , Message: ${message} `,
+        html: `Name: ${name} \n Email: ${email} \n Message: ${message} \n`,
+      };
+      sgMail
+        .send(msg)
+        .then(() => {}, error => {
+          console.error(error);
+        
+          if (error.response) {
+            console.error(error.response.body)
+          }
+        });
+      res.send('send')
+    }
 
 }
 
