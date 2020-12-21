@@ -18,6 +18,8 @@ exports.getUrlBodyFromSite = url => {
     });
     const page = await browser.newPage();
     const response = await page.goto(url);
+    await page.close();
+    await browser.close();
     resolve (await response.text());
   });
 };
