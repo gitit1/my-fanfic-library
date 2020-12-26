@@ -1,13 +1,3 @@
-/*
-TODO:  function/router: ffGetDeletedFanfics
-TODO:  function/router: ffSaveMissingFanfics
-
-TODO:  function/router: wattpadGetFanfics
-TODO:  function/router: wattpadGetDeletedFanfics
-TODO:  function/router: wattpadAddNewFanfic
-TODO:  function/router: wattpadDownloadFanfic
-TODO:  function/router: wattpadSaveMissingFanfics
-*/
 const clc = require("cli-color");
 const mongoose = require('../../config/mongoose');
 const multer = require('multer');
@@ -52,13 +42,17 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
     }
 
     if (ffFlag) {
-        const searchKeysFFArr = fandom.FFSearchUrl.split(',');
+        const searchKeysFFArr = fandom.FFSearchUrl && fandom.FFSearchUrl.split(',');
         const log2 = logger.createRollingFileLogger(opts);
-        console.log('FF - searchKeysArr:', searchKeysFFArr)
-        for (let i = 0; i < searchKeysFFArr.length; i++) {
-            getFanficsTemp = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type, searchKeysFFArr[i].trim());
-            getFanficsFF[0] = getFanficsFF[0] + getFanficsTemp[0];
-            getFanficsFF[1] = getFanficsFF[1] + getFanficsTemp[1];
+        if (searchKeysFFArr) {
+            console.log('FF - searchKeysArr:', searchKeysFFArr);
+            for (let i = 0; i < searchKeysFFArr.length; i++) {
+                getFanficsTemp = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type, searchKeysFFArr[i].trim());
+                getFanficsFF[0] = getFanficsFF[0] + getFanficsTemp[0];
+                getFanficsFF[1] = getFanficsFF[1] + getFanficsTemp[1];
+            }
+        } else {
+            console.log(clc.red('FF Search Key Not exist! finishing...'));
         }
     }
 

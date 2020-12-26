@@ -1,6 +1,5 @@
 const clc = require("cli-color");
 const cheerio = require('cheerio');
-let request = require('request')
 const pLimit = require('p-limit');
 
 const ffHelpers = require('../helpers/index');
