@@ -1,6 +1,7 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 let request = require('request');
+const clc = require("cli-color");
 
 const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
@@ -54,7 +55,7 @@ exports.downloadFanfic = async (url, source, fileName, savedAs, fandomName, fanf
                         await updateSavedFandomData(fandomName, source, fanficId, fileName, savedAs, collectionName);
                         resolve(0);
                     }).on('error', () =>
-                        reject(console.log(`There was an error in: downloader(): ${url} , filename: ${fullFilename}`)
+                        reject(console.log(clc.red(`There was an error in: downloader(): ${url} , filename: ${fullFilename}, collectionName: ${collectionName}`))
                         )).on('timeout', async function (e) {
                             console.log(`TimeOut - redownloading: ${url}`)
                             downloadFanfic(source, fileName, savedAs, fandomName);
@@ -62,10 +63,10 @@ exports.downloadFanfic = async (url, source, fileName, savedAs, fandomName, fanf
             }, 20000);
         });
     } catch (error) {
-        console.log('error in download file:',error);
+        console.log(clc.red('error in download file:',error));
         unsavedFanficDBdata()
     } finally{
-        console.log('downloadFanfic::: Finally close connection');
+        console.log(clc.green('downloadFanfic::: Finally close connection'));
         await page.close();
         await browser.close();
     }
