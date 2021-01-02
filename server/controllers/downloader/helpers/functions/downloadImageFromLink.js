@@ -1,14 +1,8 @@
 const fs = require('fs');
-const request = require('request');
+const fetch = require('node-fetch');
 
-
-exports.downloadImageFromLink = async (uri, filename, callback) => {
-    console.log()
-    await new Promise(async function(resolve, reject) {
-        request.head(uri, function(err, res, body){
-      
-          request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-        });
-        resolve();
-    });
+exports.downloadImageFromLink = async (url, filename) => {
+  const response = await fetch(url);
+  const buffer = await response.buffer();
+  fs.writeFile(filename, buffer, () => console.log('finished downloading image!'));  
 };
