@@ -16,6 +16,9 @@ class GridDataBox extends Component{
                 grid =                                         
                 <div className='code_box'>
                     <p><b>Fandom Name:</b> {fandom.FandomName}</p>
+                    <p><b>Search Keys:</b> {fandom.SearchKeys}</p>
+                    {fandom.FFSearchUrl && <p><b>FFSearchUrl:</b> {fandom.FFSearchUrl}</p>}
+                    <p><b>Priority:</b> {fandom.Priority}</p>
                     <p><b>Fanfics in Fandom:</b> {fandom.FanficsInFandom.toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</p>
                     <p><b>Saved Fanfics:</b> {savedFanfics(fandom)}</p>
                     <p><b>Deleted Fanfics:</b> {deletedFanfics(fandom)}</p>
