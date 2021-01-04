@@ -55,7 +55,7 @@ I choose to built this site because I really love to read fanfics but I have a c
 #### AO3
 - My Main problem is that while searching for a fanfic I can't know if I already read it or not , only by bookmarks (after entering the fanfic page) and in bookmark by special tags
 - The site design is too "old" even thougth its the most comptable to read fanfics like that , I still want to see images
-- I don't care about all the fandoms in the world just specific (and gay...)
+- I don't care about all the fandoms in the world just specific
 - There are a lot of fanfics that got deletd from site and I want to have a backup for them
 #### FF
 - I only read there very little fanfics so I want to follow them and see them in one place with my other fanfics
