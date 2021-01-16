@@ -55,7 +55,7 @@ class AllFandoms extends Component {
 
   getNewFilteredArray(e) {
     let newList = this.state.listFandoms.filter(function (v, i) {
-      if (v.FandomName.toLowerCase().indexOf(e.target.value) >= 0) {
+      if (v.FandomName.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0) {
         return true;
       } else {
         return false;
