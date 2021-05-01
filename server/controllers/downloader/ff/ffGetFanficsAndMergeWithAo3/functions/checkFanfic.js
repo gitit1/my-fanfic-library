@@ -141,7 +141,8 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                     exsistsFanfic.LastUpdateOfFic = fanfic.LastUpdateOfFic;
                     exsistsFanfic.Status = 'update';
                     exsistsFanfic.StatusDetails = 'old';
-                    await funcs.downloadFanfic(fanfic.URL, Source, fileName, 'epub', fandomName, exsistsFanfic.FanficID, collection);
+                    // await funcs.downloadFanfic(fanfic.URL, Source, fileName, 'epub', fandomName, exsistsFanfic.FanficID, collection);
+                    await funcs.downloadFFfanfic(fandomName, fanfic.FanficID, fileName) 
                 }
                 // Add Image (if needed)
                 if (!hasImage && linkHasImage) {
@@ -205,7 +206,8 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                     exsistsFanfic.Status = 'updated';
                     console.log('Fanfic got updated or is not saved.. going to save it');
                     await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
-                    await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fileName, 'epub', fandomName, fanfic.FanficID, collection);
+                    // await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fileName, 'epub', fandomName, fanfic.FanficID, collection);
+                    await funcs.downloadFFfanfic(fandomName, fanfic.FanficID, fileName) 
                 } else {
                     await funcs.saveFanficToDB(fandomName, exsistsFanfic, collection);
                 }
@@ -223,7 +225,8 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             }
             const status = await funcs.saveFanficToDB(fandomName, fanfic, collection);
             status && await funcs.updateFandomDataInDB(fanfic);
-            await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fileName, 'epub', fandomName, fanfic.FanficID, collection);
+            // await funcs.downloadFanfic(fanfic.URL, fanfic.Source, fileName, 'epub', fandomName, fanfic.FanficID, collection);
+            await funcs.downloadFFfanfic(fandomName, fanfic.FanficID, fileName) 
         }
         console.log(msgHeader('-------------------------------------------------------------------------------------------'));
         resolve()

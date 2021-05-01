@@ -1,6 +1,7 @@
 const fileReader = { 
     ...require('./functions/checkForSimilar'),
     ...require('./functions/downloadFanfic'),
+    ...require('./functions/downloadFFfanfic'),
     ...require('./functions/generalFunctions'),
     ...require('./functions/saveFanficToDB'),
     ...require('./functions/fsCommands'),

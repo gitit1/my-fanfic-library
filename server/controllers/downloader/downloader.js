@@ -199,11 +199,9 @@ exports.testingArea = async (req, res) => {
 const msg = (type, msg) => {
     switch (type) {
         case 'start':
-            // console.log(clc.xterm(88).bgXterm(253)('------------------------ Start ------------------------'));
             console.log(clc.xterm(56).bgXterm(253)(`[Downloader Handler] ${msg}`));
             break;
         case 'end':
-            // console.log(clc.xterm(88).bgXterm(253)('------------------------ End ------------------------'));
             break;
         default:
             break;
