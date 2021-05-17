@@ -38,8 +38,8 @@ else if (keys.nodeEnv === 'straight') {
 }
 else {
 	//Gay!!! (Ver 2)
-	require('./cronJobs/cron');
 	app.get('/*', function (req, res) {
+		require('./cronJobs/cron');
 		res.sendFile(require('path').join(buildDir, '/index.html'));
 	});
 	app.listen(5000, () => console.log(`Listening on port 5000 - production mode`));
