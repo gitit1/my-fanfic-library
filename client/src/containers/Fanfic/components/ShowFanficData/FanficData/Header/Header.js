@@ -9,8 +9,7 @@ const Header = (props) => {
         FandomName, Oneshot, Source, URL, Author, AuthorURL,
         Author1, AuthorURL1 } = props.fanfic;
     const Hiatus = !Complete ? isHiatus(LastUpdateOfFic) : false;
-
-    const url = (URL && (URL.length < 2 || !URL)) ? '' : URL.includes("http") ? URL : `http://${URL}`;
+    const url = ((URL && URL.length < 2) || !URL) ? '' : URL.includes("http") ? URL : `http://${URL}`;
     const authorURL = ( (AuthorURL && AuthorURL.length < 2) || !AuthorURL) ? '' : AuthorURL.includes("http") ? AuthorURL : `http://${AuthorURL}`;
     const authorURL1 = ( (AuthorURL1 && AuthorURL1.length < 2) || !AuthorURL1) ? '' : AuthorURL1.includes("http") ? AuthorURL1 : `http://${AuthorURL1}`;
 

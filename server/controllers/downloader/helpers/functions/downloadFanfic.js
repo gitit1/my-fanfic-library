@@ -104,7 +104,7 @@ const unsavedFanficDBdata = (collectionName, fanficId, filename, savedAs) => {
 const savedFandomDBdata = async (fandomName, source, collectionName) => {
     console.log('savedFandomDBdata')
     const attr = (source === 'AO3') ? 'AO3.SavedFanfics' : (source === 'FF') ? 'FF.SavedFanfics' : 'Wattpad';
-    const savedNum = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'SavedFic': true })
+    const savedNum = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'SavedFic': true, 'FandomName': fandomName })
 
     return new Promise(function (resolve, reject) {
         FandomModal.updateOne({ 'FandomName': fandomName }, { $set: { [attr]: savedNum } }, (error, result) => {

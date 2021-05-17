@@ -6,18 +6,19 @@ const mongoose = require('../../../../config/mongoose');
 exports.updateFandomFanficsNumbers = (fandom, source) => {
     console.log(clc.blue('[Downloader Helpers] updateFandomFanficsNumbers()'));
     const { FandomName, Collection } = fandom;
+
     return new Promise(async function (resolve, reject) {
         const collectionName = (Collection && Collection !== '') ? Collection : FandomName;
 
         fanficsInFandom = await mongoose.dbFanfics.collection(collectionName).countDocuments({'FandomName': FandomName});
         const sourceTotalFanficsInFandom = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'FandomName': FandomName });
         const sourceFanficsInSite = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'FandomName': FandomName, 'Deleted': false });
-        const sourceCompleteFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Complete': true, 'FandomName': FandomName, 'Deleted': false });
+        const sourceCompleteFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Complete': true, 'FandomName': FandomName });
         const sourceDeletedFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Deleted': true, 'FandomName': FandomName });
         const sourceSavedFanfics = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'SavedFic': true, 'FandomName': FandomName });
-        const sourceOnGoingFanfics = sourceFanficsInSite - sourceCompleteFanfics;
+        const sourceOnGoingFanfics = sourceTotalFanficsInFandom - sourceCompleteFanfics;
         
-        console.log(`${FandomName} - fanficsInFandom:`,fanficsInFandom)
+        console.log(clc.bgCyan(`--- ${FandomName} - fanficsInFandom:`,fanficsInFandom,'---'))
         console.log(`${source} - TotalFanficsInFandom:`,sourceTotalFanficsInFandom)
         console.log(`${source} - FanficsInSite:`,sourceFanficsInSite)
         console.log(`${source} - CompleteFanfics:`,sourceCompleteFanfics)

@@ -10,7 +10,7 @@ const updateFandomNumbers = async (socket, fandom, ao3, ff) => {
 
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">updateFandomNumbers()</span>`);
 
-    const sources = ao3 && ff ? ['AO3','FF'] : ao3 ? ['AO3'] : ff ? ['FF'] : [];
+    const sources = ao3 && ff ? ['AO3','FF'] : ao3 ? ['AO3'] : ff ? ['FF'] : ['AO3','FF','Wattpad'];
 
     console.log('sources:',sources)
     sources.map(async source => {

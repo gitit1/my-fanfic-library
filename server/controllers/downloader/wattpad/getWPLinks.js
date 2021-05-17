@@ -5,9 +5,12 @@ const FandomModal = require('../../../models/Fandom');
 const { getPaths } = require("./paths.js");
 const { getDataFromEpub } = require("./getDataFromEpub.js");
 const logger = require('simple-node-logger');
+const { updateFandomFanficsNumbers } = require('../helpers/index');
 
 exports.wpDownloader = async (fandomName) => {
     let fandomNameLC = fandomName.toLowerCase();
+    const fandom = await FandomModal.find({ 'FandomName': fandomName }, function (err, fandoms) { if (err) { throw err; } });
+    const collectionName = (fandom[0].Collection && fandom[0].Collection !== '') ? fandom[0].Collection : fandomName;
     const opts = {
         logDirectory: `public/logs/wp`,
         fileNamePattern: `<DATE>-${fandomNameLC}-similar-fanfics.log`,
@@ -23,37 +26,13 @@ exports.wpDownloader = async (fandomName) => {
 
     for (let i = 0; i < fanficsPathsArray.length; i++) {
         promises.push(limit(async () => {
-            await getDataFromEpub(log, fandomName, fanficsPathsArray[i])
+            await getDataFromEpub(log, fandomName, fanficsPathsArray[i], collectionName)
         }));
     }
 
     await Promise.all(promises);
 
-    fanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({});
-
-    const WPFanficsInFandom = await mongoose.dbFanfics.collection(fandomName).countDocuments({ 'Source': 'Wattpad' });
-    const WPCompleteFanfics = await mongoose.dbFanfics.collection(fandomName).countDocuments({ 'Source': 'Wattpad', 'Complete': true });
-    const WPSavedFanfics = await mongoose.dbFanfics.collection(fandomName).countDocuments({ 'Source': 'Wattpad', 'SavedFic': true });
-    const WPOnGoingFanfics = WPFanficsInFandom - WPCompleteFanfics;
-
-    await FandomModal.updateOne({ 'FandomName': fandomName },
-        {
-            $set: {
-                'FanficsInFandom': fanficsInFandom,
-                'Wattpad.FanficsInFandom': WPFanficsInFandom,
-                'Wattpad.CompleteFanfics': WPCompleteFanfics,
-                'Wattpad.OnGoingFanfics': WPOnGoingFanfics,
-                'Wattpad.SavedFanfics': WPSavedFanfics,
-                'LastUpdate': new Date().getTime(),
-                'FanficsLastUpdate': new Date().getTime(),
-                'SavedFanficsLastUpdate': new Date().getTime()
-            }
-        },
-        (err, result) => {
-            if (err) throw err;
-
-        }
-    );
+    await updateFandomFanficsNumbers(fandom[0], 'Wattpad');
 
     return;
 }

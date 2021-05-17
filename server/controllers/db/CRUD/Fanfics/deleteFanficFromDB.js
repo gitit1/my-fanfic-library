@@ -29,10 +29,10 @@ const deleteFanficFromDBFunc = (fandomName, fanficId, source, complete, deleted,
     DeletedFanfics = `${source}.DeletedFanfics`;
 
     const isComplete = (complete === 'true') ? `${source}.CompleteFanfics` : `${source}.OnGoingFanfics`;
-    let isCompleteCounter = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Complete': complete });
+    let isCompleteCounter = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Complete': complete, 'FandomName': fandomName });
     isCompleteCounter = (isCompleteCounter - 1) <= 0 ? 0 : isCompleteCounter - 1;
 
-    let DeletedFanficsCounter = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Deleted': true });
+    let DeletedFanficsCounter = await mongoose.dbFanfics.collection(collectionName).countDocuments({ 'Source': source, 'Deleted': true, 'FandomName': fandomName });
     if (deleted === 'true') {
       DeletedFanficsCounter = (DeletedFanficsCounter - 1) <= 0 ? 0 : DeletedFanficsCounter - 1;
     }

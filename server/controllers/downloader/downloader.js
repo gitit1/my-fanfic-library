@@ -178,7 +178,8 @@ exports.saveAsSimilarFanfic = async (req, res) => {
 //wattpad
 exports.wpd = async (req, res) => {
     console.log('wpd');
-    await wp.wpDownloader('avalance');
+    //http://localhost:5000/downloader/wattpad
+    await wp.wpDownloader('Calzona');
     res.send('wpd done');
 }
 
