@@ -4,11 +4,15 @@ const {getUrlBodyFromAo3} = require('../../helpers/getUrlBodyFromAo3')
 const pLimit = require('p-limit');
 const limit = pLimit(1);
 
-exports.getPagesOfFandomData = async (jar,url,numberOfPages) => {
+exports.getPagesOfFandomData = async (jar,url,numberOfPages, fromPage) => {
     let pages = [], promises = [];
 
-    await [...Array(Number(numberOfPages))].forEach(async (num,index) => {promises.push(limit(async () =>{
-        let body = await getUrlBodyFromAo3(jar,`${url}?page=${index+1}`)
+    [...Array(Number(numberOfPages))].forEach(async (num,index) => {promises.push(limit(async () =>{
+        let pageIndex = index + 1;
+        if(fromPage){
+            pageIndex = fromPage + index;
+        }
+        let body = await getUrlBodyFromAo3(jar,`${url}?page=${pageIndex}`)
         if(!body){
             console.log(clc.red('error in getPagesOfFandomData(): ',err))
         }else{

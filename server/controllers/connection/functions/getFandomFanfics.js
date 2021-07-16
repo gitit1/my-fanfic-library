@@ -7,7 +7,7 @@ const downloader = require('../../downloader/downloader')
 const now = require('performance-now')
 const { createAO3Url } = require('../../downloader/ao3/ao3GetFanfics/functions/createAO3Url')
 
-const getFandomFanfics = async (socket, log, fandom, type, ao3, ff) => {
+const getFandomFanfics = async (socket, log, fandom, type, ao3, ff, from, to) => {
     const { FandomName, SearchKeys, FFSearchUrl } = fandom;
     log.info(`--------------------------------Start--------------------------------`);
 
@@ -36,7 +36,7 @@ const getFandomFanfics = async (socket, log, fandom, type, ao3, ff) => {
     socket && socket.emit('getFanficsData', `<b>Executing:</b> <span style="color:brown">getFanficsOfFandom()</span>`);
 
     let startTime = now();
-    let fanficsLengths = await downloader.getFanfics(fandom, log, type, ao3, ff);
+    let fanficsLengths = await downloader.getFanfics(fandom, log, type, ao3, ff, from, to);
     let endTime = now();
 
     console.log(clc.cyanBright(`Fanfics data of ${FandomName} was updated!`));

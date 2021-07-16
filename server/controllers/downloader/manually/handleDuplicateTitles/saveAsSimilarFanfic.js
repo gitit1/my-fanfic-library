@@ -16,10 +16,17 @@ exports.saveAsSimilarFanfic = async (similar, fandomName, id1, id2) => {
         let todayDate = new Date();
         if (similar) {
             fanfic1.SimilarCheck = fanfic2.FanficID;
-            fanfic1.HasFFLink = true;
-            fanfic1.FanficID_FF = fanfic2.FanficID;
-            fanfic1.AuthorURL_FF = fanfic2.AuthorURL;
-            fanfic1.URL_FF = fanfic2.URL;
+            if(fanfic2.Source == 'FF'){
+                fanfic1.HasFFLink = true;
+                fanfic1.FanficID_FF = fanfic2.FanficID;
+                fanfic1.AuthorURL_FF = fanfic2.AuthorURL;
+                fanfic1.URL_FF = fanfic2.URL;
+            }else{
+                fanfic1.HasFFLink = false;
+                fanfic1.Wattpad_FF = fanfic2.FanficID;
+                fanfic1.AuthorURL_Wattpad = fanfic2.AuthorURL;
+                fanfic1.URL_Wattpad = fanfic2.URL;
+            }
             fanfic1.SimilarCheck = fanfic2.FanficID;
             fanfic1.Comments  = (fanfic1.Comments < fanfic2.Comments) ? fanfic2.Comments : fanfic1.Comments;
             fanfic1.Kudos  = (fanfic1.Kudos < fanfic2.Kudos) ? fanfic2.Kudos : fanfic1.Kudos;

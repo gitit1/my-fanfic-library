@@ -4,9 +4,9 @@ const funcs = require('./functions/index')
 const logger = require('simple-node-logger');
 const { fetchFandoms } = require("../helpers/fetchFandoms.js");
 
-exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => {
+exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff, from, to) => {
     console.log(clc.blue('[connection] manageDownloader'));
-    let log,log2;
+    let log, log2;
 
     const opts = {
         logDirectory: `public/logs/downloader`,
@@ -14,7 +14,7 @@ exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => 
         dateFormat: 'YYYY.MM.DD'
     };
     log = logger.createRollingFileLogger(opts);
-    if(fandom !== 'All'){
+    if (fandom !== 'All') {
         const opts2 = {
             logDirectory: `public/logs/downloader/duplicate-titles`,
             fileNamePattern: `<DATE>-${fandom.FandomName}.log`,
@@ -32,13 +32,13 @@ exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => 
                     case 'getFandomFanficsPartial':
                         await allFandoms.map(async fandom => promises.push(
                             await new Promise(resolve => setTimeout(resolve, 30000)),
-                            p = p.then(() => funcs.getFandomFanfics(socket, log, fandom, 'partial', ao3, ff))
+                            p = p.then(() => funcs.getFandomFanfics(socket, log, fandom, 'partial', ao3, ff, from, to))
                         ))
                         break;
                     case 'getFandomFanficsFull':
                         await allFandoms.map(async fandom => promises.push(
                             await new Promise(resolve => setTimeout(resolve, 30000)),
-                            p = p.then(() => funcs.getFandomFanfics(socket, log, fandom, 'full', ao3, ff))
+                            p = p.then(() => funcs.getFandomFanfics(socket, log, fandom, 'full', ao3, ff, from, to))
                         ))
                         break;
                     case 'getDeletedFanfics':
@@ -67,10 +67,10 @@ exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff) => 
         } else {
             switch (choice) {
                 case 'getFandomFanficsPartial':
-                    await funcs.getFandomFanfics(socket, log, fandom, 'partial', ao3, ff)
+                    await funcs.getFandomFanfics(socket, log, fandom, 'partial', ao3, ff, from, to)
                     break;
                 case 'getFandomFanficsFull':
-                    await funcs.getFandomFanfics(socket, log, fandom, 'full', ao3, ff)
+                    await funcs.getFandomFanfics(socket, log, fandom, 'full', ao3, ff, from, to)
                     break;
                 case 'getDeletedFanfics':
                     await funcs.getDeletedFanfics(socket, log, fandom)

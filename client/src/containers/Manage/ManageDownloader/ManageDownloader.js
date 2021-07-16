@@ -60,6 +60,10 @@ class ManageDownloader extends Component {
             AO3: true,
             FF: true
         },
+        pages: {
+            From: null,
+            To: null
+        },
         showData: 0,
         showGridDataBox: false,
         showGridButtons: true,
@@ -91,18 +95,19 @@ class ManageDownloader extends Component {
     }
 
     sendRequestsToServerHandler = async (choice) => {
+        const { AO3, FF } = this.state.switches;
+        const { From, To } = this.state.pages;
+        console.log('from:', From)
+        console.log('To:', To)
         socket.removeAllListeners()
         this.setState({ serverData: null, logs: [], showData: 0 })
         this.props.smallSize && this.setState({ showGridDataBox: true, showGridButtons: false });
 
-        let ao3 = this.state.switches.AO3;
-        let ff = this.state.switches.FF;
-
 
         socket.on('getFanficsData', serverData => {
             this.setState({ serverData })
-            this.state.logs.push(this.state.serverData)
-            if (this.state.serverData === 'End') {
+            this.state.logs.push(serverData)
+            if (serverData === 'End') {
                 this.state.logs.push('Done!');
                 this.props.onGetFandoms();
             }
@@ -122,7 +127,7 @@ class ManageDownloader extends Component {
             }
         });
 
-        socket.emit('getFandomFanfics', this.state.fandom, choice, ao3, ff);
+        socket.emit('getFandomFanfics', this.state.fandom, choice, AO3, FF, From, To);
 
     }
 
@@ -150,11 +155,19 @@ class ManageDownloader extends Component {
     }
 
     switchChangeHandler = (name) => {
-        console.log('in switchChangeHandler')
         this.setState(prevState => ({
             switches: {
                 ...prevState.switches,
                 [name]: !this.state.switches[name]
+            }
+        }));
+    }
+
+    pagesNumbersChangeHandler = (page,num) => {
+        this.setState(prevState => ({
+            pages: {
+                ...prevState.pages,
+                [page]: num
             }
         }));
     }
@@ -188,6 +201,7 @@ class ManageDownloader extends Component {
                                     showBox={showGridButtons}
                                     switches={switches}
                                     switchChange={this.switchChangeHandler}
+                                    pagesChange={this.pagesNumbersChangeHandler}
                                     isAllFandoms={isAllFandoms}
                                     xs={4}
                                 />

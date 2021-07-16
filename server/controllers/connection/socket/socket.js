@@ -3,7 +3,7 @@ const http = require('http')
 
 const app = express();
 const server = http.createServer(app);
-var io = require('socket.io')(server, {
+let io = require('socket.io')(server, {
   serveClient: false,
 
   pingInterval: 200000,
@@ -23,11 +23,12 @@ if (key.nodeEnv === 'straight') {
 }
 
 io.on('connection', (socket) => {
-  socket.on('getFandomFanfics', (fandomData, choice, ao3, ff) => {
+  socket.on('getFandomFanfics', (fandomData, choice, ao3, ff, from, to) => {
     console.log('[socket.js] getFandomFanfics()', choice);
-    func.manageDownloader(socket, fandomData, choice, 'site', ao3, ff)
+    func.manageDownloader(socket, fandomData, choice, 'site', ao3, ff, from, to)
   });
 });
+
 io.on('error', function (err) {
   console.error("Server error:", err);
 });

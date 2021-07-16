@@ -4,10 +4,11 @@ import Typography from '@material-ui/core/Typography';
 const Stat = ({fanfic}) => (
   <React.Fragment>
     
-<Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>{fanfic.HasFFLink ? 'Sources:' : 'Source:'}</Typography>
+<Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>{fanfic.HasFFLink || fanfic.URL_Wattpad ? 'Sources:' : 'Source:'}</Typography>
     <Typography className={`card_content_stat_dd card_content_stat_source `} variant="subtitle2" gutterBottom>
       <a href={fanfic.URL} className={`color_${fanfic.Source}`} target='_blank' rel='noopener noreferrer'>{fanfic.Source}</a>
       {fanfic.HasFFLink && <a href={fanfic.URL_FF} className='color_FF' target='_blank' rel='noopener noreferrer'> , FF</a>}
+      {fanfic.URL_Wattpad && <a href={fanfic.URL_Wattpad} className='color_Wattpad' target='_blank' rel='noopener noreferrer'> , Wattpad</a>}
     </Typography >
     <Typography className='card_content_stat_dt' variant="subtitle2" gutterBottom>Publish Date:</Typography>
     <Typography className='card_content_stat_dd' variant="subtitle2" gutterBottom>{new Date(fanfic.PublishDate).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</Typography>

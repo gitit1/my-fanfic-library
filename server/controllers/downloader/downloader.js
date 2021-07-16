@@ -13,7 +13,7 @@ let request = require('request')
 let jar = request.jar();
 
 
-exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
+exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag, fromPage, toPage) => {
     msg('start', `getFanfics - ${type}`);
     const opts = {
         logDirectory: `public/logs/downloader`,
@@ -23,8 +23,11 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
 
     if (!ao3Flag && !ffFlag) { return [0, 0] }
 
-    let getFanficsAO3 = [0, 0]
-    let getFanficsFF = [0, 0]
+    let getFanficsAO3 = [0, 0];
+    let getFanficsFF = [0, 0];
+    
+    fromPage = (!fromPage || fromPage === 0) ? null : Number(fromPage);
+    toPage = (!toPage || toPage === 0) ? null : Number(toPage);
 
     if (ao3Flag) {
         const searchKeysAO3Arr = fandom.SearchKeys.split(',');
@@ -32,9 +35,9 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
 
         for (let i = searchKeysAO3Arr.length - 1; i >= 0; i--) {
             if (i == 0) {
-                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysAO3Arr[i].trim(), '');
+                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysAO3Arr[i].trim(), '', fromPage, toPage);
             } else {
-                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysAO3Arr[i].trim(), searchKeysAO3Arr[0].trim());
+                getFanficsTemp = await ao3.ao3GetFanfics(jar, log, fandom, type, searchKeysAO3Arr[i].trim(), searchKeysAO3Arr[0].trim(), fromPage, toPage);
             }
             getFanficsAO3[0] = getFanficsAO3[0] + getFanficsTemp[0];
             getFanficsAO3[1] = getFanficsAO3[1] + getFanficsTemp[1];
@@ -47,7 +50,7 @@ exports.getFanfics = async (fandom, log, type, ao3Flag, ffFlag) => {
         if (searchKeysFFArr) {
             console.log('FF - searchKeysArr:', searchKeysFFArr);
             for (let i = 0; i < searchKeysFFArr.length; i++) {
-                getFanficsTemp = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type, searchKeysFFArr[i].trim());
+                getFanficsTemp = ffFlag && await ff.ffGetFanficsAndMergeWithAo3(log2, fandom, type, searchKeysFFArr[i].trim(), fromPage, toPage);
                 getFanficsFF[0] = getFanficsFF[0] + getFanficsTemp[0];
                 getFanficsFF[1] = getFanficsFF[1] + getFanficsTemp[1];
             }
@@ -179,6 +182,7 @@ exports.saveAsSimilarFanfic = async (req, res) => {
 exports.wpd = async (req, res) => {
     console.log('wpd');
     //http://localhost:5000/downloader/wattpad
+    //Calzona
     await wp.wpDownloader('Calzona');
     res.send('wpd done');
 }
@@ -186,15 +190,16 @@ exports.wpd = async (req, res) => {
 //testing
 exports.testingArea = async (req, res) => {
     console.log('testingArea')
-    let fandomName = 'Trishica';
+    // let fandomName = 'Trishica';
 
-    mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
-        console.log('dbFanfic.length:', dbFanfic.length)
-        for (let index = 0; index < dbFanfic.length; index++) {
-            mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
-                { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) { })
-        }
-    });
+    res.send('testingArea');
+    // mongoose.dbFanfics.collection(fandomName).find({ Source: 'Backup' }).toArray(async function (err, dbFanfic) {
+    //     console.log('dbFanfic.length:', dbFanfic.length)
+    //     for (let index = 0; index < dbFanfic.length; index++) {
+    //         mongoose.dbFanfics.collection(fandomName).updateOne({ FanficID: dbFanfic[index].FanficID },
+    //             { $set: { Source: 'AO3', Deleted: true } }, async function (error, response) { })
+    //     }
+    // });
 }
 
 const msg = (type, msg) => {

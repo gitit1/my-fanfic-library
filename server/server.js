@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const routes = require('./routes');
 const cors = require('cors');
 const passport = require("passport");
-
+const clc = require("cli-color");
 
 const publicDir = require('path').join(__dirname, '/public');
 const buildDir = require('path').join(__dirname, '/build');
@@ -26,21 +26,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', routes);
 
 if (keys.nodeEnv === 'development') {
-	//development!!! (Ver 1)
+	console.log(clc.xterm(160).bgXterm(15)('*************** In development Env ***************'));
+
 	app.listen(5000, () => console.log(`Listening on port 5000 - development mode`));
 }
 else if (keys.nodeEnv === 'straight') {
-	//Straight!!! (Ver 3)
+	console.log(clc.xterm(163).bgXterm(15)('*************** In straight Site ***************'))
 	app.get('/*', function (req, res) {
 		res.sendFile(require('path').join(buildDir, '/index.html'));
 	});
 	app.listen(5008, () => console.log(`Listening on port 5008 - production mode`));
 }
 else {
-	//Gay!!! (Ver 2)
+	console.log(clc.xterm(91).bgXterm(15)('*************** In Gay Site ***************'))
+	const cron = require('./cronJobs/cron');
 	app.get('/*', function (req, res) {
-		require('./cronJobs/cron');
 		res.sendFile(require('path').join(buildDir, '/index.html'));
-	});
+	});	
 	app.listen(5000, () => console.log(`Listening on port 5000 - production mode`));
 }
