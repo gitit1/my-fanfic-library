@@ -97,8 +97,7 @@ class ManageDownloader extends Component {
     sendRequestsToServerHandler = async (choice) => {
         const { AO3, FF } = this.state.switches;
         const { From, To } = this.state.pages;
-        console.log('from:', From)
-        console.log('To:', To)
+
         socket.removeAllListeners()
         this.setState({ serverData: null, logs: [], showData: 0 })
         this.props.smallSize && this.setState({ showGridDataBox: true, showGridButtons: false });
@@ -106,8 +105,8 @@ class ManageDownloader extends Component {
 
         socket.on('getFanficsData', serverData => {
             this.setState({ serverData })
-            this.state.logs.push(serverData)
-            if (serverData === 'End') {
+            this.state.logs.push(this.state.serverData)
+            if (this.state.serverData === 'End') {
                 this.state.logs.push('Done!');
                 this.props.onGetFandoms();
             }
