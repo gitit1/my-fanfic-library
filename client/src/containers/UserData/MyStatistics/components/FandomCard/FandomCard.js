@@ -48,10 +48,10 @@ const FandomCard = (props) => {
                 const fandom = fandoms.find(fan => {
                     return f.name === fan.FandomName;
                 });
-                const latestFics = getLatestFanfic(userData, fandom.FandomName);
+                const latestFics = fandom && getLatestFanfic(userData, fandom.FandomName);
 
                 return (
-                    !isEmpty &&
+                    !isEmpty && latestFics &&
                     <Card className={classes.StatisticsCard} key={f.name} >
                         <CardContent className={classes.CardContent}>
                             <div className={classes.cardHeader}>
