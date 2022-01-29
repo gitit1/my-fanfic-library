@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 exports.downloadImageFromLink = async (url, filename) => {
   const response = await fetch(url);

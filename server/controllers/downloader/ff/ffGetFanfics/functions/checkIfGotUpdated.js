@@ -37,7 +37,7 @@ exports.checkIfGotUpdated = (autoSave, fanfic) => {
                 await funcs.saveFanficToDB(fanfic.FandomName, newData, fandomData[0].Collection).then(async res => {
                     const { URL, Source, fileName, savedAs, FandomName, FanficID } = newData;
                     // updated && autoSave && await funcs.downloadFanfic(URL, Source, fileName, savedAs, FandomName, FanficID);
-                    updated && autoSave && await funcs.downloadFFfanfic(FandomName, FanficID, fileName) 
+                    updated && autoSave && await funcs.downloadFFFanficNew(FandomName, FanficID, fileName) 
                     !res ? reject() : (updated && autoSave) ? resolve(true) : resolve(false)
                 });
             })
