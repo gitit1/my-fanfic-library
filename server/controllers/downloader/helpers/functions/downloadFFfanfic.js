@@ -36,6 +36,11 @@ exports.downloadFFfanfic = async (fandomName, storyId, fileName) => {
             let page = await browser.newPage();
             page.setUserAgent(userAgent.replace('Headless', '')); // since Cloudflare is blocking headless Chrome, remove 'Headless' from UA header value
             await page.goto(`${url}/${currentChapter}`, { waitUntil: 'load' });
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            await page.reload(`${url}/${currentChapter}`);
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            await page.reload(`${url}/${currentChapter}`);
+            // console.log('page', page)
 
             if (currentChapter == 1) {
                 console.log("Gathering metadata...");
@@ -44,8 +49,9 @@ exports.downloadFFfanfic = async (fandomName, storyId, fileName) => {
                 storyName = await page.evaluate(async () => {
                     while (document.querySelectorAll('b.xcontrast_txt').length === 0) {
                         console.log("Waiting out Cloudflare advanced DDoS check...");
-                        await new Promise(resolve => setTimeout(resolve, 6000));
+                        await new Promise(resolve => setTimeout(resolve, 5000));
                     }
+                    console.log('1', document.querySelectorAll('b.xcontrast_txt'))
                     return document.querySelectorAll('b.xcontrast_txt')[0].innerText;
                 });
                 console.log(`Title of the story: ${storyName}`);
@@ -54,7 +60,7 @@ exports.downloadFFfanfic = async (fandomName, storyId, fileName) => {
                 authorName = await page.evaluate(() => {
                     return document.querySelectorAll('a.xcontrast_txt')[2].innerText;
                 });
-                console.log(`Name of the author: ${authorName}`);
+                // console.log(`Name of the author: ${authorName}`);
 
                 // Scrape number of chapters
                 numberOfChapters = await page.evaluate(() => {
@@ -108,7 +114,7 @@ exports.downloadFFfanfic = async (fandomName, storyId, fileName) => {
                 return chapter.innerHTML;
             });
 
-            // Add chapter contents to ebook sections
+            //Add chapter contents to ebook sections
             section = {
                 title: `Chapter ${chapterTitle}`,
                 data: chapterHtml
@@ -122,7 +128,7 @@ exports.downloadFFfanfic = async (fandomName, storyId, fileName) => {
         }
 
         // Build the ebook
-        //const pathToDownloadedFile = `${downloadLocation}${storyName} - ${authorName}.epub`;
+        const pathToDownloadedFile = `${downloadLocation}${storyName} - ${authorName}.epub`;
         const options = {
             title: storyName,
             author: authorName,
@@ -136,6 +142,7 @@ exports.downloadFFfanfic = async (fandomName, storyId, fileName) => {
         console.log(`Time taken to download story: ${(processingTimeInMs / 1000).toFixed(1)} seconds`);
         return Promise.resolve('Request completed successfully.');
     } catch (error) {
+        console.log('error', error)
         console.error(`Error: ${error.message}. Please contact github.com/ishaniray if the issue persists.`);
         return Promise.resolve('Request completed with errors.');
     } finally {
