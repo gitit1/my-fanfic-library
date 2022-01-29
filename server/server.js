@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const routes = require('./routes');
 const cors = require('cors');
 const passport = require("passport");
@@ -21,8 +20,10 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 app.use(cors())
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use('/', routes);
 
 if (keys.nodeEnv === 'development') {
