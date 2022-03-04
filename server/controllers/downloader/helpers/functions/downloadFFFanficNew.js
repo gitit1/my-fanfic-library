@@ -27,9 +27,8 @@ exports.downloadFFFanficNew = async (fandomName, storyId, fileName) => {
     const page = await browser.newPage();
     try {
         return await new Promise(async function (resolve, reject) {
-            await page.goto('https://fichub.net/');
             console.log(clc.xterm(75)('downloader: getting the url...'));
-            await page.waitFor('body')
+            await page.goto('https://fichub.net/', {'timeout': 10000, 'waitUntil':'load'});
             // await page.screenshot({ path: 'example.png' });
             await page.focus('input');
             await page.keyboard.type(url);
@@ -37,7 +36,7 @@ exports.downloadFFFanficNew = async (fandomName, storyId, fileName) => {
             await page.click('#x')
             // console.log('url:', url)
             console.log(clc.xterm(75)('downloader: waiting for epub to be ready...'));
-            await new Promise(resolve => setTimeout(resolve, 10000));
+            await new Promise(resolve => setTimeout(resolve, 20000));
             page.waitForSelector('#i > p:nth-child(2) > a');
             // const fileUrl = await fanficUrl.evaluate(anchor => anchor.getProperty('href'))
             const fileUrl = await page.$eval("#i > p:nth-child(2) > a", (elm) => elm.href);
