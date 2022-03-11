@@ -27,7 +27,7 @@ exports.ao3GetDeletedFanfics = async (jar, log, fandom) => {
             const ao3URL = await ao3Funcs.createAO3Url(searchKeysArr[i]);
             let numberOfPages = await ao3Funcs.getNumberOfSearchPages(jar, ao3URL, log);
             console.log(msg('numberOfPages:', numberOfPages));
-            const tempPagesArr = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, log);
+            const tempPagesArr = await ao3Funcs.getPagesOfFandomData(jar, ao3URL, numberOfPages, 0);
             pagesArray = pagesArray.concat(tempPagesArr)
         }
 
