@@ -37,27 +37,32 @@ exports.downloadFFFanficNew = async (fandomName, storyId, fileName) => {
             // console.log('url:', url)
             console.log(clc.xterm(75)('downloader: waiting for epub to be ready...'));
             await new Promise(resolve => setTimeout(resolve, 20000));
-            page.waitForSelector('#i > p:nth-child(2) > a');
-            // const fileUrl = await fanficUrl.evaluate(anchor => anchor.getProperty('href'))
-            const fileUrl = await page.$eval("#i > p:nth-child(2) > a", (elm) => elm.href);
-            console.log(clc.xterm(75)('downloader: epub is ready in this url: ', fileUrl));
+			await page.waitForSelector('#i > p:nth-child(2) > a', {timeout: 50000}).catch(error => {
+				console.log(clc.red('failed to wait for the selector'), error);
+				reject(1);
+			});
+			// const fileUrl = await fanficUrl.evaluate(anchor => anchor.getProperty('href'))
+			const fileUrl = await page.$eval("#i > p:nth-child(2) > a", (elm) => elm.href);
+			console.log(clc.xterm(75)('downloader: epub is ready in this url: ', fileUrl));
 
-            const file = fs.createWriteStream(fullFilename);
-            request({ uri: fileUrl, jar, credentials: 'include' }).pipe(file);
+			const file = fs.createWriteStream(fullFilename);
+			request({ uri: fileUrl, jar, credentials: 'include' }).pipe(file);
 
-            file.on('finish', () => {
-                console.log('finished stramimg file');
-            }).on('close', async () => {
-                fs.readFileSync(fullFilename, 'utf8');
-                console.log('closed straming');
-                resolve(0);
-            }).on('error', () => {
-                console.log(clc.red(`There was an error in: downloader(): ${url} , filename: ${fullFilename}, collectionName: ${collectionName}`))
-                reject(1);
-            }).on('timeout', async function (e) {
-                    console.log(`TimeOut - redownloading: ${url}`)
-                    downloadFanfic(fandomName, storyId, fileName);
-            });              
+			file.on('finish', () => {
+				console.log('finished stramimg file');
+			}).on('close', async () => {
+				fs.readFileSync(fullFilename, 'utf8');
+				console.log('closed straming');
+				resolve(0);
+			}).on('error', () => {
+				console.log(clc.red(`There was an error in: downloader(): ${url} , filename: ${fullFilename}, collectionName: ${collectionName}`))
+				reject(1);
+			}).on('timeout', async function (e) {
+					console.log(`TimeOut - redownloading: ${url}`)
+					downloadFanfic(fandomName, storyId, fileName);
+			}); 
+			console.log(clc.xterm(75)('downloader: finish downloading but lets wait again just for fun :)'));
+			await new Promise(resolve => setTimeout(resolve, 20000));            
         });
     } catch (error) {
         console.log(clc.red('error in download file:',error));
