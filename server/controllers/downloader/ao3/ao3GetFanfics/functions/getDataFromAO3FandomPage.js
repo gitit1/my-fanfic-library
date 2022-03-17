@@ -5,7 +5,7 @@ const { sleep } = require('../../../../helpers/sleep.js')
 const { getDataFromFanficPage } = require('./getDataFromFanficPage/getDataFromFanficPage');
 
 exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, page, fandom, searchKeys, mainSearchKeys, fromPage, toPage) => {
-    // console.log(clc.blue('[ao3 controller] getDataFromAO3FandomPage()'));
+    // console.log(clc.xterm(175)('[ao3 controller] getDataFromAO3FandomPage()'));
     try {
         let $ = cheerio.load(page), donePromise = 0;
         let n = $('ol.work').children('li').length;

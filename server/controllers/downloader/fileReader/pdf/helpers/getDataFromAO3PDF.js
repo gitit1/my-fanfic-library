@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 const { convertDataIntoHtml } = require('./convertDataIntoHtml');
 
 exports.getDataFromAO3PDF = async (fandomName, data, deleted) => {
-    console.log(clc.blue('[Downloader - PDF Reader] getDataFromAO3PDF()'));
+    console.log(clc.xterm(175)('[Downloader - PDF Reader] getDataFromAO3PDF()'));
     return new Promise(async function (resolve, reject) {
 
         let fanfic = {}, todayDate = new Date();

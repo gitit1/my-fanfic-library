@@ -2,7 +2,7 @@
 const clc = require("cli-color");
 
 exports.convertDataIntoHtml = async (data) => {
-    console.log(clc.blue('[Downloader - PDF Reader] getDataFromAO3PDF()'));
+    console.log(clc.xterm(175)('[Downloader - PDF Reader] getDataFromAO3PDF()'));
     return new Promise(async function (resolve, reject) {
         let htmlData = "<div>", counterOfData = false;
 

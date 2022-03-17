@@ -11,7 +11,7 @@ exports.readPdf = (fandomName, file, deleted) => {
 }
 
 const getPdfMetadata = (fandomName, file, deleted) => {
-    console.log(clc.blue('[Downloader - PDF Reader] getPdfMetadata()'));
+    console.log(clc.xterm(175)('[Downloader - PDF Reader] getPdfMetadata()'));
 
     return new Promise(async function (resolve, reject) {
         let pdfData;

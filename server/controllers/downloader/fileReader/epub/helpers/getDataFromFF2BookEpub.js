@@ -3,7 +3,7 @@ const clc = require("cli-color");
 const cheerio = require('cheerio');
 
 exports.getDataFromFF2BookEpub = async (fandomName, data, deleted) => {
-    console.log(clc.blue('[Downloader - Epub Reader] getDataFromAO3Epub()'));
+    console.log(clc.xterm(175)('[Downloader - Epub Reader] getDataFromAO3Epub()'));
     return new Promise(async function (resolve, reject) {
 
         let newData = data.replace(/<span class="bold">(.*)<\/span>(.*?)<br \/>/gim, '<p class="attr">$1<span class="data">$2</span><br /></p>');

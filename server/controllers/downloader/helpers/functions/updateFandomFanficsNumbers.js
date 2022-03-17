@@ -4,7 +4,7 @@ const FandomModal = require('../../../../models/Fandom');
 const mongoose = require('../../../../config/mongoose');
 
 exports.updateFandomFanficsNumbers = (fandom, source) => {
-    console.log(clc.blue('[Downloader Helpers] updateFandomFanficsNumbers()'));
+    console.log(clc.xterm(175)('[Downloader Helpers] updateFandomFanficsNumbers()'));
     const { FandomName, Collection } = fandom;
 
     return new Promise(async function (resolve, reject) {

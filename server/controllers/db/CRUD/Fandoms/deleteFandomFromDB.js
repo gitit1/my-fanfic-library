@@ -5,7 +5,7 @@ const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 
 exports.deleteFandomFromDB = async (req,res)=>{
-    console.log(clc.blue('[db controller] deleteFandomFromDB()'));
+    console.log(clc.xterm(175)('[db controller] deleteFandomFromDB()'));
     let fandomName = req.query.fandomName.replace("%26","&")
     let fandomNameLowerCase = fandomName.toLowerCase();
     let path = `public/fandoms/${fandomNameLowerCase.toLowerCase()}`;

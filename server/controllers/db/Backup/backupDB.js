@@ -12,7 +12,7 @@ const { fetchFandoms } = require("../../helpers/fetchFandoms.js");
 const path = `public/logs/DB_Backup`;
 
 exports.backupDBHandler = async (req, res) => {
-    console.log(clc.blue('[db controller] backupDBHandler()'));
+    console.log(clc.xterm(175)('[db controller] backupDBHandler()'));
     await this.backupDB().then(() => {
         console.log('created backup to all fandoms')
         res.send('created backup to all fandoms')
@@ -20,7 +20,7 @@ exports.backupDBHandler = async (req, res) => {
 }
 
 exports.backupDB = async () => {
-    console.log(clc.blue('[db controller] backupDB()'));
+    console.log(clc.xterm(175)('[db controller] backupDB()'));
     let allFandoms = await fetchFandoms();
 
     let promises = [], limit = pLimit(1);

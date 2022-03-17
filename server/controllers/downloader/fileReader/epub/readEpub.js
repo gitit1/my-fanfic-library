@@ -14,7 +14,7 @@ exports.readEpub = (fandomName, tempPath, deleted) => {
 }
 
 const getEpubMetadata = (fandomName, tempPath, deleted) => {
-    console.log(clc.blue('[Downloader - Epub Reader] getEpubMetadata()', tempPath));
+    console.log(clc.xterm(175)('[Downloader - Epub Reader] getEpubMetadata()', tempPath));
 
     return new Promise(async function (resolve, reject) {
         let epub = new EPub(tempPath, '/images/', '/links/');

@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 const { getUrlBodyFromSite } = require('../../../ff/helpers/getUrlBodyFromSite');
 
 exports.getDataFromWattpadEpub = async (fandomName, data, deleted) => {
-    console.log(clc.blue('[Downloader - Epub Reader] getDataFromAO3Epub()'));
+    console.log(clc.xterm(175)('[Downloader - Epub Reader] getDataFromAO3Epub()'));
     return new Promise(async function (resolve, reject) {
         let fanfic = {};
         let $ = cheerio.load(data);
@@ -57,7 +57,7 @@ exports.getDataFromWattpadEpub = async (fandomName, data, deleted) => {
 }
 
 const getRating = async (url) => {
-    console.log(clc.blue('[WPD] getRating()'));
+    console.log(clc.xterm(175)('[WPD] getRating()'));
     return new Promise(async function (resolve, reject) {
         let body = await getUrlBodyFromSite(url);
         let $ = cheerio.load(body);

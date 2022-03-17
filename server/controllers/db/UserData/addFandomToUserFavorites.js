@@ -4,7 +4,7 @@ const FandomUserData = require('../../../models/UserData');
 const {addActivityToUserActivities} = require('./addActivityToUserActivities');
 
 exports.addFandomToUserFavorites = async (req,res) =>{
-    console.log(clc.blue('[db controller - UserData] addFandomToUserFavorites()'));
+    console.log(clc.xterm(175)('[db controller - UserData] addFandomToUserFavorites()'));
     const {userEmail,fandomName,status} = req.query;
     console.log('------userEmail,fandomName,status:',userEmail,fandomName,status)
 

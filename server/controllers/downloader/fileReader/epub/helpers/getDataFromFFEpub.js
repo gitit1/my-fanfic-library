@@ -3,7 +3,7 @@ const clc = require("cli-color");
 const cheerio = require('cheerio');
 
 exports.getDataFromFFEpub = async (fandomName, data, deleted) => {
-    console.log(clc.blue('[Downloader - Epub Reader] getDataFromFFEpub()'));
+    console.log(clc.xterm(175)('[Downloader - Epub Reader] getDataFromFFEpub()'));
     return new Promise(async function (resolve, reject) {
         // console.log('data:',data)
         let $ = cheerio.load(data);

@@ -6,7 +6,7 @@ const mongoose = require('../../../../config/mongoose.js');
 const {fixStringForPath} = require('../../../helpers/fixStringForPath.js');
 
 exports.saveImageOfFanficToDB =  async (req,res) =>{
-    console.log(clc.blue('[db controller] saveImageOfFanficToDB()'));
+    console.log(clc.xterm(175)('[db controller] saveImageOfFanficToDB()'));
 
     let {fandomName,fanficId} = req.query;
     console.log('fandomName,fanficId',fandomName,fanficId)

@@ -6,7 +6,7 @@ const { getIgnoredList } = require('../../helpers/getIgnoredList');
 const { getReadingLists } = require('../../helpers/getReadingLists');
 
 exports.getFanficsFromDB = async (req, res) => {
-    console.log(clc.blue('[db controller] getFanficsFromDB()'));
+    console.log(clc.xterm(175)('[db controller] getFanficsFromDB()'));
     let { FandomName, skip, limit, userEmail, list } = req.query, userData = [], ignoreList;
     skip = Number(skip); limit = Number(limit);
     const sort = null;

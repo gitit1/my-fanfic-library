@@ -6,7 +6,7 @@ const ao3Funcs = require('./functions');
 const { updateFandomFanficsNumbers } = require('../../helpers/index')
 
 exports.ao3GetFanfics = async (jar, log, fandom, type, searchKeys, mainSearchKeys, fromPage, toPage) => {
-    console.log(clc.blue(`[ao3 controller] ao3GetFanfics() --- Run Type:: ${type} --- Search Keys: ${searchKeys}`));
+    console.log(clc.xterm(175)(`[ao3 controller] ao3GetFanfics() --- Run Type:: ${type} --- Search Keys: ${searchKeys}`));
     return new Promise(async function (resolve, reject) {
         const { FanficsLastUpdate, Priority } = fandom;
 

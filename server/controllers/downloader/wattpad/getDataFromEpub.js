@@ -16,7 +16,7 @@ exports.getDataFromEpub = (log, fandomName, paths, collectionName) => {
     })
 }
 const getRating = async (url) => {
-    console.log(clc.blue('[WPD] getRating()'));
+    console.log(clc.xterm(175)('[WPD] getRating()'));
     return new Promise(async function (resolve, reject) {
         let body = await getUrlBodyFromSite(url);
         let $ = cheerio.load(body);
@@ -30,7 +30,7 @@ const getRating = async (url) => {
 }
 
 const saveFileToServer = (oldPath, newPath) => {
-    console.log(clc.blue('[WPD] saveFileToServer()'));
+    console.log(clc.xterm(175)('[WPD] saveFileToServer()'));
 
     return new Promise(async function (resolve, reject) {
         fs.rename(oldPath, newPath, (err) => {
@@ -57,7 +57,7 @@ const deleteFolderRecursive = (path) => {
 };
 
 const getEpubMetadata = (log, fandomName, paths, collectionName) => {
-    console.log(clc.blue('[WPD] getEpubMetadata()'), collectionName);
+    console.log(clc.xterm(175)('[WPD] getEpubMetadata()'), collectionName);
 
     return new Promise(async function (resolve, reject) {
         let epubfile = paths[1];

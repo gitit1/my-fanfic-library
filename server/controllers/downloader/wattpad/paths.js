@@ -40,7 +40,7 @@ const getEpubPaths = async (fanficsFolders) => {
 }
 
 const getFilesFromFolder = (path) => {
-    console.log(clc.blue('[WPD] getFilesFromFolder()'));
+    console.log(clc.xterm(175)('[WPD] getFilesFromFolder()'));
     return new Promise(async function (resolve, reject) {
         fs.readdir(path, (err, files) => {
             files.forEach(file => {
@@ -53,7 +53,7 @@ const getFilesFromFolder = (path) => {
 }
 
 exports.getPaths = async (mainPath) => {
-    console.log(clc.blue('[WPD] getPaths()'));
+    console.log(clc.xterm(175)('[WPD] getPaths()'));
     return new Promise(async function (resolve, reject) {
         const authorsFolders = await getAllFolders(mainPath);
         const fanficsFolders = await getAllFanficsFolders(mainPath, authorsFolders);

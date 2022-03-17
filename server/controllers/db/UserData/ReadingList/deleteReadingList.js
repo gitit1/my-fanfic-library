@@ -3,7 +3,7 @@ const FandomUserData = require('../../../../models/UserData');
 const {addActivityToUserActivities} = require('../addActivityToUserActivities');
 
 exports.deleteReadingList = async (req,res) =>{
-    console.log(clc.blue('[db controller] deleteReadingList()'));
+    console.log(clc.xterm(175)('[db controller] deleteReadingList()'));
     const {userEmail,name} = req.query;
     console.log('userEmail',userEmail);
     console.log('name',name);

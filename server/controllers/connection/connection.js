@@ -5,7 +5,7 @@ const logger = require('simple-node-logger');
 const { fetchFandoms } = require("../helpers/fetchFandoms.js");
 
 exports.manageDownloader = async (socket, fandom, choice, callType, ao3, ff, from, to) => {
-    console.log(clc.blue('[connection] manageDownloader'));
+    console.log(clc.xterm(175)('[connection] manageDownloader'));
     let log, log2;
 
     const opts = {
