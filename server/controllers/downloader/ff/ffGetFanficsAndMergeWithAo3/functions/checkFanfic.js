@@ -148,10 +148,12 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 if (!hasImage && linkHasImage) {
                     console.log(msg4(`!!!!! Exsist with ao3 with linked ff but with no image - getting FF image...`));
                     log.info(`!!!!! Exsist with ao3 with linked ff but with no image - getting FF image...`);
-                    exsistsFanfic.image = imageName;
                     exsistsFanfic.Status = 'update';
                     exsistsFanfic.StatusDetails = 'image';
-                    await funcs.downloadImageFromLink(linkHasImage, imagePath);
+                    const downloadedImageResult = await funcs.downloadImageFromLink(linkHasImage, imagePath);
+                    if(downloadedImageResult){
+                        exsistsFanfic.image = imageName;
+                    }
                 }
                 if (isDeleted) {
                     console.log(msg5(`!!!!! Found Deleted from ao3 but not from FF`));
@@ -173,9 +175,11 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                 log.info(`-----Found Similar - FF fanfic: ${exsistsFanfic.FanficID}`);
 
                 if (!hasImage && linkHasImage) {
-                    exsistsFanfic.image = imageName;
                     exsistsFanfic.Status = 'update';
-                    await funcs.downloadImageFromLink(linkHasImage, imagePath);
+                    const downloadedImageResult = await funcs.downloadImageFromLink(linkHasImage, imagePath);
+                    if(downloadedImageResult){
+                        exsistsFanfic.image = imageName;
+                    }
                 }
                 exsistsFanfic.FanficTitle = fanfic.FanficTitle;
                 exsistsFanfic.URL = fanfic.URL;
@@ -223,8 +227,10 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             console.log(msg6(`-----Adding new Fanfic: ${fanfic.FanficID}`));
             log.info(`-----Adding new Fanfic: ${fanfic.FanficID}`);
             if (linkHasImage) {
-                fanfic.image = imageName;
-                await funcs.downloadImageFromLink(linkHasImage, imagePath);
+                const downloadedImageResult = await funcs.downloadImageFromLink(linkHasImage, imagePath);
+                if(downloadedImageResult){
+                    fanfic.image = imageName;
+                }
             }
             const downloading = await funcs.downloadFFFanficNew(fandomName, fanfic.FanficID, fileName);
             if(downloading === 0){
