@@ -12,7 +12,7 @@ exports.downloadImageFromLink = async(url, filename) => {
     })
     .catch((error) => {
       console.log(clc.red('failed to download image'), error);
-      reject(false);
+      resolve(false);
     })
   });
 }
