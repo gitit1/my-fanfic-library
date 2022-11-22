@@ -47,7 +47,7 @@
     "puppeteer": "^1.20.0",
     "request": "^2.88.0",
     "simple-node-logger": "^18.12.23",
-    "socket.io": "^4.4.1",
+    "socket.io": "^4.5.3",
     "validator": "^13.7.0"
   },
   "devDependencies": {
