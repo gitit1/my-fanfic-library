@@ -20,7 +20,7 @@
     "dotenv": "^6.2.0",
     "epub": "^1.2.1",
     "epub-gen": "^0.0.17",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "fs": "0.0.1-security",
     "fs-extra": "^8.0.1",
     "http": "0.0.0",
