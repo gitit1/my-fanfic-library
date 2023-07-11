@@ -28,6 +28,9 @@ const saveFanficToServer = async (jar, url, urlBody, fandomName, saveMethod) => 
                     let authorName = await ($('div#workskin h3').first().text().replace(/\s+/g, " ")) === 'Anonymous' ? 'Anonymous' : $('div#workskin h3 a').first().text().replace(/\s+/g, " ");
                     authorName = (authorName === '') ? 'Anonymous' : authorName;
                     fanficId = await link.replace(/\/downloads\/(.*)\/.*/, "$1");
+					if(fanficName.length > 60){
+                        fanficName = fanficName.slice(60)
+                    }
                     let fanficNewName = `${authorName}_${fanficName} (${fanficId}).${method}`
                     filename = `${authorName}_${fanficName} (${fanficId})`;
                     filename = fixStringForPath(filename);
