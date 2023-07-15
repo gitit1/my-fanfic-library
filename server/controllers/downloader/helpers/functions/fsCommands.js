@@ -2,7 +2,7 @@ const clc = require("cli-color");
 const fs = require('fs');
 
 exports.saveFileToServer = (oldPath, newPath) => {
-    console.log(clc.blue('[FS Commands] saveFileToServer()'));
+    console.log(clc.xterm(175)('[FS Commands] saveFileToServer()'));
 
     return new Promise(async function (resolve, reject) {
         fs.rename(oldPath, newPath, (err) => {
@@ -15,7 +15,7 @@ exports.saveFileToServer = (oldPath, newPath) => {
 }
 
 exports.deleteFile = (path) => {
-    console.log(clc.blue('[FS Commands] deleteFile()'));
+    console.log(clc.xterm(175)('[FS Commands] deleteFile()'));
 
     return new Promise(async function (resolve, reject) {
         fs.unlink(path,function(err){
@@ -29,7 +29,7 @@ exports.deleteFile = (path) => {
   };
 
 exports.deleteFolderRecursive = (path) => {
-    console.log(clc.blue('[FS Commands] deleteFile()'));
+    console.log(clc.xterm(175)('[FS Commands] deleteFile()'));
     
     if (fs.existsSync(path)) {
       fs.readdirSync(path).forEach((file, index) => {

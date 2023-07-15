@@ -152,7 +152,6 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                     exsistsFanfic.StatusDetails = 'image';
                     const downloadedImageResult = await funcs.downloadImageFromLink(linkHasImage, imagePath);
                     if(downloadedImageResult){
-                        console.log('downloadedImageResult', downloadedImageResult)
                         exsistsFanfic.image = imageName;
                     }
                 }
@@ -179,7 +178,6 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
                     exsistsFanfic.Status = 'update';
                     const downloadedImageResult = await funcs.downloadImageFromLink(linkHasImage, imagePath);
                     if(downloadedImageResult){
-                        console.log('downloadedImageResult', downloadedImageResult)
                         exsistsFanfic.image = imageName;
                     }
                 }
@@ -231,7 +229,6 @@ exports.checkFanfic = async (log, data, fandomName, collection) => {
             if (linkHasImage) {
                 const downloadedImageResult = await funcs.downloadImageFromLink(linkHasImage, imagePath);
                 if(downloadedImageResult){
-                    console.log('downloadedImageResult', downloadedImageResult)
                     fanfic.image = imageName;
                 }
             }

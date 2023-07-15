@@ -3,7 +3,7 @@ const FandomUserData = require('../../../../models/UserData');
 const {addActivityToUserActivities} = require('../addActivityToUserActivities');
 
 exports.saveReadingListToDB = async (req,res) =>{
-    console.log(clc.blue('[db controller] saveNewReadingListToDB()'));
+    console.log(clc.xterm(175)('[db controller] saveNewReadingListToDB()'));
     const {userEmail,fandomName,fanficId,author,fanficTitle,source,name} = req.query;
     console.log('userEmail,fandomName,fanficId,author,fanficTitle,source,name:',userEmail,fandomName,fanficId,author,fanficTitle,source,name)
     

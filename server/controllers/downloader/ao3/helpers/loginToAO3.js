@@ -6,6 +6,10 @@ let request = require('request')
 const ao3UserKeys = require("../../../../config/keys");
 
 exports.loginToAO3 = (jar) =>{
+    return login(jar)
+}
+
+const login = (jar) =>{
     console.log(clc.bgGreenBright('[ao3 controller] loginToAO3()'));
     let url = "https://archiveofourown.org/users/login/",utf8='',authenticity_token='',isLogin = false;
     
@@ -46,7 +50,13 @@ exports.loginToAO3 = (jar) =>{
                     let $ = cheerio.load(body);
                     isLogin = await ($('#greeting').length > 0) ? true : false
                     isLogin ? console.log(clc.green('logged in successfully to ao3')) : console.log(clc.red('Error in Loggging in'))
-                    resolve()
+                    if(!isLogin){
+                        console.log('failed to login - sleeping and tring again');
+                        await sleep(10000);
+                        resolve(login(jar)) 
+                    } else {
+                        resolve()
+                    }
                 })   
             ):resolve(console.log(clc.green('you are already logged in to ao3'))) 
         })

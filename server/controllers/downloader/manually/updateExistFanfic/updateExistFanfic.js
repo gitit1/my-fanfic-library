@@ -4,7 +4,7 @@ const {createFanficObj} = require('../../helpers/functions/createFanficObj');
 const multer = require('multer');
 
 exports.updateExistFanfic = async (fandomName,req,res) =>{
-    console.log(clc.blue('[downloader controller] updateExistFanfic()'));
+    console.log(clc.xterm(175)('[downloader controller] updateExistFanfic()'));
 
     let upload = multer({}).any();
     await upload(req, res, async function (err) {

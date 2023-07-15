@@ -6,7 +6,7 @@ const mongoose = require('../../../../config/mongoose.js');
 const UserData = require('../../../../models/UserData');
 
 exports.saveImageOfReadingList =  async (req,res) =>{
-    console.log(clc.blue('[db controller] saveImageOfReadingList()'));
+    console.log(clc.xterm(175)('[db controller] saveImageOfReadingList()'));
 
     let {userEmail,name} = req.query;
 

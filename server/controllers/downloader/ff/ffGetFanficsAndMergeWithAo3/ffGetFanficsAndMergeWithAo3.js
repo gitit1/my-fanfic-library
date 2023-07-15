@@ -7,7 +7,7 @@ const { getDataFromFFFandomPage } = require('./functions/getDataFromFFFandomPage
 const { updateFandomFanficsNumbers } = require('../../helpers/index')
 
 exports.ffGetFanficsAndMergeWithAo3 = async (log, fandom, type, ffSearchUrl, fromPage, toPage) => {
-    console.log(clc.blue(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
+    console.log(clc.xterm(175)(`[ff controller] ffGetFanficsAndMergeWithAo3() - ${type} run`));
     const { FandomName, Collection } = fandom;
 
     if (!ffSearchUrl) {

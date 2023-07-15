@@ -2,7 +2,7 @@ const clc = require ('cli-color');
 const puppeteer = require ('puppeteer');
 
 exports.getUrlBodyFromSite = url => {
-  console.log (clc.blue (`[ff controller] getUrlBodyFromSite()`));
+  console.log (clc.xterm(175) (`[ff controller] getUrlBodyFromSite()`));
   return new Promise (async function (resolve, reject) {
     const browser = await puppeteer.launch({
       ignoreHTTPSErrors: true,

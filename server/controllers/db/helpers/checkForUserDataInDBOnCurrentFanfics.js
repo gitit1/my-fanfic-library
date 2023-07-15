@@ -3,7 +3,7 @@ const clc = require("cli-color");
 const FandomUserData = require('../../../models/UserData');
 
 exports.checkForUserDataInDBOnCurrentFanfics = async (userEmail,fanfics,type)=>{
-    console.log(clc.blue('[db controller] checkForUserDataInDBOnCurrentFanfics()'));
+    console.log(clc.xterm(175)('[db controller] checkForUserDataInDBOnCurrentFanfics()'));
     // let {userEmail} = req.query;   
     // let {fanfics} = req.body;   
 

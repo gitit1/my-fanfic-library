@@ -7,8 +7,12 @@ import fanficsReducer from './reducers/fanficsReducer';
 import usersReducer from './reducers/usersReducer';
 import sizeReducer from './reducers/sizeReducer';
 
-const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
-//const composeEnhancers = compose;
+let composeEnhancers = null;
+if (process.env.NODE_ENV === 'development') {
+   composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+} else {
+   composeEnhancers = compose;
+}
 
 const rootReducer = combineReducers({
     fandoms:            fandomsReducer,
@@ -22,5 +26,6 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer,composeEnhancers(
     applyMiddleware(thunk)
 ));
+
 
 export default store;

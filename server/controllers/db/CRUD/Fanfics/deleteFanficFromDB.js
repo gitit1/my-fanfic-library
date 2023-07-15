@@ -3,7 +3,7 @@ const mongoose = require('../../../../config/mongoose');
 const FandomModal = require('../../../../models/Fandom');
 
 exports.deleteFanficFromDB = async (req, res) => {
-  console.log(clc.blue('[db controller] deleteFanficFromDB()'));
+  console.log(clc.xterm(175)('[db controller] deleteFanficFromDB()'));
   let { fandomName, fanficId, source, complete, deleted } = req.query;
   await deleteFanficFromDBFunc(fandomName, fanficId, source, complete, deleted);
   res.send(true)

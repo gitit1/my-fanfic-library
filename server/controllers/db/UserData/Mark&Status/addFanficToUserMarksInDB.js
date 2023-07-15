@@ -3,7 +3,7 @@ const FandomUserData = require('../../../../models/UserData');
 const {addActivityToUserActivities} = require('../addActivityToUserActivities');
 
 exports.addFanficToUserMarksInDB = async (req,res)=>{
-    console.log(clc.blue('[db controller] addFanficToUserFavoritesInDB()'));
+    console.log(clc.xterm(175)('[db controller] addFanficToUserFavoritesInDB()'));
     let {userEmail,fanficId,author,fanficTitle,fandomName,source,markType,mark} = req.query,saveAs;
     fanficId = Number(fanficId)
     FandomUserData.findOne({userEmail: userEmail}, async function(err, user) {  

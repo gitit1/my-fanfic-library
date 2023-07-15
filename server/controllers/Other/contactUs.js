@@ -6,7 +6,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(keys.sendgridApiKey);
 
 exports.contactUs = (req,res) =>{
-    console.log(clc.blue('[db controller] contactUs()'));
+    console.log(clc.xterm(175)('[db controller] contactUs()'));
     const {name,email,message} = req.body;
 
     const { errors, isValid } = validateForm(req.body);

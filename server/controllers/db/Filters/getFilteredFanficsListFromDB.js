@@ -7,7 +7,7 @@ const { getFilteredFanficsHandler } = require('./functions/getFilteredFanficsHan
 
 
 exports.getFilteredFanficsListFromDB = async (req, res) => {
-    console.log(clc.blue('[db controller] getFanficsFromDB()'));
+    console.log(clc.xterm(175)('[db controller] getFanficsFromDB()'));
     let { fandomName, userEmail, pageLimit, pageNumber } = req.query, filters = req.body, filtersArrays = [], flag;
 
     filtersArrays = await getFiltersRules(filters, fandomName, userEmail)//[0] - userData filters , [1] - fanfics filters, [2] - sort 

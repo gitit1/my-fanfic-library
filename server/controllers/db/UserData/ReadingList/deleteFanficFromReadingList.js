@@ -3,7 +3,7 @@ const FandomUserData = require('../../../../models/UserData');
 const { addActivityToUserActivities } = require('../addActivityToUserActivities');
 
 exports.deleteFanficFromReadingList = async (req, res) => {
-    console.log(clc.blue('[db controller] deleteFanficFromReadingList()'));
+    console.log(clc.xterm(175)('[db controller] deleteFanficFromReadingList()'));
     const { userEmail, fanficId, name, author, fanficTitle, fandomName, source } = req.query;
 
     FandomUserData.findOne({ userEmail: userEmail }, async function (err, user) {

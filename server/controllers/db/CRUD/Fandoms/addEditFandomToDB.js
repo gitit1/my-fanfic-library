@@ -8,7 +8,7 @@ const FandomModal = require('../../../../models/Fandom');
 
 
 exports.addEditFandomToDB = async (req, res) => {
-    console.log(clc.blue('[db controller] addEditFandomToDB()'));
+    console.log(clc.xterm(175)('[db controller] addEditFandomToDB()'));
     console.log('req.query:', req.query);
 
     let { fandomName, mode, mainImage, mainImageGif, iconImage, fanficImage } = req.query;
