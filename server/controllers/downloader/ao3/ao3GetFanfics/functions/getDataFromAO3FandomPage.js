@@ -18,6 +18,7 @@ exports.getDataFromAO3FandomPage = async (jar, pageNumber, numberOfPages, log, p
         for (let count = 0; count < n; count++) {
             console.log('sleeping...');
             pageNumber === 1 ? await sleep(2000) : await sleep(1500);
+            // await sleep(4000);
             console.log(clc.cyan(`Done sleeping... Getting info of fanfic [ ${count + 1} / ${n} ] from page [ ${startPage} / ${endPage} ]`));
             let page = $('ol.work').children('li').eq(count), hasMainSearchKeys;
 
