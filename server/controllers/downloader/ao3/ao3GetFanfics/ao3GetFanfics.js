@@ -13,8 +13,8 @@ exports.ao3GetFanfics = async (jar, log, fandom, type, searchKeys, mainSearchKey
         let promises = [], fanficsInFandom, savedFanficsCurrent = 0; 
         let pagePatialLimit = (Priority === 1) ? 2 : 1;
         let promiseLimit = (Priority === 1) ? 6 : (Priority === 2) ? 8 : 10;
-        // const limit = (type === 'partial' || FanficsLastUpdate === undefined) ? pLimit(1) : pLimit(promiseLimit);
-        const limit = pLimit(1);
+        const limit = (type === 'partial' || FanficsLastUpdate === undefined) ? pLimit(1) : pLimit(promiseLimit);
+        //const limit = pLimit(1); // IN CASE OF ERRORS BCS OF CLOUDFLARE
 
         request = request.defaults({ jar: jar, followAllRedirects: true });
 
