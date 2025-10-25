@@ -5,6 +5,7 @@ let request = require('request')
 
 const fanficsPath = "public/fandoms";
 const { fixStringForPath } = require('../../../helpers/fixStringForPath')
+const { ao3Request: AO3 } = require('../../../../helpers/index');
 
 
 exports.saveFanficToServerHandler = async (jar, url, urlBody, fandomName, saveMethod) => {

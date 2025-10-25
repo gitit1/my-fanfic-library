@@ -4,6 +4,7 @@ const pLimit = require('p-limit');
 
 const ao3Funcs = require('./functions');
 const { updateFandomFanficsNumbers } = require('../../helpers/index')
+const { ao3Request: AO3 } = require('../../../../helpers/index');
 
 exports.ao3GetFanfics = async (jar, log, fandom, type, searchKeys, mainSearchKeys, fromPage, toPage) => {
     console.log(clc.xterm(175)(`[ao3 controller] ao3GetFanfics() --- Run Type:: ${type} --- Search Keys: ${searchKeys}`));
@@ -16,7 +17,7 @@ exports.ao3GetFanfics = async (jar, log, fandom, type, searchKeys, mainSearchKey
         const limit = (type === 'partial' || FanficsLastUpdate === undefined) ? pLimit(1) : pLimit(promiseLimit);
         //const limit = pLimit(1); // IN CASE OF ERRORS BCS OF CLOUDFLARE
 
-        request = request.defaults({ jar: jar, followAllRedirects: true });
+        const client = AO3.createAo3Request(jar);
 
         await ao3Funcs.loginToAO3(jar);
 
